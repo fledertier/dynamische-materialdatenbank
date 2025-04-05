@@ -1,0 +1,97 @@
+import 'package:dynamische_materialdatenbank/labeled.dart';
+import 'package:dynamische_materialdatenbank/labeled_list.dart';
+import 'package:dynamische_materialdatenbank/side_sheet.dart';
+import 'package:dynamische_materialdatenbank/theme.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final formatController = TextEditingController(text: 'All');
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: buildTheme(context),
+      home: Scaffold(
+        body: Row(
+          children: [
+            Expanded(child: const Center(child: Text('Hello World!'))),
+            SideSheet(
+              title: Text('Filters'),
+              children: [
+                LabeledList(
+                  label: Text('Labels'),
+                  children: [
+                    CheckboxListTile(
+                      title: Text('Events'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Personal'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Projects'),
+                      value: true,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Reminders'),
+                      value: true,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Family'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Work'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+                Labeled(
+                  label: Text('Format'),
+                  child: TextField(
+                    decoration: InputDecoration(filled: true),
+                    controller: formatController,
+                  ),
+                ),
+                LabeledList(
+                  label: Text('Last modified'),
+                  children: [
+                    CheckboxListTile(
+                      title: Text('Today'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                    CheckboxListTile(
+                      title: Text('Last week'),
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
