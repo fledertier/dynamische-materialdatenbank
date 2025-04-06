@@ -1,22 +1,52 @@
 import 'package:flutter/material.dart';
 
 class SideSheet extends StatelessWidget {
-  const SideSheet({super.key, required this.title, required this.children});
+  const SideSheet.docked({
+    super.key,
+    required this.title,
+    required this.children,
+    this.width = 256,
+  }) : borderRadius = BorderRadius.zero,
+       margin = EdgeInsets.zero,
+       docked = true;
+
+  const SideSheet.detached({
+    super.key,
+    required this.title,
+    required this.children,
+    this.width = 256,
+    this.borderRadius = const BorderRadius.all(Radius.circular(16)),
+    this.margin = const EdgeInsets.all(16),
+  }) : docked = false;
 
   final Widget title;
   final List<Widget> children;
+  final double? width;
+  final BorderRadiusGeometry borderRadius;
+  final EdgeInsetsGeometry margin;
+  final bool docked;
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final color =
+        docked ? colorScheme.surface : colorScheme.surfaceContainerLow;
+
     return ListTileTheme(
       controlAffinity: ListTileControlAffinity.leading,
       style: ListTileStyle.drawer,
       child: Container(
-        width: 256,
+        margin: margin,
+        width: width,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(color: Theme.of(context).colorScheme.outline),
-          ),
+          color: color,
+          borderRadius: borderRadius,
+          border:
+              docked
+                  ? Border(left: BorderSide(color: colorScheme.outline))
+                  : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -24,17 +54,20 @@ class SideSheet extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(24),
               child: DefaultTextStyle.merge(
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                style: textTheme.titleLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
                 ),
                 child: title,
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: children,
+              child: Material(
+                color: color,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: children,
+                  ),
                 ),
               ),
             ),

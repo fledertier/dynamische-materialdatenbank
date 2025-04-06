@@ -27,7 +27,7 @@ class _MainAppState extends State<MainApp> {
         body: Row(
           children: [
             Expanded(child: const Center(child: Text('Hello World!'))),
-            SideSheet(
+            SideSheet.docked(
               title: Text('Filters'),
               children: [
                 LabeledList(
