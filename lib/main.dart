@@ -27,8 +27,13 @@ class _MainAppState extends State<MainApp> {
         body: Row(
           children: [
             Expanded(child: const Center(child: Text('Hello World!'))),
-            SideSheet.docked(
+            SideSheet.detached(
               title: Text('Filters'),
+              actions: [
+                FilledButton(onPressed: () {}, child: Text('Save')),
+                OutlinedButton(onPressed: () {}, child: Text('Cancel')),
+              ],
+              width: 280,
               children: [
                 LabeledList(
                   label: Text('Labels'),
@@ -68,7 +73,10 @@ class _MainAppState extends State<MainApp> {
                 Labeled(
                   label: Text('Format'),
                   child: TextField(
-                    decoration: InputDecoration(filled: true),
+                    decoration: InputDecoration(
+                      filled: true,
+                      contentPadding: const EdgeInsets.all(16),
+                    ),
                     controller: formatController,
                   ),
                 ),

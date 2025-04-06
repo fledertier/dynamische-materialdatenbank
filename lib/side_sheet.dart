@@ -5,6 +5,7 @@ class SideSheet extends StatelessWidget {
     super.key,
     required this.title,
     required this.children,
+    this.actions,
     this.width = 256,
   }) : borderRadius = BorderRadius.zero,
        margin = EdgeInsets.zero,
@@ -14,6 +15,7 @@ class SideSheet extends StatelessWidget {
     super.key,
     required this.title,
     required this.children,
+    this.actions,
     this.width = 256,
     this.borderRadius = const BorderRadius.all(Radius.circular(16)),
     this.margin = const EdgeInsets.all(16),
@@ -21,6 +23,7 @@ class SideSheet extends StatelessWidget {
 
   final Widget title;
   final List<Widget> children;
+  final List<Widget>? actions;
   final double? width;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry margin;
@@ -36,6 +39,7 @@ class SideSheet extends StatelessWidget {
     return ListTileTheme(
       controlAffinity: ListTileControlAffinity.leading,
       style: ListTileStyle.drawer,
+      horizontalTitleGap: 4,
       child: Container(
         margin: margin,
         width: width,
@@ -71,6 +75,24 @@ class SideSheet extends StatelessWidget {
                 ),
               ),
             ),
+            if (actions != null)
+              Container(
+                padding: const EdgeInsets.all(24).copyWith(top: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: colorScheme.outlineVariant),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    for (final action in actions!) ...[
+                      if (!identical(action, actions!.first))
+                        SizedBox(width: 8),
+                      action,
+                    ],
+                  ],
+                ),
+              ),
           ],
         ),
       ),
