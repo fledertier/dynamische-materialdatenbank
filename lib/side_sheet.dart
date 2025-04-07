@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class SideSheet extends StatelessWidget {
   const SideSheet.docked({
     super.key,
-    required this.title,
-    required this.children,
-    this.actions,
+    this.title,
+    this.child,
+    this.topActions,
+    this.bottomActions,
     this.width = 256,
   }) : borderRadius = BorderRadius.zero,
        margin = EdgeInsets.zero,
@@ -13,17 +14,19 @@ class SideSheet extends StatelessWidget {
 
   const SideSheet.detached({
     super.key,
-    required this.title,
-    required this.children,
-    this.actions,
+    this.title,
+    this.child,
+    this.topActions,
+    this.bottomActions,
     this.width = 256,
     this.borderRadius = const BorderRadius.all(Radius.circular(16)),
     this.margin = const EdgeInsets.all(16),
   }) : docked = false;
 
-  final Widget title;
-  final List<Widget> children;
-  final List<Widget>? actions;
+  final Widget? title;
+  final Widget? child;
+  final List<Widget>? topActions;
+  final List<Widget>? bottomActions;
   final double? width;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry margin;
@@ -33,7 +36,7 @@ class SideSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final color =
+    final containerColor =
         docked ? colorScheme.surface : colorScheme.surfaceContainerLow;
 
     return ListTileTheme(
@@ -45,7 +48,7 @@ class SideSheet extends StatelessWidget {
         width: width,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: color,
+          color: containerColor,
           borderRadius: borderRadius,
           border:
               docked
@@ -55,27 +58,38 @@ class SideSheet extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: DefaultTextStyle.merge(
-                style: textTheme.titleLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+            SizedBox(
+              height: 76,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24, right: 12),
+                child: Row(
+                  children: [
+                    if (title != null)
+                      DefaultTextStyle.merge(
+                        style: textTheme.titleLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        child: title!,
+                      ),
+                    const Spacer(),
+                    if (topActions != null)
+                      IconTheme.merge(
+                        data: IconThemeData(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        child: Row(children: topActions!),
+                      ),
+                  ],
                 ),
-                child: title,
               ),
             ),
             Expanded(
               child: Material(
-                color: color,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: children,
-                  ),
-                ),
+                color: containerColor,
+                child: SingleChildScrollView(child: child),
               ),
             ),
-            if (actions != null)
+            if (bottomActions != null)
               Container(
                 padding: const EdgeInsets.all(24).copyWith(top: 16),
                 decoration: BoxDecoration(
@@ -85,8 +99,8 @@ class SideSheet extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    for (final action in actions!) ...[
-                      if (!identical(action, actions!.first))
+                    for (final action in bottomActions!) ...[
+                      if (!identical(action, bottomActions!.first))
                         SizedBox(width: 8),
                       action,
                     ],
