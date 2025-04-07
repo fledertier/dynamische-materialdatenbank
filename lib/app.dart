@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
 import 'filters.dart';
 import 'header.dart';
+import 'material_grid.dart';
+import 'material_service.dart';
 import 'theme.dart';
 
 class App extends StatelessWidget {
@@ -20,10 +23,30 @@ class App extends StatelessWidget {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Center(child: Text('Hello World!')),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              MaterialGrid(),
+              Positioned(bottom: 16, child: AddMaterialButton()),
+            ],
+          ),
         ),
         sidebar: Filters(),
       ),
+    );
+  }
+}
+
+class AddMaterialButton extends ConsumerWidget {
+  const AddMaterialButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FloatingActionButton.large(
+      child: Icon(Icons.add),
+      onPressed: () {
+        ref.read(materialServiceProvider).createMaterial();
+      },
     );
   }
 }
