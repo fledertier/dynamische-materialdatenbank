@@ -26,15 +26,16 @@ class _MainAppState extends State<MainApp> {
       home: Scaffold(
         body: Row(
           children: [
-            Expanded(child: const Center(child: Text('Hello World!'))),
+            Expanded(child: Center(child: Text('Hello World!'))),
             SideSheet.detached(
               title: Text('Filters'),
               topActions: [
-                IconButton(icon: const Icon(Icons.close), onPressed: () {}),
+                IconButton(icon: Icon(Icons.search), onPressed: () {}),
+                IconButton(icon: Icon(Icons.close), onPressed: () {}),
               ],
               bottomActions: [
-                FilledButton(onPressed: () {}, child: Text('Save')),
-                OutlinedButton(onPressed: () {}, child: Text('Cancel')),
+                FilledButton(child: Text('Save'), onPressed: () {}),
+                OutlinedButton(child: Text('Cancel'), onPressed: () {}),
               ],
               width: 280,
               child: Column(
@@ -80,7 +81,7 @@ class _MainAppState extends State<MainApp> {
                     child: TextField(
                       decoration: InputDecoration(
                         filled: true,
-                        contentPadding: const EdgeInsets.all(16),
+                        contentPadding: EdgeInsets.all(16),
                       ),
                       controller: formatController,
                     ),

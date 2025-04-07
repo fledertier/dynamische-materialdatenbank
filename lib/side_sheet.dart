@@ -36,79 +36,84 @@ class SideSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final containerColor =
-        docked ? colorScheme.surface : colorScheme.surfaceContainerLow;
 
-    return ListTileTheme(
-      controlAffinity: ListTileControlAffinity.leading,
-      style: ListTileStyle.drawer,
-      horizontalTitleGap: 4,
-      child: Container(
-        margin: margin,
-        width: width,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: containerColor,
-          borderRadius: borderRadius,
-          border:
-              docked
-                  ? Border(left: BorderSide(color: colorScheme.outline))
-                  : null,
+    return Container(
+      margin: margin,
+      width: width,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: docked ? colorScheme.surface : colorScheme.surfaceContainerLow,
+        borderRadius: borderRadius,
+        border: Border(
+          left:
+              docked ? BorderSide(color: colorScheme.outline) : BorderSide.none,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 76,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 24, right: 12),
-                child: Row(
-                  children: [
-                    if (title != null)
-                      DefaultTextStyle.merge(
-                        style: textTheme.titleLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        child: title!,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 76,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24, right: 18),
+              child: Row(
+                children: [
+                  if (title != null)
+                    DefaultTextStyle.merge(
+                      style: textTheme.titleLarge?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
-                    const Spacer(),
-                    if (topActions != null)
-                      IconTheme.merge(
-                        data: IconThemeData(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        child: Row(children: topActions!),
+                      child: title!,
+                    ),
+                  const Spacer(),
+                  if (topActions != null)
+                    IconButtonTheme(
+                      data: IconButtonThemeData(
+                        style: IconButton.styleFrom(
+                          foregroundColor: colorScheme.onSurfaceVariant,
+                          visualDensity: VisualDensity.comfortable,
+                          padding: EdgeInsets.zero,
+                        ).merge(IconButtonTheme.of(context).style),
                       ),
-                  ],
-                ),
+                      child: Row(children: topActions!),
+                    ),
+                ],
               ),
             ),
-            Expanded(
-              child: Material(
-                color: containerColor,
+          ),
+          Expanded(
+            child: Material(
+              color:
+                  docked
+                      ? colorScheme.surface
+                      : colorScheme.surfaceContainerLow,
+              child: ListTileTheme(
+                controlAffinity: ListTileControlAffinity.leading,
+                style: ListTileStyle.drawer,
+                horizontalTitleGap: 4,
                 child: SingleChildScrollView(child: child),
               ),
             ),
-            if (bottomActions != null)
-              Container(
-                padding: const EdgeInsets.all(24).copyWith(top: 16),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: colorScheme.outlineVariant),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    for (final action in bottomActions!) ...[
-                      if (!identical(action, bottomActions!.first))
-                        SizedBox(width: 8),
-                      action,
-                    ],
-                  ],
+          ),
+          if (bottomActions != null)
+            Container(
+              padding: const EdgeInsets.all(24).copyWith(top: 16),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: colorScheme.outlineVariant),
                 ),
               ),
-          ],
-        ),
+              child: Row(
+                children: [
+                  for (final action in bottomActions!) ...[
+                    if (!identical(action, bottomActions!.first))
+                      SizedBox(width: 8),
+                    action,
+                  ],
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
