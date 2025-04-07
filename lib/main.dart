@@ -42,73 +42,79 @@ class _MainAppState extends State<MainApp> {
             Expanded(child: const Center(child: Text('Hello World!'))),
             SideSheet.detached(
               title: Text('Filters'),
-              actions: [
+              topActions: [
+                IconButton(icon: const Icon(Icons.close), onPressed: () {}),
+              ],
+              bottomActions: [
                 FilledButton(onPressed: () {}, child: Text('Save')),
                 OutlinedButton(onPressed: () {}, child: Text('Cancel')),
               ],
               width: 280,
-              children: [
-                LabeledList(
-                  label: Text('Labels'),
-                  children: [
-                    CheckboxListTile(
-                      title: Text('Events'),
-                      value: false,
-                      onChanged: (value) {},
-                    ),
-                    CheckboxListTile(
-                      title: Text('Personal'),
-                      value: false,
-                      onChanged: (value) {},
-                    ),
-                    CheckboxListTile(
-                      title: Text('Projects'),
-                      value: true,
-                      onChanged: (value) {},
-                    ),
-                    CheckboxListTile(
-                      title: Text('Reminders'),
-                      value: true,
-                      onChanged: (value) {},
-                    ),
-                    CheckboxListTile(
-                      title: Text('Family'),
-                      value: false,
-                      onChanged: (value) {},
-                    ),
-                    CheckboxListTile(
-                      title: Text('Work'),
-                      value: false,
-                      onChanged: (value) {},
-                    ),
-                  ],
-                ),
-                Labeled(
-                  label: Text('Format'),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      contentPadding: const EdgeInsets.all(16),
-                    ),
-                    controller: formatController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LabeledList(
+                    label: Text('Labels'),
+                    children: [
+                      CheckboxListTile(
+                        title: Text('Events'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Personal'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Projects'),
+                        value: true,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Reminders'),
+                        value: true,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Family'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Work'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                    ],
                   ),
-                ),
-                LabeledList(
-                  label: Text('Last modified'),
-                  children: [
-                    CheckboxListTile(
-                      title: Text('Today'),
-                      value: false,
-                      onChanged: (value) {},
+                  Labeled(
+                    label: Text('Format'),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      controller: formatController,
                     ),
-                    CheckboxListTile(
-                      title: Text('Last week'),
-                      value: false,
-                      onChanged: (value) {},
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  LabeledList(
+                    label: Text('Last modified'),
+                    children: [
+                      CheckboxListTile(
+                        title: Text('Today'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                      CheckboxListTile(
+                        title: Text('Last week'),
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
