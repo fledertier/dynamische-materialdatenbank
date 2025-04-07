@@ -37,87 +37,121 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       theme: buildTheme(context),
       home: Scaffold(
-        body: Row(
-          children: [
-            Expanded(child: Center(child: Text('Hello World!'))),
-            SideSheet.detached(
-              title: Text('Filters'),
-              topActions: [
-                IconButton(icon: Icon(Icons.search), onPressed: () {}),
-                IconButton(icon: Icon(Icons.close), onPressed: () {}),
-              ],
-              bottomActions: [
-                FilledButton(child: Text('Save'), onPressed: () {}),
-                OutlinedButton(child: Text('Cancel'), onPressed: () {}),
-              ],
-              width: 280,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  LabeledList(
-                    label: Text('Labels'),
-                    children: [
-                      CheckboxListTile(
-                        title: Text('Events'),
-                        value: false,
-                        onChanged: (value) {},
+        body: Padding(
+          padding: EdgeInsets.all(16).copyWith(bottom: 0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: SearchBar(
+                          leading: Icon(Icons.search),
+                          hintText: 'Search in materials',
+                        ),
                       ),
-                      CheckboxListTile(
-                        title: Text('Personal'),
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                      CheckboxListTile(
-                        title: Text('Projects'),
-                        value: true,
-                        onChanged: (value) {},
-                      ),
-                      CheckboxListTile(
-                        title: Text('Reminders'),
-                        value: true,
-                        onChanged: (value) {},
-                      ),
-                      CheckboxListTile(
-                        title: Text('Family'),
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                      CheckboxListTile(
-                        title: Text('Work'),
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                    ],
-                  ),
-                  Labeled(
-                    label: Text('Format'),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        contentPadding: EdgeInsets.all(16),
-                      ),
-                      controller: formatController,
                     ),
-                  ),
-                  LabeledList(
-                    label: Text('Last modified'),
-                    children: [
-                      CheckboxListTile(
-                        title: Text('Today'),
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                      CheckboxListTile(
-                        title: Text('Last week'),
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                    ],
-                  ),
-                ],
+                    CircleAvatar(child: Icon(Icons.person)),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(child: Text('Hello World!')),
+                      ),
+                    ),
+                    SideSheet.detached(
+                      title: Text('Filters'),
+                      topActions: [
+                        IconButton(icon: Icon(Icons.search), onPressed: () {}),
+                        IconButton(icon: Icon(Icons.close), onPressed: () {}),
+                      ],
+                      bottomActions: [
+                        FilledButton(child: Text('Save'), onPressed: () {}),
+                        OutlinedButton(child: Text('Cancel'), onPressed: () {}),
+                      ],
+                      width: 280,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          LabeledList(
+                            label: Text('Labels'),
+                            children: [
+                              CheckboxListTile(
+                                title: Text('Events'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Personal'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Projects'),
+                                value: true,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Reminders'),
+                                value: true,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Family'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Work'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                            ],
+                          ),
+                          Labeled(
+                            label: Text('Format'),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                filled: true,
+                                contentPadding: EdgeInsets.all(16),
+                              ),
+                              controller: formatController,
+                            ),
+                          ),
+                          LabeledList(
+                            label: Text('Last modified'),
+                            children: [
+                              CheckboxListTile(
+                                title: Text('Today'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              CheckboxListTile(
+                                title: Text('Last week'),
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

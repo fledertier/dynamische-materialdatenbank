@@ -8,9 +8,10 @@ class SideSheet extends StatelessWidget {
     this.topActions,
     this.bottomActions,
     this.width = 256,
+    this.showBottomDivider = false,
   }) : borderRadius = BorderRadius.zero,
        margin = EdgeInsets.zero,
-       docked = true;
+       showDivider = true;
 
   const SideSheet.detached({
     super.key,
@@ -21,7 +22,8 @@ class SideSheet extends StatelessWidget {
     this.width = 256,
     this.borderRadius = const BorderRadius.all(Radius.circular(16)),
     this.margin = const EdgeInsets.all(16),
-  }) : docked = false;
+    this.showBottomDivider = false,
+  }) : showDivider = false;
 
   final Widget? title;
   final Widget? child;
@@ -30,7 +32,8 @@ class SideSheet extends StatelessWidget {
   final double? width;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry margin;
-  final bool docked;
+  final bool showDivider;
+  final bool showBottomDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +45,13 @@ class SideSheet extends StatelessWidget {
       width: width,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: docked ? colorScheme.surface : colorScheme.surfaceContainerLow,
+        color: colorScheme.surface,
         borderRadius: borderRadius,
         border: Border(
           left:
-              docked ? BorderSide(color: colorScheme.outline) : BorderSide.none,
+              showDivider
+                  ? BorderSide(color: colorScheme.outline)
+                  : BorderSide.none,
         ),
       ),
       child: Column(
@@ -83,10 +88,7 @@ class SideSheet extends StatelessWidget {
           ),
           Expanded(
             child: Material(
-              color:
-                  docked
-                      ? colorScheme.surface
-                      : colorScheme.surfaceContainerLow,
+              color: colorScheme.surface,
               child: ListTileTheme(
                 controlAffinity: ListTileControlAffinity.leading,
                 style: ListTileStyle.drawer,
@@ -100,17 +102,15 @@ class SideSheet extends StatelessWidget {
               padding: const EdgeInsets.all(24).copyWith(top: 16),
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: colorScheme.outlineVariant),
+                  top:
+                      showBottomDivider
+                          ? BorderSide(color: colorScheme.outlineVariant)
+                          : BorderSide.none,
                 ),
               ),
               child: Row(
-                children: [
-                  for (final action in bottomActions!) ...[
-                    if (!identical(action, bottomActions!.first))
-                      SizedBox(width: 8),
-                    action,
-                  ],
-                ],
+                spacing: 8,
+                children: bottomActions!,
               ),
             ),
         ],
