@@ -5,7 +5,7 @@ import 'app_scaffold.dart';
 import 'filter/filters.dart';
 import 'header/header.dart';
 import 'material_grid.dart';
-import 'material_service.dart';
+import 'services/material_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

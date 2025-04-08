@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'home_page.dart';
-import 'material_detail_page.dart';
+import '../home_page.dart';
+import '../material_detail_page.dart';
 
 final routerProvider = Provider((ref) {
   return GoRouter(

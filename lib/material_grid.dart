@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'material_provider.dart';
-import 'material_service.dart';
+import 'providers/material_provider.dart';
+import 'services/material_service.dart';
 
 class MaterialGrid extends StatelessWidget {
   const MaterialGrid({super.key});
