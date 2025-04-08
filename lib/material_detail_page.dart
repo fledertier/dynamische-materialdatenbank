@@ -1,12 +1,49 @@
+import 'package:dynamische_materialdatenbank/providers/material_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MaterialDetailPage extends StatelessWidget {
+import 'app_scaffold.dart';
+import 'header/header.dart';
+
+class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});
 
   final String materialId;
 
   @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncMaterial = ref.watch(materialStreamProvider(materialId));
+    final material = asyncMaterial.value ?? {};
+
+    return AppScaffold(
+      header: Header(),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: asyncMaterial.isLoading ? Center(
+          child: CircularProgressIndicator(),
+        ) : null,
+      ),
+      sidebar: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: asyncMaterial.isLoading ? null : SizedBox(
+          width: 300,
+          child: ListView(
+            children: [
+              for (final attribute in material.keys)
+                ListTile(
+                  title: Text(attribute),
+                  subtitle: Text(material[attribute].toString()),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

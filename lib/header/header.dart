@@ -8,9 +8,14 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final canPop = ModalRoute.of(context)?.canPop ?? false;
     return Row(
       spacing: 12,
-      children: [Expanded(child: Center(child: Search())), UserAvatar()],
+      children: [
+        canPop ? BackButton() : SizedBox.square(dimension: 40),
+        Expanded(child: Center(child: Search())),
+        UserAvatar(),
+      ],
     );
   }
 }

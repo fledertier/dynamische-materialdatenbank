@@ -52,4 +52,14 @@ class MaterialService {
         await FirebaseFirestore.instance.collection("materials").doc(id).get();
     return snapshot.exists ? snapshot.data() ?? {} : {};
   }
+
+  Stream<Map<String, dynamic>> getMaterialStream(String id) {
+    return FirebaseFirestore.instance
+        .collection("materials")
+        .doc(id)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.exists ? snapshot.data() ?? {} : {};
+    });
+  }
 }

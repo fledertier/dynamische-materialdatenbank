@@ -9,10 +9,12 @@ final routerProvider = Provider((ref) {
     routes: [
       GoRoute(
         path: "/",
+        name: "home",
         builder: (context, state) => const HomePage(),
         routes: [
           GoRoute(
             path: "materials/:materialId",
+            name: "details",
             builder: (context, state) {
               final materialId = state.pathParameters['materialId']!;
               return MaterialDetailPage(materialId: materialId);

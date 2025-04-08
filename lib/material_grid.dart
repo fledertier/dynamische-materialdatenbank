@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'providers/material_provider.dart';
 import 'services/material_service.dart';
@@ -34,11 +35,15 @@ class MaterialItem extends StatelessWidget {
 
   final Map<String, dynamic> item;
 
+  String get id => item["id"];
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          context.pushNamed('details', pathParameters: {'materialId': id});
+        },
         child: Stack(
           children: [
             Positioned(
