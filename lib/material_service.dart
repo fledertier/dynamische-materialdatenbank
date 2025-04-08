@@ -47,25 +47,6 @@ class MaterialService {
     }
   }
 
-  Future<Map<String, dynamic>> getAttribute(String attribute) async {
-    final snapshot =
-        await FirebaseFirestore.instance
-            .collection("attributes")
-            .doc(attribute)
-            .get();
-    return snapshot.exists ? snapshot.data() ?? {} : {};
-  }
-
-  Stream<Map<String, dynamic>> getAttributeStream(String attribute) {
-    return FirebaseFirestore.instance
-        .collection("attributes")
-        .doc(attribute)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.exists ? snapshot.data() ?? {} : {};
-        });
-  }
-
   Future<Map<String, dynamic>> getMaterial(String id) async {
     final snapshot =
         await FirebaseFirestore.instance.collection("materials").doc(id).get();

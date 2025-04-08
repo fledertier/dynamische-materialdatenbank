@@ -1,18 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'material_service.dart';
+import 'attribute_provider.dart';
 
-final materialItemsStreamProvider = Provider((ref) {
-  final names = ref.watch(attributeStreamProvider("name")).value ?? {};
+final materialItemsStreamProvider = FutureProvider((ref) async {
+  final names = await ref.watch(attributeStreamProvider("name").future);
   return names.entries.map((entry) {
     return {"id": entry.key, "name": entry.value};
   }).toList();
-});
-
-final attributeStreamProvider = StreamProvider.family((ref, String attribute) {
-  return ref.read(materialServiceProvider).getAttributeStream(attribute);
-});
-
-final attributeProvider = FutureProvider.family((ref, String attribute) {
-  return ref.read(materialServiceProvider).getAttribute(attribute);
 });
