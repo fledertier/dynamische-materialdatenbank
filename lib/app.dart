@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
-import 'filters.dart';
-import 'header.dart';
+import 'filter/filters.dart';
+import 'header/header.dart';
 import 'material_grid.dart';
 import 'material_service.dart';
 import 'theme.dart';
@@ -20,7 +20,7 @@ class App extends StatelessWidget {
         header: Header(),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Stack(

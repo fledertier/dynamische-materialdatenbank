@@ -45,7 +45,7 @@ class SideSheet extends StatelessWidget {
       width: width,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceContainerLow,
         borderRadius: borderRadius,
         border: Border(
           left:
@@ -88,7 +88,7 @@ class SideSheet extends StatelessWidget {
           ),
           Expanded(
             child: Material(
-              color: colorScheme.surface,
+              color: colorScheme.surfaceContainerLow,
               child: ListTileTheme(
                 controlAffinity: ListTileControlAffinity.leading,
                 style: ListTileStyle.drawer,
