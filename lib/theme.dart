@@ -7,5 +7,10 @@ ThemeData buildTheme(BuildContext context) => ThemeData(
   searchBarTheme: SearchBarThemeData(
     elevation: WidgetStatePropertyAll(0),
     padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
+    constraints: BoxConstraints(maxWidth: 720, minHeight: 56),
+  ),
+  searchViewTheme: SearchViewThemeData(
+    constraints: BoxConstraints(minHeight: 0),
+    shrinkWrap: true,
   ),
 );

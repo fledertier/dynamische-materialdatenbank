@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'search.dart';
+import 'material_search.dart';
 import 'user_avatar.dart';
 
 class Header extends StatelessWidget {
@@ -13,7 +13,7 @@ class Header extends StatelessWidget {
       spacing: 12,
       children: [
         canPop ? BackButton() : SizedBox.square(dimension: 40),
-        Expanded(child: Center(child: Search())),
+        Expanded(child: Center(child: MaterialSearch())),
         UserAvatar(),
       ],
     );
