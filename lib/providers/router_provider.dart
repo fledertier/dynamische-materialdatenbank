@@ -1,20 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../home_page.dart';
+import '../attributes/attributes_page.dart';
+import '../materials_page.dart';
 import '../material_detail_page.dart';
+
+enum Pages { materials, material, attributes }
 
 final routerProvider = Provider((ref) {
   return GoRouter(
+    initialLocation: "/materials",
     routes: [
       GoRoute(
-        path: "/",
-        name: "home",
-        builder: (context, state) => const HomePage(),
+        path: "/materials",
+        name: Pages.materials.name,
+        builder: (context, state) => const MaterialsPage(),
         routes: [
           GoRoute(
-            path: "materials/:materialId",
-            name: "details",
+            path: ":materialId",
+            name: Pages.material.name,
             builder: (context, state) {
               final materialId = state.pathParameters['materialId']!;
               return MaterialDetailPage(materialId: materialId);
@@ -22,6 +26,11 @@ final routerProvider = Provider((ref) {
           ),
         ],
       ),
+      GoRoute(
+        path: "/attributes",
+        name: Pages.attributes.name,
+        builder: (context, state) => const AttributesPage(),
+      )
     ],
   );
 });

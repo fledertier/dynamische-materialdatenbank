@@ -6,15 +6,18 @@ class AppScaffold extends StatelessWidget {
     required this.header,
     required this.body,
     required this.sidebar,
+    this.navigation,
   });
 
   final Widget header;
   final Widget body;
   final Widget? sidebar;
+  final Widget? navigation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: navigation,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         child: Column(

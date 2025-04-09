@@ -1,9 +1,11 @@
 import 'package:dynamische_materialdatenbank/providers/material_provider.dart';
+import 'package:dynamische_materialdatenbank/providers/router_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
 import 'header/header.dart';
+import 'navigation.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});
@@ -17,6 +19,7 @@ class MaterialDetailPage extends ConsumerWidget {
 
     return AppScaffold(
       header: Header(),
+      navigation: Navigation(page: Pages.material),
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerLow,
