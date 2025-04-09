@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/header/directional_menu_anchor.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
@@ -5,12 +6,13 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MenuAnchor(
+    return DirectionalMenuAnchor(
+      directionality: TextDirection.rtl,
       menuChildren: [
-        MenuItemButton(
-          leadingIcon: Icon(Icons.settings),
-          child: Text('Settings'),
-          onPressed: () {},
+        ListTile(
+          leading: CircleAvatar(child: Icon(Icons.person)),
+          title: Text('Leon Martin'),
+          subtitle: Text('Admin'),
         ),
         MenuItemButton(
           leadingIcon: Icon(Icons.logout),
