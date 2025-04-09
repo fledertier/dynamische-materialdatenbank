@@ -1,8 +1,8 @@
-import 'package:dynamische_materialdatenbank/providers/router_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
+import 'constants.dart';
 import 'filter/filters.dart';
 import 'header/header.dart';
 import 'material_grid.dart';

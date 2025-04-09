@@ -1,9 +1,10 @@
-import 'package:dynamische_materialdatenbank/providers/router_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../app_scaffold.dart';
+import '../constants.dart';
 import '../header/header.dart';
 import '../navigation.dart';
+import 'attributes_list.dart';
 
 class AttributesPage extends StatelessWidget {
   const AttributesPage({super.key});
@@ -25,7 +26,7 @@ class AttributesPage extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Placeholder(),
+        child: AttributesList(),
       ),
     );
   }

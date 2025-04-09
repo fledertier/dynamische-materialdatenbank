@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants.dart';
+
 final materialServiceProvider = Provider((ref) => MaterialService());
 
 class MaterialService {
@@ -23,13 +25,13 @@ class MaterialService {
     final id = material["id"];
 
     await FirebaseFirestore.instance
-        .collection("materials")
+        .collection(Collections.material)
         .doc(id)
         .set(material, SetOptions(merge: true));
 
     for (final attribute in material.keys) {
       await FirebaseFirestore.instance
-          .collection("attributes")
+          .collection(Collections.attribute)
           .doc(attribute)
           .set({id: material[attribute]}, SetOptions(merge: true));
     }
@@ -38,10 +40,10 @@ class MaterialService {
   Future<void> deleteMaterial(String id) async {
     final material = await getMaterial(id);
 
-    FirebaseFirestore.instance.collection("materials").doc(id).delete();
+    FirebaseFirestore.instance.collection(Collections.material).doc(id).delete();
 
     for (final attribute in material.keys) {
-      FirebaseFirestore.instance.collection("attributes").doc(attribute).update(
+      FirebaseFirestore.instance.collection(Collections.attribute).doc(attribute).update(
         {id: FieldValue.delete()},
       );
     }
@@ -49,13 +51,13 @@ class MaterialService {
 
   Future<Map<String, dynamic>> getMaterial(String id) async {
     final snapshot =
-        await FirebaseFirestore.instance.collection("materials").doc(id).get();
+        await FirebaseFirestore.instance.collection(Collections.material).doc(id).get();
     return snapshot.exists ? snapshot.data() ?? {} : {};
   }
 
   Stream<Map<String, dynamic>> getMaterialStream(String id) {
     return FirebaseFirestore.instance
-        .collection("materials")
+        .collection(Collections.material)
         .doc(id)
         .snapshots()
         .map((snapshot) {

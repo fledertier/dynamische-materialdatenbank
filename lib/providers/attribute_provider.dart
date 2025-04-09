@@ -9,3 +9,7 @@ final attributeStreamProvider = StreamProvider.family((ref, String attribute) {
 final attributeProvider = FutureProvider.family((ref, String attribute) {
   return ref.read(attributeServiceProvider).getAttribute(attribute);
 });
+
+final attributesProvider = FutureProvider((ref) {
+  return ref.read(attributeServiceProvider).getAttributes();
+});
