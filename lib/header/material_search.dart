@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,14 @@ class MaterialSearch extends ConsumerStatefulWidget {
 }
 
 class _MaterialSearchState extends ConsumerState<MaterialSearch> {
-  final controller = SearchController();
+  late final SearchController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SearchController();
+    controller.value = TextEditingValue(text: ref.read(searchProvider));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +45,14 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
             );
           },
         );
+      },
+      onSubmitted: (value) {
+        controller.closeView(value);
+        ref.read(searchProvider.notifier).query = value;
+      },
+      onClear: () {
+        controller.closeView('');
+        ref.read(searchProvider.notifier).query = '';
       },
     );
   }

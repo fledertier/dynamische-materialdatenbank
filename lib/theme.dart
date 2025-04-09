@@ -6,7 +6,6 @@ ThemeData buildTheme(BuildContext context) => ThemeData(
   visualDensity: VisualDensity.standard,
   searchBarTheme: SearchBarThemeData(
     elevation: WidgetStatePropertyAll(0),
-    padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
     constraints: BoxConstraints(maxWidth: 720, minHeight: 56),
   ),
   searchViewTheme: SearchViewThemeData(
