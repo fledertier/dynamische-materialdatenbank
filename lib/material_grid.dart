@@ -12,7 +12,8 @@ class MaterialGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final items = ref.watch(materialItemsStreamProvider).value ?? [];
+        final items =
+            ref.watch(filteredMaterialItemsStreamProvider).value ?? [];
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
@@ -60,8 +61,8 @@ class MaterialItem extends StatelessWidget {
                     },
                     itemBuilder:
                         (BuildContext context) => [
-                      PopupMenuItem(value: 'delete', child: Text('Delete')),
-                    ],
+                          PopupMenuItem(value: 'delete', child: Text('Delete')),
+                        ],
                     icon: Icon(Icons.more_vert),
                     tooltip: '',
                   );

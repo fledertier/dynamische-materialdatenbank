@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../providers/attribute_provider.dart';
+import '../providers/material_provider.dart';
 import 'search.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {
@@ -25,23 +25,22 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
 
   @override
   Widget build(BuildContext context) {
-    final names = ref.watch(attributeProvider('name')).value ?? {};
+    final materials = ref.watch(materialItemsStreamProvider).value;
     return Search(
       hintText: 'Search in materials',
       controller: controller,
       search: (query) {
-        return names.entries.where((entry) {
-          return entry.value.toLowerCase().contains(query.toLowerCase());
-        }).toList();
+        if (materials == null) return [];
+        return search(materials, query);
       },
-      buildSuggestion: (suggestion) {
+      buildSuggestion: (material) {
         return ListTile(
-          title: Text(suggestion.value),
+          title: Text(material['name']),
           onTap: () {
             controller.closeView('');
             context.pushNamed(
               'details',
-              pathParameters: {'materialId': suggestion.key},
+              pathParameters: {'materialId': material['id']},
             );
           },
         );
@@ -62,4 +61,15 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
     controller.dispose();
     super.dispose();
   }
+}
+
+List<Map<String, dynamic>> search(
+  List<Map<String, dynamic>> materials,
+  String query,
+) {
+  return materials.where((material) {
+    return ["name", "description"].any((attribute) {
+      return material[attribute].toLowerCase().contains(query.toLowerCase());
+    });
+  }).toList();
 }
