@@ -9,14 +9,14 @@ class Navigation extends StatelessWidget {
 
   const Navigation({super.key, required this.page});
 
-  final Pages page;
+  final String page;
 
   @override
   Widget build(BuildContext context) {
     return NavigationDrawer(
       selectedIndex: pages.indexOf(page),
       onDestinationSelected: (index) {
-        context.goNamed(pages[index].name);
+        context.goNamed(pages[index]);
       },
       children: [
         SizedBox(height: 14),

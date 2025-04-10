@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../constants.dart';
 import '../providers/material_provider.dart';
 import 'search.dart';
 
@@ -39,7 +40,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
           onTap: () {
             controller.closeView('');
             context.pushNamed(
-              'details',
+              Pages.material,
               pathParameters: {'materialId': material['id']},
             );
           },

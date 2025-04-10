@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../attributes/attributes_page.dart';
 import '../constants.dart';
-import '../materials_page.dart';
 import '../material_detail_page.dart';
+import '../materials_page.dart';
 
 final routerProvider = Provider((ref) {
   return GoRouter(
@@ -12,12 +12,12 @@ final routerProvider = Provider((ref) {
     routes: [
       GoRoute(
         path: "/materials",
-        name: Pages.materials.name,
+        name: Pages.materials,
         builder: (context, state) => const MaterialsPage(),
         routes: [
           GoRoute(
             path: ":materialId",
-            name: Pages.material.name,
+            name: Pages.material,
             builder: (context, state) {
               final materialId = state.pathParameters['materialId']!;
               return MaterialDetailPage(materialId: materialId);
@@ -27,9 +27,9 @@ final routerProvider = Provider((ref) {
       ),
       GoRoute(
         path: "/attributes",
-        name: Pages.attributes.name,
+        name: Pages.attributes,
         builder: (context, state) => const AttributesPage(),
-      )
+      ),
     ],
   );
 });

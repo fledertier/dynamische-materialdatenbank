@@ -44,7 +44,7 @@ class MaterialItem extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          context.pushNamed('details', pathParameters: {'materialId': id});
+          context.pushNamed(Pages.material, pathParameters: {'materialId': id});
         },
         child: Stack(
           children: [
