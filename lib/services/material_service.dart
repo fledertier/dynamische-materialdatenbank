@@ -25,13 +25,13 @@ class MaterialService {
     final id = material["id"];
 
     await FirebaseFirestore.instance
-        .collection(Collections.material)
+        .collection(Collections.materials)
         .doc(id)
         .set(material, SetOptions(merge: true));
 
     for (final attribute in material.keys) {
       await FirebaseFirestore.instance
-          .collection(Collections.attribute)
+          .collection(Collections.attributes)
           .doc(attribute)
           .set({id: material[attribute]}, SetOptions(merge: true));
     }
@@ -40,10 +40,10 @@ class MaterialService {
   Future<void> deleteMaterial(String id) async {
     final material = await getMaterial(id);
 
-    FirebaseFirestore.instance.collection(Collections.material).doc(id).delete();
+    FirebaseFirestore.instance.collection(Collections.materials).doc(id).delete();
 
     for (final attribute in material.keys) {
-      FirebaseFirestore.instance.collection(Collections.attribute).doc(attribute).update(
+      FirebaseFirestore.instance.collection(Collections.attributes).doc(attribute).update(
         {id: FieldValue.delete()},
       );
     }
@@ -51,13 +51,13 @@ class MaterialService {
 
   Future<Map<String, dynamic>> getMaterial(String id) async {
     final snapshot =
-        await FirebaseFirestore.instance.collection(Collections.material).doc(id).get();
+        await FirebaseFirestore.instance.collection(Collections.materials).doc(id).get();
     return snapshot.exists ? snapshot.data() ?? {} : {};
   }
 
   Stream<Map<String, dynamic>> getMaterialStream(String id) {
     return FirebaseFirestore.instance
-        .collection(Collections.material)
+        .collection(Collections.materials)
         .doc(id)
         .snapshots()
         .map((snapshot) {

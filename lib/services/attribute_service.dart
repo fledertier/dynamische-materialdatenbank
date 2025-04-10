@@ -10,7 +10,7 @@ class AttributeService {
   Future<Map<String, dynamic>> getAttribute(String attribute) async {
     final snapshot =
         await FirebaseFirestore.instance
-            .collection(Collections.attribute)
+            .collection(Collections.attributes)
             .doc(attribute)
             .get();
     return snapshot.exists ? snapshot.data() ?? {} : {};
@@ -18,7 +18,7 @@ class AttributeService {
 
   Stream<Map<String, dynamic>> getAttributeStream(String attribute) {
     return FirebaseFirestore.instance
-        .collection(Collections.attribute)
+        .collection(Collections.attributes)
         .doc(attribute)
         .snapshots()
         .map((snapshot) {
@@ -31,7 +31,7 @@ class AttributeService {
   ) async {
     final snapshot =
         await FirebaseFirestore.instance
-            .collection(Collections.material)
+            .collection(Collections.materials)
             .where(attribute, isNull: false)
             .get();
     return snapshot.docs.map((doc) => doc.data()).toList();
@@ -44,13 +44,13 @@ class AttributeService {
     for (final material in materials) {
       final id = material["id"];
       FirebaseFirestore.instance
-          .collection(Collections.material)
+          .collection(Collections.materials)
           .doc(id)
           .update({attribute: FieldValue.delete()});
     }
 
     FirebaseFirestore.instance
-        .collection(Collections.attribute)
+        .collection(Collections.attributes)
         .doc(attribute)
         .delete();
   }
@@ -58,7 +58,7 @@ class AttributeService {
   Future<List<Attribute>> getAttributes() async {
     final snapshot =
         await FirebaseFirestore.instance
-            .collection(Collections.attributes)
+            .collection(Collections.metadata)
             .withConverter(
               fromFirestore: (snapshot, options) {
                 return Attribute.fromJson(snapshot.data()!);
