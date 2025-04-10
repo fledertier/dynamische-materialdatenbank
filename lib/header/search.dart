@@ -22,40 +22,24 @@ class Search<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final leading = IconButton(
-      icon: Icon(Icons.search),
-      onPressed: () {
-        onSubmitted?.call(controller.text);
-      },
-    );
-    final trailing = IconButton(
-      icon: const Icon(Icons.close),
-      tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
-      onPressed: onClear,
-    );
-    return SearchAnchor(
+    return SearchAnchor.bar(
       searchController: controller,
-      viewLeading: leading,
+      barHintText: hintText,
       viewTrailing: [
         ValueListenableBuilder(
           valueListenable: controller,
+          child: IconButton(
+            icon: const Icon(Icons.close),
+            tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
+            onPressed: onClear,
+          ),
           builder: (context, value, child) {
-            return controller.text.isEmpty ? const SizedBox() : trailing;
+            return value.text.isEmpty ? const SizedBox() : child!;
           },
         ),
       ],
-      viewOnChanged: (value) {},
-      viewOnSubmitted: onSubmitted,
-      builder: (context, controller) {
-        return SearchBar(
-          controller: controller,
-          leading: leading,
-          hintText: hintText,
-          onTap: controller.openView,
-          onChanged: onChanged,
-          onSubmitted: onSubmitted,
-        );
-      },
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
       suggestionsBuilder: (context, controller) {
         final query = controller.text;
         if (query.isEmpty) {
