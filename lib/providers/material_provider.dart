@@ -21,7 +21,7 @@ final materialsStreamProvider = FutureProvider.family((
   AttributesParameter parameter,
 ) async {
   final attributes = await ref.watch(
-    attributesStreamProvider(parameter).future,
+    attributesValuesStreamProvider(parameter).future,
   );
   return attributes.values.toList();
 });

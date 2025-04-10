@@ -59,15 +59,50 @@ class AttributeService {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.metadata)
-            .withConverter(
-              fromFirestore: (snapshot, options) {
-                return Attribute.fromJson(snapshot.data()!);
-              },
-              toFirestore: (attribute, options) {
-                return attribute.toJson();
-              },
-            )
+            .doc("attributes")
             .get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    final list = snapshot.dataOrNull()?.includeKeysInValuesAs("id") ?? [];
+    return list.map(Attribute.fromJson).toList();
   }
+
+  Stream<List<Attribute>> getAttributesStream() {
+    return FirebaseFirestore.instance
+        .collection(Collections.metadata)
+        .doc("attributes")
+        .snapshots()
+        .map((snapshot) {
+          final list = snapshot.dataOrNull()?.includeKeysInValuesAs("id") ?? [];
+          return list.map(Attribute.fromJson).toList();
+        });
+  }
+
+  Future<void> createAttribute(CreateAttribute attribute) async {
+    final id = attribute.name; // todo: change to uuid
+    await FirebaseFirestore.instance
+        .collection(Collections.metadata)
+        .doc("attributes")
+        .set({id: attribute.toJson()}, SetOptions(merge: true));
+  }
+
+  Future<void> updateAttribute(UpdateAttribute attribute) async {
+    final id = attribute.id;
+    await FirebaseFirestore.instance
+        .collection(Collections.metadata)
+        .doc("attributes")
+        .set({id: attribute.toJson()}, SetOptions(merge: true));
+  }
+}
+
+typedef Json = Map<String, dynamic>;
+
+extension on Json {
+  List<Json> includeKeysInValuesAs(String attribute) {
+    return entries.map((entry) {
+      return {attribute: entry.key, ...entry.value as Json};
+    }).toList();
+  }
+}
+
+extension DocumentSnapshotExtension<T> on DocumentSnapshot<T> {
+  T? dataOrNull() => exists ? data() : null;
 }

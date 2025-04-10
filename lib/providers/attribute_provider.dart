@@ -1,23 +1,27 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/attribute_service.dart';
 
-final attributeStreamProvider = StreamProvider.family((ref, String attribute) {
+final attributeValuesStreamProvider = StreamProvider.family((
+  ref,
+  String attribute,
+) {
   return ref.read(attributeServiceProvider).getAttributeStream(attribute);
 });
 
-final attributeProvider = FutureProvider.family((ref, String attribute) {
+final attributeValuesProvider = FutureProvider.family((ref, String attribute) {
   return ref.read(attributeServiceProvider).getAttribute(attribute);
 });
 
-final attributesStreamProvider = FutureProvider.family((
+final attributesValuesStreamProvider = FutureProvider.family((
   ref,
   AttributesParameter parameter,
 ) async {
   final materials = <String, Map<String, dynamic>>{};
   for (final attribute in parameter.attributes) {
-    final values = await ref.watch(attributeProvider(attribute).future);
+    final values = await ref.watch(attributeValuesProvider(attribute).future);
     values.forEach((id, value) {
       final material = materials.putIfAbsent(id, () => {"id": id});
       material[attribute] = value;
@@ -45,4 +49,15 @@ class AttributesParameter {
 
 final attributesProvider = FutureProvider((ref) {
   return ref.read(attributeServiceProvider).getAttributes();
+});
+
+final attributesStreamProvider = StreamProvider((ref) {
+  return ref.read(attributeServiceProvider).getAttributesStream();
+});
+
+final attributeProvider = Provider.family((ref, String attribute) {
+  return ref
+      .watch(attributesProvider)
+      .value
+      ?.firstWhereOrNull((a) => a.id == attribute);
 });
