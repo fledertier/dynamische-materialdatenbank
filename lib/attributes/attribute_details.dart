@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
 import 'package:dynamische_materialdatenbank/services/attribute_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,11 +32,16 @@ class AttributeDetails extends ConsumerWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   Spacer(),
-                  if (mode.value is EditAttributeMode)
+                  if (mode.value case final EditAttributeMode editMode)
                     FilledButton.tonalIcon(
                       label: Text("Delete"),
                       icon: Icon(Symbols.delete),
-                      onPressed: () {},
+                      onPressed: () async {
+                        final deleted = await showAttributeDeleteDialog(context, editMode.attribute);
+                        if (deleted) {
+                          mode.value = null;
+                        }
+                      },
                     ),
                 ],
               ),

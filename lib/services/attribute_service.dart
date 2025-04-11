@@ -38,10 +38,9 @@ class AttributeService {
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  Future<void> deleteAttribute(
-    String attribute,
-    List<Map<String, dynamic>> materials,
-  ) async {
+  Future<void> deleteAttribute(String attribute) async {
+    final materials = await getMaterialsWithAttribute(attribute);
+
     for (final material in materials) {
       final id = material["id"];
       FirebaseFirestore.instance
@@ -54,6 +53,11 @@ class AttributeService {
         .collection(Collections.attributes)
         .doc(attribute)
         .delete();
+
+    FirebaseFirestore.instance
+        .collection(Collections.metadata)
+        .doc("attributes")
+        .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
   }
 
   Future<List<Attribute>> getAttributes() async {
