@@ -1,8 +1,27 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/attribute_service.dart';
+
+class Extrema {
+  const Extrema({required this.min, required this.max});
+
+  final double min, max;
+}
+
+final attributeExtremaProvider = FutureProvider.family((
+  ref,
+  String attribute,
+) async {
+  final values = await ref.watch(
+    attributeValuesStreamProvider(attribute).future,
+  );
+  final numbers = values.values.map((value) => value as double);
+  return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
+});
 
 final attributeValuesStreamProvider = StreamProvider.family((
   ref,

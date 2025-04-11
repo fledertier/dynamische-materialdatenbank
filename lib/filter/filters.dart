@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/attribute_provider.dart';
+import 'filter_state.dart';
 import 'labeled.dart';
 import 'labeled_list.dart';
 import 'side_sheet.dart';
@@ -12,7 +15,7 @@ class Filters extends StatefulWidget {
 }
 
 class _FiltersState extends State<Filters> {
-  final formatController = TextEditingController(text: 'All');
+  FilterState state = FilterState();
 
   @override
   Widget build(BuildContext context) {
@@ -32,64 +35,96 @@ class _FiltersState extends State<Filters> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           LabeledList(
-            label: Text('Labels'),
+            label: Text('Nachhaltigkeit'),
             children: [
               CheckboxListTile(
-                title: Text('Events'),
-                value: false,
-                onChanged: (value) {},
+                title: Text('Recyclebar'),
+                value: state.recyclable ?? false,
+                onChanged: (value) {
+                  setState(() {
+                    if (value == false) value = null;
+                    state.recyclable = value;
+                  });
+                },
               ),
               CheckboxListTile(
-                title: Text('Personal'),
-                value: false,
-                onChanged: (value) {},
+                title: Text('Abbaubar'),
+                value: state.biodegradable ?? false,
+                onChanged: (value) {
+                  setState(() {
+                    if (value == false) value = null;
+                    state.biodegradable = value;
+                  });
+                },
               ),
               CheckboxListTile(
-                title: Text('Projects'),
-                value: true,
-                onChanged: (value) {},
-              ),
-              CheckboxListTile(
-                title: Text('Reminders'),
-                value: true,
-                onChanged: (value) {},
-              ),
-              CheckboxListTile(
-                title: Text('Family'),
-                value: false,
-                onChanged: (value) {},
-              ),
-              CheckboxListTile(
-                title: Text('Work'),
-                value: false,
-                onChanged: (value) {},
+                title: Text('Biobasiert'),
+                value: state.biobased ?? false,
+                onChanged: (value) {
+                  setState(() {
+                    if (value == false) value = null;
+                    state.biobased = value;
+                  });
+                },
               ),
             ],
           ),
           Labeled(
-            label: Text('Format'),
-            child: TextField(
-              decoration: InputDecoration(
+            label: Text('Hersteller'),
+            child: DropdownMenu(
+              inputDecorationTheme: InputDecorationTheme(
                 filled: true,
                 contentPadding: EdgeInsets.all(16),
               ),
-              controller: formatController,
+              enableFilter: true,
+              expandedInsets: EdgeInsets.zero,
+              dropdownMenuEntries: [
+                DropdownMenuEntry(value: null, label: 'Alle'),
+                DropdownMenuEntry(
+                  value: 'Manufacturer 1',
+                  label: 'Manufacturer 1',
+                ),
+                DropdownMenuEntry(
+                  value: 'Manufacturer 2',
+                  label: 'Manufacturer 2',
+                ),
+              ],
+              initialSelection: state.manufacturer,
+              onSelected: (value) {
+                setState(() {
+                  state.manufacturer = value;
+                });
+              },
             ),
           ),
-          LabeledList(
-            label: Text('Last modified'),
-            children: [
-              CheckboxListTile(
-                title: Text('Today'),
-                value: false,
-                onChanged: (value) {},
-              ),
-              CheckboxListTile(
-                title: Text('Last week'),
-                value: false,
-                onChanged: (value) {},
-              ),
-            ],
+          Labeled(
+            label: Text('Gewicht'),
+            gap: 6,
+            child: Consumer(
+              builder: (context, ref, child) {
+                final extrema =
+                    ref.watch(attributeExtremaProvider('weight')).value;
+                final minWeight = extrema?.min ?? 0;
+                final maxWeight = extrema?.max ?? 1;
+                final weight =
+                    state.weight?.clamp(minWeight, maxWeight) ?? maxWeight;
+                return Slider(
+                  label: '${weight.toStringAsFixed(1)} Kg',
+                  min: minWeight,
+                  max: maxWeight,
+                  value: weight,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value != maxWeight) {
+                        state.weight = value;
+                      } else {
+                        state.weight = null;
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),

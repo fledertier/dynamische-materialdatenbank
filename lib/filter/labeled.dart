@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 
 class Labeled extends StatelessWidget {
-  const Labeled({super.key, required this.label, required this.child});
+  const Labeled({
+    super.key,
+    required this.label,
+    required this.child,
+    this.gap = 16,
+  });
 
   final Widget label;
   final Widget child;
+  final double gap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: DefaultTextStyle.merge(
+    return Padding(
+      padding: EdgeInsets.all(24).copyWith(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DefaultTextStyle.merge(
             style: Theme.of(context).textTheme.labelMedium,
             child: label,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24).copyWith(top: 0),
-          child: child,
-        ),
-      ],
+          SizedBox(height: gap),
+          child,
+        ],
+      ),
     );
   }
 }
