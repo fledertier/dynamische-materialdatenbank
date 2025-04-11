@@ -78,7 +78,7 @@ class AttributeService {
   }
 
   Future<void> createAttribute(Json attribute) async {
-    final id = Uuid().v4();
+    final id = Uuid().v7();
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc("attributes")

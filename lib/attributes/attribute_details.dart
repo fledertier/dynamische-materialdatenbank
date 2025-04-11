@@ -9,56 +9,63 @@ import 'attribute_mode.dart';
 class AttributeDetails extends ConsumerWidget {
   const AttributeDetails({super.key, required this.mode});
 
-  final AttributeMode mode;
+  final ValueNotifier<AttributeMode?> mode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Text(
-                switch(mode) {
-                  CreateAttributeMode _ => "Create Attribute",
-                  EditAttributeMode _ => "Edit Attribute",
-                  _ => "",
-                },
-                style: Theme.of(context).textTheme.headlineSmall,
+    return ListenableBuilder(
+      listenable: mode,
+      builder: (context, child) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Text(
+                    switch(mode.value) {
+                      CreateAttributeMode _ => "Create Attribute",
+                      EditAttributeMode _ => "Edit Attribute",
+                      _ => "",
+                    },
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  Spacer(),
+                  if (mode.value is EditAttributeMode)
+                    FilledButton.tonalIcon(
+                      label: Text("Delete"),
+                      icon: Icon(Symbols.delete),
+                      onPressed: () {},
+                    ),
+                ],
               ),
-              Spacer(),
-              if (mode is EditAttributeMode)
-                FilledButton.tonalIcon(
-                  label: Text("Delete"),
-                  icon: Icon(Symbols.delete),
-                  onPressed: () {},
-                ),
-            ],
-          ),
-        ),
-        Expanded(
-          child:
-              switch(mode) {
-                final CreateAttributeMode _ => CreateAttributeForm(
-                  onCreateAttribute: (attribute) {
-                    ref
-                        .read(attributeServiceProvider)
-                        .createAttribute(attribute);
+            ),
+            Expanded(
+              key: ValueKey(mode.value),
+              child:
+                  switch(mode.value) {
+                    final CreateAttributeMode _ => CreateAttributeForm(
+                      onCreateAttribute: (attribute) {
+                        ref
+                            .read(attributeServiceProvider)
+                            .createAttribute(attribute);
+                        mode.value = null;
+                      },
+                    ),
+                    final EditAttributeMode editMode => EditAttributeForm(
+                      attribute: editMode.attribute,
+                      onEditAttribute: (attribute) {
+                        ref
+                            .read(attributeServiceProvider)
+                            .updateAttribute(attribute);
+                      },
+                    ),
+                    _ => SizedBox(),
                   },
-                ),
-                final EditAttributeMode editMode => EditAttributeForm(
-                  attribute: editMode.attribute,
-                  onEditAttribute: (attribute) {
-                    ref
-                        .read(attributeServiceProvider)
-                        .updateAttribute(attribute);
-                  },
-                ),
-                _ => SizedBox(),
-              },
-        ),
-      ],
+            ),
+          ],
+        );
+      }
     );
   }
 }

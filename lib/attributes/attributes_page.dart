@@ -16,7 +16,7 @@ class AttributesPage extends StatefulWidget {
 }
 
 class _AttributesPageState extends State<AttributesPage> {
-  final mode = ValueNotifier(AttributeMode.create);
+  final mode = ValueNotifier<AttributeMode?>(null);
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +50,7 @@ class _AttributesPageState extends State<AttributesPage> {
             ),
             Expanded(
               child: AttributesList(
-                onTap: (attribute) {
-                  mode.value = AttributeMode.edit(attribute);
-                },
+                mode: mode,
               ),
             ),
           ],
@@ -64,14 +62,8 @@ class _AttributesPageState extends State<AttributesPage> {
             color: theme.colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: ListenableBuilder(
-            listenable: mode,
-            builder: (context, child) {
-              return AttributeDetails(
-                key: ValueKey(mode.value),
-                mode: mode.value,
-              );
-            },
+          child: AttributeDetails(
+            mode: mode,
           ),
         ),
       ),

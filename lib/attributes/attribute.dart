@@ -5,7 +5,7 @@ class Attribute {
   final String nameDe;
   final String? nameEn;
   final AttributeType type;
-  final bool required;
+  final bool? required;
 
   String get name => nameDe;
 
@@ -39,7 +39,7 @@ class Attribute {
       nameDe: json['nameDe'],
       nameEn: json['nameEn'],
       type: AttributeType.fromJson(json['type']),
-      required: json['required'] ?? false,
+      required: json['required'],
     );
   }
 

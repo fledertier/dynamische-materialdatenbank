@@ -35,9 +35,10 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
     if (_formKey.currentState?.validate() ?? false) {
       final attribute = {
         'nameDe': _attribute.value["nameDe"]!,
-        'nameEn': _attribute.value["nameEn"],
+        if (_attribute.value["nameEn"]?.isNotEmpty ?? false)
+          'nameEn': _attribute.value["nameEn"],
         'type': _attribute.value["type"]!.toJson(),
-        'required': _attribute.value["required"] ?? false,
+        if (_attribute.value["required"] == true) 'required': true,
       };
       widget.onCreateAttribute?.call(attribute);
     }
@@ -177,7 +178,16 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      widget.onEditAttribute?.call(_attribute.value);
+      final attribute = Attribute(
+        id: widget.attribute.id,
+        nameDe: _attribute.value.nameDe,
+        nameEn: _attribute.value.nameEn?.isNotEmpty ?? false
+          ? _attribute.value.nameEn
+          : null,
+        type: widget.attribute.type,
+        required: _attribute.value.required == true ? true : null,
+      );
+      widget.onEditAttribute?.call(attribute);
     }
   }
 
@@ -261,7 +271,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                   listenable: _attribute,
                   builder: (context, child) {
                     return Checkbox(
-                      value: _attribute.value.required,
+                      value: _attribute.value.required ?? false,
                       onChanged: (value) {
                         _attribute.value = _attribute.value.copyWith(
                           required: value ?? false,

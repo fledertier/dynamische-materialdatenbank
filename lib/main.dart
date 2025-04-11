@@ -15,6 +15,7 @@ void main() async {
 
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
+    ignoreUndefinedProperties: true,
   );
 
   GoRouter.optionURLReflectsImperativeAPIs = true;

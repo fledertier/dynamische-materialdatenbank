@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
+import 'attribute_mode.dart';
 
 class AttributesList extends ConsumerWidget {
-  const AttributesList({super.key, this.onTap});
+  const AttributesList({super.key, required this.mode});
 
-  final void Function(Attribute attribute)? onTap;
+  final ValueNotifier<AttributeMode?> mode;
+
+  bool isSelected(Attribute attribute) {
+    if (mode.value case final EditAttributeMode editMode) {
+      return editMode.attribute == attribute;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,26 +28,38 @@ class AttributesList extends ConsumerWidget {
 
     final attributes = snapshot.value ?? [];
 
-    return ListView.builder(
-      itemCount: attributes.length,
-      itemBuilder: (context, index) {
-        final attribute = attributes[index];
+    return ListenableBuilder(
+      listenable: mode,
+      builder: (context, child) {
+        return ListView.builder(
+          itemCount: attributes.length,
+          itemBuilder: (context, index) {
+            final attribute = attributes[index];
 
-        return AttributeListTile(
-          attribute,
-          onTap: () {
-            onTap?.call(attribute);
+            return AttributeListTile(
+              attribute,
+              selected: isSelected(attribute),
+              onTap: () {
+                mode.value = AttributeMode.edit(attribute);
+              },
+            );
           },
         );
-      },
+      }
     );
   }
 }
 
 class AttributeListTile extends StatelessWidget {
-  const AttributeListTile(this.attribute, {super.key, required this.onTap});
+  const AttributeListTile(
+    this.attribute, {
+    super.key,
+    this.selected = false,
+    required this.onTap,
+  });
 
   final Attribute attribute;
+  final bool selected;
   final void Function()? onTap;
 
   @override
@@ -50,8 +70,12 @@ class AttributeListTile extends StatelessWidget {
         leading: Icon(attribute.type.icon()),
         title: Text(attribute.name),
         subtitle: Text(
-          [attribute.type.name, if (attribute.required) "required"].join(", "),
+          [
+            attribute.type.name,
+            if (attribute.required ?? false) "required",
+          ].join(", "),
         ),
+        selected: selected,
         onTap: onTap,
       ),
     );
