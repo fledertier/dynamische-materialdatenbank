@@ -21,29 +21,32 @@ class AttributeDetails extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Text(
-                    switch(mode.value) {
-                      CreateAttributeMode _ => "Create Attribute",
-                      EditAttributeMode _ => "Edit Attribute",
-                      _ => "",
-                    },
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  Spacer(),
-                  if (mode.value case final EditAttributeMode editMode)
-                    FilledButton.tonalIcon(
-                      label: Text("Delete"),
-                      icon: Icon(Symbols.delete),
-                      onPressed: () async {
-                        final deleted = await showAttributeDeleteDialog(context, editMode.attribute);
-                        if (deleted) {
-                          mode.value = null;
-                        }
+              child: SizedBox(
+                height: 40,
+                child: Row(
+                  children: [
+                    Text(
+                      switch(mode.value) {
+                        CreateAttributeMode _ => "Create Attribute",
+                        EditAttributeMode _ => "Edit Attribute",
+                        _ => "",
                       },
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                ],
+                    Spacer(),
+                    if (mode.value case final EditAttributeMode editMode)
+                      FilledButton.tonalIcon(
+                        label: Text("Delete"),
+                        icon: Icon(Symbols.delete),
+                        onPressed: () async {
+                          final deleted = await showAttributeDeleteDialog(context, editMode.attribute);
+                          if (deleted) {
+                            mode.value = null;
+                          }
+                        },
+                      ),
+                  ],
+                ),
               ),
             ),
             Expanded(

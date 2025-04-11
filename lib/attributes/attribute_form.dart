@@ -193,6 +193,8 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -247,7 +249,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 labelText: "Type",
                 constraints: BoxConstraints(maxWidth: fieldWidth),
               ),
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge,
               items:
                   AttributeType.values.map((type) {
                     return DropdownMenuItem(
@@ -256,7 +258,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(type.icon()),
+                          Icon(type.icon(), color: theme.disabledColor),
                           SizedBox(width: 8),
                           Text(type.name),
                         ],

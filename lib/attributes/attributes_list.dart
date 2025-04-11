@@ -76,6 +76,7 @@ class AttributeListTile extends StatelessWidget {
           ].join(", "),
         ),
         selected: selected,
+        selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
         onTap: onTap,
       ),
     );
