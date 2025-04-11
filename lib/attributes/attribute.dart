@@ -13,6 +13,20 @@ class Attribute {
     required this.required,
   });
 
+  Attribute copyWith({
+    String? id,
+    String? name,
+    AttributeType? type,
+    bool? required,
+  }) {
+    return Attribute(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      required: required ?? this.required,
+    );
+  }
+
   factory Attribute.fromJson(Map<String, dynamic> json) {
     return Attribute(
       id: json['id'],
@@ -35,11 +49,15 @@ class Attribute {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! Attribute) return false;
-    return id == other.id && name == other.name && type == other.type && required == other.required;
+    return id == other.id &&
+        name == other.name &&
+        type == other.type &&
+        required == other.required;
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ type.hashCode ^ required.hashCode;
+  int get hashCode =>
+      id.hashCode ^ name.hashCode ^ type.hashCode ^ required.hashCode;
 }
 
 class CreateAttribute {
@@ -54,11 +72,7 @@ class CreateAttribute {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'type': type.toJson(),
-      'required': required,
-    };
+    return {'name': name, 'type': type.toJson(), 'required': required};
   }
 }
 
@@ -67,11 +81,18 @@ class UpdateAttribute {
   final String? name;
   final bool? required;
 
-  const UpdateAttribute({
-    required this.id,
-    this.name,
-    this.required,
-  });
+  const UpdateAttribute({required this.id, this.name, this.required});
+
+  factory UpdateAttribute.fromChanges({
+    required Attribute before,
+    required Attribute after,
+  }) {
+    return UpdateAttribute(
+      id: before.id,
+      name: after.name != before.name ? after.name : null,
+      required: after.required != before.required ? after.required : null,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

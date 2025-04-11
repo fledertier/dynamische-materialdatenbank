@@ -161,26 +161,17 @@ class EditAttributeForm extends StatefulWidget {
 class _EditAttributeFormState extends State<EditAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // todo: insert initial values
-  final _nameDe = TextEditingController();
-  final _nameEn = TextEditingController();
-  AttributeType? _type;
-  bool _required = false;
+  late final _attribute = ValueNotifier(widget.attribute);
 
-  @override
-  void dispose() {
-    _nameDe.dispose();
-    super.dispose();
-  }
+  bool get hasChanged => _attribute.value != widget.attribute;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final attribute = UpdateAttribute(
-        id: widget.attribute.id,
-        name: _nameDe.text,
-        required: _required,
+      final update = UpdateAttribute.fromChanges(
+        before: widget.attribute,
+        after: _attribute.value,
       );
-      widget.onEditAttribute?.call(attribute);
+      widget.onEditAttribute?.call(update);
     }
   }
 
@@ -199,7 +190,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
               runSpacing: 16,
               children: [
                 TextFormField(
-                  controller: _nameDe,
+                  initialValue: widget.attribute.name,
                   decoration: InputDecoration(
                     labelText: "Name (De)",
                     constraints: BoxConstraints(maxWidth: fieldWidth),
@@ -210,75 +201,83 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                     }
                     return null;
                   },
+                  onChanged: (value) {
+                    _attribute.value = _attribute.value.copyWith(name: value);
+                  },
                 ),
                 ListenableBuilder(
-                  listenable: _nameDe,
+                  listenable: _attribute,
                   builder: (context, child) {
                     return TextFormField(
-                      controller: _nameEn,
+                      // initialValue: widget.attribute.nameEn,
                       decoration: InputDecoration(
                         labelText: "Name (En)",
-                        hintText: _nameDe.text,
+                        hintText: _attribute.value.name,
                         constraints: BoxConstraints(maxWidth: fieldWidth),
                       ),
+                      onChanged: (value) {
+                        // _attribute.value = _attribute.value.copyWith(
+                        //   nameEn: value,
+                        // );
+                      },
                     );
                   },
                 ),
               ],
             ),
             DropdownButtonFormField<AttributeType>(
-              value: _type,
+              value: _attribute.value.type,
               decoration: InputDecoration(
                 labelText: "Type",
                 constraints: BoxConstraints(maxWidth: fieldWidth),
               ),
               style: Theme.of(context).textTheme.bodyLarge,
               items:
-                  AttributeType.values
-                      .map(
-                        (value) => DropdownMenuItem(
-                          value: value,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(value.icon()),
-                              SizedBox(width: 8),
-                              Text(value.name),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _type = value;
-                });
-              },
-              validator: (value) {
-                if (value == null) {
-                  return "Please select a type";
-                }
-                return null;
-              },
+                  AttributeType.values.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(type.icon()),
+                          SizedBox(width: 8),
+                          Text(type.name),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+              onChanged: null,
             ),
             Row(
               children: [
-                Checkbox(
-                  value: _required,
-                  onChanged: (value) {
-                    setState(() {
-                      _required = value ?? false;
-                    });
+                ListenableBuilder(
+                  listenable: _attribute,
+                  builder: (context, child) {
+                    return Checkbox(
+                      value: _attribute.value.required,
+                      onChanged: (value) {
+                        _attribute.value = _attribute.value.copyWith(
+                          required: value ?? false,
+                        );
+                      },
+                    );
                   },
                 ),
                 Text("Required"),
               ],
             ),
-            // todo: disable when no changes
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: FilledButton(onPressed: _submitForm, child: Text("Edit")),
+              child: ListenableBuilder(
+                listenable: _attribute,
+                builder: (context, child) {
+                  return FilledButton(
+                    onPressed: hasChanged ? _submitForm : null,
+                    child: Text("Edit"),
+                  );
+                },
+              ),
             ),
           ],
         ),

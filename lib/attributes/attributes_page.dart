@@ -20,21 +20,23 @@ class _AttributesPageState extends State<AttributesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppScaffold(
       header: Header(),
       navigation: Navigation(page: Pages.attributes),
       body: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          color: theme.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Text("Attributes", style: Theme.of(context).textTheme.headlineSmall),
+                  Text("Attributes", style: theme.textTheme.headlineSmall),
                   Spacer(),
                   FilledButton.tonalIcon(
                     label: Text("Add"),
@@ -46,25 +48,27 @@ class _AttributesPageState extends State<AttributesPage> {
                 ],
               ),
             ),
-            Expanded(child: AttributesList(onTap: (attribute) {
-              mode.value = AttributeMode.edit(attribute);
-            })),
+            Expanded(
+              child: AttributesList(
+                onTap: (attribute) {
+                  mode.value = AttributeMode.edit(attribute);
+                },
+              ),
+            ),
           ],
         ),
       ),
       sidebar: Expanded(
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: theme.colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
           ),
           child: ListenableBuilder(
             listenable: mode,
             builder: (context, child) {
-              return AttributeDetails(
-                mode: mode.value,
-              );
-            }
+              return AttributeDetails(mode: mode.value);
+            },
           ),
         ),
       ),
