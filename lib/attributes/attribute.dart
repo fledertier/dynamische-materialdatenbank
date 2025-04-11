@@ -2,26 +2,32 @@ import 'attribute_type.dart';
 
 class Attribute {
   final String id;
-  final String name;
+  final String nameDe;
+  final String? nameEn;
   final AttributeType type;
   final bool required;
 
+  String get name => nameDe;
+
   const Attribute({
     required this.id,
-    required this.name,
+    required this.nameDe,
+    required this.nameEn,
     required this.type,
     required this.required,
   });
 
   Attribute copyWith({
     String? id,
-    String? name,
+    String? nameDe,
+    String? nameEn,
     AttributeType? type,
     bool? required,
   }) {
     return Attribute(
       id: id ?? this.id,
-      name: name ?? this.name,
+      nameDe: nameDe ?? this.nameDe,
+      nameEn: nameEn ?? this.nameEn,
       type: type ?? this.type,
       required: required ?? this.required,
     );
@@ -30,7 +36,8 @@ class Attribute {
   factory Attribute.fromJson(Map<String, dynamic> json) {
     return Attribute(
       id: json['id'],
-      name: json['name'],
+      nameDe: json['nameDe'],
+      nameEn: json['nameEn'],
       type: AttributeType.fromJson(json['type']),
       required: json['required'] ?? false,
     );
@@ -39,7 +46,8 @@ class Attribute {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
+      'nameDe': nameDe,
+      'nameEn': nameEn,
       'type': type.toJson(),
       'required': required,
     };
@@ -50,54 +58,13 @@ class Attribute {
     if (identical(this, other)) return true;
     if (other is! Attribute) return false;
     return id == other.id &&
-        name == other.name &&
+        nameDe == other.nameDe &&
+        nameEn == other.nameEn &&
         type == other.type &&
         required == other.required;
   }
 
   @override
   int get hashCode =>
-      id.hashCode ^ name.hashCode ^ type.hashCode ^ required.hashCode;
-}
-
-class CreateAttribute {
-  final String name;
-  final AttributeType type;
-  final bool required;
-
-  const CreateAttribute({
-    required this.name,
-    required this.type,
-    required this.required,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'type': type.toJson(), 'required': required};
-  }
-}
-
-class UpdateAttribute {
-  final String id;
-  final String? name;
-  final bool? required;
-
-  const UpdateAttribute({required this.id, this.name, this.required});
-
-  factory UpdateAttribute.fromChanges({
-    required Attribute before,
-    required Attribute after,
-  }) {
-    return UpdateAttribute(
-      id: before.id,
-      name: after.name != before.name ? after.name : null,
-      required: after.required != before.required ? after.required : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      if (name != null) 'name': name,
-      if (required != null) 'required': required,
-    };
-  }
+      id.hashCode ^ nameDe.hashCode ^ nameEn.hashCode ^ type.hashCode ^ required.hashCode;
 }

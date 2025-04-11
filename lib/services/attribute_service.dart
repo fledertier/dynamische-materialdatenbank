@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../attributes/attribute.dart';
 import '../constants.dart';
@@ -76,15 +77,15 @@ class AttributeService {
         });
   }
 
-  Future<void> createAttribute(CreateAttribute attribute) async {
-    final id = attribute.name; // todo: change to uuid
+  Future<void> createAttribute(Json attribute) async {
+    final id = Uuid().v4();
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc("attributes")
-        .set({id: attribute.toJson()}, SetOptions(merge: true));
+        .set({id: attribute}, SetOptions(merge: true));
   }
 
-  Future<void> updateAttribute(UpdateAttribute attribute) async {
+  Future<void> updateAttribute(Attribute attribute) async {
     final id = attribute.id;
     await FirebaseFirestore.instance
         .collection(Collections.metadata)

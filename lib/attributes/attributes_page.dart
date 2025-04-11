@@ -67,7 +67,10 @@ class _AttributesPageState extends State<AttributesPage> {
           child: ListenableBuilder(
             listenable: mode,
             builder: (context, child) {
-              return AttributeDetails(mode: mode.value);
+              return AttributeDetails(
+                key: ValueKey(mode.value),
+                mode: mode.value,
+              );
             },
           ),
         ),

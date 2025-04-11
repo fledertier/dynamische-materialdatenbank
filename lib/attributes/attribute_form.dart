@@ -8,7 +8,7 @@ const double fieldWidth = 280;
 class CreateAttributeForm extends StatefulWidget {
   const CreateAttributeForm({super.key, this.onCreateAttribute});
 
-  final void Function(CreateAttribute attribute)? onCreateAttribute;
+  final void Function(Map<String, dynamic> attribute)? onCreateAttribute;
 
   @override
   State<CreateAttributeForm> createState() => _CreateAttributeFormState();
@@ -18,9 +18,8 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameDe = TextEditingController();
-  final _nameEn = TextEditingController();
-  AttributeType? _type;
-  bool _required = false;
+
+  final _attribute = ValueNotifier<Map<String, dynamic>>({});
 
   @override
   void dispose() {
@@ -28,13 +27,18 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
     super.dispose();
   }
 
+  void update(String key, dynamic value) {
+    _attribute.value = {..._attribute.value, key: value};
+  }
+
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final attribute = CreateAttribute(
-        name: _nameDe.text,
-        type: _type!,
-        required: _required,
-      );
+      final attribute = {
+        'nameDe': _attribute.value["nameDe"]!,
+        'nameEn': _attribute.value["nameEn"],
+        'type': _attribute.value["type"]!.toJson(),
+        'required': _attribute.value["required"] ?? false,
+      };
       widget.onCreateAttribute?.call(attribute);
     }
   }
@@ -65,24 +69,29 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                     }
                     return null;
                   },
+                  onChanged: (value) {
+                    update('nameDe', value);
+                  },
                 ),
                 ListenableBuilder(
                   listenable: _nameDe,
                   builder: (context, child) {
                     return TextFormField(
-                      controller: _nameEn,
                       decoration: InputDecoration(
                         labelText: "Name (En)",
                         hintText: _nameDe.text,
                         constraints: BoxConstraints(maxWidth: fieldWidth),
                       ),
+                      onChanged: (value) {
+                        update('nameEn', value);
+                      },
                     );
                   },
                 ),
               ],
             ),
             DropdownButtonFormField<AttributeType>(
-              value: _type,
+              value: _attribute.value["type"],
               decoration: InputDecoration(
                 labelText: "Type",
                 constraints: BoxConstraints(maxWidth: fieldWidth),
@@ -106,9 +115,7 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                       )
                       .toList(),
               onChanged: (value) {
-                setState(() {
-                  _type = value;
-                });
+                update('type', value);
               },
               validator: (value) {
                 if (value == null) {
@@ -119,12 +126,15 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
             ),
             Row(
               children: [
-                Checkbox(
-                  value: _required,
-                  onChanged: (value) {
-                    setState(() {
-                      _required = value ?? false;
-                    });
+                ListenableBuilder(
+                  listenable: _attribute,
+                  builder: (context, child) {
+                    return Checkbox(
+                      value: _attribute.value["required"] ?? false,
+                      onChanged: (value) {
+                        update('required', value);
+                      },
+                    );
                   },
                 ),
                 Text("Required"),
@@ -152,7 +162,7 @@ class EditAttributeForm extends StatefulWidget {
   });
 
   final Attribute attribute;
-  final void Function(UpdateAttribute attribute)? onEditAttribute;
+  final void Function(Attribute attribute)? onEditAttribute;
 
   @override
   State<EditAttributeForm> createState() => _EditAttributeFormState();
@@ -167,11 +177,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final update = UpdateAttribute.fromChanges(
-        before: widget.attribute,
-        after: _attribute.value,
-      );
-      widget.onEditAttribute?.call(update);
+      widget.onEditAttribute?.call(_attribute.value);
     }
   }
 
@@ -202,23 +208,23 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                     return null;
                   },
                   onChanged: (value) {
-                    _attribute.value = _attribute.value.copyWith(name: value);
+                    _attribute.value = _attribute.value.copyWith(nameDe: value);
                   },
                 ),
                 ListenableBuilder(
                   listenable: _attribute,
                   builder: (context, child) {
                     return TextFormField(
-                      // initialValue: widget.attribute.nameEn,
+                      initialValue: widget.attribute.nameEn,
                       decoration: InputDecoration(
                         labelText: "Name (En)",
                         hintText: _attribute.value.name,
                         constraints: BoxConstraints(maxWidth: fieldWidth),
                       ),
                       onChanged: (value) {
-                        // _attribute.value = _attribute.value.copyWith(
-                        //   nameEn: value,
-                        // );
+                        _attribute.value = _attribute.value.copyWith(
+                          nameEn: value,
+                        );
                       },
                     );
                   },
@@ -274,7 +280,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 builder: (context, child) {
                   return FilledButton(
                     onPressed: hasChanged ? _submitForm : null,
-                    child: Text("Edit"),
+                    child: Text("Save"),
                   );
                 },
               ),
