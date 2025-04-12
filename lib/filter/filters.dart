@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,28 +65,36 @@ class Filters extends ConsumerWidget {
           ),
           Labeled(
             label: Text('Hersteller'),
-            child: DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(
-                filled: true,
-                contentPadding: EdgeInsets.all(16),
-              ),
-              enableFilter: true,
-              expandedInsets: EdgeInsets.zero,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: null, label: 'Alle'),
-                DropdownMenuEntry(
-                  value: 'Manufacturer 1',
-                  label: 'Manufacturer 1',
-                ),
-                DropdownMenuEntry(
-                  value: 'Manufacturer 2',
-                  label: 'Manufacturer 2',
-                ),
-              ],
-              initialSelection: options.manufacturer,
-              onSelected: (value) {
-                notifier.options = options.copyWithNullable(
-                  manufacturer: () => value,
+            child: Consumer(
+              builder: (context, ref, child) {
+                final values =
+                    ref.watch(attributeValuesProvider('manufacturer')).value;
+                final manufacturers = values?.values.toSet().sortedBy(
+                  (value) => value.toString(),
+                );
+                return DropdownMenu(
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    contentPadding: EdgeInsets.all(16),
+                  ),
+                  enableFilter: true,
+                  expandedInsets: EdgeInsets.zero,
+                  menuHeight: 16 + 48 * 4,
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(value: null, label: 'Alle'),
+                    ...?manufacturers?.map(
+                      (manufacturer) => DropdownMenuEntry(
+                        value: manufacturer,
+                        label: manufacturer.toString(),
+                      ),
+                    ),
+                  ],
+                  initialSelection: options.manufacturer,
+                  onSelected: (value) {
+                    notifier.options = options.copyWithNullable(
+                      manufacturer: () => value,
+                    );
+                  },
                 );
               },
             ),
