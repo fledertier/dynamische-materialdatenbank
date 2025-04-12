@@ -13,21 +13,33 @@ class Navigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationDrawer(
+    return NavigationRail(
+      labelType: NavigationRailLabelType.all,
+      // backgroundColor: Color(0xfff2ecee),
+      selectedIconTheme: IconThemeData(fill: 1),
       selectedIndex: pages.indexOf(page),
       onDestinationSelected: (index) {
         context.goNamed(pages[index]);
       },
-      children: [
-        SizedBox(height: 14),
-        NavigationDrawerDestination(
+      leading: Padding(
+        padding: const EdgeInsets.only(top: 4, bottom: 16),
+        child: FloatingActionButton(
+          elevation: 0,
+          hoverElevation: 0,
+          highlightElevation: 0,
+          focusElevation: 0,
+          backgroundColor: Color(0xfff1d3f9),
+          onPressed: () {},
+          child: const Icon(Symbols.add),
+        ),
+      ),
+      destinations: [
+        NavigationRailDestination(
           icon: Icon(Symbols.interests_rounded),
-          selectedIcon: Icon(Symbols.interests_rounded, fill: 1),
           label: Text("Materials"),
         ),
-        NavigationDrawerDestination(
+        NavigationRailDestination(
           icon: Icon(Icons.change_history_rounded),
-          selectedIcon: Icon(Icons.change_history_rounded, fill: 1),
           label: Text("Attributes"),
         ),
       ],

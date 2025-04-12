@@ -17,24 +17,30 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: navigation,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: Column(
-          spacing: 12,
-          children: [
-            header,
-            Expanded(
-              child: Row(
-                spacing: 24,
+      body: Row(
+        children: [
+          if (navigation != null) navigation!,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Column(
+                spacing: 12,
                 children: [
-                  Expanded(child: body),
-                  if (sidebar != null) sidebar!,
+                  header,
+                  Expanded(
+                    child: Row(
+                      spacing: 24,
+                      children: [
+                        Expanded(child: body),
+                        if (sidebar != null) sidebar!,
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

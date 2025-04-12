@@ -12,7 +12,7 @@ class Header extends StatelessWidget {
     return Row(
       spacing: 12,
       children: [
-        canPop ? BackButton() : DrawerButton(),
+        canPop ? BackButton() : SizedBox.square(dimension: 40),
         Expanded(child: Center(child: MaterialSearch())),
         UserAvatar(),
       ],
