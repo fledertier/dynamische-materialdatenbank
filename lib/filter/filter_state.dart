@@ -13,6 +13,14 @@ class FilterState {
   final String? manufacturer;
   final double? weight;
 
+  bool get isEmpty {
+    return recyclable == null &&
+        biodegradable == null &&
+        biobased == null &&
+        manufacturer == null &&
+        weight == null;
+  }
+
   FilterState copyWithNullable({
     bool? Function()? recyclable,
     bool? Function()? biodegradable,

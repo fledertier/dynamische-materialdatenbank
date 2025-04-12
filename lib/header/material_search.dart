@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
+import '../providers/attribute_provider.dart';
 import '../providers/material_provider.dart';
+import '../services/search_service.dart';
 import 'search.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {
@@ -25,8 +27,16 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final materials = ref.watch(materialItemsStreamProvider).value;
+    final attributes = AttributesParameter({'name', 'description'});
+    final materials = ref.watch(materialsStreamProvider(attributes)).value;
+
     return Search(
       hintText: 'Search in materials',
       controller: controller,
@@ -56,21 +66,4 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
       },
     );
   }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-}
-
-List<Map<String, dynamic>> search(
-  List<Map<String, dynamic>> materials,
-  String query,
-) {
-  return materials.where((material) {
-    return ["name", "description"].any((attribute) {
-      return material[attribute].toLowerCase().contains(query.toLowerCase());
-    });
-  }).toList();
 }
