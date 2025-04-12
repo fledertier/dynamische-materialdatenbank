@@ -20,8 +20,8 @@ final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
     if (options.weight != null) "weight",
   });
   var materials = await ref.watch(materialsStreamProvider(attributes).future);
-  materials = search(materials, query);
-  materials = filter(materials, options);
+  materials = ref.read(searchServiceProvider).search(materials, query);
+  materials = ref.read(filterServiceProvider).filter(materials, options);
   return materials;
 });
 

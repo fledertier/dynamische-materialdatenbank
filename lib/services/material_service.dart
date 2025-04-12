@@ -14,6 +14,10 @@ class MaterialService {
       "id": id,
       "name": "Material $id",
       "description": "Description of Material $id",
+      "recyclable": Random().nextBool(),
+      "biodegradable": Random().nextBool(),
+      "biobased": Random().nextBool(),
+      "manufacturer": "Manufacturer ${Random().nextInt(10)}",
       "weight": double.parse((Random().nextDouble() * 100).toStringAsFixed(2)),
     };
 
@@ -40,18 +44,25 @@ class MaterialService {
   Future<void> deleteMaterial(String id) async {
     final material = await getMaterial(id);
 
-    FirebaseFirestore.instance.collection(Collections.materials).doc(id).delete();
+    FirebaseFirestore.instance
+        .collection(Collections.materials)
+        .doc(id)
+        .delete();
 
     for (final attribute in material.keys) {
-      FirebaseFirestore.instance.collection(Collections.attributes).doc(attribute).update(
-        {id: FieldValue.delete()},
-      );
+      FirebaseFirestore.instance
+          .collection(Collections.attributes)
+          .doc(attribute)
+          .update({id: FieldValue.delete()});
     }
   }
 
   Future<Map<String, dynamic>> getMaterial(String id) async {
     final snapshot =
-        await FirebaseFirestore.instance.collection(Collections.materials).doc(id).get();
+        await FirebaseFirestore.instance
+            .collection(Collections.materials)
+            .doc(id)
+            .get();
     return snapshot.exists ? snapshot.data() ?? {} : {};
   }
 
@@ -61,7 +72,7 @@ class MaterialService {
         .doc(id)
         .snapshots()
         .map((snapshot) {
-      return snapshot.exists ? snapshot.data() ?? {} : {};
-    });
+          return snapshot.exists ? snapshot.data() ?? {} : {};
+        });
   }
 }

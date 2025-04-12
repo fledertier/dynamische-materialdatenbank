@@ -42,7 +42,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
       controller: controller,
       search: (query) {
         if (materials == null) return [];
-        return search(materials, query);
+        return ref.read(searchServiceProvider).search(materials, query);
       },
       buildSuggestion: (material) {
         return ListTile(
