@@ -2,23 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
-import 'filter_state.dart';
+import '../providers/filter_provider.dart';
 import 'labeled.dart';
 import 'labeled_list.dart';
 import 'side_sheet.dart';
 
-class Filters extends StatefulWidget {
+class Filters extends ConsumerWidget {
   const Filters({super.key});
 
   @override
-  State<Filters> createState() => _FiltersState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(filterProvider);
+    final notifier = ref.read(filterProvider.notifier);
 
-class _FiltersState extends State<Filters> {
-  FilterState state = FilterState();
-
-  @override
-  Widget build(BuildContext context) {
     return SideSheet.detached(
       title: Text('Filters'),
       topActions: [
@@ -41,30 +37,27 @@ class _FiltersState extends State<Filters> {
                 title: Text('Recyclebar'),
                 value: state.recyclable ?? false,
                 onChanged: (value) {
-                  setState(() {
-                    if (value == false) value = null;
-                    state.recyclable = value;
-                  });
+                  notifier.state = state.copyWithNullable(
+                    recyclable: () => value == true ? value : null,
+                  );
                 },
               ),
               CheckboxListTile(
                 title: Text('Abbaubar'),
                 value: state.biodegradable ?? false,
                 onChanged: (value) {
-                  setState(() {
-                    if (value == false) value = null;
-                    state.biodegradable = value;
-                  });
+                  notifier.state = state.copyWithNullable(
+                    biodegradable: () => value == true ? value : null,
+                  );
                 },
               ),
               CheckboxListTile(
                 title: Text('Biobasiert'),
                 value: state.biobased ?? false,
                 onChanged: (value) {
-                  setState(() {
-                    if (value == false) value = null;
-                    state.biobased = value;
-                  });
+                  notifier.state = state.copyWithNullable(
+                    biobased: () => value == true ? value : null,
+                  );
                 },
               ),
             ],
@@ -91,9 +84,9 @@ class _FiltersState extends State<Filters> {
               ],
               initialSelection: state.manufacturer,
               onSelected: (value) {
-                setState(() {
-                  state.manufacturer = value;
-                });
+                notifier.state = state.copyWithNullable(
+                  manufacturer: () => value,
+                );
               },
             ),
           ),
@@ -114,13 +107,9 @@ class _FiltersState extends State<Filters> {
                   max: maxWeight,
                   value: weight,
                   onChanged: (value) {
-                    setState(() {
-                      if (value != maxWeight) {
-                        state.weight = value;
-                      } else {
-                        state.weight = null;
-                      }
-                    });
+                    notifier.state = state.copyWithNullable(
+                      weight: () => value != maxWeight ? value : null,
+                    );
                   },
                 );
               },
