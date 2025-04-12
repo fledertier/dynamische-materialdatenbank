@@ -1,5 +1,5 @@
-class FilterState {
-  const FilterState({
+class FilterOptions {
+  const FilterOptions({
     this.recyclable,
     this.biodegradable,
     this.biobased,
@@ -21,14 +21,14 @@ class FilterState {
         weight == null;
   }
 
-  FilterState copyWithNullable({
+  FilterOptions copyWithNullable({
     bool? Function()? recyclable,
     bool? Function()? biodegradable,
     bool? Function()? biobased,
     String? Function()? manufacturer,
     double? Function()? weight,
   }) {
-    return FilterState(
+    return FilterOptions(
       recyclable: recyclable != null ? recyclable() : this.recyclable,
       biodegradable:
           biodegradable != null ? biodegradable() : this.biodegradable,
@@ -40,7 +40,7 @@ class FilterState {
 
   @override
   bool operator ==(Object other) {
-    return other is FilterState &&
+    return other is FilterOptions &&
         other.recyclable == recyclable &&
         other.biodegradable == biodegradable &&
         other.biobased == biobased &&

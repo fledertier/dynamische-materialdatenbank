@@ -1,27 +1,26 @@
-import '../filter/filter_state.dart';
+import '../filter/filter_options.dart';
 
 List<Map<String, dynamic>> filter(
   List<Map<String, dynamic>> materials,
-  FilterState filterState,
+  FilterOptions options,
 ) {
-  if (filterState.isEmpty) {
+  if (options.isEmpty) {
     return materials;
   }
   return materials.where((material) {
-    if (material['recyclable'] != filterState.recyclable) {
+    if (material['recyclable'] != options.recyclable) {
       return false;
     }
-    if (material['biodegradable'] != filterState.biodegradable) {
+    if (material['biodegradable'] != options.biodegradable) {
       return false;
     }
-    if (material['biobased'] != filterState.biobased) {
+    if (material['biobased'] != options.biobased) {
       return false;
     }
-    if (material['manufacturer'] != filterState.manufacturer) {
+    if (material['manufacturer'] != options.manufacturer) {
       return false;
     }
-    if (filterState.weight != null &&
-        material['weight'] > filterState.weight!) {
+    if (options.weight != null && material['weight'] > options.weight!) {
       return false;
     }
     return true;

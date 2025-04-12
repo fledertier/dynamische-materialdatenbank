@@ -1,14 +1,13 @@
-import 'package:dynamische_materialdatenbank/filter/filter_state.dart';
+import 'package:dynamische_materialdatenbank/filter/filter_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final filterProvider = NotifierProvider(FilterNotifier.new);
 
-class FilterNotifier extends Notifier<FilterState> {
+class FilterNotifier extends Notifier<FilterOptions> {
   @override
-  FilterState build() => FilterState();
+  FilterOptions build() => FilterOptions();
 
-  @override
-  set state(FilterState filterState) {
-    super.state = filterState;
+  set options(FilterOptions options) {
+    state = options;
   }
 }

@@ -12,7 +12,7 @@ class Filters extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(filterProvider);
+    final options = ref.watch(filterProvider);
     final notifier = ref.read(filterProvider.notifier);
 
     return SideSheet.detached(
@@ -35,27 +35,27 @@ class Filters extends ConsumerWidget {
             children: [
               CheckboxListTile(
                 title: Text('Recyclebar'),
-                value: state.recyclable ?? false,
+                value: options.recyclable ?? false,
                 onChanged: (value) {
-                  notifier.state = state.copyWithNullable(
+                  notifier.options = options.copyWithNullable(
                     recyclable: () => value == true ? value : null,
                   );
                 },
               ),
               CheckboxListTile(
                 title: Text('Abbaubar'),
-                value: state.biodegradable ?? false,
+                value: options.biodegradable ?? false,
                 onChanged: (value) {
-                  notifier.state = state.copyWithNullable(
+                  notifier.options = options.copyWithNullable(
                     biodegradable: () => value == true ? value : null,
                   );
                 },
               ),
               CheckboxListTile(
                 title: Text('Biobasiert'),
-                value: state.biobased ?? false,
+                value: options.biobased ?? false,
                 onChanged: (value) {
-                  notifier.state = state.copyWithNullable(
+                  notifier.options = options.copyWithNullable(
                     biobased: () => value == true ? value : null,
                   );
                 },
@@ -82,9 +82,9 @@ class Filters extends ConsumerWidget {
                   label: 'Manufacturer 2',
                 ),
               ],
-              initialSelection: state.manufacturer,
+              initialSelection: options.manufacturer,
               onSelected: (value) {
-                notifier.state = state.copyWithNullable(
+                notifier.options = options.copyWithNullable(
                   manufacturer: () => value,
                 );
               },
@@ -100,14 +100,14 @@ class Filters extends ConsumerWidget {
                 final minWeight = extrema?.min ?? 0;
                 final maxWeight = extrema?.max ?? 1;
                 final weight =
-                    state.weight?.clamp(minWeight, maxWeight) ?? maxWeight;
+                    options.weight?.clamp(minWeight, maxWeight) ?? maxWeight;
                 return Slider(
                   label: '${weight.toStringAsFixed(1)} Kg',
                   min: minWeight,
                   max: maxWeight,
                   value: weight,
                   onChanged: (value) {
-                    notifier.state = state.copyWithNullable(
+                    notifier.options = options.copyWithNullable(
                       weight: () => value != maxWeight ? value : null,
                     );
                   },
