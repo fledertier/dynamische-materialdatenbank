@@ -24,6 +24,7 @@ class Navigation extends StatelessWidget {
       leading: Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 16),
         child: FloatingActionButton(
+          heroTag: null,
           elevation: 0,
           hoverElevation: 0,
           highlightElevation: 0,

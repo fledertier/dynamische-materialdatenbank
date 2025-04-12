@@ -19,7 +19,7 @@ class MaterialDetailPage extends ConsumerWidget {
 
     return AppScaffold(
       header: Header(),
-      navigation: Navigation(page: Pages.material),
+      navigation: Navigation(page: Pages.materials),
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerLow,
