@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants.dart';
 import '../providers/attribute_provider.dart';
 import '../providers/filter_provider.dart';
 import 'labeled.dart';
@@ -14,7 +15,8 @@ class Filters extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterProvider);
-    final notifier = ref.read(filterProvider.notifier);
+    final optionsNotifier = ref.read(filterProvider.notifier);
+    final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
     return SideSheet.detached(
       title: Text('Filters'),
@@ -35,28 +37,28 @@ class Filters extends ConsumerWidget {
             label: Text('Nachhaltigkeit'),
             children: [
               CheckboxListTile(
-                title: Text('Recyclebar'),
+                title: Text(attributes[Attributes.recyclable]?.name ?? ''),
                 value: options['recyclable'] ?? false,
                 onChanged: (value) {
-                  notifier.updateWith({
+                  optionsNotifier.updateWith({
                     'recyclable': value == true ? value : null,
                   });
                 },
               ),
               CheckboxListTile(
-                title: Text('Abbaubar'),
+                title: Text(attributes[Attributes.biodegradable]?.name ?? ''),
                 value: options['biodegradable'] ?? false,
                 onChanged: (value) {
-                  notifier.updateWith({
+                  optionsNotifier.updateWith({
                     'biodegradable': value == true ? value : null,
                   });
                 },
               ),
               CheckboxListTile(
-                title: Text('Biobasiert'),
+                title: Text(attributes[Attributes.biobased]?.name ?? ''),
                 value: options['biobased'] ?? false,
                 onChanged: (value) {
-                  notifier.updateWith({
+                  optionsNotifier.updateWith({
                     'biobased': value == true ? value : null,
                   });
                 },
@@ -64,7 +66,7 @@ class Filters extends ConsumerWidget {
             ],
           ),
           Labeled(
-            label: Text('Hersteller'),
+            label: Text(attributes[Attributes.manufacturer]?.name ?? ''),
             child: Consumer(
               builder: (context, ref, child) {
                 final values =
@@ -91,14 +93,14 @@ class Filters extends ConsumerWidget {
                   ],
                   initialSelection: options['manufacturer'],
                   onSelected: (value) {
-                    notifier.updateWith({'manufacturer': value});
+                    optionsNotifier.updateWith({'manufacturer': value});
                   },
                 );
               },
             ),
           ),
           Labeled(
-            label: Text('Gewicht'),
+            label: Text(attributes[Attributes.weight]?.name ?? ''),
             gap: 6,
             child: Consumer(
               builder: (context, ref, child) {
@@ -114,7 +116,7 @@ class Filters extends ConsumerWidget {
                   max: maxWeight,
                   value: weight,
                   onChanged: (value) {
-                    notifier.updateWith({
+                    optionsNotifier.updateWith({
                       'weight': value != maxWeight ? value : null,
                     });
                   },
