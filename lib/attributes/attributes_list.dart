@@ -45,7 +45,7 @@ class AttributesList extends ConsumerWidget {
             );
           },
         );
-      }
+      },
     );
   }
 }
@@ -67,7 +67,7 @@ class AttributeListTile extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: ListTile(
-        leading: Icon(attribute.type.icon()),
+        leading: Icon(attribute.type.icon),
         title: Text(attribute.name),
         subtitle: Text(
           [

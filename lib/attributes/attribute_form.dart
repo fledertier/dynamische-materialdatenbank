@@ -107,7 +107,7 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(value.icon()),
+                              Icon(value.icon),
                               SizedBox(width: 8),
                               Text(value.name),
                             ],
@@ -181,9 +181,10 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
       final attribute = Attribute(
         id: widget.attribute.id,
         nameDe: _attribute.value.nameDe,
-        nameEn: _attribute.value.nameEn?.isNotEmpty ?? false
-          ? _attribute.value.nameEn
-          : null,
+        nameEn:
+            _attribute.value.nameEn?.isNotEmpty ?? false
+                ? _attribute.value.nameEn
+                : null,
         type: widget.attribute.type,
         required: _attribute.value.required == true ? true : null,
       );
@@ -258,7 +259,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(type.icon(), color: theme.disabledColor),
+                          Icon(type.icon, color: theme.disabledColor),
                           SizedBox(width: 8),
                           Text(type.name),
                         ],

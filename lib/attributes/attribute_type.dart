@@ -5,7 +5,8 @@ const attributeTypes = AttributeType.values;
 
 enum AttributeType {
   text,
-  number;
+  number,
+  boolean;
 
   static AttributeType fromJson(dynamic json) {
     return AttributeType.values.firstWhere((e) => e.name == json);
@@ -15,10 +16,11 @@ enum AttributeType {
 }
 
 extension AttributeTypeExtension on AttributeType {
-  IconData icon() {
+  IconData get icon {
     return switch (this) {
-      AttributeType.text => Symbols.abc,
-      AttributeType.number => Symbols.onetwothree, // Symbols.numbers,
+      AttributeType.text => Symbols.text_fields,
+      AttributeType.number => Symbols.numbers,
+      AttributeType.boolean => Symbols.toggle_on,
       // _ => Symbols.change_history,
     };
   }
