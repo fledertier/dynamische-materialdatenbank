@@ -9,19 +9,15 @@ import 'filter_provider.dart';
 
 final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
   final query = ref.watch(searchProvider);
-  final options = ref.watch(filterProvider);
+  final filterOptions = ref.watch(filterProvider);
   final attributes = AttributesParameter({
     "name",
     if (query.isNotEmpty) "description",
-    if (options.recyclable != null) "recyclable",
-    if (options.biodegradable != null) "biodegradable",
-    if (options.biobased != null) "biobased",
-    if (options.manufacturer != null) "manufacturer",
-    if (options.weight != null) "weight",
+    ...filterOptions.keys,
   });
   var materials = await ref.watch(materialsStreamProvider(attributes).future);
   materials = ref.read(searchServiceProvider).search(materials, query);
-  materials = ref.read(filterServiceProvider).filter(materials, options);
+  materials = ref.read(filterServiceProvider).filter(materials, filterOptions);
   return materials;
 });
 

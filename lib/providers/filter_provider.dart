@@ -1,13 +1,12 @@
-import 'package:dynamische_materialdatenbank/filter/filter_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final filterProvider = NotifierProvider(FilterNotifier.new);
 
-class FilterNotifier extends Notifier<FilterOptions> {
+class FilterNotifier extends Notifier<Map<String, dynamic>> {
   @override
-  FilterOptions build() => FilterOptions();
+  Map<String, dynamic> build() => {};
 
-  set options(FilterOptions options) {
-    state = options;
+  void updateWith(Map<String, dynamic> options) {
+    state = {...state, ...options}..removeWhere((key, value) => value == null);
   }
 }
