@@ -26,7 +26,7 @@ class AttributesList extends ConsumerWidget {
       return Center(child: CircularProgressIndicator());
     }
 
-    final attributes = snapshot.value ?? [];
+    final attributes = snapshot.value ?? {};
 
     return ListenableBuilder(
       listenable: mode,
@@ -34,7 +34,7 @@ class AttributesList extends ConsumerWidget {
         return ListView.builder(
           itemCount: attributes.length,
           itemBuilder: (context, index) {
-            final attribute = attributes[index];
+            final attribute = attributes.values.elementAt(index);
 
             return AttributeListTile(
               attribute,

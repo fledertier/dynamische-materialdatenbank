@@ -9,7 +9,7 @@ enum AttributeType {
   boolean;
 
   static AttributeType fromJson(dynamic json) {
-    return AttributeType.values.firstWhere((e) => e.name == json);
+    return AttributeType.values.byName(json);
   }
 
   String toJson() => name;

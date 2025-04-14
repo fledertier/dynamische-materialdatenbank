@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -75,8 +74,5 @@ final attributesStreamProvider = StreamProvider((ref) {
 });
 
 final attributeProvider = Provider.family((ref, String attribute) {
-  return ref
-      .watch(attributesProvider)
-      .value
-      ?.firstWhereOrNull((a) => a.id == attribute);
+  return ref.watch(attributesProvider).value?[attribute];
 });

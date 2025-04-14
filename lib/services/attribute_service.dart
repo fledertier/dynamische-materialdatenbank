@@ -60,24 +60,24 @@ class AttributeService {
         .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
   }
 
-  Future<List<Attribute>> getAttributes() async {
+  Future<Map<String, Attribute>> getAttributes() async {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.metadata)
             .doc("attributes")
             .get();
-    final list = snapshot.dataOrNull()?.includeKeysInValuesAs("id") ?? [];
-    return list.map(Attribute.fromJson).toList();
+    final map = snapshot.dataOrNull() ?? {};
+    return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
   }
 
-  Stream<List<Attribute>> getAttributesStream() {
+  Stream<Map<String, Attribute>> getAttributesStream() {
     return FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc("attributes")
         .snapshots()
         .map((snapshot) {
-          final list = snapshot.dataOrNull()?.includeKeysInValuesAs("id") ?? [];
-          return list.map(Attribute.fromJson).toList();
+          final map = snapshot.dataOrNull() ?? {};
+          return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
         });
   }
 
@@ -86,7 +86,9 @@ class AttributeService {
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc("attributes")
-        .set({id: attribute}, SetOptions(merge: true));
+        .set({
+          id: {'id': id, ...attribute},
+        }, SetOptions(merge: true));
   }
 
   Future<void> updateAttribute(Attribute attribute) async {
@@ -99,14 +101,6 @@ class AttributeService {
 }
 
 typedef Json = Map<String, dynamic>;
-
-extension on Json {
-  List<Json> includeKeysInValuesAs(String attribute) {
-    return entries.map((entry) {
-      return {attribute: entry.key, ...entry.value as Json};
-    }).toList();
-  }
-}
 
 extension DocumentSnapshotExtension<T> on DocumentSnapshot<T> {
   T? dataOrNull() => exists ? data() : null;
