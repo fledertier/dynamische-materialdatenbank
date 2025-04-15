@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants.dart';
 import '../services/filter_service.dart';
 import '../services/material_service.dart';
 import '../services/search_service.dart';
@@ -11,8 +12,8 @@ final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
   final query = ref.watch(searchProvider);
   final filterOptions = ref.watch(filterProvider);
   final attributes = AttributesParameter({
-    "name",
-    if (query.isNotEmpty) "description",
+    Attributes.name,
+    if (query.isNotEmpty) Attributes.description,
     ...filterOptions.keys,
   });
   var materials = await ref.watch(materialsStreamProvider(attributes).future);

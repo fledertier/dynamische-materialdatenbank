@@ -42,7 +42,7 @@ class AttributeService {
     final materials = await getMaterialsWithAttribute(attribute);
 
     for (final material in materials) {
-      final id = material["id"];
+      final id = material[Attributes.id];
       FirebaseFirestore.instance
           .collection(Collections.materials)
           .doc(id)

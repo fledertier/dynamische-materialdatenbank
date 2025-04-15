@@ -2,31 +2,33 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
+import '../placeholder.dart';
 
 final materialServiceProvider = Provider((ref) => MaterialService());
 
 class MaterialService {
   Future<void> createMaterial() async {
-    final id = Random().nextInt(4000).toString().padLeft(4, "0");
+    final id = Uuid().v7();
     final material = {
-      "id": id,
-      "name": "Material $id",
-      "description": "Description of Material $id",
-      "recyclable": Random().nextBool(),
-      "biodegradable": Random().nextBool(),
-      "biobased": Random().nextBool(),
-      "manufacturer": "Manufacturer ${Random().nextInt(10)}",
-      "weight": double.parse((Random().nextDouble() * 100).toStringAsFixed(2)),
+      Attributes.id: id,
+      Attributes.name: randomName(),
+      Attributes.description: randomDescription(),
+      if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
+      if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
+      if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
+      if (Random().nextBool()) Attributes.manufacturer: "Manufacturer ${Random().nextInt(10)}",
+      if (Random().nextBool()) Attributes.weight: double.parse((Random().nextDouble() * 100).toStringAsFixed(2)),
     };
 
     await updateMaterial(material);
   }
 
   Future<void> updateMaterial(Map<String, dynamic> material) async {
-    assert(material["id"] != null, "Material must have an id");
-    final id = material["id"];
+    assert(material[Attributes.id] != null, "Material must have an id");
+    final id = material[Attributes.id];
 
     await FirebaseFirestore.instance
         .collection(Collections.materials)

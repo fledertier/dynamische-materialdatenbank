@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants.dart';
 import '../services/attribute_service.dart';
 
 class Extrema {
@@ -19,6 +20,9 @@ final attributeExtremaProvider = FutureProvider.family((
     attributeValuesStreamProvider(attribute).future,
   );
   final numbers = values.values.map((value) => value as double);
+  if (numbers.isEmpty) {
+    return null;
+  }
   return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
 });
 
@@ -41,7 +45,7 @@ final attributesValuesStreamProvider = FutureProvider.family((
   for (final attribute in parameter.attributes) {
     final values = await ref.watch(attributeValuesProvider(attribute).future);
     values.forEach((id, value) {
-      final material = materials.putIfAbsent(id, () => {"id": id});
+      final material = materials.putIfAbsent(id, () => {Attributes.id: id});
       material[attribute] = value;
     });
   }

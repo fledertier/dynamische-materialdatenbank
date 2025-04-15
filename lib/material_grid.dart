@@ -37,7 +37,7 @@ class MaterialItem extends StatelessWidget {
 
   final Map<String, dynamic> item;
 
-  String get id => item["id"];
+  String get id => item[Attributes.id];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class MaterialItem extends StatelessWidget {
                   return PopupMenuButton<String>(
                     onSelected: (value) {
                       if (value == 'delete') {
-                        final id = item["id"];
+                        final id = item[Attributes.id];
                         ref.read(materialServiceProvider).deleteMaterial(id);
                       }
                     },
@@ -70,7 +70,7 @@ class MaterialItem extends StatelessWidget {
                 },
               ),
             ),
-            Positioned(bottom: 12, left: 12, child: Text(item["name"])),
+            Positioned(bottom: 12, left: 12, child: Text(item[Attributes.name])),
           ],
         ),
       ),

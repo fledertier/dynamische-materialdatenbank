@@ -39,28 +39,28 @@ class Filters extends ConsumerWidget {
             children: [
               CheckboxListTile(
                 title: LoadingText(attributes[Attributes.recyclable]?.name),
-                value: options['recyclable'] ?? false,
+                value: options[Attributes.recyclable] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
-                    'recyclable': value == true ? value : null,
+                    Attributes.recyclable: value == true ? value : null,
                   });
                 },
               ),
               CheckboxListTile(
                 title: LoadingText(attributes[Attributes.biodegradable]?.name),
-                value: options['biodegradable'] ?? false,
+                value: options[Attributes.biodegradable] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
-                    'biodegradable': value == true ? value : null,
+                    Attributes.biodegradable: value == true ? value : null,
                   });
                 },
               ),
               CheckboxListTile(
                 title: LoadingText(attributes[Attributes.biobased]?.name),
-                value: options['biobased'] ?? false,
+                value: options[Attributes.biobased] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
-                    'biobased': value == true ? value : null,
+                    Attributes.biobased: value == true ? value : null,
                   });
                 },
               ),
@@ -71,7 +71,7 @@ class Filters extends ConsumerWidget {
             child: Consumer(
               builder: (context, ref, child) {
                 final values =
-                    ref.watch(attributeValuesProvider('manufacturer')).value;
+                    ref.watch(attributeValuesProvider(Attributes.manufacturer)).value;
                 final manufacturers = values?.values.toSet().sortedBy(
                   (value) => value.toString(),
                 );
@@ -92,9 +92,9 @@ class Filters extends ConsumerWidget {
                       ),
                     ),
                   ],
-                  initialSelection: options['manufacturer'],
+                  initialSelection: options[Attributes.manufacturer],
                   onSelected: (value) {
-                    optionsNotifier.updateWith({'manufacturer': value});
+                    optionsNotifier.updateWith({Attributes.manufacturer: value});
                   },
                 );
               },
@@ -106,11 +106,11 @@ class Filters extends ConsumerWidget {
             child: Consumer(
               builder: (context, ref, child) {
                 final extrema =
-                    ref.watch(attributeExtremaProvider('weight')).value;
+                    ref.watch(attributeExtremaProvider(Attributes.weight)).value;
                 final minWeight = extrema?.min ?? 0;
                 final maxWeight = extrema?.max ?? 1;
                 final weight =
-                    options['weight']?.clamp(minWeight, maxWeight) ?? maxWeight;
+                    options[Attributes.weight]?.clamp(minWeight, maxWeight) ?? maxWeight;
                 return Slider(
                   label: '${weight.toStringAsFixed(1)} Kg',
                   min: minWeight,
@@ -118,7 +118,7 @@ class Filters extends ConsumerWidget {
                   value: weight,
                   onChanged: (value) {
                     optionsNotifier.updateWith({
-                      'weight': value != maxWeight ? value : null,
+                      Attributes.weight: value != maxWeight ? value : null,
                     });
                   },
                 );

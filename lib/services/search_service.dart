@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../constants.dart';
+
 final searchServiceProvider = Provider((ref) => SearchService());
 
 class SearchService {
@@ -11,7 +13,7 @@ class SearchService {
       return materials;
     }
     return materials.where((material) {
-      return ['name', 'description'].any((attribute) {
+      return [Attributes.name, Attributes.description].any((attribute) {
         return material[attribute].toLowerCase().contains(query.toLowerCase());
       });
     }).toList();
