@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
+import '../highlighted_text.dart';
 import '../providers/attribute_provider.dart';
 import '../providers/material_provider.dart';
 import '../services/search_service.dart';
@@ -18,6 +19,7 @@ class MaterialSearch extends ConsumerStatefulWidget {
 
 class _MaterialSearchState extends ConsumerState<MaterialSearch> {
   late final SearchController controller;
+  late String query;
 
   @override
   void initState() {
@@ -38,18 +40,19 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
       hintText: 'Search in materials',
       controller: controller,
       search: (query) async {
-        final attributes = AttributesParameter({
-          Attributes.name,
-          Attributes.description,
-        });
+        this.query = query;
+        final attributes = AttributesParameter({Attributes.name});
         final materials = await ref.read(
           materialsStreamProvider(attributes).future,
         );
-        return ref.read(searchServiceProvider).search(materials, query);
+        return ref
+            .read(searchServiceProvider)
+            .search(materials, attributes.attributes, query);
       },
       buildSuggestion: (material) {
+        final name = material[Attributes.name] as String;
         return ListTile(
-          title: Text(material[Attributes.name]),
+          title: HighlightedText(name, highlighted: query),
           onTap: () {
             controller.closeView('');
             context.pushNamed(

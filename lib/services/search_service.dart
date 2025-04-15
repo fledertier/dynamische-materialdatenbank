@@ -1,19 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants.dart';
-
 final searchServiceProvider = Provider((ref) => SearchService());
 
 class SearchService {
   List<Map<String, dynamic>> search(
     List<Map<String, dynamic>> materials,
+    Iterable<String> attributes,
     String query,
   ) {
     if (query.isEmpty) {
       return materials;
     }
     return materials.where((material) {
-      return [Attributes.name, Attributes.description].any((attribute) {
+      return attributes.any((attribute) {
         if (material[attribute] == null) {
           return false;
         }

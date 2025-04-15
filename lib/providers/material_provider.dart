@@ -17,7 +17,7 @@ final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
     ...filterOptions.keys,
   });
   var materials = await ref.watch(materialsStreamProvider(attributes).future);
-  materials = ref.read(searchServiceProvider).search(materials, query);
+  materials = ref.read(searchServiceProvider).search(materials, attributes.attributes, query);
   materials = ref.read(filterServiceProvider).filter(materials, filterOptions);
   return materials;
 });
