@@ -1,9 +1,11 @@
+import 'package:dynamische_materialdatenbank/providers/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/providers/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
 import 'constants.dart';
+import 'filter/labeled.dart';
 import 'header/header.dart';
 import 'navigation.dart';
 
@@ -16,6 +18,8 @@ class MaterialDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncMaterial = ref.watch(materialStreamProvider(materialId));
     final material = asyncMaterial.value ?? {};
+
+    final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
     return AppScaffold(
       header: Header(),
@@ -43,9 +47,9 @@ class MaterialDetailPage extends ConsumerWidget {
                   child: ListView(
                     children: [
                       for (final attribute in material.keys)
-                        ListTile(
-                          title: Text(attribute),
-                          subtitle: Text(material[attribute].toString()),
+                        Labeled(
+                          label: Text(attributes[attribute]?.name ?? attribute),
+                          child: Text(material[attribute].toString()),
                         ),
                     ],
                   ),

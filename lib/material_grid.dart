@@ -70,7 +70,11 @@ class MaterialItem extends StatelessWidget {
                 },
               ),
             ),
-            Positioned(bottom: 12, left: 12, child: Text(item[Attributes.name])),
+            Positioned(
+              bottom: 12,
+              left: 12,
+              child: Text(item[Attributes.name]),
+            ),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 import '../placeholder.dart';
@@ -11,16 +11,15 @@ final materialServiceProvider = Provider((ref) => MaterialService());
 
 class MaterialService {
   Future<void> createMaterial() async {
-    final id = Uuid().v7();
     final material = {
-      Attributes.id: id,
+      Attributes.id: generateId(),
       Attributes.name: randomName(),
       Attributes.description: randomDescription(),
       if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
-      if (Random().nextBool()) Attributes.manufacturer: "Manufacturer ${Random().nextInt(10)}",
-      if (Random().nextBool()) Attributes.weight: double.parse((Random().nextDouble() * 100).toStringAsFixed(2)),
+      if (Random().nextBool()) Attributes.manufacturer: randomManufacturer(),
+      if (Random().nextBool()) Attributes.weight: randomWeight(),
     };
 
     await updateMaterial(material);

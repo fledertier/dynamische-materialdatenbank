@@ -20,6 +20,16 @@ String randomDescription() {
   return '${selectedSentences.join('. ')}.';
 }
 
+String randomManufacturer() {
+  final random = Random();
+  return "Manufacturer ${random.nextInt(10)}";
+}
+
+double randomWeight() {
+  final random = Random();
+  return double.parse((random.nextDouble() * 100).toStringAsFixed(2));
+}
+
 const randomMaterialNames = [
   "Aluminium",
   "Beton",

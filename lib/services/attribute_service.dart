@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 import '../attributes/attribute.dart';
 import '../constants.dart';
@@ -82,7 +82,7 @@ class AttributeService {
   }
 
   Future<void> createAttribute(Json attribute) async {
-    final id = Uuid().v7();
+    final id = generateId();
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc("attributes")
