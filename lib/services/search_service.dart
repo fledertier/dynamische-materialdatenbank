@@ -14,6 +14,9 @@ class SearchService {
     }
     return materials.where((material) {
       return [Attributes.name, Attributes.description].any((attribute) {
+        if (material[attribute] == null) {
+          return false;
+        }
         return material[attribute].toLowerCase().contains(query.toLowerCase());
       });
     }).toList();

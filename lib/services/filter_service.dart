@@ -15,6 +15,10 @@ class FilterService {
         final filterValue = options[attribute];
         final value = material[attribute];
 
+        if (value == null) {
+          return false;
+        }
+
         if (filterValue is double) {
           if (value > filterValue) {
             return false;

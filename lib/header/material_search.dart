@@ -34,24 +34,27 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
 
   @override
   Widget build(BuildContext context) {
-    final attributes = AttributesParameter({'name', 'description'});
-    final materials = ref.watch(materialsStreamProvider(attributes)).value;
-
     return Search(
       hintText: 'Search in materials',
       controller: controller,
-      search: (query) {
-        if (materials == null) return [];
+      search: (query) async {
+        final attributes = AttributesParameter({
+          Attributes.name,
+          Attributes.description,
+        });
+        final materials = await ref.read(
+          materialsStreamProvider(attributes).future,
+        );
         return ref.read(searchServiceProvider).search(materials, query);
       },
       buildSuggestion: (material) {
         return ListTile(
-          title: Text(material['name']),
+          title: Text(material[Attributes.name]),
           onTap: () {
             controller.closeView('');
             context.pushNamed(
               Pages.material,
-              pathParameters: {'materialId': material['id']},
+              pathParameters: {'materialId': material[Attributes.id]},
             );
           },
         );

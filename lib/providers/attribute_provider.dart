@@ -53,12 +53,15 @@ final attributesValuesStreamProvider = FutureProvider.family((
 });
 
 class AttributesParameter {
-  AttributesParameter(this.attributes);
+  const AttributesParameter(this.attributes);
 
   final Set<String> attributes;
 
   @override
   bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
     return other is AttributesParameter &&
         setEquals(other.attributes, attributes);
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class Search<T> extends StatelessWidget {
@@ -14,7 +16,7 @@ class Search<T> extends StatelessWidget {
 
   final String? hintText;
   final SearchController controller;
-  final List<T> Function(String query) search;
+  final FutureOr<List<T>> Function(String query) search;
   final Widget Function(T suggestion) buildSuggestion;
   final void Function(String value)? onChanged;
   final void Function(String value)? onSubmitted;
@@ -40,12 +42,12 @@ class Search<T> extends StatelessWidget {
       ],
       onChanged: onChanged,
       onSubmitted: onSubmitted,
-      suggestionsBuilder: (context, controller) {
+      suggestionsBuilder: (context, controller) async {
         final query = controller.text;
         if (query.isEmpty) {
           return [];
         }
-        final suggestions = search(query);
+        final suggestions = await search(query);
         return suggestions.map(buildSuggestion);
       },
     );
