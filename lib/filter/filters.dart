@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,7 +38,7 @@ class Filters extends ConsumerWidget {
             label: Text('Nachhaltigkeit'),
             children: [
               CheckboxListTile(
-                title: Text(attributes[Attributes.recyclable]?.name ?? ''),
+                title: LoadingText(attributes[Attributes.recyclable]?.name),
                 value: options['recyclable'] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
@@ -46,7 +47,7 @@ class Filters extends ConsumerWidget {
                 },
               ),
               CheckboxListTile(
-                title: Text(attributes[Attributes.biodegradable]?.name ?? ''),
+                title: LoadingText(attributes[Attributes.biodegradable]?.name),
                 value: options['biodegradable'] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
@@ -55,7 +56,7 @@ class Filters extends ConsumerWidget {
                 },
               ),
               CheckboxListTile(
-                title: Text(attributes[Attributes.biobased]?.name ?? ''),
+                title: LoadingText(attributes[Attributes.biobased]?.name),
                 value: options['biobased'] ?? false,
                 onChanged: (value) {
                   optionsNotifier.updateWith({
@@ -66,7 +67,7 @@ class Filters extends ConsumerWidget {
             ],
           ),
           Labeled(
-            label: Text(attributes[Attributes.manufacturer]?.name ?? ''),
+            label: LoadingText(attributes[Attributes.manufacturer]?.name),
             child: Consumer(
               builder: (context, ref, child) {
                 final values =
@@ -100,7 +101,7 @@ class Filters extends ConsumerWidget {
             ),
           ),
           Labeled(
-            label: Text(attributes[Attributes.weight]?.name ?? ''),
+            label: LoadingText(attributes[Attributes.weight]?.name),
             gap: 6,
             child: Consumer(
               builder: (context, ref, child) {
