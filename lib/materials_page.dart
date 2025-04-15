@@ -19,7 +19,7 @@ class MaterialsPage extends StatelessWidget {
       navigation: Navigation(page: Pages.materials),
       body: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          color: ColorScheme.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Stack(

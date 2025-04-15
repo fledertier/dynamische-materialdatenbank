@@ -22,7 +22,7 @@ class LabeledList extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: DefaultTextStyle.merge(
-              style: Theme.of(context).textTheme.labelMedium,
+              style: TextTheme.of(context).labelMedium,
               child: label,
             ),
           ),

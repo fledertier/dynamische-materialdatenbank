@@ -22,30 +22,34 @@ class MaterialDetailPage extends ConsumerWidget {
       navigation: Navigation(page: Pages.materials),
       body: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          color: ColorScheme.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: asyncMaterial.isLoading ? Center(
-          child: CircularProgressIndicator(),
-        ) : null,
+        child:
+            asyncMaterial.isLoading
+                ? Center(child: CircularProgressIndicator())
+                : null,
       ),
       sidebar: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          color: ColorScheme.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: asyncMaterial.isLoading ? null : SizedBox(
-          width: 300,
-          child: ListView(
-            children: [
-              for (final attribute in material.keys)
-                ListTile(
-                  title: Text(attribute),
-                  subtitle: Text(material[attribute].toString()),
+        child:
+            asyncMaterial.isLoading
+                ? null
+                : SizedBox(
+                  width: 300,
+                  child: ListView(
+                    children: [
+                      for (final attribute in material.keys)
+                        ListTile(
+                          title: Text(attribute),
+                          subtitle: Text(material[attribute].toString()),
+                        ),
+                    ],
+                  ),
                 ),
-            ],
-          ),
-        ),
       ),
     );
   }

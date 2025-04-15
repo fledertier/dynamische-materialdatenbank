@@ -20,7 +20,7 @@ class Labeled extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DefaultTextStyle.merge(
-            style: Theme.of(context).textTheme.labelMedium,
+            style: TextTheme.of(context).labelMedium,
             child: label,
           ),
           SizedBox(height: gap),

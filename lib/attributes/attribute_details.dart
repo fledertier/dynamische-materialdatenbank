@@ -25,21 +25,21 @@ class AttributeDetails extends ConsumerWidget {
                 height: 40,
                 child: Row(
                   children: [
-                    Text(
-                      switch(mode.value) {
-                        CreateAttributeMode _ => "Create Attribute",
-                        EditAttributeMode _ => "Edit Attribute",
-                        _ => "",
-                      },
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
+                    Text(switch (mode.value) {
+                      CreateAttributeMode _ => "Create Attribute",
+                      EditAttributeMode _ => "Edit Attribute",
+                      _ => "",
+                    }, style: TextTheme.of(context).headlineSmall),
                     Spacer(),
                     if (mode.value case final EditAttributeMode editMode)
                       FilledButton.tonalIcon(
                         label: Text("Delete"),
                         icon: Icon(Symbols.delete),
                         onPressed: () async {
-                          final deleted = await showAttributeDeleteDialog(context, editMode.attribute);
+                          final deleted = await showAttributeDeleteDialog(
+                            context,
+                            editMode.attribute,
+                          );
                           if (deleted) {
                             mode.value = null;
                           }
@@ -51,30 +51,29 @@ class AttributeDetails extends ConsumerWidget {
             ),
             Expanded(
               key: ValueKey(mode.value),
-              child:
-                  switch(mode.value) {
-                    final CreateAttributeMode _ => CreateAttributeForm(
-                      onCreateAttribute: (attribute) {
-                        ref
-                            .read(attributeServiceProvider)
-                            .createAttribute(attribute);
-                        mode.value = null;
-                      },
-                    ),
-                    final EditAttributeMode editMode => EditAttributeForm(
-                      attribute: editMode.attribute,
-                      onEditAttribute: (attribute) {
-                        ref
-                            .read(attributeServiceProvider)
-                            .updateAttribute(attribute);
-                      },
-                    ),
-                    _ => SizedBox(),
+              child: switch (mode.value) {
+                final CreateAttributeMode _ => CreateAttributeForm(
+                  onCreateAttribute: (attribute) {
+                    ref
+                        .read(attributeServiceProvider)
+                        .createAttribute(attribute);
+                    mode.value = null;
                   },
+                ),
+                final EditAttributeMode editMode => EditAttributeForm(
+                  attribute: editMode.attribute,
+                  onEditAttribute: (attribute) {
+                    ref
+                        .read(attributeServiceProvider)
+                        .updateAttribute(attribute);
+                  },
+                ),
+                _ => SizedBox(),
+              },
             ),
           ],
         );
-      }
+      },
     );
   }
 }

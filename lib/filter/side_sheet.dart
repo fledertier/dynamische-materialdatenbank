@@ -37,8 +37,8 @@ class SideSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = TextTheme.of(context);
+    final colorScheme = ColorScheme.of(context);
 
     return Container(
       margin: margin,
@@ -108,10 +108,7 @@ class SideSheet extends StatelessWidget {
                           : BorderSide.none,
                 ),
               ),
-              child: Row(
-                spacing: 8,
-                children: bottomActions!,
-              ),
+              child: Row(spacing: 8, children: bottomActions!),
             ),
         ],
       ),

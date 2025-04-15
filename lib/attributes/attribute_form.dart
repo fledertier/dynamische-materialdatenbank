@@ -97,7 +97,7 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 labelText: "Type",
                 constraints: BoxConstraints(maxWidth: fieldWidth),
               ),
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: TextTheme.of(context).bodyLarge,
               items:
                   AttributeType.values
                       .map(
