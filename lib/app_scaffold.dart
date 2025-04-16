@@ -5,7 +5,7 @@ class AppScaffold extends StatelessWidget {
     super.key,
     required this.header,
     required this.body,
-    required this.sidebar,
+    this.sidebar,
     this.navigation,
   });
 

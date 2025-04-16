@@ -2,6 +2,7 @@ class Pages {
   static const materials = "materials";
   static const material = "material";
   static const attributes = "attributes";
+  static const customSearch = "custom-search";
 }
 
 class Collections {

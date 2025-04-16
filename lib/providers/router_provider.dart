@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/custom_search/custom_search_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +30,11 @@ final routerProvider = Provider((ref) {
         path: "/attributes",
         name: Pages.attributes,
         builder: (context, state) => const AttributesPage(),
+      ),
+      GoRoute(
+        path: "/custom-search",
+        name: Pages.customSearch,
+        builder: (context, state) => const CustomSearchPage(),
       ),
     ],
   );
