@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/attribute_provider.dart';
+import '../providers/filter_provider.dart';
+
+class SliderFilterOption extends ConsumerWidget {
+  const SliderFilterOption(this.attribute, {super.key});
+
+  final String attribute;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final options = ref.watch(filterProvider);
+    final optionsNotifier = ref.read(filterProvider.notifier);
+    final extrema = ref.watch(attributeExtremaProvider(attribute)).value;
+    final minWeight = extrema?.min ?? 0;
+    final maxWeight = extrema?.max ?? 1;
+    final weight = options[attribute]?.clamp(minWeight, maxWeight) ?? maxWeight;
+
+    return Slider(
+      label: '${weight.toStringAsFixed(1)} Kg',
+      min: minWeight,
+      max: maxWeight,
+      value: weight,
+      onChanged: (value) {
+        optionsNotifier.updateWith({
+          attribute: value != maxWeight ? value : null,
+        });
+      },
+    );
+  }
+}
