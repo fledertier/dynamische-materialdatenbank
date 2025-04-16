@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,7 +58,7 @@ class AttributeService {
 
     FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc("attributes")
+        .doc(Metadata.attributes)
         .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
   }
 
@@ -64,7 +66,7 @@ class AttributeService {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.metadata)
-            .doc("attributes")
+            .doc(Metadata.attributes)
             .get();
     final map = snapshot.dataOrNull() ?? {};
     return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
@@ -73,7 +75,7 @@ class AttributeService {
   Stream<Map<String, Attribute>> getAttributesStream() {
     return FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc("attributes")
+        .doc(Metadata.attributes)
         .snapshots()
         .map((snapshot) {
           final map = snapshot.dataOrNull() ?? {};
@@ -82,10 +84,10 @@ class AttributeService {
   }
 
   Future<void> createAttribute(Json attribute) async {
-    final id = generateId();
+    final id = attribute.putIfAbsent('id', generateId);
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc("attributes")
+        .doc(Metadata.attributes)
         .set({
           id: {'id': id, ...attribute},
         }, SetOptions(merge: true));
@@ -95,8 +97,33 @@ class AttributeService {
     final id = attribute.id;
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc("attributes")
+        .doc(Metadata.attributes)
         .set({id: attribute.toJson()}, SetOptions(merge: true));
+  }
+
+  String nearestAvailableAttributeId(
+    String name,
+    Map<String, Attribute> attributes,
+  ) {
+    final suffix = RegExp(r"(?:-(\d+))?");
+    final pattern = RegExp(RegExp.escape(name) + suffix.pattern);
+
+    final similarIds =
+        attributes.keys.where((id) => pattern.hasMatch(id)).toList();
+
+    final usedNumbers =
+        similarIds.map((id) {
+          final match = pattern.firstMatch(id);
+          if (match != null && match.group(0) == id) {
+            final digits = match.group(1);
+            final number = digits != null ? int.parse(digits) : 0;
+            return number;
+          }
+          return 0;
+        }).toSet();
+
+    final nextNumber = usedNumbers.isEmpty ? 0 : usedNumbers.reduce(max) + 1;
+    return nextNumber > 0 ? "$name-$nextNumber" : name;
   }
 }
 

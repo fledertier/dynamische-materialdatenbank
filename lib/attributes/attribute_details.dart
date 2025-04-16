@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
+import 'package:dynamische_materialdatenbank/providers/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/services/attribute_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,10 +54,12 @@ class AttributeDetails extends ConsumerWidget {
               key: ValueKey(mode.value),
               child: switch (mode.value) {
                 final CreateAttributeMode _ => CreateAttributeForm(
-                  onCreateAttribute: (attribute) {
-                    ref
-                        .read(attributeServiceProvider)
-                        .createAttribute(attribute);
+                  onCreateAttribute: (attribute) async {
+                    final id = await nearestAvailableId(ref, attribute);
+                    ref.read(attributeServiceProvider).createAttribute({
+                      ...attribute,
+                      "id": id,
+                    });
                     mode.value = null;
                   },
                 ),
@@ -75,5 +78,14 @@ class AttributeDetails extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<String> nearestAvailableId(WidgetRef ref, Json attribute) async {
+    final name =
+        attribute["nameEn"] as String? ?? attribute["nameDe"] as String;
+    final attributes = await ref.read(attributesStreamProvider.future);
+    return ref
+        .read(attributeServiceProvider)
+        .nearestAvailableAttributeId(name.toLowerCase(), attributes);
   }
 }
