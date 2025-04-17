@@ -79,7 +79,9 @@ class AttributeListTile extends StatelessWidget {
           ].join(", "),
         ),
         selected: selected,
-        selectedTileColor: ColorScheme.of(context).primaryContainer,
+        textColor: ColorScheme.of(context).onSecondaryContainer,
+        selectedTileColor: ColorScheme.of(context).secondaryContainer,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         onTap: onTap,
       ),
     );
