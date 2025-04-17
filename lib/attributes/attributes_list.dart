@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class AttributesList extends ConsumerWidget {
       return Center(child: CircularProgressIndicator());
     }
 
-    final attributes = snapshot.value ?? {};
+    final attributes =
+        snapshot.value?.values.sortedBy((attribute) => attribute.name) ?? [];
 
     return ListenableBuilder(
       listenable: mode,
@@ -34,7 +36,7 @@ class AttributesList extends ConsumerWidget {
         return ListView.builder(
           itemCount: attributes.length,
           itemBuilder: (context, index) {
-            final attribute = attributes.values.elementAt(index);
+            final attribute = attributes.elementAt(index);
 
             return AttributeListTile(
               attribute,

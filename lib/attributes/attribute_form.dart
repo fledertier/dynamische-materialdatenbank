@@ -191,9 +191,10 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
 
   final _type = TextEditingController();
 
+  late var _savedAttribute = widget.attribute;
   late final _attribute = ValueNotifier(widget.attribute);
 
-  bool get hasChanged => _attribute.value != widget.attribute;
+  bool get hasChanged => _attribute.value != _savedAttribute;
 
   @override
   void dispose() {
@@ -210,11 +211,14 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
             _attribute.value.nameEn?.isNotEmpty ?? false
                 ? _attribute.value.nameEn
                 : null,
-        type: widget.attribute.type,
-        unitType: widget.attribute.unitType,
+        type: _attribute.value.type,
+        unitType: _attribute.value.unitType,
         required: _attribute.value.required == true ? true : null,
       );
       widget.onEditAttribute?.call(attribute);
+      setState(() {
+        _savedAttribute = attribute;
+      });
     }
   }
 
