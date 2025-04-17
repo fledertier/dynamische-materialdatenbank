@@ -15,8 +15,18 @@ class Navigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationRail(
       labelType: NavigationRailLabelType.all,
-      // backgroundColor: Color(0xfff2ecee),
-      selectedIconTheme: IconThemeData(fill: 1),
+      unselectedLabelTextStyle: TextTheme.of(context).labelMedium?.copyWith(
+        color: ColorScheme.of(context).onSurfaceVariant,
+        fontWeight: FontWeight.w400,
+      ),
+      selectedLabelTextStyle: TextTheme.of(context).labelMedium?.copyWith(
+        color: ColorScheme.of(context).onSurface,
+        fontWeight: FontWeight.w400,
+      ),
+      selectedIconTheme: IconThemeData(
+        fill: 1,
+        color: ColorScheme.of(context).onSecondaryContainer,
+      ),
       selectedIndex: pages.indexOf(page),
       onDestinationSelected: (index) {
         context.goNamed(pages[index]);
@@ -29,7 +39,6 @@ class Navigation extends StatelessWidget {
           hoverElevation: 0,
           highlightElevation: 0,
           focusElevation: 0,
-          backgroundColor: Color(0xfff1d3f9),
           onPressed: () {},
           child: const Icon(Symbols.add),
         ),
@@ -38,10 +47,12 @@ class Navigation extends StatelessWidget {
         NavigationRailDestination(
           icon: Icon(Symbols.interests_rounded),
           label: Text("Materials"),
+          padding: const EdgeInsets.only(top: 8),
         ),
         NavigationRailDestination(
           icon: Icon(Icons.change_history_rounded),
           label: Text("Attributes"),
+          padding: const EdgeInsets.only(top: 8),
         ),
       ],
     );

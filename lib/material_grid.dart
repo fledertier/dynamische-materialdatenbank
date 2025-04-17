@@ -32,52 +32,88 @@ class MaterialGrid extends StatelessWidget {
   }
 }
 
-class MaterialItem extends StatelessWidget {
+class MaterialItem extends StatefulWidget {
   const MaterialItem({super.key, required this.item});
 
   final Map<String, dynamic> item;
 
-  String get id => item[Attributes.id];
+  @override
+  State<MaterialItem> createState() => _MaterialItemState();
+}
+
+class _MaterialItemState extends State<MaterialItem> {
+  final hovered = ValueNotifier(false);
+
+  String get id => widget.item[Attributes.id];
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          context.pushNamed(Pages.material, pathParameters: {'materialId': id});
-        },
-        child: Stack(
-          children: [
-            Positioned(
-              top: 4,
-              right: 4,
-              child: Consumer(
-                builder: (context, ref, child) {
-                  return PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'delete') {
-                        final id = item[Attributes.id];
-                        ref.read(materialServiceProvider).deleteMaterial(id);
-                      }
-                    },
-                    itemBuilder:
-                        (BuildContext context) => [
-                          PopupMenuItem(value: 'delete', child: Text('Delete')),
-                        ],
-                    icon: Icon(Icons.more_vert),
-                    tooltip: '',
-                  );
-                },
+    return Card.filled(
+      child: MouseRegion(
+        onEnter: (event) => hovered.value = true,
+        onExit: (event) => hovered.value = false,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () {
+            context.pushNamed(
+              Pages.material,
+              pathParameters: {'materialId': id},
+            );
+          },
+          child: Stack(
+            children: [
+              Positioned(
+                top: 4,
+                right: 4,
+                child: ListenableBuilder(
+                  listenable: hovered,
+                  builder: (context, child) {
+                    return Offstage(
+                      offstage: !hovered.value,
+                      child: MaterialContextMenu(material: widget.item),
+                    );
+                  },
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 12,
-              left: 12,
-              child: Text(item[Attributes.name]),
-            ),
-          ],
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    widget.item[Attributes.name],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class MaterialContextMenu extends ConsumerWidget {
+  const MaterialContextMenu({super.key, required this.material});
+
+  final Map<String, dynamic> material;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopupMenuButton<String>(
+      onSelected: (value) {
+        if (value == 'delete') {
+          final id = material[Attributes.id];
+          ref.read(materialServiceProvider).deleteMaterial(id);
+        }
+      },
+      itemBuilder:
+          (context) => [PopupMenuItem(value: 'delete', child: Text('Delete'))],
+      icon: Icon(Icons.more_vert),
+      tooltip: '',
     );
   }
 }
