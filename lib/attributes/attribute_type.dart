@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-enum Operation {
+enum Operator {
   equals,
   notEquals,
   greaterThan,
@@ -9,8 +9,8 @@ enum Operation {
   contains,
   notContains;
 
-  static Operation fromJson(dynamic json) {
-    return Operation.values.byName(json);
+  static Operator fromJson(dynamic json) {
+    return Operator.values.byName(json);
   }
 
   String toJson() => name;
@@ -18,38 +18,38 @@ enum Operation {
 
 enum AttributeType {
   text(
-    allowedOperations: {
-      Operation.contains,
-      Operation.notContains,
-      Operation.equals,
-      Operation.notEquals,
+    operators: {
+      Operator.contains,
+      Operator.notContains,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
   textarea(
-    allowedOperations: {
-      Operation.contains,
-      Operation.notContains,
-      Operation.equals,
-      Operation.notEquals,
+    operators: {
+      Operator.contains,
+      Operator.notContains,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
   number(
-    allowedOperations: {
-      Operation.greaterThan,
-      Operation.lessThan,
-      Operation.equals,
-      Operation.notEquals,
+    operators: {
+      Operator.greaterThan,
+      Operator.lessThan,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
   boolean(
-    allowedOperations: {
-      Operation.equals,
+    operators: {
+      Operator.equals,
     },
   );
 
-  final Set<Operation> allowedOperations;
+  final Set<Operator> operators;
 
-  const AttributeType({required this.allowedOperations});
+  const AttributeType({required this.operators});
 
   static AttributeType fromJson(dynamic json) {
     return AttributeType.values.byName(json);
