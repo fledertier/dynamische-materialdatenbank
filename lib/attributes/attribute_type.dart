@@ -18,6 +18,7 @@ enum Operator {
 
 enum AttributeType {
   text(
+    baseType: 'String',
     operators: {
       Operator.contains,
       Operator.notContains,
@@ -26,6 +27,7 @@ enum AttributeType {
     },
   ),
   textarea(
+    baseType: 'String',
     operators: {
       Operator.contains,
       Operator.notContains,
@@ -34,6 +36,7 @@ enum AttributeType {
     },
   ),
   number(
+    baseType: 'double',
     operators: {
       Operator.greaterThan,
       Operator.lessThan,
@@ -41,15 +44,12 @@ enum AttributeType {
       Operator.notEquals,
     },
   ),
-  boolean(
-    operators: {
-      Operator.equals,
-    },
-  );
+  boolean(baseType: 'bool', operators: {Operator.equals});
 
+  final String baseType;
   final Set<Operator> operators;
 
-  const AttributeType({required this.operators});
+  const AttributeType({required this.baseType, required this.operators});
 
   static AttributeType fromJson(dynamic json) {
     return AttributeType.values.byName(json);
@@ -67,5 +67,15 @@ extension AttributeTypeExtension on AttributeType {
       AttributeType.boolean => Symbols.toggle_on,
       // _ => Symbols.change_history,
     };
+  }
+
+  bool get hasExchangeableTypes {
+    return exchangeableTypes.length > 1;
+  }
+
+  List<AttributeType> get exchangeableTypes {
+    return AttributeType.values
+        .where((value) => value.baseType == baseType)
+        .toList();
   }
 }

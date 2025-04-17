@@ -59,11 +59,11 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
+          spacing: 24,
           children: [
             Wrap(
               spacing: 16,
-              runSpacing: 16,
+              runSpacing: 24,
               children: [
                 TextFormField(
                   controller: _nameDe,
@@ -189,9 +189,17 @@ class EditAttributeForm extends StatefulWidget {
 class _EditAttributeFormState extends State<EditAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
+  final _type = TextEditingController();
+
   late final _attribute = ValueNotifier(widget.attribute);
 
   bool get hasChanged => _attribute.value != widget.attribute;
+
+  @override
+  void dispose() {
+    _type.dispose();
+    super.dispose();
+  }
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -218,11 +226,11 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
+          spacing: 24,
           children: [
             Wrap(
               spacing: 16,
-              runSpacing: 16,
+              runSpacing: 24,
               children: [
                 TextFormField(
                   initialValue: widget.attribute.name,
@@ -262,19 +270,43 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
             ),
             DropdownMenuFormField<AttributeType>(
               initialSelection: _attribute.value.type,
+              controller: _type,
               label: Text("Type"),
               width: fieldWidth,
-              dropdownMenuEntries: [],
-              enabled: false,
+              dropdownMenuEntries: [
+                for (final value in _attribute.value.type.exchangeableTypes)
+                  DropdownMenuEntry(
+                    value: value,
+                    label: value.name,
+                    leadingIcon: Icon(value.icon),
+                  ),
+              ],
+              enabled: _attribute.value.type.hasExchangeableTypes,
+              onSelected: (value) {
+                _attribute.value = _attribute.value.copyWith(type: value);
+              },
             ),
-            if (_attribute.value.type == AttributeType.number)
-              DropdownMenuFormField<UnitType>(
+            ListenableBuilder(
+              listenable: _type,
+              builder: (context, child) {
+                if (_attribute.value.type != AttributeType.number) {
+                  return SizedBox();
+                }
+                return child!;
+              },
+              child: DropdownMenuFormField<UnitType>(
                 initialSelection: _attribute.value.unitType,
                 label: Text("Unit type"),
                 width: fieldWidth,
-                dropdownMenuEntries: [],
-                enabled: false,
+                dropdownMenuEntries: [
+                  for (final value in UnitType.values)
+                    DropdownMenuEntry(value: value, label: value.name),
+                ],
+                onSelected: (value) {
+                  _attribute.value = _attribute.value.copyWith(unitType: value);
+                },
               ),
+            ),
             Row(
               children: [
                 ListenableBuilder(
