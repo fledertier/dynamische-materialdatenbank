@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 
+import '../custom_search/dropdown_menu_form_field.dart';
 import 'attribute.dart';
 import 'attribute_type.dart';
 
@@ -97,32 +98,22 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 ),
               ],
             ),
-            DropdownButtonFormField<AttributeType>(
-              value: _attribute.value["type"],
-              decoration: InputDecoration(
-                labelText: "Type",
-                constraints: BoxConstraints(maxWidth: fieldWidth),
-              ),
-              style: TextTheme.of(context).bodyLarge,
-              items: [
+            DropdownMenuFormField<AttributeType>(
+              initialSelection: _attribute.value["type"],
+              width: fieldWidth,
+              label: Text("Type"),
+              dropdownMenuEntries: [
                 for (final value in AttributeType.values)
-                  DropdownMenuItem(
+                  DropdownMenuEntry(
                     value: value,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(value.icon),
-                        SizedBox(width: 8),
-                        Text(value.name),
-                      ],
-                    ),
+                    label: value.name,
+                    leadingIcon: Icon(value.icon),
                   ),
               ],
-              onChanged: (value) {
+              onSelected: (value) {
                 update('type', value);
-                _type.text = value?.name ?? '';
               },
+              controller: _type,
               validator: (value) {
                 if (value == null) {
                   return "Please select a type";
@@ -130,26 +121,23 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 return null;
               },
             ),
-            ValueListenableBuilder(
-              valueListenable: _type,
-              builder: (context, value, child) {
+            ListenableBuilder(
+              listenable: _type,
+              builder: (context, child) {
                 if (_attribute.value["type"] != AttributeType.number) {
                   return SizedBox();
                 }
                 return child!;
               },
-              child: DropdownButtonFormField<UnitType>(
-                value: _attribute.value["unitType"],
-                decoration: InputDecoration(
-                  labelText: "Unit type",
-                  constraints: BoxConstraints(maxWidth: fieldWidth),
-                ),
-                style: TextTheme.of(context).bodyLarge,
-                items: [
+              child: DropdownMenuFormField<UnitType>(
+                initialSelection: _attribute.value["unitType"],
+                width: fieldWidth,
+                label: Text("Unit type"),
+                dropdownMenuEntries: [
                   for (final value in UnitType.values)
-                    DropdownMenuItem(value: value, child: Text(value.name)),
+                    DropdownMenuEntry(value: value, label: value.name),
                 ],
-                onChanged: (value) {
+                onSelected: (value) {
                   update('unitType', value);
                 },
               ),
@@ -224,8 +212,6 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -274,43 +260,20 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 ),
               ],
             ),
-            DropdownButtonFormField<AttributeType>(
-              value: _attribute.value.type,
-              decoration: InputDecoration(
-                labelText: "Type",
-                constraints: BoxConstraints(maxWidth: fieldWidth),
-              ),
-              style: theme.textTheme.bodyLarge,
-              items: [
-                for (final type in AttributeType.values)
-                  DropdownMenuItem(
-                    value: type,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(type.icon, color: theme.disabledColor),
-                        SizedBox(width: 8),
-                        Text(type.name),
-                      ],
-                    ),
-                  ),
-              ],
-              onChanged: null,
+            DropdownMenuFormField<AttributeType>(
+              initialSelection: _attribute.value.type,
+              label: Text("Type"),
+              width: fieldWidth,
+              dropdownMenuEntries: [],
+              enabled: false,
             ),
             if (_attribute.value.type == AttributeType.number)
-              DropdownButtonFormField<UnitType>(
-                value: _attribute.value.unitType,
-                decoration: InputDecoration(
-                  labelText: "Unit type",
-                  constraints: BoxConstraints(maxWidth: fieldWidth),
-                ),
-                style: theme.textTheme.bodyLarge,
-                items: [
-                  for (final value in UnitType.values)
-                    DropdownMenuItem(value: value, child: Text(value.name)),
-                ],
-                onChanged: null,
+              DropdownMenuFormField<UnitType>(
+                initialSelection: _attribute.value.unitType,
+                label: Text("Unit type"),
+                width: fieldWidth,
+                dropdownMenuEntries: [],
+                enabled: false,
               ),
             Row(
               children: [

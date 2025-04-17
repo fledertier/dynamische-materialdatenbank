@@ -28,5 +28,6 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
         return Size(4, 24);
       }),
     ),
+    inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
   );
 }
