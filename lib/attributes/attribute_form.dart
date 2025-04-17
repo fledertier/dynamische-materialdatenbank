@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 
 import 'attribute.dart';
@@ -18,12 +19,14 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameDe = TextEditingController();
+  final _type = TextEditingController();
 
   final _attribute = ValueNotifier<Map<String, dynamic>>({});
 
   @override
   void dispose() {
     _nameDe.dispose();
+    _type.dispose();
     super.dispose();
   }
 
@@ -38,6 +41,9 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
         if (_attribute.value["nameEn"]?.isNotEmpty ?? false)
           'nameEn': _attribute.value["nameEn"],
         'type': _attribute.value["type"]!.toJson(),
+        if (_attribute.value["type"] == AttributeType.number &&
+            _attribute.value["unitType"] != null)
+          'unitType': (_attribute.value["unitType"]! as UnitType).name,
         if (_attribute.value["required"] == true) 'required': true,
       };
       widget.onCreateAttribute?.call(attribute);
@@ -98,25 +104,24 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 constraints: BoxConstraints(maxWidth: fieldWidth),
               ),
               style: TextTheme.of(context).bodyLarge,
-              items:
-                  AttributeType.values
-                      .map(
-                        (value) => DropdownMenuItem(
-                          value: value,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(value.icon),
-                              SizedBox(width: 8),
-                              Text(value.name),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
+              items: [
+                for (final value in AttributeType.values)
+                  DropdownMenuItem(
+                    value: value,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(value.icon),
+                        SizedBox(width: 8),
+                        Text(value.name),
+                      ],
+                    ),
+                  ),
+              ],
               onChanged: (value) {
                 update('type', value);
+                _type.text = value?.name ?? '';
               },
               validator: (value) {
                 if (value == null) {
@@ -124,6 +129,30 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 }
                 return null;
               },
+            ),
+            ValueListenableBuilder(
+              valueListenable: _type,
+              builder: (context, value, child) {
+                if (_attribute.value["type"] != AttributeType.number) {
+                  return SizedBox();
+                }
+                return child!;
+              },
+              child: DropdownButtonFormField<UnitType>(
+                value: _attribute.value["unitType"],
+                decoration: InputDecoration(
+                  labelText: "Unit type",
+                  constraints: BoxConstraints(maxWidth: fieldWidth),
+                ),
+                style: TextTheme.of(context).bodyLarge,
+                items: [
+                  for (final value in UnitType.values)
+                    DropdownMenuItem(value: value, child: Text(value.name)),
+                ],
+                onChanged: (value) {
+                  update('unitType', value);
+                },
+              ),
             ),
             Row(
               children: [
@@ -186,6 +215,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 ? _attribute.value.nameEn
                 : null,
         type: widget.attribute.type,
+        unitType: widget.attribute.unitType,
         required: _attribute.value.required == true ? true : null,
       );
       widget.onEditAttribute?.call(attribute);
@@ -251,23 +281,37 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 constraints: BoxConstraints(maxWidth: fieldWidth),
               ),
               style: theme.textTheme.bodyLarge,
-              items:
-                  AttributeType.values.map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(type.icon, color: theme.disabledColor),
-                          SizedBox(width: 8),
-                          Text(type.name),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+              items: [
+                for (final type in AttributeType.values)
+                  DropdownMenuItem(
+                    value: type,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(type.icon, color: theme.disabledColor),
+                        SizedBox(width: 8),
+                        Text(type.name),
+                      ],
+                    ),
+                  ),
+              ],
               onChanged: null,
             ),
+            if (_attribute.value.type == AttributeType.number)
+              DropdownButtonFormField<UnitType>(
+                value: _attribute.value.unitType,
+                decoration: InputDecoration(
+                  labelText: "Unit type",
+                  constraints: BoxConstraints(maxWidth: fieldWidth),
+                ),
+                style: theme.textTheme.bodyLarge,
+                items: [
+                  for (final value in UnitType.values)
+                    DropdownMenuItem(value: value, child: Text(value.name)),
+                ],
+                onChanged: null,
+              ),
             Row(
               children: [
                 ListenableBuilder(

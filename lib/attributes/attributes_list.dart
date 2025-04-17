@@ -72,6 +72,7 @@ class AttributeListTile extends StatelessWidget {
         subtitle: Text(
           [
             attribute.type.name,
+            if (attribute.unitType != null) attribute.unitType!.name,
             if (attribute.required ?? false) "required",
           ].join(", "),
         ),
