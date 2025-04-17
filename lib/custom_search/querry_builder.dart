@@ -1,9 +1,12 @@
+import 'package:dynamische_materialdatenbank/custom_search/query_service.dart';
 import 'package:dynamische_materialdatenbank/custom_search/where_clause_controller.dart';
 import 'package:dynamische_materialdatenbank/custom_search/where_clause_widget.dart';
 import 'package:flutter/material.dart';
 
 class QueryBuilder extends StatefulWidget {
-  const QueryBuilder({super.key});
+  const QueryBuilder({super.key, this.onExecute});
+
+  final void Function(MaterialQuery query)? onExecute;
 
   @override
   State<QueryBuilder> createState() => _QueryBuilderState();
@@ -47,10 +50,10 @@ class _QueryBuilderState extends State<QueryBuilder> {
           FilledButton(
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
-                for (final c in controllers) {
-                  debugPrint(c.value.toString());
-                }
-                final whereClauses = controllers.map((c) => c.toWhereClause());
+                final whereClauses =
+                    controllers.map((c) => c.toWhereClause()).toList();
+                final query = MaterialQuery(whereClauses: whereClauses);
+                widget.onExecute?.call(query);
               }
             },
             child: const Text("Ausführen"),

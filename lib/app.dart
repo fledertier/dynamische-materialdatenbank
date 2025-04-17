@@ -19,7 +19,7 @@ class App extends ConsumerWidget {
   }
 
   bool isAfterSunset() {
-    final sunset = TimeOfDay(hour: 20, minute: 0);
+    final sunset = TimeOfDay(hour: 19, minute: 00);
     return TimeOfDay.now().isAfter(sunset);
   }
 }
