@@ -7,7 +7,7 @@ class EmptyField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InputDecorator(decoration: InputDecoration(enabled: false));
+    return TextFormField(decoration: InputDecoration(enabled: false));
   }
 }
 

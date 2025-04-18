@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_scaffold.dart';
 import 'constants.dart';
-import 'filter/filters.dart';
+import 'filter/filters_and_search.dart';
 import 'header/header.dart';
 import 'material_grid.dart';
 import 'navigation.dart';
@@ -30,7 +30,7 @@ class MaterialsPage extends StatelessWidget {
           ],
         ),
       ),
-      sidebar: Filters(),
+      sidebar: FiltersAndSearch(),
     );
   }
 }

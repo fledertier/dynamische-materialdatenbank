@@ -5,17 +5,24 @@ class Labeled extends StatelessWidget {
     super.key,
     required this.label,
     required this.child,
+    this.padding = const EdgeInsets.only(
+      left: 24,
+      right: 24,
+      top: 16,
+      bottom: 24,
+    ),
     this.gap = 16,
   });
 
   final Widget label;
   final Widget child;
+  final EdgeInsets padding;
   final double gap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24).copyWith(top: 16),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

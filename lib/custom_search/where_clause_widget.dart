@@ -47,15 +47,11 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
             onEnter: (event) => hover.value = true,
             onExit: (event) => hover.value = false,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8, top: 16),
-                    child: Text("Where"),
-                  ),
                   DropdownMenuFormField(
                     hintText: "Attribute",
                     width: 200,
@@ -103,7 +99,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                   ),
                   buildParameterField(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.only(left: 8, top: 8),
                     child: ListenableBuilder(
                       listenable: hover,
                       builder: (context, child) {

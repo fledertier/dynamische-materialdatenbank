@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/custom_search/query_service.dart';
 import 'package:dynamische_materialdatenbank/custom_search/where_clause_controller.dart';
 import 'package:dynamische_materialdatenbank/custom_search/where_clause_widget.dart';
+import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
 
 class QueryBuilder extends StatefulWidget {
@@ -33,16 +34,23 @@ class _QueryBuilderState extends State<QueryBuilder> {
     return Form(
       key: formKey,
       child: Column(
-        spacing: 24,
+        spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...controllers.map((controller) {
-            return WhereClauseWidget(
-              key: ValueKey(controller),
-              controller: controller,
-              onRemove: () => removeWhereClause(controller),
-            );
-          }),
+          for (final controller in controllers)
+            Labeled(
+              padding: EdgeInsets.zero,
+              gap: 4,
+              label:
+                  controller == controllers.first
+                      ? Text("Where")
+                      : Text("And where"),
+              child: WhereClauseWidget(
+                key: ValueKey(controller),
+                controller: controller,
+                onRemove: () => removeWhereClause(controller),
+              ),
+            ),
           TextButton(
             onPressed: addWhereClause,
             child: const Text("Add Condition"),
