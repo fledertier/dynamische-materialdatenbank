@@ -5,6 +5,7 @@ class SideSheet extends StatelessWidget {
     super.key,
     this.title,
     this.child,
+    this.leading,
     this.topActions,
     this.bottomActions,
     this.width = 256,
@@ -17,6 +18,7 @@ class SideSheet extends StatelessWidget {
     super.key,
     this.title,
     this.child,
+    this.leading,
     this.topActions,
     this.bottomActions,
     this.width = 256,
@@ -27,6 +29,7 @@ class SideSheet extends StatelessWidget {
 
   final Widget? title;
   final Widget? child;
+  final Widget? leading;
   final List<Widget>? topActions;
   final List<Widget>? bottomActions;
   final double? width;
@@ -39,6 +42,7 @@ class SideSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
     final colorScheme = ColorScheme.of(context);
+    final iconButtonTheme = IconButtonTheme.of(context);
 
     return Container(
       margin: margin,
@@ -60,9 +64,22 @@ class SideSheet extends StatelessWidget {
           SizedBox(
             height: 76,
             child: Padding(
-              padding: const EdgeInsets.only(left: 24, right: 18),
+              padding: EdgeInsets.only(
+                left: leading != null ? 4 : 24,
+                right: 18,
+              ),
               child: Row(
                 children: [
+                  if (leading != null)
+                    IconButtonTheme(
+                      data: IconButtonThemeData(
+                        style: IconButton.styleFrom(
+                          foregroundColor: colorScheme.onSurfaceVariant,
+                          tapTargetSize: MaterialTapTargetSize.padded,
+                        ).merge(iconButtonTheme.style),
+                      ),
+                      child: leading!,
+                    ),
                   if (title != null)
                     DefaultTextStyle.merge(
                       style: textTheme.titleLarge?.copyWith(
@@ -78,7 +95,7 @@ class SideSheet extends StatelessWidget {
                           foregroundColor: colorScheme.onSurfaceVariant,
                           visualDensity: VisualDensity.comfortable,
                           padding: EdgeInsets.zero,
-                        ).merge(IconButtonTheme.of(context).style),
+                        ).merge(iconButtonTheme.style),
                       ),
                       child: Row(children: topActions!),
                     ),

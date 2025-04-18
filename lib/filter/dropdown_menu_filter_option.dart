@@ -21,6 +21,7 @@ class DropdownMenuFilterOption extends ConsumerWidget {
     return DropdownMenu(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
+        border: UnderlineInputBorder(),
         contentPadding: EdgeInsets.all(16),
       ),
       enableFilter: true,
