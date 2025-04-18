@@ -1,6 +1,6 @@
-import 'package:dynamische_materialdatenbank/custom_search/query_service.dart';
-import 'package:dynamische_materialdatenbank/custom_search/where_clause_controller.dart';
-import 'package:dynamische_materialdatenbank/custom_search/where_clause_widget.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/query_service.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause_controller.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause_widget.dart';
 import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
 

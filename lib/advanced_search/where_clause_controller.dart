@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/custom_search/where_clause.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../attributes/attribute.dart';
@@ -6,13 +6,13 @@ import '../attributes/attribute_type.dart';
 
 class WhereClauseController extends ValueNotifier<WhereClauseValue> {
   WhereClauseController()
-      : super(
-    const WhereClauseValue(
-      attribute: null,
-      operator: null,
-      parameter: null,
-    ),
-  );
+    : super(
+        const WhereClauseValue(
+          attribute: null,
+          comparator: null,
+          parameter: null,
+        ),
+      );
 
   Attribute? get attribute => value.attribute;
 
@@ -20,10 +20,10 @@ class WhereClauseController extends ValueNotifier<WhereClauseValue> {
     value = value.copyWith(attribute: () => attribute);
   }
 
-  Operator? get operator => value.operator;
+  Comparator? get comparator => value.comparator;
 
-  set operator(Operator? operator) {
-    value = value.copyWith(operator: () => operator);
+  set comparator(Comparator? comparator) {
+    value = value.copyWith(comparator: () => comparator);
   }
 
   Object? get parameter => value.parameter;
@@ -35,7 +35,7 @@ class WhereClauseController extends ValueNotifier<WhereClauseValue> {
   WhereClause toWhereClause() {
     return WhereClause(
       attribute: attribute!,
-      operator: operator!,
+      comparator: comparator!,
       parameter: parameter!,
     );
   }
@@ -43,19 +43,19 @@ class WhereClauseController extends ValueNotifier<WhereClauseValue> {
 
 class WhereClauseValue {
   final Attribute? attribute;
-  final Operator? operator;
+  final Comparator? comparator;
   final Object? parameter;
 
-  const WhereClauseValue({this.attribute, this.operator, this.parameter});
+  const WhereClauseValue({this.attribute, this.comparator, this.parameter});
 
   WhereClauseValue copyWith({
     Attribute? Function()? attribute,
-    Operator? Function()? operator,
+    Comparator? Function()? comparator,
     Object? Function()? parameter,
   }) {
     return WhereClauseValue(
       attribute: attribute != null ? attribute() : this.attribute,
-      operator: operator != null ? operator() : this.operator,
+      comparator: comparator != null ? comparator() : this.comparator,
       parameter: parameter != null ? parameter() : this.parameter,
     );
   }
@@ -66,17 +66,17 @@ class WhereClauseValue {
 
     return other is WhereClauseValue &&
         other.attribute == attribute &&
-        other.operator == operator &&
+        other.comparator == comparator &&
         other.parameter == parameter;
   }
 
   @override
   int get hashCode {
-    return attribute.hashCode ^ operator.hashCode ^ parameter.hashCode;
+    return attribute.hashCode ^ comparator.hashCode ^ parameter.hashCode;
   }
 
   @override
   String toString() {
-    return 'WhereClauseValue(attribute: $attribute, operator: $operator, parameter: $parameter)';
+    return 'WhereClauseValue(attribute: $attribute, comparator: $comparator, parameter: $parameter)';
   }
 }

@@ -1,11 +1,11 @@
-import 'package:dynamische_materialdatenbank/custom_search/querry_builder.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/querry_builder.dart';
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../advanced_search/query_service.dart';
 import '../constants.dart';
-import '../custom_search/query_service.dart';
 import '../providers/attribute_provider.dart';
 import '../services/attribute_service.dart';
 import 'checkbox_filter_option.dart';

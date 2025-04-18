@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/custom_search/where_clause.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_type.dart';
@@ -20,18 +20,18 @@ class QueryService {
     if (value == null) {
       return false;
     }
-    switch (clause.operator) {
-      case Operator.equals:
+    switch (clause.comparator) {
+      case Comparator.equals:
         return value == clause.parameter;
-      case Operator.notEquals:
+      case Comparator.notEquals:
         return value != clause.parameter;
-      case Operator.greaterThan:
+      case Comparator.greaterThan:
         return value > clause.parameter;
-      case Operator.lessThan:
+      case Comparator.lessThan:
         return value < clause.parameter;
-      case Operator.contains:
+      case Comparator.contains:
         return value.toString().contains(clause.parameter.toString());
-      case Operator.notContains:
+      case Comparator.notContains:
         return !value.toString().contains(clause.parameter.toString());
     }
   }

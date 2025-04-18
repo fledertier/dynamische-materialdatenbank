@@ -3,12 +3,12 @@ import '../attributes/attribute_type.dart';
 
 class WhereClause {
   final Attribute attribute;
-  final Operator operator;
+  final Comparator comparator;
   final Object parameter;
 
   const WhereClause({
     required this.attribute,
-    required this.operator,
+    required this.comparator,
     required this.parameter,
   });
 
@@ -18,12 +18,12 @@ class WhereClause {
 
     return other is WhereClause &&
         other.attribute == attribute &&
-        other.operator == operator &&
+        other.comparator == comparator &&
         other.parameter == parameter;
   }
 
   @override
   int get hashCode {
-    return attribute.hashCode ^ operator.hashCode ^ parameter.hashCode;
+    return attribute.hashCode ^ comparator.hashCode ^ parameter.hashCode;
   }
 }

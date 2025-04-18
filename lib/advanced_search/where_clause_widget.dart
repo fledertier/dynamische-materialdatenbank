@@ -1,5 +1,5 @@
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause_controller.dart';
 import 'package:dynamische_materialdatenbank/custom_search/dropdown_menu_form_field.dart';
-import 'package:dynamische_materialdatenbank/custom_search/where_clause_controller.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -65,7 +65,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                     onSelected: (attribute) {
                       controller.value = WhereClauseValue(
                         attribute: attribute,
-                        operator: attribute?.type.operators.firstOrNull,
+                        comparator: attribute?.type.operators.firstOrNull,
                       );
                     },
                     validator: (attribute) {
@@ -88,7 +88,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                           );
                         }).toList(),
                     onSelected: (operator) {
-                      controller.operator = operator;
+                      controller.comparator = operator;
                     },
                     validator: (operator) {
                       if (controller.attribute != null && operator == null) {
