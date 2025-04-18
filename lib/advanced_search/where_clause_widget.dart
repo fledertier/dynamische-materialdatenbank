@@ -145,7 +145,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
         );
       case AttributeType.boolean:
         return BooleanField(
-          initialValue: true,
+          // initialValue: true,
           required: true,
           onChanged: (value) {
             controller.parameter = value;

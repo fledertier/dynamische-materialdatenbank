@@ -4,10 +4,9 @@ import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../advanced_search/query_service.dart';
+import '../advanced_search/advanced_search_provider.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
-import '../services/attribute_service.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';
 import 'labeled.dart';
@@ -120,31 +119,13 @@ class AdvancedSearch extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             QueryBuilder(
-              onExecute: (query) async {
-                final result = await executeQuery(ref, query);
-
-                debugPrint("Found ${result.length} results");
-                for (final material in result.take(8)) {
-                  debugPrint(material.toString());
-                }
-                if (result.length > 8) {
-                  debugPrint("+ ${result.length - 8} more");
-                }
+              onQuery: (query) {
+                ref.read(queryProvider.notifier).state = query;
               },
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<List<Json>> executeQuery(WidgetRef ref, MaterialQuery query) async {
-    final attributeIds = query.attributeIds();
-    final parameter = AttributesParameter(attributeIds);
-    final materialsById = await ref.read(
-      attributesValuesStreamProvider(parameter).future,
-    );
-    final materials = materialsById.values.toList();
-    return ref.read(queryServiceProvider).execute(query, materials);
   }
 }

@@ -50,6 +50,9 @@ class NumberField extends StatelessWidget {
         decimal: true,
         signed: true,
       ),
+      decoration: InputDecoration(
+        constraints: const BoxConstraints(maxWidth: 150),
+      ),
       onChanged: (value) {
         final number = num.tryParse(value);
         onChanged(number);
@@ -74,7 +77,7 @@ class NumberField extends StatelessWidget {
 class BooleanField extends StatefulWidget {
   const BooleanField({
     super.key,
-    this.initialValue = true,
+    this.initialValue,
     required this.onChanged,
     this.required = false,
   });
