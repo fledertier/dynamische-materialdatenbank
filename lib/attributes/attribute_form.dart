@@ -20,14 +20,12 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameDe = TextEditingController();
-  final _type = TextEditingController();
 
   final _attribute = ValueNotifier<Map<String, dynamic>>({});
 
   @override
   void dispose() {
     _nameDe.dispose();
-    _type.dispose();
     super.dispose();
   }
 
@@ -98,49 +96,51 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                 ),
               ],
             ),
-            DropdownMenuFormField<AttributeType>(
-              initialSelection: _attribute.value["type"],
-              width: fieldWidth,
-              label: Text("Type"),
-              dropdownMenuEntries: [
-                for (final value in AttributeType.values)
-                  DropdownMenuEntry(
-                    value: value,
-                    label: value.name,
-                    leadingIcon: Icon(value.icon),
-                  ),
-              ],
-              onSelected: (value) {
-                update('type', value);
+            StatefulBuilder(
+              builder: (context, setState) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 24,
+                  children: [
+                    DropdownMenuFormField<AttributeType>(
+                      initialSelection: _attribute.value["type"],
+                      width: fieldWidth,
+                      label: Text("Type"),
+                      dropdownMenuEntries: [
+                        for (final value in AttributeType.values)
+                          DropdownMenuEntry(
+                            value: value,
+                            label: value.name,
+                            leadingIcon: Icon(value.icon),
+                          ),
+                      ],
+                      onSelected: (value) {
+                        update('type', value);
+                        setState(() => {});
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return "Please select a type";
+                        }
+                        return null;
+                      },
+                    ),
+                    if (_attribute.value["type"] == AttributeType.number)
+                      DropdownMenuFormField<UnitType>(
+                        initialSelection: _attribute.value["unitType"],
+                        width: fieldWidth,
+                        label: Text("Unit type"),
+                        dropdownMenuEntries: [
+                          for (final value in UnitType.values)
+                            DropdownMenuEntry(value: value, label: value.name),
+                        ],
+                        onSelected: (value) {
+                          update('unitType', value);
+                        },
+                      ),
+                  ],
+                );
               },
-              controller: _type,
-              validator: (value) {
-                if (value == null) {
-                  return "Please select a type";
-                }
-                return null;
-              },
-            ),
-            ListenableBuilder(
-              listenable: _type,
-              builder: (context, child) {
-                if (_attribute.value["type"] != AttributeType.number) {
-                  return SizedBox();
-                }
-                return child!;
-              },
-              child: DropdownMenuFormField<UnitType>(
-                initialSelection: _attribute.value["unitType"],
-                width: fieldWidth,
-                label: Text("Unit type"),
-                dropdownMenuEntries: [
-                  for (final value in UnitType.values)
-                    DropdownMenuEntry(value: value, label: value.name),
-                ],
-                onSelected: (value) {
-                  update('unitType', value);
-                },
-              ),
             ),
             Row(
               children: [
@@ -189,18 +189,10 @@ class EditAttributeForm extends StatefulWidget {
 class _EditAttributeFormState extends State<EditAttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final _type = TextEditingController();
-
   late var _savedAttribute = widget.attribute;
   late final _attribute = ValueNotifier(widget.attribute);
 
   bool get hasChanged => _attribute.value != _savedAttribute;
-
-  @override
-  void dispose() {
-    _type.dispose();
-    super.dispose();
-  }
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -272,44 +264,51 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 ),
               ],
             ),
-            DropdownMenuFormField<AttributeType>(
-              initialSelection: _attribute.value.type,
-              controller: _type,
-              label: Text("Type"),
-              width: fieldWidth,
-              dropdownMenuEntries: [
-                for (final value in _attribute.value.type.exchangeableTypes)
-                  DropdownMenuEntry(
-                    value: value,
-                    label: value.name,
-                    leadingIcon: Icon(value.icon),
-                  ),
-              ],
-              enabled: _attribute.value.type.hasExchangeableTypes,
-              onSelected: (value) {
-                _attribute.value = _attribute.value.copyWith(type: value);
+            StatefulBuilder(
+              builder: (context, setState) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 24,
+                  children: [
+                    DropdownMenuFormField<AttributeType>(
+                      initialSelection: _attribute.value.type,
+                      label: Text("Type"),
+                      width: fieldWidth,
+                      dropdownMenuEntries: [
+                        for (final value
+                            in _attribute.value.type.exchangeableTypes)
+                          DropdownMenuEntry(
+                            value: value,
+                            label: value.name,
+                            leadingIcon: Icon(value.icon),
+                          ),
+                      ],
+                      enabled: _attribute.value.type.hasExchangeableTypes,
+                      onSelected: (value) {
+                        _attribute.value = _attribute.value.copyWith(
+                          type: value,
+                        );
+                        setState(() => {});
+                      },
+                    ),
+                    if (_attribute.value.type == AttributeType.number)
+                      DropdownMenuFormField<UnitType>(
+                        initialSelection: _attribute.value.unitType,
+                        label: Text("Unit type"),
+                        width: fieldWidth,
+                        dropdownMenuEntries: [
+                          for (final value in UnitType.values)
+                            DropdownMenuEntry(value: value, label: value.name),
+                        ],
+                        onSelected: (value) {
+                          _attribute.value = _attribute.value.copyWith(
+                            unitType: value,
+                          );
+                        },
+                      ),
+                  ],
+                );
               },
-            ),
-            ListenableBuilder(
-              listenable: _type,
-              builder: (context, child) {
-                if (_attribute.value.type != AttributeType.number) {
-                  return SizedBox();
-                }
-                return child!;
-              },
-              child: DropdownMenuFormField<UnitType>(
-                initialSelection: _attribute.value.unitType,
-                label: Text("Unit type"),
-                width: fieldWidth,
-                dropdownMenuEntries: [
-                  for (final value in UnitType.values)
-                    DropdownMenuEntry(value: value, label: value.name),
-                ],
-                onSelected: (value) {
-                  _attribute.value = _attribute.value.copyWith(unitType: value);
-                },
-              ),
             ),
             Row(
               children: [
