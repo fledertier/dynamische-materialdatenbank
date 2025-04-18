@@ -24,7 +24,9 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final attributes = ref.watch(attributesProvider).value?.values ?? [];
+    final attributes =
+        ref.watch(attributesProvider).value?.values ??
+        [controller.attribute].nonNulls;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -55,6 +57,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                   DropdownMenuFormField(
                     hintText: "Attribute",
                     width: 200,
+                    initialSelection: controller.attribute,
                     dropdownMenuEntries:
                         attributes.map((attribute) {
                           return DropdownMenuEntry(
@@ -77,8 +80,8 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                   ),
                   DropdownMenuFormField(
                     key: ValueKey(controller.attribute),
-                    initialSelection: operations.firstOrNull,
-                    hintText: "Operator",
+                    initialSelection: controller.comparator,
+                    hintText: "Comparator",
                     enabled: controller.attribute != null,
                     dropdownMenuEntries:
                         operations.map((operation) {
@@ -92,7 +95,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                     },
                     validator: (operator) {
                       if (controller.attribute != null && operator == null) {
-                        return "Please select an operator";
+                        return "Please select an comparator";
                       }
                       return null;
                     },
@@ -131,6 +134,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
     switch (attributeType) {
       case AttributeType.text || AttributeType.textarea:
         return TextField(
+          initialValue: controller.parameter as String?,
           required: true,
           onChanged: (value) {
             controller.parameter = value;
@@ -138,6 +142,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
         );
       case AttributeType.number:
         return NumberField(
+          initialValue: controller.parameter as num?,
           required: true,
           onChanged: (value) {
             controller.parameter = value;
@@ -145,7 +150,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
         );
       case AttributeType.boolean:
         return BooleanField(
-          // initialValue: true,
+          initialValue: controller.parameter as bool?,
           required: true,
           onChanged: (value) {
             controller.parameter = value;

@@ -12,14 +12,21 @@ class EmptyField extends StatelessWidget {
 }
 
 class TextField extends StatelessWidget {
-  const TextField({super.key, required this.onChanged, this.required = false});
+  const TextField({
+    super.key,
+    this.initialValue,
+    required this.onChanged,
+    this.required = false,
+  });
 
+  final String? initialValue;
   final void Function(String? value) onChanged;
   final bool required;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
       onChanged: onChanged,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -36,16 +43,19 @@ class TextField extends StatelessWidget {
 class NumberField extends StatelessWidget {
   const NumberField({
     super.key,
+    this.initialValue,
     required this.onChanged,
     this.required = false,
   });
 
+  final num? initialValue;
   final void Function(num? value) onChanged;
   final bool required;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue?.toString(),
       keyboardType: TextInputType.numberWithOptions(
         decimal: true,
         signed: true,

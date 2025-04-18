@@ -1,10 +1,72 @@
 import 'package:dynamische_materialdatenbank/advanced_search/query_service.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/where_clause.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../attributes/attribute_type.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
 
-final queryProvider = StateProvider<MaterialQuery?>((ref) => null);
+final queryProvider = NotifierProvider<QueryNotifier, MaterialQuery?>(
+  QueryNotifier.new,
+);
+
+class QueryNotifier extends Notifier<MaterialQuery?> {
+  @override
+  MaterialQuery? build() {
+    return null;
+  }
+
+  set query(MaterialQuery? query) {
+    state = query;
+  }
+
+  set filterOptions(Map<String, dynamic> options) {
+    ref.read(attributesStreamProvider).whenData((attributes) {
+      final clauses = <WhereClause>[];
+
+      for (final attribute in [
+        Attributes.recyclable,
+        Attributes.biodegradable,
+        Attributes.biobased,
+      ]) {
+        final value = options[attribute];
+        if (value == true) {
+          clauses.add(
+            WhereClause(
+              attribute: attributes[attribute]!,
+              parameter: value,
+              comparator: Comparator.equals,
+            ),
+          );
+        }
+      }
+
+      final manufacturer = options[Attributes.manufacturer];
+      if (manufacturer is String && manufacturer.isNotEmpty) {
+        clauses.add(
+          WhereClause(
+            attribute: attributes[Attributes.manufacturer]!,
+            parameter: manufacturer,
+            comparator: Comparator.equals,
+          ),
+        );
+      }
+
+      final weight = options[Attributes.weight];
+      if (weight is double) {
+        clauses.add(
+          WhereClause(
+            attribute: attributes[Attributes.weight]!,
+            parameter: weight,
+            comparator: Comparator.lessThan,
+          ),
+        );
+      }
+
+      state = MaterialQuery(whereClauses: clauses);
+    });
+  }
+}
 
 final queriedMaterialItemsProvider = FutureProvider.autoDispose<List<Material>>(
   (ref) async {

@@ -119,8 +119,9 @@ class AdvancedSearch extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             QueryBuilder(
+              initialQuery: ref.read(queryProvider),
               onQuery: (query) {
-                ref.read(queryProvider.notifier).state = query;
+                ref.read(queryProvider.notifier).query = query;
               },
             ),
           ],

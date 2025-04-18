@@ -5,8 +5,9 @@ import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
 
 class QueryBuilder extends StatefulWidget {
-  const QueryBuilder({super.key, this.onQuery});
+  const QueryBuilder({super.key, this.initialQuery, this.onQuery});
 
+  final MaterialQuery? initialQuery;
   final void Function(MaterialQuery? query)? onQuery;
 
   @override
@@ -15,7 +16,17 @@ class QueryBuilder extends StatefulWidget {
 
 class _QueryBuilderState extends State<QueryBuilder> {
   final formKey = GlobalKey<FormState>();
-  final controllers = [WhereClauseController()];
+  late final List<WhereClauseController> controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    controllers =
+        widget.initialQuery?.whereClauses
+            .map((clause) => WhereClauseController(clause))
+            .toList() ??
+        [WhereClauseController()];
+  }
 
   void addWhereClause() {
     setState(() {
@@ -58,9 +69,9 @@ class _QueryBuilderState extends State<QueryBuilder> {
               padding: EdgeInsets.zero,
               gap: 4,
               label:
-              controller == controllers.first
-                  ? Text("Where")
-                  : Text("And where"),
+                  controller == controllers.first
+                      ? Text("Where")
+                      : Text("And where"),
               child: WhereClauseWidget(
                 key: ValueKey(controller),
                 controller: controller,
