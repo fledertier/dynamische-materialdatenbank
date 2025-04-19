@@ -47,4 +47,8 @@ class MaterialQuery {
   Set<String> attributeIds() {
     return whereClauses.map((clause) => clause.attribute.id).toSet();
   }
+
+  bool containsAttribute(String attributeId) {
+    return whereClauses.any((clause) => clause.attribute.id == attributeId);
+  }
 }

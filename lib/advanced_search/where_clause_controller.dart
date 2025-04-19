@@ -5,12 +5,12 @@ import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
 
 class WhereClauseController extends ValueNotifier<WhereClauseValue> {
-  WhereClauseController()
+  WhereClauseController([WhereClause? value])
     : super(
-        const WhereClauseValue(
-          attribute: null,
-          comparator: null,
-          parameter: null,
+        WhereClauseValue(
+          attribute: value?.attribute,
+          comparator: value?.comparator,
+          parameter: value?.parameter,
         ),
       );
 

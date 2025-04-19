@@ -5,9 +5,10 @@ import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
 
 class QueryBuilder extends StatefulWidget {
-  const QueryBuilder({super.key, this.onExecute});
+  const QueryBuilder({super.key, this.initialQuery, this.onQuery});
 
-  final void Function(MaterialQuery query)? onExecute;
+  final MaterialQuery? initialQuery;
+  final void Function(MaterialQuery? query)? onQuery;
 
   @override
   State<QueryBuilder> createState() => _QueryBuilderState();
@@ -15,7 +16,17 @@ class QueryBuilder extends StatefulWidget {
 
 class _QueryBuilderState extends State<QueryBuilder> {
   final formKey = GlobalKey<FormState>();
-  final controllers = [WhereClauseController()];
+  late final List<WhereClauseController> controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    controllers =
+        widget.initialQuery?.whereClauses
+            .map((clause) => WhereClauseController(clause))
+            .toList() ??
+        [WhereClauseController()];
+  }
 
   void addWhereClause() {
     setState(() {
@@ -29,10 +40,26 @@ class _QueryBuilderState extends State<QueryBuilder> {
     });
   }
 
+  void validateAndBuild() {
+    if (formKey.currentState?.validate() ?? false) {
+      if (controllers.isEmpty) {
+        widget.onQuery?.call(null);
+      } else {
+        final whereClauses = controllers.map((c) => c.toWhereClause()).toList();
+        final query = MaterialQuery(whereClauses: whereClauses);
+        widget.onQuery?.call(query);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      onChanged: () {
+        Future.microtask(validateAndBuild);
+      },
       child: Column(
         spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,17 +81,6 @@ class _QueryBuilderState extends State<QueryBuilder> {
           TextButton(
             onPressed: addWhereClause,
             child: const Text("Add Condition"),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                final whereClauses =
-                    controllers.map((c) => c.toWhereClause()).toList();
-                final query = MaterialQuery(whereClauses: whereClauses);
-                widget.onExecute?.call(query);
-              }
-            },
-            child: const Text("Ausführen"),
           ),
         ],
       ),

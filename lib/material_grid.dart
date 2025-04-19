@@ -1,9 +1,9 @@
+import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'constants.dart';
-import 'providers/material_provider.dart';
 import 'services/material_service.dart';
 
 class MaterialGrid extends StatelessWidget {
@@ -13,8 +13,7 @@ class MaterialGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final items =
-            ref.watch(filteredMaterialItemsStreamProvider).value ?? [];
+        final items = ref.watch(queriedMaterialItemsProvider).value ?? [];
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
