@@ -1,15 +1,31 @@
 import 'condition.dart';
 
 class MaterialQuery {
-  final List<Condition> conditions;
+  final List<Condition> filterConditions;
+  final List<Condition> searchConditions;
+  final List<Condition> customConditions;
 
-  const MaterialQuery({required this.conditions});
+  List<Condition> get conditions => [
+    ...filterConditions,
+    ...searchConditions,
+    ...customConditions,
+  ];
 
-  Set<String> attributeIds() {
-    return conditions.map((clause) => clause.attribute.id).toSet();
-  }
+  const MaterialQuery({
+    this.filterConditions = const [],
+    this.searchConditions = const [],
+    this.customConditions = const [],
+  });
 
-  bool containsAttribute(String attributeId) {
-    return conditions.any((clause) => clause.attribute.id == attributeId);
+  MaterialQuery copyWith({
+    List<Condition>? filterConditions,
+    List<Condition>? searchConditions,
+    List<Condition>? customConditions,
+  }) {
+    return MaterialQuery(
+      filterConditions: filterConditions ?? this.filterConditions,
+      searchConditions: searchConditions ?? this.searchConditions,
+      customConditions: customConditions ?? this.customConditions,
+    );
   }
 }

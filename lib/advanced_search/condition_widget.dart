@@ -9,10 +9,16 @@ import '../providers/attribute_provider.dart';
 import 'fields.dart';
 
 class ConditionWidget extends ConsumerStatefulWidget {
-  const ConditionWidget({super.key, this.controller, this.onRemove});
+  const ConditionWidget({
+    super.key,
+    this.controller,
+    this.onRemove,
+    this.enabled = true,
+  });
 
   final ConditionController? controller;
   final void Function()? onRemove;
+  final bool enabled;
 
   @override
   ConsumerState<ConditionWidget> createState() => _ConditionState();
@@ -48,59 +54,59 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
           return MouseRegion(
             onEnter: (event) => hover.value = true,
             onExit: (event) => hover.value = false,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  DropdownMenuFormField(
-                    hintText: "Attribute",
-                    width: 200,
-                    initialSelection: controller.attribute,
-                    dropdownMenuEntries:
-                        attributes.map((attribute) {
-                          return DropdownMenuEntry(
-                            value: attribute,
-                            label: attribute.name,
-                          );
-                        }).toList(),
-                    onSelected: (attribute) {
-                      controller.value = ConditionValue(
-                        attribute: attribute,
-                        comparator: attribute?.type.operators.firstOrNull,
-                      );
-                    },
-                    validator: (attribute) {
-                      if (attribute == null) {
-                        return "Please select an attribute";
-                      }
-                      return null;
-                    },
-                  ),
-                  DropdownMenuFormField(
-                    key: ValueKey(controller.attribute),
-                    initialSelection: controller.comparator,
-                    hintText: "Comparator",
-                    enabled: controller.attribute != null,
-                    dropdownMenuEntries:
-                        operations.map((operation) {
-                          return DropdownMenuEntry(
-                            value: operation,
-                            label: operation.name,
-                          );
-                        }).toList(),
-                    onSelected: (operator) {
-                      controller.comparator = operator;
-                    },
-                    validator: (operator) {
-                      if (controller.attribute != null && operator == null) {
-                        return "Please select an comparator";
-                      }
-                      return null;
-                    },
-                  ),
-                  buildParameterField(),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                DropdownMenuFormField(
+                  hintText: "Attribute",
+                  enabled: widget.enabled,
+                  width: 200,
+                  initialSelection: controller.attribute,
+                  dropdownMenuEntries:
+                      attributes.map((attribute) {
+                        return DropdownMenuEntry(
+                          value: attribute,
+                          label: attribute.name,
+                        );
+                      }).toList(),
+                  onSelected: (attribute) {
+                    controller.value = ConditionValue(
+                      attribute: attribute,
+                      comparator: attribute?.type.operators.firstOrNull,
+                    );
+                  },
+                  validator: (attribute) {
+                    if (attribute == null) {
+                      return "Please select an attribute";
+                    }
+                    return null;
+                  },
+                ),
+                DropdownMenuFormField(
+                  key: ValueKey(controller.attribute),
+                  hintText: "Comparator",
+                  initialSelection: controller.comparator,
+                  enabled: widget.enabled && controller.attribute != null,
+                  dropdownMenuEntries:
+                      operations.map((operation) {
+                        return DropdownMenuEntry(
+                          value: operation,
+                          label: operation.name,
+                        );
+                      }).toList(),
+                  onSelected: (operator) {
+                    controller.comparator = operator;
+                  },
+                  validator: (operator) {
+                    if (controller.attribute != null && operator == null) {
+                      return "Please select an comparator";
+                    }
+                    return null;
+                  },
+                ),
+                buildParameterField(),
+                if (widget.enabled)
                   Padding(
                     padding: const EdgeInsets.only(left: 8, top: 8),
                     child: ListenableBuilder(
@@ -120,8 +126,7 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
                       },
                     ),
                   ),
-                ],
-              ),
+              ],
             ),
           );
         },
@@ -135,6 +140,7 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
     switch (attributeType) {
       case AttributeType.text || AttributeType.textarea:
         return TextField(
+          enabled: widget.enabled,
           initialValue: controller.parameter as String?,
           required: true,
           onChanged: (value) {
@@ -143,6 +149,7 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
         );
       case AttributeType.number:
         return NumberField(
+          enabled: widget.enabled,
           initialValue: controller.parameter as num?,
           required: true,
           onChanged: (value) {
@@ -151,6 +158,7 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
         );
       case AttributeType.boolean:
         return BooleanField(
+          enabled: widget.enabled,
           initialValue: controller.parameter as bool?,
           required: true,
           onChanged: (value) {

@@ -17,15 +17,18 @@ class TextField extends StatelessWidget {
     this.initialValue,
     required this.onChanged,
     this.required = false,
+    this.enabled = true,
   });
 
   final String? initialValue;
   final void Function(String? value) onChanged;
   final bool required;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       initialValue: initialValue,
       onChanged: onChanged,
       validator: (value) {
@@ -46,15 +49,18 @@ class NumberField extends StatelessWidget {
     this.initialValue,
     required this.onChanged,
     this.required = false,
+    this.enabled = true,
   });
 
   final num? initialValue;
   final void Function(num? value) onChanged;
   final bool required;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       initialValue: initialValue?.toString(),
       keyboardType: TextInputType.numberWithOptions(
         decimal: true,
@@ -90,11 +96,13 @@ class BooleanField extends StatefulWidget {
     this.initialValue,
     required this.onChanged,
     this.required = false,
+    this.enabled = true,
   });
 
   final bool? initialValue;
   final void Function(bool? value) onChanged;
   final bool required;
+  final bool enabled;
 
   @override
   State<BooleanField> createState() => _BooleanFieldState();
@@ -112,6 +120,7 @@ class _BooleanFieldState extends State<BooleanField> {
   @override
   Widget build(BuildContext context) {
     return DropdownMenuFormField(
+      enabled: widget.enabled,
       initialSelection: widget.initialValue,
       dropdownMenuEntries: [
         DropdownMenuEntry(value: true, label: "True"),

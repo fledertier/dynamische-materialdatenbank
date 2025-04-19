@@ -14,25 +14,27 @@ final queryServiceProvider = Provider((ref) => QueryService());
 class QueryService {
   List<Material> execute(MaterialQuery query, List<Material> materials) {
     return materials.where((material) {
-      return query.conditions.every((clause) => matches(clause, material));
+      return query.conditions.every(
+        (condition) => matches(condition, material),
+      );
     }).toList();
   }
 
-  bool matches(Condition clause, Material material) {
-    final value = material[clause.attribute.id];
+  bool matches(Condition condition, Material material) {
+    final value = material[condition.attribute.id];
     if (value == null) {
       return false;
     }
-    return switch (clause.comparator) {
-      Comparator.equals => value == clause.parameter,
-      Comparator.notEquals => value != clause.parameter,
-      Comparator.greaterThan => value > clause.parameter,
-      Comparator.lessThan => value < clause.parameter,
+    return switch (condition.comparator) {
+      Comparator.equals => value == condition.parameter,
+      Comparator.notEquals => value != condition.parameter,
+      Comparator.greaterThan => value > condition.parameter,
+      Comparator.lessThan => value < condition.parameter,
       Comparator.contains => value.toString().containsIgnoreCase(
-        clause.parameter.toString(),
+        condition.parameter.toString(),
       ),
       Comparator.notContains =>
-        !value.toString().containsIgnoreCase(clause.parameter.toString()),
+        !value.toString().containsIgnoreCase(condition.parameter.toString()),
     };
   }
 }

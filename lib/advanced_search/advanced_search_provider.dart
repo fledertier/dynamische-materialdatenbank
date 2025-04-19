@@ -8,23 +8,27 @@ import '../providers/attribute_provider.dart';
 import '../types.dart';
 import 'material_query.dart';
 
-final queryProvider = NotifierProvider<QueryNotifier, MaterialQuery?>(
+final queryProvider = NotifierProvider<QueryNotifier, MaterialQuery>(
   QueryNotifier.new,
 );
 
-class QueryNotifier extends Notifier<MaterialQuery?> {
+class QueryNotifier extends Notifier<MaterialQuery> {
   @override
-  MaterialQuery? build() {
-    return null;
+  MaterialQuery build() {
+    return MaterialQuery();
   }
 
-  set query(MaterialQuery? query) {
+  set query(MaterialQuery query) {
     state = query;
+  }
+
+  set customConditions(List<Condition> conditions) {
+    state = state.copyWith(customConditions: conditions);
   }
 
   set filterOptions(Map<String, dynamic> options) {
     ref.read(attributesStreamProvider).whenData((attributes) {
-      final clauses = <Condition>[];
+      final conditions = <Condition>[];
 
       for (final attribute in [
         Attributes.recyclable,
@@ -33,11 +37,11 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
       ]) {
         final value = options[attribute];
         if (value == true) {
-          clauses.add(
+          conditions.add(
             Condition(
               attribute: attributes[attribute]!,
-              parameter: value,
               comparator: Comparator.equals,
+              parameter: value,
             ),
           );
         }
@@ -45,28 +49,55 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
 
       final manufacturer = options[Attributes.manufacturer];
       if (manufacturer is String && manufacturer.isNotEmpty) {
-        clauses.add(
+        conditions.add(
           Condition(
             attribute: attributes[Attributes.manufacturer]!,
-            parameter: manufacturer,
             comparator: Comparator.equals,
+            parameter: manufacturer,
           ),
         );
       }
 
       final weight = options[Attributes.weight];
       if (weight is double) {
-        clauses.add(
+        conditions.add(
           Condition(
             attribute: attributes[Attributes.weight]!,
-            parameter: weight,
             comparator: Comparator.lessThan,
+            parameter: weight,
           ),
         );
       }
 
-      state = MaterialQuery(conditions: clauses);
+      filterConditions = conditions;
     });
+  }
+
+  set filterConditions(List<Condition> conditions) {
+    state = state.copyWith(filterConditions: conditions);
+  }
+
+  set searchQuery(String searchQuery) {
+    ref.read(attributesStreamProvider).whenData((attributes) {
+      late final conditions = [
+        Condition(
+          attribute: attributes[Attributes.name]!,
+          comparator: Comparator.contains,
+          parameter: searchQuery,
+        ),
+        Condition(
+          attribute: attributes[Attributes.description]!,
+          comparator: Comparator.contains,
+          parameter: searchQuery,
+        ),
+      ];
+
+      searchConditions = searchQuery.isNotEmpty ? conditions : [];
+    });
+  }
+
+  set searchConditions(List<Condition> conditions) {
+    state = state.copyWith(searchConditions: conditions);
   }
 }
 
@@ -75,15 +106,12 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose<List<Material>>(
     final query = ref.watch(queryProvider);
     final parameter = AttributesParameter({
       Attributes.name,
-      ...?query?.attributeIds(),
+      ...query.conditions.map((condition) => condition.attribute.id),
     });
     final materialsById = await ref.read(
       attributesValuesStreamProvider(parameter).future,
     );
     final materials = materialsById.values.toList();
-    if (query == null) {
-      return materials;
-    }
     return ref.read(queryServiceProvider).execute(query, materials);
   },
 );
