@@ -1,13 +1,13 @@
-import 'package:dynamische_materialdatenbank/advanced_search/where_clause.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
 
-class WhereClauseController extends ValueNotifier<WhereClauseValue> {
-  WhereClauseController([WhereClause? value])
+class ConditionController extends ValueNotifier<ConditionValue> {
+  ConditionController([Condition? value])
     : super(
-        WhereClauseValue(
+        ConditionValue(
           attribute: value?.attribute,
           comparator: value?.comparator,
           parameter: value?.parameter,
@@ -32,8 +32,8 @@ class WhereClauseController extends ValueNotifier<WhereClauseValue> {
     value = value.copyWith(parameter: () => parameter);
   }
 
-  WhereClause toWhereClause() {
-    return WhereClause(
+  Condition toCondition() {
+    return Condition(
       attribute: attribute!,
       comparator: comparator!,
       parameter: parameter!,
@@ -41,19 +41,19 @@ class WhereClauseController extends ValueNotifier<WhereClauseValue> {
   }
 }
 
-class WhereClauseValue {
+class ConditionValue {
   final Attribute? attribute;
   final Comparator? comparator;
   final Object? parameter;
 
-  const WhereClauseValue({this.attribute, this.comparator, this.parameter});
+  const ConditionValue({this.attribute, this.comparator, this.parameter});
 
-  WhereClauseValue copyWith({
+  ConditionValue copyWith({
     Attribute? Function()? attribute,
     Comparator? Function()? comparator,
     Object? Function()? parameter,
   }) {
-    return WhereClauseValue(
+    return ConditionValue(
       attribute: attribute != null ? attribute() : this.attribute,
       comparator: comparator != null ? comparator() : this.comparator,
       parameter: parameter != null ? parameter() : this.parameter,
@@ -64,7 +64,7 @@ class WhereClauseValue {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is WhereClauseValue &&
+    return other is ConditionValue &&
         other.attribute == attribute &&
         other.comparator == comparator &&
         other.parameter == parameter;
@@ -77,6 +77,6 @@ class WhereClauseValue {
 
   @override
   String toString() {
-    return 'WhereClauseValue(attribute: $attribute, comparator: $comparator, parameter: $parameter)';
+    return 'ConditionValue(attribute: $attribute, comparator: $comparator, parameter: $parameter)';
   }
 }

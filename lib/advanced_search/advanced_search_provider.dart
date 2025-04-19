@@ -1,5 +1,5 @@
+import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/query_service.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/where_clause.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_type.dart';
@@ -22,7 +22,7 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
 
   set filterOptions(Map<String, dynamic> options) {
     ref.read(attributesStreamProvider).whenData((attributes) {
-      final clauses = <WhereClause>[];
+      final clauses = <Condition>[];
 
       for (final attribute in [
         Attributes.recyclable,
@@ -32,7 +32,7 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
         final value = options[attribute];
         if (value == true) {
           clauses.add(
-            WhereClause(
+            Condition(
               attribute: attributes[attribute]!,
               parameter: value,
               comparator: Comparator.equals,
@@ -44,7 +44,7 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
       final manufacturer = options[Attributes.manufacturer];
       if (manufacturer is String && manufacturer.isNotEmpty) {
         clauses.add(
-          WhereClause(
+          Condition(
             attribute: attributes[Attributes.manufacturer]!,
             parameter: manufacturer,
             comparator: Comparator.equals,
@@ -55,7 +55,7 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
       final weight = options[Attributes.weight];
       if (weight is double) {
         clauses.add(
-          WhereClause(
+          Condition(
             attribute: attributes[Attributes.weight]!,
             parameter: weight,
             comparator: Comparator.lessThan,
@@ -63,7 +63,7 @@ class QueryNotifier extends Notifier<MaterialQuery?> {
         );
       }
 
-      state = MaterialQuery(whereClauses: clauses);
+      state = MaterialQuery(conditions: clauses);
     });
   }
 }

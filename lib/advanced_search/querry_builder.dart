@@ -1,6 +1,6 @@
+import 'package:dynamische_materialdatenbank/advanced_search/condition_controller.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/query_service.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/where_clause_controller.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/where_clause_widget.dart';
 import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
 
@@ -16,25 +16,25 @@ class QueryBuilder extends StatefulWidget {
 
 class _QueryBuilderState extends State<QueryBuilder> {
   final formKey = GlobalKey<FormState>();
-  late final List<WhereClauseController> controllers;
+  late final List<ConditionController> controllers;
 
   @override
   void initState() {
     super.initState();
     controllers =
-        widget.initialQuery?.whereClauses
-            .map((clause) => WhereClauseController(clause))
+        widget.initialQuery?.conditions
+            .map((clause) => ConditionController(clause))
             .toList() ??
-        [WhereClauseController()];
+        [ConditionController()];
   }
 
-  void addWhereClause() {
+  void addCondition() {
     setState(() {
-      controllers.add(WhereClauseController());
+      controllers.add(ConditionController());
     });
   }
 
-  void removeWhereClause(WhereClauseController controller) {
+  void removeCondition(ConditionController controller) {
     setState(() {
       controllers.remove(controller);
     });
@@ -45,8 +45,8 @@ class _QueryBuilderState extends State<QueryBuilder> {
       if (controllers.isEmpty) {
         widget.onQuery?.call(null);
       } else {
-        final whereClauses = controllers.map((c) => c.toWhereClause()).toList();
-        final query = MaterialQuery(whereClauses: whereClauses);
+        final conditions = controllers.map((c) => c.toCondition()).toList();
+        final query = MaterialQuery(conditions: conditions);
         widget.onQuery?.call(query);
       }
     }
@@ -72,14 +72,14 @@ class _QueryBuilderState extends State<QueryBuilder> {
                   controller == controllers.first
                       ? Text("Where")
                       : Text("And where"),
-              child: WhereClauseWidget(
+              child: ConditionWidget(
                 key: ValueKey(controller),
                 controller: controller,
-                onRemove: () => removeWhereClause(controller),
+                onRemove: () => removeCondition(controller),
               ),
             ),
           TextButton(
-            onPressed: addWhereClause,
+            onPressed: addCondition,
             child: const Text("Add condition"),
           ),
         ],

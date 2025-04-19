@@ -1,12 +1,12 @@
 import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
 
-class WhereClause {
+class Condition {
   final Attribute attribute;
   final Comparator comparator;
   final Object parameter;
 
-  const WhereClause({
+  const Condition({
     required this.attribute,
     required this.comparator,
     required this.parameter,
@@ -16,7 +16,7 @@ class WhereClause {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is WhereClause &&
+    return other is Condition &&
         other.attribute == attribute &&
         other.comparator == comparator &&
         other.parameter == parameter;

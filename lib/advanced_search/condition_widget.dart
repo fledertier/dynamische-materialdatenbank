@@ -1,5 +1,5 @@
+import 'package:dynamische_materialdatenbank/advanced_search/condition_controller.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/dropdown_menu_form_field.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/where_clause_controller.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -8,18 +8,18 @@ import '../attributes/attribute_type.dart';
 import '../providers/attribute_provider.dart';
 import 'fields.dart';
 
-class WhereClauseWidget extends ConsumerStatefulWidget {
-  const WhereClauseWidget({super.key, this.controller, this.onRemove});
+class ConditionWidget extends ConsumerStatefulWidget {
+  const ConditionWidget({super.key, this.controller, this.onRemove});
 
-  final WhereClauseController? controller;
+  final ConditionController? controller;
   final void Function()? onRemove;
 
   @override
-  ConsumerState<WhereClauseWidget> createState() => _WhereClauseState();
+  ConsumerState<ConditionWidget> createState() => _ConditionState();
 }
 
-class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
-  late final controller = widget.controller ?? WhereClauseController();
+class _ConditionState extends ConsumerState<ConditionWidget> {
+  late final controller = widget.controller ?? ConditionController();
   final hover = ValueNotifier(false);
 
   @override
@@ -66,7 +66,7 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                           );
                         }).toList(),
                     onSelected: (attribute) {
-                      controller.value = WhereClauseValue(
+                      controller.value = ConditionValue(
                         attribute: attribute,
                         comparator: attribute?.type.operators.firstOrNull,
                       );
