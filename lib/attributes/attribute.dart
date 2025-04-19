@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/units.dart';
 
+import '../types.dart';
 import 'attribute_type.dart';
 
 class Attribute extends AttributeData {

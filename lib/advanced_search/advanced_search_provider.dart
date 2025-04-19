@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../attributes/attribute_type.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
+import '../types.dart';
+import 'material_query.dart';
 
 final queryProvider = NotifierProvider<QueryNotifier, MaterialQuery?>(
   QueryNotifier.new,

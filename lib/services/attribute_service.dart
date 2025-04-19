@@ -116,8 +116,6 @@ class AttributeService {
   }
 }
 
-typedef Json = Map<String, dynamic>;
-
 extension DocumentSnapshotExtension<T> on DocumentSnapshot<T> {
   T? dataOrNull() => exists ? data() : null;
 }

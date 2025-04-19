@@ -1,8 +1,9 @@
 import 'package:dynamische_materialdatenbank/advanced_search/condition_controller.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/query_service.dart';
 import 'package:dynamische_materialdatenbank/filter/labeled.dart';
 import 'package:flutter/material.dart';
+
+import 'material_query.dart';
 
 class QueryBuilder extends StatefulWidget {
   const QueryBuilder({super.key, this.initialQuery, this.onQuery});

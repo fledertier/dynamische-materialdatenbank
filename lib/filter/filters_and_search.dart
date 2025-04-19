@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/advanced_search/querry_builder.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/query_builder.dart';
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
