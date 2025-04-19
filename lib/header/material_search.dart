@@ -11,7 +11,9 @@ import '../services/search_service.dart';
 import 'search.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {
-  const MaterialSearch({super.key});
+  const MaterialSearch({super.key, this.onFilter});
+
+  final void Function()? onFilter;
 
   @override
   ConsumerState<MaterialSearch> createState() => _MaterialSearchState();
@@ -70,6 +72,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
         controller.closeView('');
         ref.read(searchProvider.notifier).query = '';
       },
+      onFilter: widget.onFilter,
     );
   }
 }

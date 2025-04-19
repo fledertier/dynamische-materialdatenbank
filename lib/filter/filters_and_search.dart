@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../advanced_search/advanced_search_provider.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
+import '../providers/filter_provider.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';
 import 'labeled.dart';
@@ -16,7 +17,9 @@ import 'side_sheet.dart';
 enum View { filters, advancedSearch }
 
 class FiltersAndSearch extends StatefulWidget {
-  const FiltersAndSearch({super.key});
+  const FiltersAndSearch({super.key, this.onClose});
+
+  final void Function()? onClose;
 
   @override
   State<FiltersAndSearch> createState() => _FiltersAndSearchState();
@@ -41,18 +44,23 @@ class _FiltersAndSearchState extends State<FiltersAndSearch> {
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
+      alignment: Alignment.topLeft,
       curve: Curves.easeOutCubic,
       child:
           _currentView == View.filters
-              ? Filters(onAdvancedSearch: showAdvancedSearch)
-              : AdvancedSearch(onFilters: showFilters),
+              ? Filters(
+                onClose: widget.onClose,
+                onAdvancedSearch: showAdvancedSearch,
+              )
+              : AdvancedSearch(onClose: widget.onClose, onFilters: showFilters),
     );
   }
 }
 
 class Filters extends ConsumerWidget {
-  const Filters({super.key, this.onAdvancedSearch});
+  const Filters({super.key, this.onClose, this.onAdvancedSearch});
 
+  final void Function()? onClose;
   final void Function()? onAdvancedSearch;
 
   @override
@@ -62,13 +70,23 @@ class Filters extends ConsumerWidget {
     return SideSheet.detached(
       title: Text('Filters'),
       topActions: [
-        IconButton(icon: Icon(Icons.search), onPressed: () {}),
-        IconButton(icon: Icon(Icons.close), onPressed: () {}),
+        IconButton(
+          icon: Icon(Icons.refresh),
+          tooltip: 'Reset',
+          onPressed: () {
+            ref.read(filterProvider.notifier).reset();
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.close),
+          tooltip: 'Close',
+          onPressed: onClose,
+        ),
       ],
       bottomActions: [
         OutlinedButton.icon(
           icon: Icon(Icons.auto_awesome),
-          label: Text('Advanced Search'),
+          label: Text('Advanced search'),
           onPressed: onAdvancedSearch,
         ),
       ],
@@ -101,16 +119,30 @@ class Filters extends ConsumerWidget {
 }
 
 class AdvancedSearch extends ConsumerWidget {
-  const AdvancedSearch({super.key, this.onFilters});
+  const AdvancedSearch({super.key, this.onFilters, this.onClose});
 
+  final void Function()? onClose;
   final void Function()? onFilters;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SideSheet.detached(
       leading: BackButton(onPressed: onFilters),
-      title: Text('Advanced Search'),
-      topActions: [IconButton(icon: Icon(Icons.close), onPressed: () {})],
+      title: Text('Advanced search'),
+      topActions: [
+        IconButton(
+          icon: Icon(Icons.refresh),
+          tooltip: 'Reset',
+          onPressed: () {
+            ref.read(filterProvider.notifier).reset();
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.close),
+          tooltip: 'Close',
+          onPressed: onClose,
+        ),
+      ],
       width: 640,
       margin: EdgeInsets.zero,
       child: Padding(

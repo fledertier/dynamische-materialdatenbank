@@ -20,7 +20,6 @@ class MaterialGrid extends StatelessWidget {
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
           ),
-          padding: const EdgeInsets.all(16),
           itemCount: items.length,
           itemBuilder: (context, index) {
             return MaterialItem(item: items[index]);

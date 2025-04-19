@@ -80,7 +80,7 @@ class _QueryBuilderState extends State<QueryBuilder> {
             ),
           TextButton(
             onPressed: addWhereClause,
-            child: const Text("Add Condition"),
+            child: const Text("Add condition"),
           ),
         ],
       ),

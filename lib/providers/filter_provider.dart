@@ -12,4 +12,9 @@ class FilterNotifier extends Notifier<Map<String, dynamic>> {
     state = {...state, ...options}..removeWhere((key, value) => value == null);
     ref.read(queryProvider.notifier).filterOptions = state;
   }
+
+  void reset() {
+    state = {};
+    ref.read(queryProvider.notifier).filterOptions = state;
+  }
 }

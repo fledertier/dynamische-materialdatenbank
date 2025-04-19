@@ -12,6 +12,7 @@ class Search<T> extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.onClear,
+    this.onFilter,
   });
 
   final String? hintText;
@@ -21,24 +22,33 @@ class Search<T> extends StatelessWidget {
   final void Function(String value)? onChanged;
   final void Function(String value)? onSubmitted;
   final void Function()? onClear;
+  final void Function()? onFilter;
 
   @override
   Widget build(BuildContext context) {
+    final clear = IconButton(
+      icon: const Icon(Icons.close),
+      tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
+      onPressed: onClear,
+    );
+    final filter = IconButton(
+      icon: Icon(Icons.tune),
+      tooltip: 'Filters',
+      onPressed: onFilter,
+    );
     return SearchAnchor.bar(
       searchController: controller,
       barHintText: hintText,
+      barTrailing: [if (onFilter != null) filter],
+      barPadding: WidgetStatePropertyAll(EdgeInsets.only(left: 16, right: 8)),
       viewTrailing: [
         ValueListenableBuilder(
           valueListenable: controller,
-          child: IconButton(
-            icon: const Icon(Icons.close),
-            tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
-            onPressed: onClear,
-          ),
           builder: (context, value, child) {
-            return value.text.isEmpty ? const SizedBox() : child!;
+            return value.text.isEmpty ? const SizedBox() : clear;
           },
         ),
+        if (onFilter != null) filter,
       ],
       onChanged: onChanged,
       onSubmitted: onSubmitted,

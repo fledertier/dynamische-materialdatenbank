@@ -9,28 +9,44 @@ import 'material_grid.dart';
 import 'navigation.dart';
 import 'services/material_service.dart';
 
-class MaterialsPage extends StatelessWidget {
+class MaterialsPage extends StatefulWidget {
   const MaterialsPage({super.key});
+
+  @override
+  State<MaterialsPage> createState() => _MaterialsPageState();
+}
+
+class _MaterialsPageState extends State<MaterialsPage> {
+  bool showFilters = true;
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      header: Header(),
-      navigation: Navigation(page: Pages.materials),
-      body: Container(
-        decoration: BoxDecoration(
-          color: ColorScheme.of(context).surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            MaterialGrid(),
-            Positioned(bottom: 16, child: AddMaterialButton()),
-          ],
-        ),
+      header: Header(
+        onFilter: () {
+          setState(() {
+            showFilters = true;
+          });
+        },
       ),
-      sidebar: FiltersAndSearch(),
+      navigation: Navigation(page: Pages.materials),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          MaterialGrid(),
+          Positioned(bottom: 16, child: AddMaterialButton()),
+        ],
+      ),
+      sidebar:
+          showFilters
+              ? FiltersAndSearch(
+                onClose: () {
+                  setState(() {
+                    showFilters = false;
+                  });
+                },
+              )
+              : null,
     );
   }
 }

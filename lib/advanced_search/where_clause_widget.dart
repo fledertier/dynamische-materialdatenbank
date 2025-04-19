@@ -109,7 +109,8 @@ class _WhereClauseState extends ConsumerState<WhereClauseWidget> {
                         return Opacity(
                           opacity: hover.value ? 1 : 0,
                           child: IconButton(
-                            onPressed: () => widget.onRemove?.call(),
+                            tooltip: "Remove",
+                            onPressed: widget.onRemove,
                             icon: Icon(
                               Symbols.remove_circle,
                               color: ColorScheme.of(context).onSurfaceVariant,
