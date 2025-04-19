@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute.dart';
@@ -81,16 +80,6 @@ class AttributeService {
           final map = snapshot.dataOrNull() ?? {};
           return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
         });
-  }
-
-  Future<void> createAttribute(Json attribute) async {
-    final id = attribute.putIfAbsent('id', generateId);
-    await FirebaseFirestore.instance
-        .collection(Collections.metadata)
-        .doc(Metadata.attributes)
-        .set({
-          id: {'id': id, ...attribute},
-        }, SetOptions(merge: true));
   }
 
   Future<void> updateAttribute(Attribute attribute) async {

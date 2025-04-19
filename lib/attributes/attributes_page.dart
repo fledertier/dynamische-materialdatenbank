@@ -4,8 +4,8 @@ import '../app_scaffold.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../navigation.dart';
+import 'attribute.dart';
 import 'attribute_details.dart';
-import 'attribute_mode.dart';
 import 'attributes_list.dart';
 
 class AttributesPage extends StatefulWidget {
@@ -16,7 +16,7 @@ class AttributesPage extends StatefulWidget {
 }
 
 class _AttributesPageState extends State<AttributesPage> {
-  final mode = ValueNotifier<AttributeMode?>(null);
+  final selectedAttribute = ValueNotifier<AttributeData?>(null);
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,15 @@ class _AttributesPageState extends State<AttributesPage> {
                         label: Text("Add"),
                         icon: Icon(Icons.add),
                         onPressed: () {
-                          mode.value = AttributeMode.create;
+                          selectedAttribute.value = AttributeData();
                         },
                       ),
                     ],
                   ),
                 ),
-                Expanded(child: AttributesList(mode: mode)),
+                Expanded(
+                  child: AttributesList(selectedAttribute: selectedAttribute),
+                ),
               ],
             ),
           ),
@@ -58,7 +60,7 @@ class _AttributesPageState extends State<AttributesPage> {
                 color: theme.colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: AttributeDetails(mode: mode),
+              child: AttributeDetails(selectedAttribute: selectedAttribute),
             ),
           ),
         ],

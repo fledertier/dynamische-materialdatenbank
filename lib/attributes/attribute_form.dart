@@ -1,51 +1,36 @@
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 
-import '../custom_search/dropdown_menu_form_field.dart';
+import '../advanced_search/dropdown_menu_form_field.dart';
 import 'attribute.dart';
 import 'attribute_type.dart';
 
 const double fieldWidth = 280;
 
-class CreateAttributeForm extends StatefulWidget {
-  const CreateAttributeForm({super.key, this.onCreateAttribute});
+class AttributeForm extends StatefulWidget {
+  const AttributeForm({
+    super.key,
+    required this.initialAttribute,
+    required this.onSubmit,
+  });
 
-  final void Function(Map<String, dynamic> attribute)? onCreateAttribute;
+  final AttributeData initialAttribute;
+  final void Function(AttributeData attribute) onSubmit;
 
   @override
-  State<CreateAttributeForm> createState() => _CreateAttributeFormState();
+  State<AttributeForm> createState() => _AttributeFormState();
 }
 
-class _CreateAttributeFormState extends State<CreateAttributeForm> {
+class _AttributeFormState extends State<AttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final _nameDe = TextEditingController();
+  late final _attribute = ValueNotifier(widget.initialAttribute);
 
-  final _attribute = ValueNotifier<Map<String, dynamic>>({});
-
-  @override
-  void dispose() {
-    _nameDe.dispose();
-    super.dispose();
-  }
-
-  void update(String key, dynamic value) {
-    _attribute.value = {..._attribute.value, key: value};
-  }
+  bool get hasChanged => _attribute.value != widget.initialAttribute;
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      final attribute = {
-        'nameDe': _attribute.value["nameDe"]!,
-        if (_attribute.value["nameEn"]?.isNotEmpty ?? false)
-          'nameEn': _attribute.value["nameEn"],
-        'type': _attribute.value["type"]!.toJson(),
-        if (_attribute.value["type"] == AttributeType.number &&
-            _attribute.value["unitType"] != null)
-          'unitType': (_attribute.value["unitType"]! as UnitType).name,
-        if (_attribute.value["required"] == true) 'required': true,
-      };
-      widget.onCreateAttribute?.call(attribute);
+      widget.onSubmit(_attribute.value);
     }
   }
 
@@ -64,7 +49,7 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
               runSpacing: 24,
               children: [
                 TextFormField(
-                  controller: _nameDe,
+                  initialValue: widget.initialAttribute.nameDe,
                   decoration: InputDecoration(
                     labelText: "Name (De)",
                     constraints: BoxConstraints(maxWidth: fieldWidth),
@@ -76,20 +61,25 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                     return null;
                   },
                   onChanged: (value) {
-                    update('nameDe', value);
+                    _attribute.value = _attribute.value.copyWith(
+                      nameDe: () => value.isNotEmpty ? value : null,
+                    );
                   },
                 ),
                 ListenableBuilder(
-                  listenable: _nameDe,
+                  listenable: _attribute,
                   builder: (context, child) {
                     return TextFormField(
+                      initialValue: widget.initialAttribute.nameEn,
                       decoration: InputDecoration(
                         labelText: "Name (En)",
-                        hintText: _nameDe.text,
+                        hintText: _attribute.value.nameDe,
                         constraints: BoxConstraints(maxWidth: fieldWidth),
                       ),
                       onChanged: (value) {
-                        update('nameEn', value);
+                        _attribute.value = _attribute.value.copyWith(
+                          nameEn: () => value.isNotEmpty ? value : null,
+                        );
                       },
                     );
                   },
@@ -103,19 +93,31 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                   runSpacing: 24,
                   children: [
                     DropdownMenuFormField<AttributeType>(
-                      initialSelection: _attribute.value["type"],
-                      width: fieldWidth,
+                      initialSelection: widget.initialAttribute.type,
                       label: Text("Type"),
+                      width: fieldWidth,
                       dropdownMenuEntries: [
-                        for (final value in AttributeType.values)
+                        for (final value
+                            in widget
+                                    .initialAttribute
+                                    .type
+                                    ?.exchangeableTypes ??
+                                AttributeType.values)
                           DropdownMenuEntry(
                             value: value,
                             label: value.name,
                             leadingIcon: Icon(value.icon),
                           ),
                       ],
+                      enabled:
+                          widget.initialAttribute.type?.hasExchangeableTypes ??
+                          true,
                       onSelected: (value) {
-                        update('type', value);
+                        _attribute.value = _attribute.value.copyWith(
+                          type: () => value,
+                          unitType:
+                              value != AttributeType.number ? () => null : null,
+                        );
                         setState(() => {});
                       },
                       validator: (value) {
@@ -125,175 +127,9 @@ class _CreateAttributeFormState extends State<CreateAttributeForm> {
                         return null;
                       },
                     ),
-                    if (_attribute.value["type"] == AttributeType.number)
-                      DropdownMenuFormField<UnitType>(
-                        initialSelection: _attribute.value["unitType"],
-                        width: fieldWidth,
-                        label: Text("Unit type"),
-                        dropdownMenuEntries: [
-                          for (final value in UnitType.values)
-                            DropdownMenuEntry(value: value, label: value.name),
-                        ],
-                        onSelected: (value) {
-                          update('unitType', value);
-                        },
-                      ),
-                  ],
-                );
-              },
-            ),
-            Row(
-              children: [
-                ListenableBuilder(
-                  listenable: _attribute,
-                  builder: (context, child) {
-                    return Checkbox(
-                      value: _attribute.value["required"] ?? false,
-                      onChanged: (value) {
-                        update('required', value);
-                      },
-                    );
-                  },
-                ),
-                Text("Required"),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: FilledButton(
-                onPressed: _submitForm,
-                child: Text("Create"),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EditAttributeForm extends StatefulWidget {
-  const EditAttributeForm({
-    super.key,
-    required this.attribute,
-    this.onEditAttribute,
-  });
-
-  final Attribute attribute;
-  final void Function(Attribute attribute)? onEditAttribute;
-
-  @override
-  State<EditAttributeForm> createState() => _EditAttributeFormState();
-}
-
-class _EditAttributeFormState extends State<EditAttributeForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  late var _savedAttribute = widget.attribute;
-  late final _attribute = ValueNotifier(widget.attribute);
-
-  bool get hasChanged => _attribute.value != _savedAttribute;
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final attribute = Attribute(
-        id: widget.attribute.id,
-        nameDe: _attribute.value.nameDe,
-        nameEn:
-            _attribute.value.nameEn?.isNotEmpty ?? false
-                ? _attribute.value.nameEn
-                : null,
-        type: _attribute.value.type,
-        unitType: _attribute.value.unitType,
-        required: _attribute.value.required == true ? true : null,
-      );
-      widget.onEditAttribute?.call(attribute);
-      setState(() {
-        _savedAttribute = attribute;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 24,
-          children: [
-            Wrap(
-              spacing: 16,
-              runSpacing: 24,
-              children: [
-                TextFormField(
-                  initialValue: widget.attribute.name,
-                  decoration: InputDecoration(
-                    labelText: "Name (De)",
-                    constraints: BoxConstraints(maxWidth: fieldWidth),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter a name";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    _attribute.value = _attribute.value.copyWith(nameDe: value);
-                  },
-                ),
-                ListenableBuilder(
-                  listenable: _attribute,
-                  builder: (context, child) {
-                    return TextFormField(
-                      initialValue: widget.attribute.nameEn,
-                      decoration: InputDecoration(
-                        labelText: "Name (En)",
-                        hintText: _attribute.value.name,
-                        constraints: BoxConstraints(maxWidth: fieldWidth),
-                      ),
-                      onChanged: (value) {
-                        _attribute.value = _attribute.value.copyWith(
-                          nameEn: value,
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            StatefulBuilder(
-              builder: (context, setState) {
-                return Wrap(
-                  spacing: 16,
-                  runSpacing: 24,
-                  children: [
-                    DropdownMenuFormField<AttributeType>(
-                      initialSelection: _attribute.value.type,
-                      label: Text("Type"),
-                      width: fieldWidth,
-                      dropdownMenuEntries: [
-                        for (final value
-                            in _attribute.value.type.exchangeableTypes)
-                          DropdownMenuEntry(
-                            value: value,
-                            label: value.name,
-                            leadingIcon: Icon(value.icon),
-                          ),
-                      ],
-                      enabled: _attribute.value.type.hasExchangeableTypes,
-                      onSelected: (value) {
-                        _attribute.value = _attribute.value.copyWith(
-                          type: value,
-                        );
-                        setState(() => {});
-                      },
-                    ),
                     if (_attribute.value.type == AttributeType.number)
                       DropdownMenuFormField<UnitType>(
-                        initialSelection: _attribute.value.unitType,
+                        initialSelection: widget.initialAttribute.unitType,
                         label: Text("Unit type"),
                         width: fieldWidth,
                         dropdownMenuEntries: [
@@ -302,7 +138,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                         ],
                         onSelected: (value) {
                           _attribute.value = _attribute.value.copyWith(
-                            unitType: value,
+                            unitType: () => value,
                           );
                         },
                       ),
@@ -319,7 +155,7 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                       value: _attribute.value.required ?? false,
                       onChanged: (value) {
                         _attribute.value = _attribute.value.copyWith(
-                          required: value ?? false,
+                          required: () => value == true ? true : null,
                         );
                       },
                     );
@@ -335,7 +171,9 @@ class _EditAttributeFormState extends State<EditAttributeForm> {
                 builder: (context, child) {
                   return FilledButton(
                     onPressed: hasChanged ? _submitForm : null,
-                    child: Text("Save"),
+                    child: Text(
+                      widget.initialAttribute is Attribute ? "Save" : "Create",
+                    ),
                   );
                 },
               ),

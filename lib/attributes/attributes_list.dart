@@ -5,19 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
-import 'attribute_mode.dart';
 
 class AttributesList extends ConsumerWidget {
-  const AttributesList({super.key, required this.mode});
+  const AttributesList({super.key, required this.selectedAttribute});
 
-  final ValueNotifier<AttributeMode?> mode;
-
-  bool isSelected(Attribute attribute) {
-    if (mode.value case final EditAttributeMode editMode) {
-      return editMode.attribute == attribute;
-    }
-    return false;
-  }
+  final ValueNotifier<AttributeData?> selectedAttribute;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +23,7 @@ class AttributesList extends ConsumerWidget {
         snapshot.value?.values.sortedBy((attribute) => attribute.name) ?? [];
 
     return ListenableBuilder(
-      listenable: mode,
+      listenable: selectedAttribute,
       builder: (context, child) {
         return ListView.builder(
           itemCount: attributes.length,
@@ -40,9 +32,9 @@ class AttributesList extends ConsumerWidget {
 
             return AttributeListTile(
               attribute,
-              selected: isSelected(attribute),
+              selected: selectedAttribute.value == attribute,
               onTap: () {
-                mode.value = AttributeMode.edit(attribute);
+                selectedAttribute.value = attribute;
               },
             );
           },
@@ -75,7 +67,7 @@ class AttributeListTile extends StatelessWidget {
           [
             attribute.type.name,
             if (attribute.unitType != null) attribute.unitType!.name,
-            if (attribute.required ?? false) "required",
+            if (attribute.required) "required",
           ].join(", "),
         ),
         selected: selected,
