@@ -5,12 +5,7 @@ class Labeled extends StatelessWidget {
     super.key,
     required this.label,
     required this.child,
-    this.padding = const EdgeInsets.only(
-      left: 24,
-      right: 24,
-      top: 16,
-      bottom: 24,
-    ),
+    this.padding = const EdgeInsets.fromLTRB(24, 16, 24, 24),
     this.gap = 16,
   });
 

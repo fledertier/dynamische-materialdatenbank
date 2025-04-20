@@ -4,9 +4,16 @@ import 'package:flutter/material.dart';
 import 'condition.dart';
 
 class ConditionGroupWidget extends StatefulWidget {
-  const ConditionGroupWidget({super.key, required this.conditionGroup});
+  const ConditionGroupWidget({
+    super.key,
+    required this.conditionGroup,
+    this.onRemove,
+    this.isRootNode = false,
+  });
 
   final ConditionGroup conditionGroup;
+  final void Function()? onRemove;
+  final bool isRootNode;
 
   @override
   State<ConditionGroupWidget> createState() => _ConditionGroupWidgetState();
@@ -17,100 +24,136 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
+    final theme = Theme.of(context);
     return Stack(
       children: [
-        Positioned.fill(
-          right: null,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(child: HalfBracket.upper()),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    conditionGroup = conditionGroup.copyWith(
-                      type: conditionGroup.type.other,
-                    );
-                  });
-                },
-                child:
-                    conditionGroup.type == ConditionGroupType.and
-                        ? Text("And")
-                        : Text("Or"),
-              ),
-              Expanded(child: HalfBracket.lower()),
-            ],
+        if (!isRootNode)
+          Positioned.fill(
+            right: null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: HalfBracket.upper()),
+                TextButton(
+                  onPressed: toggleType,
+                  child: isAnd ? Text("And") : Text("Or"),
+                ),
+                Expanded(child: HalfBracket.lower()),
+              ],
+            ),
           ),
-        ),
         Padding(
-          padding: const EdgeInsets.only(left: 64 - 16),
+          padding:
+              isRootNode
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(left: 64 - 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
               for (final node in conditionGroup.nodes)
                 if (node is ConditionGroup)
-                  ConditionGroupWidget(conditionGroup: node)
+                  ConditionGroupWidget(
+                    conditionGroup: node,
+                    onRemove: () => removeNode(node),
+                  )
                 else if (node is Condition)
                   Padding(
                     padding: const EdgeInsets.only(left: 32),
-                    child: ConditionWidget(condition: node),
+                    child: ConditionWidget(
+                      condition: node,
+                      onRemove: () => removeNode(node),
+                    ),
                   )
                 else
                   throw Exception("Unknown condition node type"),
-              Padding(
-                padding: const EdgeInsets.only(left: 32),
-                child: Row(
-                  spacing: 6,
-                  children: [
-                    FilledButton.tonal(
-                      style: FilledButton.styleFrom(
-                        foregroundColor: colorScheme.primary,
-                        backgroundColor: colorScheme.primary.withValues(
-                          alpha: 0.08,
-                        ),
+              Theme(
+                data: theme.copyWith(
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary.withValues(
+                        alpha: 0.08,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          conditionGroup.nodes.add(Condition());
-                        });
-                      },
-                      child:
-                          conditionGroup.type == ConditionGroupType.and
-                              ? Text("And")
-                              : Text("Or"),
-                    ),
-                    FilledButton.tonal(
-                      style: FilledButton.styleFrom(
-                        foregroundColor: colorScheme.primary,
-                        backgroundColor: colorScheme.primary.withValues(
-                          alpha: 0.08,
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          conditionGroup.nodes.add(
-                            ConditionGroup(
-                              type: conditionGroup.type.other,
-                              nodes: [Condition(), Condition()],
-                            ),
-                          );
-                        });
-                      },
-                      child:
-                          conditionGroup.type == ConditionGroupType.and
-                              ? Text("Or")
-                              : Text("And"),
-                    ),
-                  ],
+                    ).merge(theme.textButtonTheme.style),
+                  ),
                 ),
+                child:
+                    isRootNode
+                        ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Row(
+                            spacing: 6,
+                            children: [
+                              TextButton(
+                                onPressed: () => addCondition(),
+                                child: Text(isAnd ? "And" : "Or"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  toggleType();
+                                  addCondition();
+                                },
+                                child: Text(isAnd ? "Or" : "And"),
+                              ),
+                            ],
+                          ),
+                        )
+                        : Padding(
+                          padding: const EdgeInsets.only(left: 32),
+                          child: Row(
+                            spacing: 6,
+                            children: [
+                              TextButton.icon(
+                                icon: Icon(Icons.add),
+                                onPressed: () => addCondition(),
+                                label: Text("Condition"),
+                              ),
+                              TextButton(
+                                onPressed: () => addConditionGroup(),
+                                child: Text(isAnd ? "Or" : "And"),
+                              ),
+                            ],
+                          ),
+                        ),
               ),
             ],
           ),
         ),
       ],
     );
+  }
+
+  bool get isAnd => conditionGroup.type == ConditionGroupType.and;
+
+  bool get isRootNode => widget.isRootNode && conditionGroup.nodes.isEmpty;
+
+  void toggleType() {
+    setState(() {
+      conditionGroup.type = conditionGroup.type.other;
+    });
+  }
+
+  void addCondition() {
+    setState(() {
+      conditionGroup.nodes.add(Condition());
+    });
+  }
+
+  void addConditionGroup() {
+    setState(() {
+      conditionGroup.nodes.add(
+        ConditionGroup(type: conditionGroup.type.other, nodes: [Condition()]),
+      );
+    });
+  }
+
+  void removeNode(ConditionNode node) {
+    setState(() {
+      conditionGroup.nodes.remove(node);
+    });
+    if (conditionGroup.nodes.isEmpty) {
+      widget.onRemove?.call();
+    }
   }
 }
 

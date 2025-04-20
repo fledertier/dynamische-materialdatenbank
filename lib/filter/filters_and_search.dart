@@ -149,16 +149,23 @@ class AdvancedSearch extends ConsumerWidget {
       margin: EdgeInsets.zero,
       child: Builder(
         builder: (context) {
-          return ConditionGroupWidget(
-            conditionGroup: ConditionGroup(
-              type: ConditionGroupType.and,
-              nodes: [
-                ConditionGroup(
-                  type: ConditionGroupType.or,
-                  nodes: [Condition(), Condition()],
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
+              child: ConditionGroupWidget(
+                isRootNode: true,
+                conditionGroup: ConditionGroup(
+                  type: ConditionGroupType.and,
+                  nodes: [
+                    ConditionGroup(
+                      type: ConditionGroupType.or,
+                      nodes: [Condition(), Condition()],
+                    ),
+                    Condition(),
+                  ],
                 ),
-                Condition(),
-              ],
+              ),
             ),
           );
           return Consumer(

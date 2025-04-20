@@ -57,9 +57,10 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
           return MouseRegion(
             onEnter: (event) => hover.value = true,
             onExit: (event) => hover.value = false,
-            child: Wrap(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               spacing: 8,
-              runSpacing: 8,
               children: [
                 DropdownMenuFormField(
                   hintText: "Attribute",

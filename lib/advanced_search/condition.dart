@@ -16,17 +16,10 @@ abstract class ConditionNode {
 }
 
 class ConditionGroup extends ConditionNode {
-  const ConditionGroup({required this.type, required this.nodes});
+  ConditionGroup({required this.type, required this.nodes});
 
-  final ConditionGroupType type;
-  final List<ConditionNode> nodes;
-
-  ConditionGroup copyWith({
-    ConditionGroupType? type,
-    List<ConditionNode>? nodes,
-  }) {
-    return ConditionGroup(type: type ?? this.type, nodes: nodes ?? this.nodes);
-  }
+  ConditionGroupType type;
+  List<ConditionNode> nodes;
 }
 
 class Condition extends ConditionNode {
