@@ -1,3 +1,5 @@
+import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition_group.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/conditions_builder.dart';
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/loading_text.dart';
@@ -26,7 +28,7 @@ class FiltersAndSearch extends StatefulWidget {
 }
 
 class _FiltersAndSearchState extends State<FiltersAndSearch> {
-  View _currentView = View.filters;
+  View _currentView = View.advancedSearch;
 
   void showFilters() {
     setState(() {
@@ -143,48 +145,64 @@ class AdvancedSearch extends ConsumerWidget {
           onPressed: onClose,
         ),
       ],
-      width: 640,
+      width: 800,
       margin: EdgeInsets.zero,
-      child: Consumer(
-        builder: (context, ref, child) {
-          final query = ref.watch(queryProvider);
-          final queryNotifier = ref.read(queryProvider.notifier);
+      child: Builder(
+        builder: (context) {
+          return ConditionGroupWidget(
+            conditionGroup: ConditionGroup(
+              type: ConditionGroupType.and,
+              nodes: [
+                ConditionGroup(
+                  type: ConditionGroupType.or,
+                  nodes: [Condition(), Condition()],
+                ),
+                Condition(),
+              ],
+            ),
+          );
+          return Consumer(
+            builder: (context, ref, child) {
+              final query = ref.watch(queryProvider);
+              final queryNotifier = ref.read(queryProvider.notifier);
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (query.searchConditions.isNotEmpty)
-                Labeled(
-                  label: Text('Search'),
-                  child: ConditionsBuilder(
-                    initialConditions: query.searchConditions,
-                    onSubmit: (conditions) {
-                      queryNotifier.searchConditions = conditions;
-                    },
-                    editable: false,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (query.searchConditions.isNotEmpty)
+                    Labeled(
+                      label: Text('Search'),
+                      child: ConditionsBuilder(
+                        initialConditions: query.searchConditions,
+                        onSubmit: (conditions) {
+                          queryNotifier.searchConditions = conditions;
+                        },
+                        editable: false,
+                      ),
+                    ),
+                  if (query.filterConditions.isNotEmpty)
+                    Labeled(
+                      label: Text('Filter'),
+                      child: ConditionsBuilder(
+                        initialConditions: query.filterConditions,
+                        onSubmit: (conditions) {
+                          queryNotifier.filterConditions = conditions;
+                        },
+                        editable: false,
+                      ),
+                    ),
+                  Labeled(
+                    label: Text('Custom'),
+                    child: ConditionsBuilder(
+                      initialConditions: query.customConditions,
+                      onSubmit: (conditions) {
+                        queryNotifier.customConditions = conditions;
+                      },
+                    ),
                   ),
-                ),
-              if (query.filterConditions.isNotEmpty)
-                Labeled(
-                  label: Text('Filter'),
-                  child: ConditionsBuilder(
-                    initialConditions: query.filterConditions,
-                    onSubmit: (conditions) {
-                      queryNotifier.filterConditions = conditions;
-                    },
-                    editable: false,
-                  ),
-                ),
-              Labeled(
-                label: Text('Custom'),
-                child: ConditionsBuilder(
-                  initialConditions: query.customConditions,
-                  onSubmit: (conditions) {
-                    queryNotifier.customConditions = conditions;
-                  },
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           );
         },
       ),

@@ -6,16 +6,19 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../attributes/attribute_type.dart';
 import '../providers/attribute_provider.dart';
+import 'condition.dart';
 import 'fields.dart';
 
 class ConditionWidget extends ConsumerStatefulWidget {
   const ConditionWidget({
     super.key,
     this.controller,
+    this.condition,
     this.onRemove,
     this.enabled = true,
   });
 
+  final Condition? condition;
   final ConditionController? controller;
   final void Function()? onRemove;
   final bool enabled;

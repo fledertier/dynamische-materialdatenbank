@@ -21,11 +21,11 @@ class QueryService {
   }
 
   bool matches(Condition condition, Material material) {
-    final value = material[condition.attribute.id];
+    final value = material[condition.attribute!.id];
     if (value == null) {
       return false;
     }
-    return switch (condition.comparator) {
+    return switch (condition.comparator!) {
       Comparator.equals => value == condition.parameter,
       Comparator.notEquals => value != condition.parameter,
       Comparator.greaterThan => value > condition.parameter,

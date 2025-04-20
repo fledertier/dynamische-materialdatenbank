@@ -1,16 +1,40 @@
 import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
 
-class Condition {
-  final Attribute attribute;
-  final Comparator comparator;
-  final Object parameter;
+enum ConditionGroupType { and, or }
 
-  const Condition({
-    required this.attribute,
-    required this.comparator,
-    required this.parameter,
-  });
+extension LogicalOperatorExtension on ConditionGroupType {
+  ConditionGroupType get other {
+    return this == ConditionGroupType.and
+        ? ConditionGroupType.or
+        : ConditionGroupType.and;
+  }
+}
+
+abstract class ConditionNode {
+  const ConditionNode();
+}
+
+class ConditionGroup extends ConditionNode {
+  const ConditionGroup({required this.type, required this.nodes});
+
+  final ConditionGroupType type;
+  final List<ConditionNode> nodes;
+
+  ConditionGroup copyWith({
+    ConditionGroupType? type,
+    List<ConditionNode>? nodes,
+  }) {
+    return ConditionGroup(type: type ?? this.type, nodes: nodes ?? this.nodes);
+  }
+}
+
+class Condition extends ConditionNode {
+  final Attribute? attribute;
+  final Comparator? comparator;
+  final Object? parameter;
+
+  const Condition({this.attribute, this.comparator, this.parameter});
 
   @override
   bool operator ==(Object other) {

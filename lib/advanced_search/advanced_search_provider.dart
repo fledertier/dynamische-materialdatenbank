@@ -106,7 +106,7 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose<List<Material>>(
     final query = ref.watch(queryProvider);
     final parameter = AttributesParameter({
       Attributes.name,
-      ...query.conditions.map((condition) => condition.attribute.id),
+      ...query.conditions.map((condition) => condition.attribute!.id),
     });
     final materialsById = await ref.read(
       attributesValuesStreamProvider(parameter).future,
