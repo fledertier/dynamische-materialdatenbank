@@ -1,9 +1,8 @@
-import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
 
 enum ConditionGroupType { and, or }
 
-extension LogicalOperatorExtension on ConditionGroupType {
+extension ConditionGroupTypeExtension on ConditionGroupType {
   ConditionGroupType get other {
     return this == ConditionGroupType.and
         ? ConditionGroupType.or
@@ -23,11 +22,27 @@ class ConditionGroup extends ConditionNode {
 }
 
 class Condition extends ConditionNode {
-  final Attribute? attribute;
-  final Comparator? comparator;
+  final String? attribute;
+  final Operator? operator;
   final Object? parameter;
 
-  const Condition({this.attribute, this.comparator, this.parameter});
+  const Condition({this.attribute, this.operator, this.parameter});
+
+  bool get isValid {
+    return attribute != null || operator != null || parameter != null;
+  }
+
+  Condition copyWith({
+    String? Function()? attribute,
+    Operator? Function()? operator,
+    Object? Function()? parameter,
+  }) {
+    return Condition(
+      attribute: attribute != null ? attribute() : this.attribute,
+      operator: operator != null ? operator() : this.operator,
+      parameter: parameter != null ? parameter() : this.parameter,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
@@ -35,12 +50,12 @@ class Condition extends ConditionNode {
 
     return other is Condition &&
         other.attribute == attribute &&
-        other.comparator == comparator &&
+        other.operator == operator &&
         other.parameter == parameter;
   }
 
   @override
   int get hashCode {
-    return attribute.hashCode ^ comparator.hashCode ^ parameter.hashCode;
+    return Object.hash(attribute, operator, parameter);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-enum Comparator {
+enum Operator {
   equals,
   notEquals,
   greaterThan,
@@ -9,8 +9,8 @@ enum Comparator {
   contains,
   notContains;
 
-  static Comparator fromJson(dynamic json) {
-    return Comparator.values.byName(json);
+  static Operator fromJson(dynamic json) {
+    return Operator.values.byName(json);
   }
 
   String toJson() => name;
@@ -20,34 +20,34 @@ enum AttributeType {
   text(
     baseType: 'String',
     operators: {
-      Comparator.contains,
-      Comparator.notContains,
-      Comparator.equals,
-      Comparator.notEquals,
+      Operator.contains,
+      Operator.notContains,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
   textarea(
     baseType: 'String',
     operators: {
-      Comparator.contains,
-      Comparator.notContains,
-      Comparator.equals,
-      Comparator.notEquals,
+      Operator.contains,
+      Operator.notContains,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
   number(
     baseType: 'double',
     operators: {
-      Comparator.greaterThan,
-      Comparator.lessThan,
-      Comparator.equals,
-      Comparator.notEquals,
+      Operator.greaterThan,
+      Operator.lessThan,
+      Operator.equals,
+      Operator.notEquals,
     },
   ),
-  boolean(baseType: 'bool', operators: {Comparator.equals});
+  boolean(baseType: 'bool', operators: {Operator.equals});
 
   final String baseType;
-  final Set<Comparator> operators;
+  final Set<Operator> operators;
 
   const AttributeType({required this.baseType, required this.operators});
 

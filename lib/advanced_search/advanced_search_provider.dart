@@ -39,8 +39,8 @@ class QueryNotifier extends Notifier<MaterialQuery> {
         if (value == true) {
           conditions.add(
             Condition(
-              attribute: attributes[attribute]!,
-              comparator: Comparator.equals,
+              attribute: attribute,
+              operator: Operator.equals,
               parameter: value,
             ),
           );
@@ -51,8 +51,8 @@ class QueryNotifier extends Notifier<MaterialQuery> {
       if (manufacturer is String && manufacturer.isNotEmpty) {
         conditions.add(
           Condition(
-            attribute: attributes[Attributes.manufacturer]!,
-            comparator: Comparator.equals,
+            attribute: Attributes.manufacturer,
+            operator: Operator.equals,
             parameter: manufacturer,
           ),
         );
@@ -62,8 +62,8 @@ class QueryNotifier extends Notifier<MaterialQuery> {
       if (weight is double) {
         conditions.add(
           Condition(
-            attribute: attributes[Attributes.weight]!,
-            comparator: Comparator.lessThan,
+            attribute: Attributes.weight,
+            operator: Operator.lessThan,
             parameter: weight,
           ),
         );
@@ -81,13 +81,13 @@ class QueryNotifier extends Notifier<MaterialQuery> {
     ref.read(attributesStreamProvider).whenData((attributes) {
       late final conditions = [
         Condition(
-          attribute: attributes[Attributes.name]!,
-          comparator: Comparator.contains,
+          attribute: Attributes.name,
+          operator: Operator.contains,
           parameter: searchQuery,
         ),
         Condition(
-          attribute: attributes[Attributes.description]!,
-          comparator: Comparator.contains,
+          attribute: Attributes.description,
+          operator: Operator.contains,
           parameter: searchQuery,
         ),
       ];
@@ -106,7 +106,9 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose<List<Material>>(
     final query = ref.watch(queryProvider);
     final parameter = AttributesParameter({
       Attributes.name,
-      ...query.conditions.map((condition) => condition.attribute!.id),
+      ...query.conditions
+          .where((condition) => condition.isValid)
+          .map((condition) => condition.attribute!),
     });
     final materialsById = await ref.read(
       attributesValuesStreamProvider(parameter).future,

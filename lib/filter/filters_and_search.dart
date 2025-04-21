@@ -1,12 +1,10 @@
 import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/condition_group.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/conditions_builder.dart';
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../advanced_search/advanced_search_provider.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
 import '../providers/filter_provider.dart';
@@ -167,49 +165,6 @@ class AdvancedSearch extends ConsumerWidget {
                 ),
               ),
             ),
-          );
-          return Consumer(
-            builder: (context, ref, child) {
-              final query = ref.watch(queryProvider);
-              final queryNotifier = ref.read(queryProvider.notifier);
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (query.searchConditions.isNotEmpty)
-                    Labeled(
-                      label: Text('Search'),
-                      child: ConditionsBuilder(
-                        initialConditions: query.searchConditions,
-                        onSubmit: (conditions) {
-                          queryNotifier.searchConditions = conditions;
-                        },
-                        editable: false,
-                      ),
-                    ),
-                  if (query.filterConditions.isNotEmpty)
-                    Labeled(
-                      label: Text('Filter'),
-                      child: ConditionsBuilder(
-                        initialConditions: query.filterConditions,
-                        onSubmit: (conditions) {
-                          queryNotifier.filterConditions = conditions;
-                        },
-                        editable: false,
-                      ),
-                    ),
-                  Labeled(
-                    label: Text('Custom'),
-                    child: ConditionsBuilder(
-                      initialConditions: query.customConditions,
-                      onSubmit: (conditions) {
-                        queryNotifier.customConditions = conditions;
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
           );
         },
       ),

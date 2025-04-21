@@ -80,6 +80,6 @@ final attributesStreamProvider = StreamProvider((ref) {
   return ref.read(attributeServiceProvider).getAttributesStream();
 });
 
-final attributeProvider = Provider.family((ref, String attribute) {
+final attributeProvider = Provider.family((ref, String? attribute) {
   return ref.watch(attributesProvider).value?[attribute];
 });

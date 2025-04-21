@@ -63,6 +63,7 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
                     child: ConditionWidget(
                       condition: node,
                       onRemove: () => removeNode(node),
+                      onChange: (condition) => updateCondition(node, condition),
                     ),
                   )
                 else
@@ -136,6 +137,13 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
   void addCondition() {
     setState(() {
       conditionGroup.nodes.add(Condition());
+    });
+  }
+
+  void updateCondition(Condition condition, Condition updatedCondition) {
+    setState(() {
+      final index = conditionGroup.nodes.indexOf(condition);
+      conditionGroup.nodes[index] = updatedCondition;
     });
   }
 

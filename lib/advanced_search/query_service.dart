@@ -21,19 +21,22 @@ class QueryService {
   }
 
   bool matches(Condition condition, Material material) {
-    final value = material[condition.attribute!.id];
+    if (!condition.isValid) {
+      return false;
+    }
+    final value = material[condition.attribute!];
     if (value == null) {
       return false;
     }
-    return switch (condition.comparator!) {
-      Comparator.equals => value == condition.parameter,
-      Comparator.notEquals => value != condition.parameter,
-      Comparator.greaterThan => value > condition.parameter,
-      Comparator.lessThan => value < condition.parameter,
-      Comparator.contains => value.toString().containsIgnoreCase(
+    return switch (condition.operator!) {
+      Operator.equals => value == condition.parameter,
+      Operator.notEquals => value != condition.parameter,
+      Operator.greaterThan => value > condition.parameter,
+      Operator.lessThan => value < condition.parameter,
+      Operator.contains => value.toString().containsIgnoreCase(
         condition.parameter.toString(),
       ),
-      Comparator.notContains =>
+      Operator.notContains =>
         !value.toString().containsIgnoreCase(condition.parameter.toString()),
     };
   }
