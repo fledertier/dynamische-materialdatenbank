@@ -1,10 +1,9 @@
-import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/condition_group.dart';
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../advanced_search/advanced_search.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
 import '../providers/filter_provider.dart';
@@ -113,60 +112,6 @@ class Filters extends ConsumerWidget {
             child: SliderFilterOption(Attributes.weight),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class AdvancedSearch extends ConsumerWidget {
-  const AdvancedSearch({super.key, this.onFilters, this.onClose});
-
-  final void Function()? onClose;
-  final void Function()? onFilters;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SideSheet.detached(
-      leading: BackButton(onPressed: onFilters),
-      title: Text('Advanced search'),
-      topActions: [
-        IconButton(
-          icon: Icon(Icons.refresh),
-          tooltip: 'Reset',
-          onPressed: () {
-            ref.read(filterProvider.notifier).reset();
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.close),
-          tooltip: 'Close',
-          onPressed: onClose,
-        ),
-      ],
-      width: 800,
-      margin: EdgeInsets.zero,
-      child: Builder(
-        builder: (context) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
-              child: ConditionGroupWidget(
-                isRootNode: true,
-                conditionGroup: ConditionGroup(
-                  type: ConditionGroupType.and,
-                  nodes: [
-                    ConditionGroup(
-                      type: ConditionGroupType.or,
-                      nodes: [Condition(), Condition()],
-                    ),
-                    Condition(),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }

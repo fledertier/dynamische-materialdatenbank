@@ -29,7 +29,7 @@ class Condition extends ConditionNode {
   const Condition({this.attribute, this.operator, this.parameter});
 
   bool get isValid {
-    return attribute != null || operator != null || parameter != null;
+    return attribute != null && operator != null && parameter != null;
   }
 
   Condition copyWith({
