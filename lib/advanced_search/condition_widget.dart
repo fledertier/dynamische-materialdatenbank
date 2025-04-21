@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/dropdown_menu_form_field.dart';
+import 'package:dynamische_materialdatenbank/hover_builder.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -8,7 +9,7 @@ import '../providers/attribute_provider.dart';
 import 'condition.dart';
 import 'fields.dart';
 
-class ConditionWidget extends ConsumerStatefulWidget {
+class ConditionWidget extends ConsumerWidget {
   const ConditionWidget({
     super.key,
     required this.condition,
@@ -23,18 +24,11 @@ class ConditionWidget extends ConsumerStatefulWidget {
   final bool enabled;
 
   @override
-  ConsumerState<ConditionWidget> createState() => _ConditionState();
-}
-
-class _ConditionState extends ConsumerState<ConditionWidget> {
-  final hover = ValueNotifier(false);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final attributes =
         ref.watch(attributesProvider).value?.values.toList() ?? [];
     final attribute = attributes.firstWhereOrNull(
-      (attribute) => attribute.id == widget.condition.attribute,
+      (attribute) => attribute.id == condition.attribute,
     );
     final operators = attribute?.type.operators ?? {};
     return Theme(
@@ -49,17 +43,13 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
           border: OutlineInputBorder(),
         ),
       ),
-      child: MouseRegion(
-        onEnter: (event) => hover.value = true,
-        onExit: (event) => hover.value = false,
+      child: HoverBuilder(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           spacing: 8,
           children: [
             DropdownMenuFormField(
               hintText: "Attribute",
-              enabled: widget.enabled,
+              enabled: enabled,
               width: 200,
               initialSelection: attribute,
               dropdownMenuEntries:
@@ -74,7 +64,7 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
                   attribute: attribute?.id,
                   operator: attribute?.type.operators.firstOrNull,
                 );
-                widget.onChange?.call(condition);
+                onChange?.call(condition);
               },
               validator: (attribute) {
                 if (attribute == null) {
@@ -84,10 +74,10 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
               },
             ),
             DropdownMenuFormField(
-              key: ValueKey(widget.condition.attribute),
+              key: ValueKey(condition.attribute),
               hintText: "Operator",
-              initialSelection: widget.condition.operator,
-              enabled: widget.enabled && widget.condition.attribute != null,
+              initialSelection: condition.operator,
+              enabled: enabled && condition.attribute != null,
               dropdownMenuEntries:
                   operators.map((operation) {
                     return DropdownMenuEntry(
@@ -96,49 +86,45 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
                     );
                   }).toList(),
               onSelected: (operator) {
-                widget.onChange?.call(
-                  widget.condition.copyWith(operator: () => operator),
-                );
+                onChange?.call(condition.copyWith(operator: () => operator));
               },
               validator: (operator) {
-                if (widget.condition.attribute != null && operator == null) {
+                if (condition.attribute != null && operator == null) {
                   return "Please select an operator";
                 }
                 return null;
               },
             ),
             ConditionParameterField(
-              enabled: widget.enabled,
+              enabled: enabled,
               type: attribute?.type,
-              value: widget.condition.parameter,
+              value: condition.parameter,
               onChanged: (value) {
-                widget.onChange?.call(
-                  widget.condition.copyWith(parameter: () => value),
-                );
+                onChange?.call(condition.copyWith(parameter: () => value));
               },
             ),
-            if (widget.enabled)
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 8),
-                child: ListenableBuilder(
-                  listenable: hover,
-                  builder: (context, child) {
-                    return Opacity(
-                      opacity: hover.value ? 1 : 0,
-                      child: IconButton(
-                        tooltip: "Remove",
-                        onPressed: widget.onRemove,
-                        icon: Icon(
-                          Symbols.remove_circle,
-                          color: ColorScheme.of(context).onSurfaceVariant,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
           ],
         ),
+        builder: (context, hovered, child) {
+          return Row(
+            spacing: 8,
+            children: [
+              child!,
+              if (enabled)
+                Visibility.maintain(
+                  visible: hovered,
+                  child: IconButton(
+                    tooltip: "Remove",
+                    onPressed: onRemove,
+                    icon: Icon(
+                      Symbols.remove_circle,
+                      color: ColorScheme.of(context).onSurfaceVariant,
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
