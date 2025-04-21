@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../attributes/attribute_type.dart';
 import '../providers/attribute_provider.dart';
 import 'condition.dart';
 import 'fields.dart';
@@ -108,7 +107,16 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
                 return null;
               },
             ),
-            buildParameterField(),
+            ConditionParameterField(
+              enabled: widget.enabled,
+              type: attribute?.type,
+              value: widget.condition.parameter,
+              onChanged: (value) {
+                widget.onChange?.call(
+                  widget.condition.copyWith(parameter: () => value),
+                );
+              },
+            ),
             if (widget.enabled)
               Padding(
                 padding: const EdgeInsets.only(left: 8, top: 8),
@@ -133,49 +141,5 @@ class _ConditionState extends ConsumerState<ConditionWidget> {
         ),
       ),
     );
-  }
-
-  // todo: extract widget
-  Widget buildParameterField() {
-    final attribute = ref.watch(attributeProvider(widget.condition.attribute));
-    final attributeType = attribute?.type;
-
-    switch (attributeType) {
-      case AttributeType.text || AttributeType.textarea:
-        return TextField(
-          enabled: widget.enabled,
-          initialValue: widget.condition.parameter as String?,
-          required: true,
-          onChanged: (value) {
-            widget.onChange?.call(
-              widget.condition.copyWith(parameter: () => value),
-            );
-          },
-        );
-      case AttributeType.number:
-        return NumberField(
-          enabled: widget.enabled,
-          initialValue: widget.condition.parameter as num?,
-          required: true,
-          onChanged: (value) {
-            widget.onChange?.call(
-              widget.condition.copyWith(parameter: () => value),
-            );
-          },
-        );
-      case AttributeType.boolean:
-        return BooleanField(
-          enabled: widget.enabled,
-          initialValue: widget.condition.parameter as bool?,
-          required: true,
-          onChanged: (value) {
-            widget.onChange?.call(
-              widget.condition.copyWith(parameter: () => value),
-            );
-          },
-        );
-      default:
-        return EmptyField();
-    }
   }
 }

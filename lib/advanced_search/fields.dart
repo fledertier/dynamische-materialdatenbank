@@ -1,13 +1,49 @@
 import 'package:flutter/material.dart';
 
+import '../attributes/attribute_type.dart';
 import 'dropdown_menu_form_field.dart';
 
-class EmptyField extends StatelessWidget {
-  const EmptyField({super.key});
+class ConditionParameterField extends StatelessWidget {
+  const ConditionParameterField({
+    super.key,
+    required this.type,
+    required this.value,
+    this.onChanged,
+    this.enabled = true,
+  });
+
+  final AttributeType? type;
+  final Object? value;
+  final void Function(Object? value)? onChanged;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(decoration: InputDecoration(enabled: false));
+    switch (type) {
+      case AttributeType.text || AttributeType.textarea:
+        return TextField(
+          enabled: enabled,
+          initialValue: value as String?,
+          required: true,
+          onChanged: (value) => onChanged?.call(value),
+        );
+      case AttributeType.number:
+        return NumberField(
+          enabled: enabled,
+          initialValue: value as num?,
+          required: true,
+          onChanged: (value) => onChanged?.call(value),
+        );
+      case AttributeType.boolean:
+        return BooleanField(
+          enabled: enabled,
+          initialValue: value as bool?,
+          required: true,
+          onChanged: (value) => onChanged?.call(value),
+        );
+      default:
+        return EmptyField();
+    }
   }
 }
 
@@ -137,5 +173,14 @@ class _BooleanFieldState extends State<BooleanField> {
         return null;
       },
     );
+  }
+}
+
+class EmptyField extends StatelessWidget {
+  const EmptyField({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(decoration: InputDecoration(enabled: false));
   }
 }
