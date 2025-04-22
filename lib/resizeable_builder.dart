@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class HandleAlignment {
-  static const left = HandleAlignment(0.0);
-  static const center = HandleAlignment(0.5);
-  static const right = HandleAlignment(1.0);
+enum HandleAlignment {
+  outer(1.0),
+  middle(0.5),
+  inner(0.0);
 
-  const HandleAlignment(this.x);
+  const HandleAlignment(this.value);
 
-  final double x;
+  final double value;
 }
 
 class ResizeableBuilder extends StatefulWidget {
@@ -19,7 +19,7 @@ class ResizeableBuilder extends StatefulWidget {
     required this.width,
     required this.maxWidth,
     this.handleWidth = 8,
-    this.handleAlignment = HandleAlignment.center,
+    this.handleAlignment = HandleAlignment.middle,
     this.cursor = SystemMouseCursors.resizeLeftRight,
   });
 
@@ -45,7 +45,7 @@ class _ResizeableBuilderState extends State<ResizeableBuilder> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            left: widget.handleWidth * widget.handleAlignment.x,
+            left: widget.handleWidth * widget.handleAlignment.value,
           ),
           child: widget.builder(context, width),
         ),
