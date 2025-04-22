@@ -22,40 +22,13 @@ class ConditionGroup extends ConditionNode {
 }
 
 class Condition extends ConditionNode {
-  final String? attribute;
-  final Operator? operator;
-  final Object? parameter;
+  String? attribute;
+  Operator? operator;
+  Object? parameter;
 
-  const Condition({this.attribute, this.operator, this.parameter});
+  Condition({this.attribute, this.operator, this.parameter});
 
   bool get isValid {
     return attribute != null && operator != null && parameter != null;
-  }
-
-  Condition copyWith({
-    String? Function()? attribute,
-    Operator? Function()? operator,
-    Object? Function()? parameter,
-  }) {
-    return Condition(
-      attribute: attribute != null ? attribute() : this.attribute,
-      operator: operator != null ? operator() : this.operator,
-      parameter: parameter != null ? parameter() : this.parameter,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Condition &&
-        other.attribute == attribute &&
-        other.operator == operator &&
-        other.parameter == parameter;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hash(attribute, operator, parameter);
   }
 }

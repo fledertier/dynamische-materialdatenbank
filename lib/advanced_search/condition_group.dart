@@ -63,7 +63,6 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
                     child: ConditionWidget(
                       condition: node,
                       onRemove: () => removeNode(node),
-                      onChange: (condition) => updateCondition(node, condition),
                     ),
                   )
                 else
