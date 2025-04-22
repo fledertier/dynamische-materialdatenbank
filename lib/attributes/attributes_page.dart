@@ -20,8 +20,6 @@ class _AttributesPageState extends State<AttributesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return AppScaffold(
       header: Header(),
       navigation: Navigation(page: Pages.attributes),
@@ -30,34 +28,12 @@ class _AttributesPageState extends State<AttributesPage> {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 412),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Text("Attributes", style: theme.textTheme.headlineSmall),
-                      Spacer(),
-                      FilledButton.tonalIcon(
-                        label: Text("Add"),
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          selectedAttribute.value = AttributeData();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: AttributesList(selectedAttribute: selectedAttribute),
-                ),
-              ],
-            ),
+            child: AttributesList(selectedAttribute: selectedAttribute),
           ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerLow,
+                color: ColorScheme.of(context).surfaceContainerLow,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: AttributeDetails(selectedAttribute: selectedAttribute),

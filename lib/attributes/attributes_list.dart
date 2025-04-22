@@ -6,40 +6,68 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
 
-class AttributesList extends ConsumerWidget {
+class AttributesList extends StatelessWidget {
   const AttributesList({super.key, required this.selectedAttribute});
 
   final ValueNotifier<AttributeData?> selectedAttribute;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final snapshot = ref.watch(attributesStreamProvider);
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Attributes", style: TextTheme.of(context).headlineSmall),
+              FilledButton.tonalIcon(
+                label: Text("Add"),
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  selectedAttribute.value = AttributeData();
+                },
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Consumer(
+            builder: (context, ref, child) {
+              final snapshot = ref.watch(attributesStreamProvider);
 
-    if (snapshot.isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
+              if (snapshot.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-    final attributes =
-        snapshot.value?.values.sortedBy((attribute) => attribute.name) ?? [];
+              final attributesById = snapshot.value ?? {};
+              final attributes = attributesById.values.sortedBy(
+                (attribute) => attribute.name,
+              );
 
-    return ListenableBuilder(
-      listenable: selectedAttribute,
-      builder: (context, child) {
-        return ListView.builder(
-          itemCount: attributes.length,
-          itemBuilder: (context, index) {
-            final attribute = attributes.elementAt(index);
+              return ListenableBuilder(
+                listenable: selectedAttribute,
+                builder: (context, child) {
+                  return ListView.builder(
+                    itemCount: attributes.length,
+                    itemBuilder: (context, index) {
+                      final attribute = attributes.elementAt(index);
 
-            return AttributeListTile(
-              attribute,
-              selected: selectedAttribute.value == attribute,
-              onTap: () {
-                selectedAttribute.value = attribute;
-              },
-            );
-          },
-        );
-      },
+                      return AttributeListTile(
+                        attribute,
+                        selected: selectedAttribute.value == attribute,
+                        onTap: () {
+                          selectedAttribute.value = attribute;
+                        },
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

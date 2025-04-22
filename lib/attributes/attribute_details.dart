@@ -19,14 +19,19 @@ class AttributeDetails extends ConsumerWidget {
       listenable: selectedAttribute,
       builder: (context, child) {
         if (selectedAttribute.value == null) {
-          return Center(child: Text("Select an attribute to edit"));
+          return Center(
+            child: Text(
+              "Select an attribute to edit",
+              style: TextStyle(color: ColorScheme.of(context).onSurfaceVariant),
+            ),
+          );
         }
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                height: 40,
+            SizedBox(
+              height: 76,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   children: [
                     Text(
@@ -58,16 +63,21 @@ class AttributeDetails extends ConsumerWidget {
             ),
             Expanded(
               key: ValueKey(selectedAttribute.value),
-              child: AttributeForm(
-                initialAttribute: selectedAttribute.value!,
-                onSubmit: (attribute) async {
-                  if (attribute is! Attribute) {
-                    final id = await nearestAvailableId(ref, attribute);
-                    attribute = Attribute.fromData(id, attribute);
-                  }
-                  ref.read(attributeServiceProvider).updateAttribute(attribute);
-                  selectedAttribute.value = attribute;
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: AttributeForm(
+                  initialAttribute: selectedAttribute.value!,
+                  onSubmit: (attribute) async {
+                    if (attribute is! Attribute) {
+                      final id = await nearestAvailableId(ref, attribute);
+                      attribute = Attribute.fromData(id, attribute);
+                    }
+                    ref
+                        .read(attributeServiceProvider)
+                        .updateAttribute(attribute);
+                    selectedAttribute.value = attribute;
+                  },
+                ),
               ),
             ),
           ],
