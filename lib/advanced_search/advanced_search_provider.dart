@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/advanced_search/condition.dart';
+import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

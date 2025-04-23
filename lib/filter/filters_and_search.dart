@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
-import 'package:dynamische_materialdatenbank/loading_text.dart';
+import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

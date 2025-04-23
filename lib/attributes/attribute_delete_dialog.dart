@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../providers/attribute_provider.dart';
-import '../services/attribute_service.dart';
+import 'attribute_service.dart';
 import 'attribute.dart';
 
 class AttributeDeleteDialog extends ConsumerWidget {
@@ -23,9 +23,7 @@ class AttributeDeleteDialog extends ConsumerWidget {
 
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 500,
-        ),
+        constraints: BoxConstraints(maxWidth: 500),
         child: AlertDialog(
           title: const Text("Delete Attribute"),
           content: Text(
@@ -33,10 +31,15 @@ class AttributeDeleteDialog extends ConsumerWidget {
             "including its $numberOfEntries entries in materials?",
           ),
           actions: [
-            TextButton(onPressed: () => context.pop(), child: const Text("Cancel")),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text("Cancel"),
+            ),
             TextButton(
               onPressed: () {
-                ref.read(attributeServiceProvider).deleteAttribute(attribute.id);
+                ref
+                    .read(attributeServiceProvider)
+                    .deleteAttribute(attribute.id);
                 context.pop(true);
               },
               child: const Text("Delete"),
@@ -53,7 +56,8 @@ Future<bool> showAttributeDeleteDialog(
   Attribute attribute,
 ) async {
   return await showDialog<bool>(
-    context: context,
-    builder: (context) => AttributeDeleteDialog(attribute: attribute),
-  ) ?? false;
+        context: context,
+        builder: (context) => AttributeDeleteDialog(attribute: attribute),
+      ) ??
+      false;
 }

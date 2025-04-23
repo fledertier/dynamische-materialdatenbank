@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
-import '../highlighted_text.dart';
+import '../widgets/highlighted_text.dart';
 import '../providers/attribute_provider.dart';
 import '../providers/material_provider.dart';
-import '../services/search_service.dart';
+import 'search_service.dart';
 import 'search.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {

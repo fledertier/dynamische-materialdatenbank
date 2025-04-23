@@ -5,7 +5,7 @@ import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
-import '../placeholder.dart';
+import 'placeholder.dart';
 
 final materialServiceProvider = Provider((ref) => MaterialService());
 

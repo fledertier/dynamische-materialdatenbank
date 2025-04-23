@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/advanced_search/dropdown_menu_form_field.dart';
-import 'package:dynamische_materialdatenbank/hover_builder.dart';
+import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../providers/attribute_provider.dart';
-import 'condition.dart';
-import 'fields.dart';
+import '../query/condition.dart';
+import 'parameter_fields.dart';
 
 class ConditionWidget extends ConsumerWidget {
   const ConditionWidget({

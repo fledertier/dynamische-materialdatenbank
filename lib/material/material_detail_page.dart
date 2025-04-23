@@ -3,11 +3,11 @@ import 'package:dynamische_materialdatenbank/providers/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app_scaffold.dart';
-import 'constants.dart';
-import 'filter/labeled.dart';
-import 'header/header.dart';
-import 'navigation.dart';
+import '../app_scaffold.dart';
+import '../constants.dart';
+import '../filter/labeled.dart';
+import '../header/header.dart';
+import '../navigation.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});

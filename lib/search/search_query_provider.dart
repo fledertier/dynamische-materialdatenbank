@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../advanced_search/condition.dart';
+import '../query/condition.dart';
 import '../attributes/attribute_type.dart';
 import '../constants.dart';
 import 'search_provider.dart';

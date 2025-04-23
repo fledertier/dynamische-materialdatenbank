@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app_scaffold.dart';
-import 'constants.dart';
-import 'filter/filters_and_search.dart';
-import 'header/header.dart';
+import '../app_scaffold.dart';
+import '../constants.dart';
+import '../filter/filters_and_search.dart';
+import '../header/header.dart';
 import 'material_grid.dart';
-import 'navigation.dart';
-import 'services/material_service.dart';
+import '../navigation.dart';
+import 'material_service.dart';
 
 class MaterialsPage extends StatefulWidget {
   const MaterialsPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'material_search.dart';
+import '../search/material_search.dart';
 import 'user_avatar.dart';
 
 class Header extends StatelessWidget {

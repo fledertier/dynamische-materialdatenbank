@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../filter/side_sheet.dart';
 import '../query/query_source_provider.dart';
-import '../resizeable_builder.dart';
+import '../widgets/resizeable_builder.dart';
 import 'advanced_search_provider.dart';
-import 'condition_group.dart';
+import 'condition_group_widget.dart';
 
 class AdvancedSearch extends ConsumerStatefulWidget {
   const AdvancedSearch({super.key, this.onClose});

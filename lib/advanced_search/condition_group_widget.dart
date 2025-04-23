@@ -2,7 +2,8 @@ import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'condition.dart';
+import '../query/condition.dart';
+import 'half_bracket.dart';
 
 class ConditionGroupWidget extends ConsumerWidget {
   const ConditionGroupWidget({
@@ -155,38 +156,5 @@ class ConditionGroupWidget extends ConsumerWidget {
   void update(void Function() update) {
     update();
     onChanged?.call();
-  }
-}
-
-class HalfBracket extends StatelessWidget {
-  const HalfBracket.upper({super.key, this.width = 20}) : isUpper = true;
-
-  const HalfBracket.lower({super.key, this.width = 20}) : isUpper = false;
-
-  final double width;
-  final bool isUpper;
-
-  @override
-  Widget build(BuildContext context) {
-    final borderSide = BorderSide(
-      width: 2,
-      color: ColorScheme.of(context).primary,
-    );
-
-    return Padding(
-      padding: EdgeInsets.only(left: width),
-      child: SizedBox(
-        width: width,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border(
-              left: borderSide,
-              top: isUpper ? borderSide : BorderSide.none,
-              bottom: isUpper ? BorderSide.none : borderSide,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -1,11 +1,11 @@
-import 'package:dynamische_materialdatenbank/hover_builder.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'constants.dart';
-import 'services/material_service.dart';
+import '../constants.dart';
+import 'material_service.dart';
 
 class MaterialGrid extends StatelessWidget {
   const MaterialGrid({super.key});

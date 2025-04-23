@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../attributes/attribute.dart';
+import 'attribute.dart';
 import '../constants.dart';
 
 final attributeServiceProvider = Provider((ref) => AttributeService());

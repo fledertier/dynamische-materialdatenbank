@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
 import '../filter/filter_provider.dart';
-import '../services/filter_service.dart';
-import '../services/material_service.dart';
-import '../services/search_service.dart';
+import '../filter/filter_service.dart';
+import '../material/material_service.dart';
+import '../search/search_service.dart';
 import 'attribute_provider.dart';
 
 final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {

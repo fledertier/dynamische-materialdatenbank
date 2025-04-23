@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../advanced_search/dropdown_menu_form_field.dart';
+import '../widgets/dropdown_menu_form_field.dart';
 import '../types.dart';
 import 'attribute.dart';
 import 'attribute_type.dart';

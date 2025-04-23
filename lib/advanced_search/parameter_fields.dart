@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../attributes/attribute_type.dart';
-import 'dropdown_menu_form_field.dart';
+import '../widgets/dropdown_menu_form_field.dart';
 
 class ConditionParameterField extends StatelessWidget {
   const ConditionParameterField({
