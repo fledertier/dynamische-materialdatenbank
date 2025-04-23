@@ -19,5 +19,6 @@ class AdvancedSearchQueryNotifier extends ChangeNotifier {
   void reset() {
     query.type = ConditionGroupType.and;
     query.nodes = [Condition()];
+    notifyListeners();
   }
 }

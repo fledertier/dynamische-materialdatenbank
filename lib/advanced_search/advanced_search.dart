@@ -7,13 +7,20 @@ import '../resizeable_builder.dart';
 import 'advanced_search_provider.dart';
 import 'condition_group.dart';
 
-class AdvancedSearch extends ConsumerWidget {
+class AdvancedSearch extends ConsumerStatefulWidget {
   const AdvancedSearch({super.key, this.onClose});
 
   final void Function()? onClose;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AdvancedSearch> createState() => _AdvancedSearchState();
+}
+
+class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
+  Key queryKey = UniqueKey();
+
+  @override
+  Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final query = ref.watch(advancedSearchQueryProvider).query;
 
@@ -35,17 +42,15 @@ class AdvancedSearch extends ConsumerWidget {
               icon: Icon(Icons.refresh),
               tooltip: 'Reset',
               onPressed: () {
+                queryKey = UniqueKey();
                 ref.read(advancedSearchQueryProvider.notifier).reset();
               },
             ),
             IconButton(
               icon: Icon(Icons.close),
               tooltip: 'Close',
-              onPressed: onClose,
+              onPressed: widget.onClose,
             ),
-          ],
-          bottomActions: [
-            FilledButton(onPressed: () {}, child: Text('Run query')),
           ],
           width: width,
           margin: EdgeInsets.zero,
@@ -54,10 +59,8 @@ class AdvancedSearch extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
               child: Form(
-                onChanged: () {
-                  ref.read(advancedSearchQueryProvider.notifier).update();
-                },
                 child: ConditionGroupWidget(
+                  key: queryKey,
                   isRootNode: true,
                   conditionGroup: query,
                 ),

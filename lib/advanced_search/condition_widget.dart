@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../providers/attribute_provider.dart';
+import 'advanced_search_provider.dart';
 import 'condition.dart';
 import 'fields.dart';
 
@@ -63,7 +64,7 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
                     );
                   }).toList(),
               onSelected: (attribute) {
-                setState(() {
+                update(() {
                   widget.condition.attribute = attribute?.id;
                   widget.condition.operator =
                       attribute?.type.operators.firstOrNull;
@@ -90,7 +91,7 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
                     );
                   }).toList(),
               onSelected: (operator) {
-                setState(() {
+                update(() {
                   widget.condition.operator = operator;
                 });
               },
@@ -106,7 +107,7 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
               type: attribute?.type,
               value: widget.condition.parameter,
               onChanged: (value) {
-                setState(() {
+                update(() {
                   widget.condition.parameter = value;
                 });
               },
@@ -135,5 +136,10 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
         },
       ),
     );
+  }
+
+  void update(void Function() update) {
+    update();
+    ref.read(advancedSearchQueryProvider.notifier).update();
   }
 }

@@ -24,21 +24,18 @@ class ConditionParameterField extends StatelessWidget {
         return TextField(
           enabled: enabled,
           initialValue: value as String?,
-          required: true,
           onChanged: (value) => onChanged?.call(value),
         );
       case AttributeType.number:
         return NumberField(
           enabled: enabled,
           initialValue: value as num?,
-          required: true,
           onChanged: (value) => onChanged?.call(value),
         );
       case AttributeType.boolean:
         return BooleanField(
           enabled: enabled,
-          initialValue: value as bool?,
-          required: true,
+          initialValue: value as bool? ?? true,
           onChanged: (value) => onChanged?.call(value),
         );
       default:

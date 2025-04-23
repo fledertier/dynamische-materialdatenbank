@@ -162,7 +162,7 @@ class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
   }
 
   void update(void Function() update) {
-    setState(update);
+    update();
     ref.read(advancedSearchQueryProvider.notifier).update();
   }
 }
