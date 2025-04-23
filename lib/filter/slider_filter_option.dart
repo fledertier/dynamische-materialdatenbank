@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
-import '../providers/filter_provider.dart';
+import 'filter_provider.dart';
 
 class SliderFilterOption extends ConsumerWidget {
   const SliderFilterOption(this.attribute, {super.key});
@@ -11,8 +11,8 @@ class SliderFilterOption extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final options = ref.watch(filterProvider);
-    final optionsNotifier = ref.read(filterProvider.notifier);
+    final options = ref.watch(filterOptionsProvider);
+    final optionsNotifier = ref.read(filterOptionsProvider.notifier);
     final extrema = ref.watch(attributeExtremaProvider(attribute)).value;
     final minWeight = extrema?.min ?? 0;
     final maxWeight = extrema?.max ?? 1;

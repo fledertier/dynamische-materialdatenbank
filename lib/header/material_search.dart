@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/providers/search_provider.dart';
+import 'package:dynamische_materialdatenbank/search/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -66,11 +66,11 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
       },
       onSubmitted: (value) {
         controller.closeView(value);
-        ref.read(searchProvider.notifier).query = value;
+        ref.read(searchProvider.notifier).search = value;
       },
       onClear: () {
         controller.closeView('');
-        ref.read(searchProvider.notifier).query = '';
+        ref.read(searchProvider.notifier).search = '';
       },
       onFilter: widget.onFilter,
     );

@@ -1,9 +1,11 @@
+import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'condition.dart';
 
-class ConditionGroupWidget extends StatefulWidget {
+class ConditionGroupWidget extends ConsumerStatefulWidget {
   const ConditionGroupWidget({
     super.key,
     required this.conditionGroup,
@@ -16,12 +18,11 @@ class ConditionGroupWidget extends StatefulWidget {
   final bool isRootNode;
 
   @override
-  State<ConditionGroupWidget> createState() => _ConditionGroupWidgetState();
+  ConsumerState<ConditionGroupWidget> createState() =>
+      _ConditionGroupWidgetState();
 }
 
-class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
-  late ConditionGroup conditionGroup = widget.conditionGroup;
-
+class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -51,7 +52,7 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              for (final node in conditionGroup.nodes)
+              for (final node in widget.conditionGroup.nodes)
                 if (node is ConditionGroup)
                   ConditionGroupWidget(
                     conditionGroup: node,
@@ -123,44 +124,46 @@ class _ConditionGroupWidgetState extends State<ConditionGroupWidget> {
     );
   }
 
-  bool get isAnd => conditionGroup.type == ConditionGroupType.and;
+  bool get isAnd => widget.conditionGroup.type == ConditionGroupType.and;
 
-  bool get isRootNode => widget.isRootNode && conditionGroup.nodes.isEmpty;
+  bool get isRootNode =>
+      widget.isRootNode && widget.conditionGroup.nodes.isEmpty;
 
   void toggleType() {
-    setState(() {
-      conditionGroup.type = conditionGroup.type.other;
+    update(() {
+      widget.conditionGroup.type = widget.conditionGroup.type.other;
     });
   }
 
   void addCondition() {
-    setState(() {
-      conditionGroup.nodes.add(Condition());
-    });
-  }
-
-  void updateCondition(Condition condition, Condition updatedCondition) {
-    setState(() {
-      final index = conditionGroup.nodes.indexOf(condition);
-      conditionGroup.nodes[index] = updatedCondition;
+    update(() {
+      widget.conditionGroup.nodes.add(Condition());
     });
   }
 
   void addConditionGroup() {
-    setState(() {
-      conditionGroup.nodes.add(
-        ConditionGroup(type: conditionGroup.type.other, nodes: [Condition()]),
+    update(() {
+      widget.conditionGroup.nodes.add(
+        ConditionGroup(
+          type: widget.conditionGroup.type.other,
+          nodes: [Condition()],
+        ),
       );
     });
   }
 
   void removeNode(ConditionNode node) {
-    setState(() {
-      conditionGroup.nodes.remove(node);
+    update(() {
+      widget.conditionGroup.nodes.remove(node);
     });
-    if (conditionGroup.nodes.isEmpty) {
+    if (widget.conditionGroup.nodes.isEmpty) {
       widget.onRemove?.call();
     }
+  }
+
+  void update(void Function() update) {
+    setState(update);
+    ref.read(advancedSearchQueryProvider.notifier).update();
   }
 }
 

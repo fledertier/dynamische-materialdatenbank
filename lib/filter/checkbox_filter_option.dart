@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/attribute_provider.dart';
-import '../providers/filter_provider.dart';
+import 'filter_provider.dart';
 
 class CheckboxFilterOption extends ConsumerWidget {
   const CheckboxFilterOption(this.attribute, {super.key});
@@ -12,8 +12,8 @@ class CheckboxFilterOption extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final options = ref.watch(filterProvider);
-    final optionsNotifier = ref.read(filterProvider.notifier);
+    final options = ref.watch(filterOptionsProvider);
+    final optionsNotifier = ref.read(filterOptionsProvider.notifier);
     final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
     return CheckboxListTile(

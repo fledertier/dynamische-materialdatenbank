@@ -6,61 +6,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../advanced_search/advanced_search.dart';
 import '../constants.dart';
 import '../providers/attribute_provider.dart';
-import '../providers/filter_provider.dart';
+import '../query/query_source_provider.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';
+import 'filter_provider.dart';
 import 'labeled.dart';
 import 'labeled_list.dart';
 import 'side_sheet.dart';
 
-enum View { filters, advancedSearch }
-
-class FiltersAndSearch extends StatefulWidget {
+class FiltersAndSearch extends ConsumerWidget {
   const FiltersAndSearch({super.key, this.onClose});
 
   final void Function()? onClose;
 
   @override
-  State<FiltersAndSearch> createState() => _FiltersAndSearchState();
-}
-
-class _FiltersAndSearchState extends State<FiltersAndSearch> {
-  View _currentView = View.advancedSearch;
-
-  void showFilters() {
-    setState(() {
-      _currentView = View.filters;
-    });
-  }
-
-  void showAdvancedSearch() {
-    setState(() {
-      _currentView = View.advancedSearch;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final querySource = ref.watch(querySourceProvider);
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       alignment: Alignment.topLeft,
       curve: Curves.easeOutCubic,
       child:
-          _currentView == View.filters
-              ? Filters(
-                onClose: widget.onClose,
-                onAdvancedSearch: showAdvancedSearch,
-              )
-              : AdvancedSearch(onClose: widget.onClose, onFilters: showFilters),
+          querySource == QuerySource.searchAndFilter
+              ? Filters(onClose: onClose)
+              : AdvancedSearch(onClose: onClose),
     );
   }
 }
 
 class Filters extends ConsumerWidget {
-  const Filters({super.key, this.onClose, this.onAdvancedSearch});
+  const Filters({super.key, this.onClose});
 
   final void Function()? onClose;
-  final void Function()? onAdvancedSearch;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +50,7 @@ class Filters extends ConsumerWidget {
           icon: Icon(Icons.refresh),
           tooltip: 'Reset',
           onPressed: () {
-            ref.read(filterProvider.notifier).reset();
+            ref.read(filterOptionsProvider.notifier).reset();
           },
         ),
         IconButton(
@@ -86,7 +63,10 @@ class Filters extends ConsumerWidget {
         OutlinedButton.icon(
           icon: Icon(Icons.auto_awesome),
           label: Text('Advanced search'),
-          onPressed: onAdvancedSearch,
+          onPressed: () {
+            ref.read(querySourceProvider.notifier).state =
+                QuerySource.advancedSearch;
+          },
         ),
       ],
       width: 280,

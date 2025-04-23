@@ -1,5 +1,5 @@
-import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
 import 'package:dynamische_materialdatenbank/hover_builder.dart';
+import 'package:dynamische_materialdatenbank/query/query_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

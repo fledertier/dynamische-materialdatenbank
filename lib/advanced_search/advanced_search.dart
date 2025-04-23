@@ -2,35 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../filter/side_sheet.dart';
-import '../providers/filter_provider.dart';
+import '../query/query_source_provider.dart';
 import '../resizeable_builder.dart';
-import 'condition.dart';
+import 'advanced_search_provider.dart';
 import 'condition_group.dart';
 
 class AdvancedSearch extends ConsumerWidget {
-  const AdvancedSearch({super.key, this.onFilters, this.onClose});
+  const AdvancedSearch({super.key, this.onClose});
 
   final void Function()? onClose;
-  final void Function()? onFilters;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenSize = MediaQuery.of(context).size;
+    final query = ref.watch(advancedSearchQueryProvider).query;
 
     return ResizeableBuilder(
       minWidth: 320,
       width: 600,
-      maxWidth: screenWidth - 300,
+      maxWidth: screenSize.width - 300,
       builder: (context, width) {
         return SideSheet.detached(
-          leading: BackButton(onPressed: onFilters),
+          leading: BackButton(
+            onPressed: () {
+              ref.read(querySourceProvider.notifier).state =
+                  QuerySource.searchAndFilter;
+            },
+          ),
           title: Text('Advanced search'),
           topActions: [
             IconButton(
               icon: Icon(Icons.refresh),
               tooltip: 'Reset',
               onPressed: () {
-                ref.read(filterProvider.notifier).reset();
+                ref.read(advancedSearchQueryProvider.notifier).reset();
               },
             ),
             IconButton(
@@ -39,30 +44,25 @@ class AdvancedSearch extends ConsumerWidget {
               onPressed: onClose,
             ),
           ],
+          bottomActions: [
+            FilledButton(onPressed: () {}, child: Text('Run query')),
+          ],
           width: width,
           margin: EdgeInsets.zero,
-          child: Builder(
-            builder: (context) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
-                  child: ConditionGroupWidget(
-                    isRootNode: true,
-                    conditionGroup: ConditionGroup(
-                      type: ConditionGroupType.and,
-                      nodes: [
-                        ConditionGroup(
-                          type: ConditionGroupType.or,
-                          nodes: [Condition(), Condition()],
-                        ),
-                        Condition(),
-                      ],
-                    ),
-                  ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
+              child: Form(
+                onChanged: () {
+                  ref.read(advancedSearchQueryProvider.notifier).update();
+                },
+                child: ConditionGroupWidget(
+                  isRootNode: true,
+                  conditionGroup: query,
                 ),
-              );
-            },
+              ),
+            ),
           ),
         );
       },
