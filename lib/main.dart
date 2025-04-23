@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'app.dart';
+import 'app/app.dart';
 import 'firebase_options.dart';
 
 void main() async {

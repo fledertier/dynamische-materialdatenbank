@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/header/directional_menu_anchor.dart';
+import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {

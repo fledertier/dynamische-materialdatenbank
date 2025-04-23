@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class Navigation extends StatelessWidget {
   static const pages = [Pages.materials, Pages.attributes];

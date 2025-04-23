@@ -11,8 +11,8 @@ enum HandleAlignment {
   final double value;
 }
 
-class ResizeableBuilder extends StatefulWidget {
-  const ResizeableBuilder({
+class ResizableBuilder extends StatefulWidget {
+  const ResizableBuilder({
     super.key,
     required this.builder,
     required this.minWidth,
@@ -32,10 +32,10 @@ class ResizeableBuilder extends StatefulWidget {
   final Widget Function(BuildContext context, double width) builder;
 
   @override
-  State<ResizeableBuilder> createState() => _ResizeableBuilderState();
+  State<ResizableBuilder> createState() => _ResizableBuilderState();
 }
 
-class _ResizeableBuilderState extends State<ResizeableBuilder> {
+class _ResizableBuilderState extends State<ResizableBuilder> {
   late double width = widget.width;
   late double dragStart = widget.width;
 

@@ -7,12 +7,12 @@ import '../advanced_search/advanced_search.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../query/query_source_provider.dart';
+import '../widgets/labeled.dart';
+import '../widgets/labeled_list.dart';
+import '../widgets/side_sheet.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';
 import 'filter_provider.dart';
-import 'labeled.dart';
-import 'labeled_list.dart';
-import 'side_sheet.dart';
 
 class FiltersAndSearch extends ConsumerWidget {
   const FiltersAndSearch({super.key, this.onClose});

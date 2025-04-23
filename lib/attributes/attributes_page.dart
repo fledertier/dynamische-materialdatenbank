@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../app_scaffold.dart';
+import '../app/app_scaffold.dart';
+import '../app/navigation.dart';
 import '../constants.dart';
 import '../header/header.dart';
-import '../navigation.dart';
 import 'attribute.dart';
 import 'attribute_details.dart';
 import 'attributes_list.dart';

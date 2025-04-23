@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../filter/side_sheet.dart';
 import '../query/query_source_provider.dart';
-import '../widgets/resizeable_builder.dart';
+import '../widgets/resizable_builder.dart';
+import '../widgets/side_sheet.dart';
 import 'advanced_search_provider.dart';
 import 'condition_group_widget.dart';
 
@@ -24,7 +24,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
     final screenSize = MediaQuery.of(context).size;
     final query = ref.watch(advancedSearchQueryProvider).query;
 
-    return ResizeableBuilder(
+    return ResizableBuilder(
       minWidth: 320,
       width: 600,
       maxWidth: screenSize.width - 300,
