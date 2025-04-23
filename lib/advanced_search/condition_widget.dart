@@ -6,33 +6,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../providers/attribute_provider.dart';
-import 'advanced_search_provider.dart';
 import 'condition.dart';
 import 'fields.dart';
 
-class ConditionWidget extends ConsumerStatefulWidget {
+class ConditionWidget extends ConsumerWidget {
   const ConditionWidget({
     super.key,
     required this.condition,
+    this.onChanged,
     this.onRemove,
     this.enabled = true,
   });
 
   final Condition condition;
+  final void Function()? onChanged;
   final void Function()? onRemove;
   final bool enabled;
 
   @override
-  ConsumerState<ConditionWidget> createState() => _ConditionWidgetState();
-}
-
-class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final attributes =
         ref.watch(attributesProvider).value?.values.toList() ?? [];
     final attribute = attributes.firstWhereOrNull(
-      (attribute) => attribute.id == widget.condition.attribute,
+      (attribute) => attribute.id == condition.attribute,
     );
     final operators = attribute?.type.operators ?? {};
     return Theme(
@@ -53,7 +49,7 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
           children: [
             DropdownMenuFormField(
               hintText: "Attribute",
-              enabled: widget.enabled,
+              enabled: enabled,
               width: 200,
               initialSelection: attribute,
               dropdownMenuEntries:
@@ -65,10 +61,9 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
                   }).toList(),
               onSelected: (attribute) {
                 update(() {
-                  widget.condition.attribute = attribute?.id;
-                  widget.condition.operator =
-                      attribute?.type.operators.firstOrNull;
-                  widget.condition.parameter = null;
+                  condition.attribute = attribute?.id;
+                  condition.operator = attribute?.type.operators.firstOrNull;
+                  condition.parameter = null;
                 });
               },
               validator: (attribute) {
@@ -79,10 +74,10 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
               },
             ),
             DropdownMenuFormField(
-              key: ValueKey(widget.condition.attribute),
+              key: ValueKey(condition.attribute),
               hintText: "Operator",
-              initialSelection: widget.condition.operator,
-              enabled: widget.enabled && widget.condition.attribute != null,
+              initialSelection: condition.operator,
+              enabled: enabled && condition.attribute != null,
               dropdownMenuEntries:
                   operators.map((operation) {
                     return DropdownMenuEntry(
@@ -92,23 +87,23 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
                   }).toList(),
               onSelected: (operator) {
                 update(() {
-                  widget.condition.operator = operator;
+                  condition.operator = operator;
                 });
               },
               validator: (operator) {
-                if (widget.condition.attribute != null && operator == null) {
+                if (condition.attribute != null && operator == null) {
                   return "Please select an operator";
                 }
                 return null;
               },
             ),
             ConditionParameterField(
-              enabled: widget.enabled,
+              enabled: enabled,
               type: attribute?.type,
-              value: widget.condition.parameter,
+              value: condition.parameter,
               onChanged: (value) {
                 update(() {
-                  widget.condition.parameter = value;
+                  condition.parameter = value;
                 });
               },
             ),
@@ -119,12 +114,12 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
             spacing: 8,
             children: [
               child!,
-              if (widget.enabled)
+              if (enabled)
                 Visibility.maintain(
                   visible: hovered,
                   child: IconButton(
                     tooltip: "Remove",
-                    onPressed: widget.onRemove,
+                    onPressed: onRemove,
                     icon: Icon(
                       Symbols.remove_circle,
                       color: ColorScheme.of(context).onSurfaceVariant,
@@ -140,6 +135,6 @@ class _ConditionWidgetState extends ConsumerState<ConditionWidget> {
 
   void update(void Function() update) {
     update();
-    ref.read(advancedSearchQueryProvider.notifier).update();
+    onChanged?.call();
   }
 }

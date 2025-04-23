@@ -63,6 +63,9 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
                   key: queryKey,
                   isRootNode: true,
                   conditionGroup: query,
+                  onChanged: () {
+                    ref.read(advancedSearchQueryProvider.notifier).update();
+                  },
                 ),
               ),
             ),

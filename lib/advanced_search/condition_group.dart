@@ -1,34 +1,29 @@
-import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
 import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'condition.dart';
 
-class ConditionGroupWidget extends ConsumerStatefulWidget {
+class ConditionGroupWidget extends ConsumerWidget {
   const ConditionGroupWidget({
     super.key,
     required this.conditionGroup,
+    this.onChanged,
     this.onRemove,
     this.isRootNode = false,
   });
 
   final ConditionGroup conditionGroup;
+  final void Function()? onChanged;
   final void Function()? onRemove;
   final bool isRootNode;
 
   @override
-  ConsumerState<ConditionGroupWidget> createState() =>
-      _ConditionGroupWidgetState();
-}
-
-class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        if (!isRootNode)
+        if (!(isRootNode && conditionGroup.nodes.isEmpty))
           Positioned.fill(
             right: null,
             child: Column(
@@ -45,17 +40,18 @@ class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
           ),
         Padding(
           padding:
-              isRootNode
+              (isRootNode && conditionGroup.nodes.isEmpty)
                   ? EdgeInsets.zero
                   : const EdgeInsets.only(left: 64 - 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              for (final node in widget.conditionGroup.nodes)
+              for (final node in conditionGroup.nodes)
                 if (node is ConditionGroup)
                   ConditionGroupWidget(
                     conditionGroup: node,
+                    onChanged: onChanged,
                     onRemove: () => removeNode(node),
                   )
                 else if (node is Condition)
@@ -63,6 +59,7 @@ class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
                     padding: const EdgeInsets.only(left: 32),
                     child: ConditionWidget(
                       condition: node,
+                      onChanged: onChanged,
                       onRemove: () => removeNode(node),
                     ),
                   )
@@ -79,7 +76,7 @@ class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
                   ),
                 ),
                 child:
-                    isRootNode
+                    (isRootNode && conditionGroup.nodes.isEmpty)
                         ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: Row(
@@ -124,46 +121,40 @@ class _ConditionGroupWidgetState extends ConsumerState<ConditionGroupWidget> {
     );
   }
 
-  bool get isAnd => widget.conditionGroup.type == ConditionGroupType.and;
-
-  bool get isRootNode =>
-      widget.isRootNode && widget.conditionGroup.nodes.isEmpty;
+  bool get isAnd => conditionGroup.type == ConditionGroupType.and;
 
   void toggleType() {
     update(() {
-      widget.conditionGroup.type = widget.conditionGroup.type.other;
+      conditionGroup.type = conditionGroup.type.other;
     });
   }
 
   void addCondition() {
     update(() {
-      widget.conditionGroup.nodes.add(Condition());
+      conditionGroup.nodes.add(Condition());
     });
   }
 
   void addConditionGroup() {
     update(() {
-      widget.conditionGroup.nodes.add(
-        ConditionGroup(
-          type: widget.conditionGroup.type.other,
-          nodes: [Condition()],
-        ),
+      conditionGroup.nodes.add(
+        ConditionGroup(type: conditionGroup.type.other, nodes: [Condition()]),
       );
     });
   }
 
   void removeNode(ConditionNode node) {
     update(() {
-      widget.conditionGroup.nodes.remove(node);
+      conditionGroup.nodes.remove(node);
     });
-    if (widget.conditionGroup.nodes.isEmpty) {
-      widget.onRemove?.call();
+    if (conditionGroup.nodes.isEmpty) {
+      onRemove?.call();
     }
   }
 
   void update(void Function() update) {
     update();
-    ref.read(advancedSearchQueryProvider.notifier).update();
+    onChanged?.call();
   }
 }
 
