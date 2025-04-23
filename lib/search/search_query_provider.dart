@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../query/condition.dart';
 import '../attributes/attribute_type.dart';
 import '../constants.dart';
+import '../query/condition.dart';
+import '../query/condition_group.dart';
 import 'search_provider.dart';
 
 final searchQueryProvider = Provider((ref) {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../query/condition.dart';
+import '../query/condition_group.dart';
+import '../query/condition_node.dart';
 import 'half_bracket.dart';
 
 class ConditionGroupWidget extends ConsumerWidget {
