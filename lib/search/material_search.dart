@@ -3,46 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../attributes/attribute_provider.dart';
 import '../constants.dart';
+import '../material/material_provider.dart';
 import '../widgets/highlighted_text.dart';
-import '../providers/attribute_provider.dart';
-import '../providers/material_provider.dart';
-import 'search_service.dart';
 import 'search.dart';
+import 'search_service.dart';
 
-class MaterialSearch extends ConsumerStatefulWidget {
+class MaterialSearch extends ConsumerWidget {
   const MaterialSearch({super.key, this.onFilter});
 
   final void Function()? onFilter;
 
   @override
-  ConsumerState<MaterialSearch> createState() => _MaterialSearchState();
-}
-
-class _MaterialSearchState extends ConsumerState<MaterialSearch> {
-  late final SearchController controller;
-  late String query;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = SearchController();
-    controller.value = TextEditingValue(text: ref.read(searchProvider));
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(searchControllerProvider);
     return Search(
       hintText: 'Search in materials',
       controller: controller,
       search: (query) async {
-        this.query = query;
         final attributes = AttributesParameter({Attributes.name});
         final materials = await ref.read(
           materialsStreamProvider(attributes).future,
@@ -51,7 +30,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
             .read(searchServiceProvider)
             .search(materials, attributes.attributes, query);
       },
-      buildSuggestion: (material) {
+      buildSuggestion: (material, query) {
         final name = material[Attributes.name] as String;
         return ListTile(
           title: HighlightedText(name, highlighted: query),
@@ -64,15 +43,15 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
           },
         );
       },
-      onSubmitted: (value) {
-        controller.closeView(value);
-        ref.read(searchProvider.notifier).search = value;
+      onSubmitted: (query) {
+        controller.closeView(query);
+        ref.read(searchProvider.notifier).state = query;
       },
       onClear: () {
         controller.closeView('');
-        ref.read(searchProvider.notifier).search = '';
+        ref.read(searchProvider.notifier).state = '';
       },
-      onFilter: widget.onFilter,
+      onFilter: onFilter,
     );
   }
 }

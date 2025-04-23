@@ -1,5 +1,5 @@
-import 'package:dynamische_materialdatenbank/providers/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/providers/material_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

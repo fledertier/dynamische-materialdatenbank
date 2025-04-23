@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/attribute_provider.dart';
+import '../attributes/attribute_provider.dart';
 import 'filter_provider.dart';
 
 class SliderFilterOption extends ConsumerWidget {

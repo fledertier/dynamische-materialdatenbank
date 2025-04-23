@@ -3,9 +3,9 @@ import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../advanced_search/advanced_search_provider.dart';
+import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../filter/filter_provider.dart';
-import '../providers/attribute_provider.dart';
 import '../search/search_query_provider.dart';
 
 final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {

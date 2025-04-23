@@ -1,12 +1,12 @@
 import 'package:dynamische_materialdatenbank/search/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../filter/filter_provider.dart';
 import '../filter/filter_service.dart';
-import '../material/material_service.dart';
 import '../search/search_service.dart';
-import 'attribute_provider.dart';
+import 'material_service.dart';
 
 final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
   final query = ref.watch(searchProvider);

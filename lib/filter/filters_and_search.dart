@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../advanced_search/advanced_search.dart';
+import '../attributes/attribute_provider.dart';
 import '../constants.dart';
-import '../providers/attribute_provider.dart';
 import '../query/query_source_provider.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../providers/attribute_provider.dart';
+import '../attributes/attribute_provider.dart';
 import '../query/condition.dart';
 import 'parameter_fields.dart';
 

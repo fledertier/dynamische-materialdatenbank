@@ -1,13 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final searchProvider = NotifierProvider(SearchNotifier.new);
+final searchProvider = StateProvider((ref) => '');
 
-// todo: use state provider
-class SearchNotifier extends Notifier<String> {
-  @override
-  String build() => '';
-
-  set search(String query) {
-    state = query;
-  }
-}
+final searchControllerProvider = Provider((ref) {
+  final controller = SearchController();
+  ref.onDispose(controller.dispose);
+  return controller;
+});

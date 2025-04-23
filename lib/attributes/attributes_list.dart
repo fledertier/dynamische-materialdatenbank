@@ -4,7 +4,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/attribute_provider.dart';
+import 'attribute_provider.dart';
 
 class AttributesList extends StatelessWidget {
   const AttributesList({super.key, required this.selectedAttribute});

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
-import '../attributes/attribute_service.dart';
+import 'attribute_service.dart';
 
 class Extrema {
   const Extrema({required this.min, required this.max});

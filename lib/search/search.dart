@@ -18,7 +18,7 @@ class Search<T> extends StatelessWidget {
   final String? hintText;
   final SearchController controller;
   final FutureOr<List<T>> Function(String query) search;
-  final Widget Function(T suggestion) buildSuggestion;
+  final Widget Function(T suggestion, String query) buildSuggestion;
   final void Function(String value)? onChanged;
   final void Function(String value)? onSubmitted;
   final void Function()? onClear;
@@ -58,7 +58,9 @@ class Search<T> extends StatelessWidget {
           return [];
         }
         final suggestions = await search(query);
-        return suggestions.map(buildSuggestion);
+        return suggestions.map(
+          (suggestion) => buildSuggestion(suggestion, query),
+        );
       },
     );
   }
