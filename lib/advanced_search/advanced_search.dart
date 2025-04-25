@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../prompt/material_prompt.dart';
 import '../query/query_source_provider.dart';
 import '../widgets/resizable_builder.dart';
 import '../widgets/side_sheet.dart';
@@ -54,6 +55,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
           ],
           width: width,
           margin: EdgeInsets.zero,
+          bottomActions: [Expanded(child: MaterialPrompt())],
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Padding(
