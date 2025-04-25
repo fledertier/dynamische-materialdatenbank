@@ -14,12 +14,14 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: buildTheme(context, Brightness.light),
       darkTheme: buildTheme(context, Brightness.dark),
-      themeMode: isAfterSunset() ? ThemeMode.dark : ThemeMode.light,
+      themeMode: isDarkOutside() ? ThemeMode.dark : ThemeMode.light,
     );
   }
 
-  bool isAfterSunset() {
+  bool isDarkOutside() {
+    final now = TimeOfDay.now();
     final sunset = TimeOfDay(hour: 19, minute: 00);
-    return TimeOfDay.now().isAfter(sunset);
+    final sunrise = TimeOfDay(hour: 7, minute: 00);
+    return now.isAfter(sunset) || now.isBefore(sunrise);
   }
 }
