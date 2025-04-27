@@ -10,8 +10,9 @@ import '../query/condition_group.dart';
 import '../query/query_service.dart';
 
 class MaterialPrompt extends ConsumerStatefulWidget {
-  const MaterialPrompt({super.key, this.onQuery});
+  const MaterialPrompt({super.key, this.controller, this.onQuery});
 
+  final TextEditingController? controller;
   final void Function(ConditionGroup query)? onQuery;
 
   @override
@@ -19,7 +20,7 @@ class MaterialPrompt extends ConsumerStatefulWidget {
 }
 
 class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
-  final controller = TextEditingController();
+  late final controller = widget.controller ?? TextEditingController();
 
   @override
   Widget build(BuildContext context) {

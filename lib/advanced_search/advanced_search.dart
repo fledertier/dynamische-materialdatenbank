@@ -19,6 +19,7 @@ class AdvancedSearch extends ConsumerStatefulWidget {
 
 class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
   Key queryKey = UniqueKey();
+  final promptController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
               onPressed: () {
                 queryKey = UniqueKey();
                 ref.read(advancedSearchQueryProvider.notifier).reset();
+                promptController.clear();
               },
             ),
             IconButton(
@@ -58,6 +60,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
           bottomActions: [
             Expanded(
               child: MaterialPrompt(
+                controller: promptController,
                 onQuery: (query) {
                   queryKey = UniqueKey();
                   ref.read(advancedSearchQueryProvider.notifier).query = query;
