@@ -20,8 +20,8 @@ class App extends ConsumerWidget {
 
   bool isDarkOutside() {
     final now = TimeOfDay.now();
-    final sunset = TimeOfDay(hour: 19, minute: 00);
-    final sunrise = TimeOfDay(hour: 7, minute: 00);
+    final sunset = TimeOfDay(hour: 20, minute: 40);
+    final sunrise = TimeOfDay(hour: 6, minute: 00);
     return now.isAfter(sunset) || now.isBefore(sunrise);
   }
 }

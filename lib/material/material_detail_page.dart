@@ -8,6 +8,7 @@ import '../app/navigation.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
+import 'attribute/light_transmission_card.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});
@@ -32,7 +33,7 @@ class MaterialDetailPage extends ConsumerWidget {
         child:
             asyncMaterial.isLoading
                 ? Center(child: CircularProgressIndicator())
-                : null,
+                : Center(child: LightTransmissionCard(value: 0.63)),
       ),
       sidebar: Container(
         decoration: BoxDecoration(
