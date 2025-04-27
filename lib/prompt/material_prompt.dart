@@ -57,10 +57,10 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
     final attributes = await ref.read(attributesStreamProvider.future);
     final promptService = ref.read(promptServiceProvider);
 
-    final query = promptService.buildPrompt(
+    final query = await promptService.generateQuery(
+      userPrompt: text.trim(),
       attributes: attributes.values.toList(),
       types: AttributeType.values,
-      prompt: text.trim(),
     );
 
     debugPrint(query);
