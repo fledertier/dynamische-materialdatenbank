@@ -1,15 +1,18 @@
 import 'dart:ui_web';
 
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/prompt/prompt_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_type.dart';
+import '../query/condition_group.dart';
+import '../query/query_service.dart';
 
 class MaterialPrompt extends ConsumerStatefulWidget {
-  const MaterialPrompt({super.key});
+  const MaterialPrompt({super.key, this.onQuery});
+
+  final void Function(ConditionGroup query)? onQuery;
 
   @override
   ConsumerState<MaterialPrompt> createState() => _MaterialPromptState();
@@ -55,15 +58,17 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
 
   void submit(String text) async {
     final attributes = await ref.read(attributesStreamProvider.future);
-    final promptService = ref.read(promptServiceProvider);
+    final queryService = ref.read(queryServiceProvider);
 
-    final query = await promptService.generateQuery(
-      userPrompt: text.trim(),
+    final query = await queryService.generateQuery(
       attributes: attributes.values.toList(),
       types: AttributeType.values,
+      prompt: text.trim(),
     );
 
-    debugPrint(query);
+    if (query != null) {
+      widget.onQuery?.call(query);
+    }
   }
 
   KeyEventResult detectNewLine(FocusNode node, KeyEvent event) {

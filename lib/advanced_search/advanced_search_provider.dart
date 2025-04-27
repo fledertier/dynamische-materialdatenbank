@@ -14,6 +14,12 @@ class AdvancedSearchQueryNotifier extends ChangeNotifier {
     nodes: [Condition()],
   );
 
+  set query(ConditionGroup query) {
+    this.query.nodes = query.nodes;
+    this.query.type = query.type;
+    notifyListeners();
+  }
+
   void update() {
     notifyListeners();
   }
