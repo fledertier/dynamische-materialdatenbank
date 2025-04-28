@@ -1,5 +1,6 @@
-import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
+import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,12 +51,11 @@ class MaterialItem extends StatelessWidget {
           builder: (context, hovered, child) {
             return Stack(
               children: [
-                if (hovered)
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: MaterialContextMenu(material: item),
-                  ),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: MaterialContextMenu(material: item, visible: hovered),
+                ),
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -79,23 +79,35 @@ class MaterialItem extends StatelessWidget {
 }
 
 class MaterialContextMenu extends ConsumerWidget {
-  const MaterialContextMenu({super.key, required this.material});
+  const MaterialContextMenu({
+    super.key,
+    required this.material,
+    this.visible = true,
+  });
 
   final Map<String, dynamic> material;
+  final bool visible;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PopupMenuButton<String>(
-      onSelected: (value) {
-        if (value == 'delete') {
-          final id = material[Attributes.id];
-          ref.read(materialServiceProvider).deleteMaterial(id);
-        }
+    return DirectionalMenuAnchor(
+      directionality: TextDirection.rtl,
+      builder: (context, controller, child) {
+        return IconButton(
+          onPressed: controller.isOpen ? controller.close : controller.open,
+          icon: Icon(controller.isOpen || visible ? Icons.more_vert : null),
+        );
       },
-      itemBuilder:
-          (context) => [PopupMenuItem(value: 'delete', child: Text('Delete'))],
-      icon: Icon(Icons.more_vert),
-      tooltip: '',
+      menuChildren: [
+        MenuItemButton(
+          onPressed: () {
+            final id = material[Attributes.id];
+            ref.read(materialServiceProvider).deleteMaterial(id);
+          },
+          requestFocusOnHover: false,
+          child: Text('Delete'),
+        ),
+      ],
     );
   }
 }

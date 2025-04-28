@@ -29,5 +29,8 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
       }),
     ),
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
+    menuButtonTheme: MenuButtonThemeData(
+      style: MenuItemButton.styleFrom(minimumSize: Size(120, 40)),
+    ),
   );
 }

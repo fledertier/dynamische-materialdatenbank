@@ -16,6 +16,7 @@ class UserAvatar extends StatelessWidget {
         ),
         MenuItemButton(
           leadingIcon: Icon(Icons.logout),
+          requestFocusOnHover: false,
           child: Text('Logout'),
           onPressed: () {},
         ),

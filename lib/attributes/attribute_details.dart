@@ -2,9 +2,11 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../widgets/directional_menu_anchor.dart';
 import 'attribute.dart';
 import 'attribute_form.dart';
 
@@ -41,21 +43,34 @@ class AttributeDetails extends ConsumerWidget {
                       style: TextTheme.of(context).headlineSmall,
                     ),
                     Spacer(),
-                    FilledButton.tonalIcon(
-                      label: Text("Delete"),
-                      icon: Icon(Symbols.delete),
-                      onPressed: () async {
-                        bool? deleted;
-                        if (selectedAttribute.value is Attribute) {
-                          deleted = await showAttributeDeleteDialog(
-                            context,
-                            selectedAttribute.value as Attribute,
-                          );
-                        }
-                        if (deleted ?? true) {
-                          selectedAttribute.value = null;
-                        }
+                    DirectionalMenuAnchor(
+                      directionality: TextDirection.rtl,
+                      builder: (context, controller, child) {
+                        return IconButton(
+                          onPressed:
+                              controller.isOpen
+                                  ? controller.close
+                                  : controller.open,
+                          icon: Icon(Icons.more_vert),
+                        );
                       },
+                      menuChildren: [
+                        if (selectedAttribute.value is Attribute)
+                          MenuItemButton(
+                            leadingIcon: Icon(Symbols.content_copy),
+                            requestFocusOnHover: false,
+                            onPressed: copyAttributeId,
+                            child: Text('Copy id'),
+                          ),
+                        MenuItemButton(
+                          leadingIcon: Icon(Symbols.delete),
+                          requestFocusOnHover: false,
+                          onPressed: () {
+                            deleteAttribute(context);
+                          },
+                          child: Text("Delete"),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -84,6 +99,24 @@ class AttributeDetails extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> deleteAttribute(BuildContext context) async {
+    bool? deleted;
+    if (selectedAttribute.value is Attribute) {
+      deleted = await showAttributeDeleteDialog(
+        context,
+        selectedAttribute.value as Attribute,
+      );
+    }
+    if (deleted ?? true) {
+      selectedAttribute.value = null;
+    }
+  }
+
+  void copyAttributeId() {
+    final attribute = selectedAttribute.value as Attribute;
+    Clipboard.setData(ClipboardData(text: attribute.id));
   }
 
   Future<String> nearestAvailableId(
