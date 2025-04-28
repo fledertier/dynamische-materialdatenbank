@@ -1,24 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AttributeCard extends ConsumerWidget {
+import '../../widgets/loading_text.dart';
+import '../edit_mode_button.dart';
+
+class AttributeCard extends ConsumerStatefulWidget {
   const AttributeCard({
     super.key,
     required this.label,
     required this.value,
     this.unit,
     required this.child,
+    this.onChanged,
   });
 
-  final Widget label;
-  final Widget value;
-  final Widget? unit;
+  final String? label;
+  final String value;
+  final String? unit;
   final Widget child;
+  final ValueChanged<String>? onChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AttributeCard> createState() => _AttributeCardState();
+}
+
+class _AttributeCardState extends ConsumerState<AttributeCard> {
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.value);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
     final colorScheme = ColorScheme.of(context);
+
+    final edit = ref.watch(editModeProvider);
 
     return Container(
       width: 158,
@@ -36,32 +62,36 @@ class AttributeCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              DefaultTextStyle.merge(
-                style: textTheme.labelMedium,
-                child: label,
-              ),
+              LoadingText(widget.label, style: textTheme.labelMedium),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 mainAxisSize: MainAxisSize.min,
                 spacing: 4,
                 children: [
-                  DefaultTextStyle.merge(
-                    style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
-                    child: value,
+                  IntrinsicWidth(
+                    child: TextField(
+                      enabled: edit,
+                      style: textTheme.titleLarge?.copyWith(
+                        fontFamily: 'Lexend',
+                      ),
+                      decoration: InputDecoration.collapsed(hintText: '0'),
+                      controller: controller,
+                      onChanged: widget.onChanged,
+                    ),
                   ),
-                  if (unit != null)
-                    DefaultTextStyle.merge(
+                  if (widget.unit != null)
+                    Text(
+                      widget.unit!,
                       style: textTheme.bodyMedium?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
-                      child: unit!,
                     ),
                 ],
               ),
             ],
           ),
-          child,
+          widget.child,
         ],
       ),
     );

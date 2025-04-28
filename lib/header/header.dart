@@ -4,8 +4,9 @@ import '../search/material_search.dart';
 import 'user_avatar.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key, this.onFilter});
+  const Header({super.key, this.actions, this.onFilter});
 
+  final List<Widget>? actions;
   final void Function()? onFilter;
 
   @override
@@ -16,6 +17,7 @@ class Header extends StatelessWidget {
       children: [
         canPop ? BackButton() : SizedBox.square(dimension: 40),
         Expanded(child: Center(child: MaterialSearch(onFilter: onFilter))),
+        ...?actions,
         UserAvatar(),
       ],
     );

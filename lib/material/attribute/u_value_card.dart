@@ -1,27 +1,36 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
-import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../types.dart';
+import '../material_service.dart';
+import 'attribute_card.dart';
 import 'ray_painter.dart';
 
 class UValueCard extends ConsumerWidget {
-  const UValueCard({super.key, required this.value});
+  const UValueCard(this.material, {super.key});
 
-  final double value;
+  final Json material;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final attribute = ref.watch(attributeProvider(Attributes.uValue));
+    final value = material[Attributes.uValue] ?? 0;
+
     final transmittedRays = (value / 6 * 10).clamp(0, 10).round();
     final reflectedRays = 10 - transmittedRays;
 
     return AttributeCard(
-      label: LoadingText(attribute?.name),
-      value: Text(value.toStringAsFixed(1)),
-      unit: Text('W/m²K'),
+      label: attribute?.name,
+      value: value.toStringAsFixed(1),
+      unit: 'W/m²K',
+      onChanged: (value) {
+        ref.read(materialServiceProvider).updateMaterial({
+          Attributes.id: material[Attributes.id],
+          Attributes.uValue: double.tryParse(value) ?? 0,
+        });
+      },
       child: AspectRatio(
         aspectRatio: 1,
         child: CustomPaint(

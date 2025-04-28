@@ -12,6 +12,7 @@ import '../widgets/labeled.dart';
 import 'attribute/light_absorption_card.dart';
 import 'attribute/light_reflection_card.dart';
 import 'attribute/light_transmission_card.dart';
+import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});
@@ -26,7 +27,7 @@ class MaterialDetailPage extends ConsumerWidget {
     final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
     return AppScaffold(
-      header: Header(),
+      header: Header(actions: [EditModeButton()]),
       navigation: Navigation(page: Pages.materials),
       body: Container(
         decoration: BoxDecoration(
@@ -41,10 +42,10 @@ class MaterialDetailPage extends ConsumerWidget {
                     spacing: 16,
                     runSpacing: 16,
                     children: [
-                      LightReflectionCard(value: 0.16),
-                      LightAbsorptionCard(value: 0.31),
-                      LightTransmissionCard(value: 0.63),
-                      UValueCard(value: 3.3),
+                      LightReflectionCard(material),
+                      LightAbsorptionCard(material),
+                      LightTransmissionCard(material),
+                      UValueCard(material),
                     ],
                   ),
                 ),
