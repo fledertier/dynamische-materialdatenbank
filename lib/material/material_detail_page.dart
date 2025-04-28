@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/u_value_card.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,8 @@ import '../app/navigation.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
+import 'attribute/light_absorption_card.dart';
+import 'attribute/light_reflection_card.dart';
 import 'attribute/light_transmission_card.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -33,7 +36,18 @@ class MaterialDetailPage extends ConsumerWidget {
         child:
             asyncMaterial.isLoading
                 ? Center(child: CircularProgressIndicator())
-                : Center(child: LightTransmissionCard(value: 0.63)),
+                : Center(
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: [
+                      LightReflectionCard(value: 0.16),
+                      LightAbsorptionCard(value: 0.31),
+                      LightTransmissionCard(value: 0.63),
+                      UValueCard(value: 3.3),
+                    ],
+                  ),
+                ),
       ),
       sidebar: Container(
         decoration: BoxDecoration(

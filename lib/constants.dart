@@ -21,6 +21,9 @@ class Attributes {
   static const manufacturer = "manufacturer";
   static const weight = "weight";
   static const lightTransmission = "light transmission";
+  static const lightAbsorption = "light absorption";
+  static const lightReflection = "light reflection";
+  static const uValue = "u-value";
 }
 
 class Metadata {
