@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 enum Ray { incident, reflected, absorbed, transmitted }
@@ -26,17 +27,16 @@ class RayPainter extends CustomPainter {
           ..color = mediumColor
           ..strokeWidth = 1.5;
 
-    final material = Rect.fromCenter(
+    final medium = Rect.fromCenter(
       center: size.center(Offset.zero),
       width: mediumWidth,
       height: size.height,
     );
-    canvas.drawRect(material, paint);
+    canvas.drawRect(medium, paint);
 
     paint.color = rayColor;
     final gradient = Offset(1, 1 - (rays.length - 1) * spacing / size.height);
-    for (int i = 0; i < rays.length; i++) {
-      final ray = rays[i];
+    rays.forEachIndexed((i, ray) {
       final start = Offset(0, i * spacing);
       final end = start + gradient * length(ray, size.width);
 
@@ -49,7 +49,7 @@ class RayPainter extends CustomPainter {
         final endReflection = end + (end - start).scale(-1, 1);
         canvas.drawArrow(end, endReflection, paint);
       }
-    }
+    });
   }
 
   double length(Ray ray, double width) {
@@ -61,7 +61,7 @@ class RayPainter extends CustomPainter {
   }
 
   bool showHead(Ray ray) {
-    return ray != Ray.incident && ray != Ray.reflected;
+    return ray == Ray.absorbed || ray == Ray.transmitted;
   }
 
   bool reflect(Ray ray) {
@@ -70,12 +70,12 @@ class RayPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    if (oldDelegate is RayPainter) {
-      return oldDelegate.rays != rays ||
-          oldDelegate.spacing != spacing ||
-          oldDelegate.mediumWidth != mediumWidth;
+    if (oldDelegate is! RayPainter) {
+      return true;
     }
-    return true;
+    return oldDelegate.rays != rays ||
+        oldDelegate.spacing != spacing ||
+        oldDelegate.mediumWidth != mediumWidth;
   }
 }
 

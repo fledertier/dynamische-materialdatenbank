@@ -1,72 +1,41 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ray_painter.dart';
 
-class LightTransmissionCard extends StatelessWidget {
+class LightTransmissionCard extends ConsumerWidget {
   const LightTransmissionCard({super.key, required this.value});
 
   final double value;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final attribute = ref.watch(
+      attributeProvider(Attributes.lightTransmission),
+    );
     final transmittedRays = (value * 10).round();
     final nonTransmittedRays = 10 - transmittedRays;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorScheme.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        spacing: 16,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 8,
-            children: [
-              Text(
-                'Light transmission',
-                style: TextTheme.of(context).labelMedium,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 4,
-                children: [
-                  Text(
-                    (value * 100).toStringAsFixed(0),
-                    style: TextTheme.of(
-                      context,
-                    ).titleLarge?.copyWith(fontFamily: 'Lexend'),
-                  ),
-                  Text(
-                    '%',
-                    style: TextTheme.of(context).bodyMedium?.copyWith(
-                      color: ColorScheme.of(context).onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
+    return AttributeCard(
+      label: LoadingText(attribute?.name),
+      value: Text((value * 100).toStringAsFixed(0)),
+      unit: Text('%'),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: CustomPaint(
+          painter: RayPainter(
+            rays: [
+              for (int i = 0; i < nonTransmittedRays; i++) Ray.incident,
+              for (int i = 0; i < transmittedRays; i++) Ray.transmitted,
             ],
+            rayColor: ColorScheme.of(context).onPrimaryContainer,
+            mediumColor: ColorScheme.of(context).primaryContainer,
           ),
-          SizedBox.square(
-            dimension: 126,
-            child: CustomPaint(
-              painter: RayPainter(
-                rays: [
-                  for (int i = 0; i < nonTransmittedRays; i++) Ray.incident,
-                  for (int i = 0; i < transmittedRays; i++) Ray.transmitted,
-                ],
-                rayColor: ColorScheme.of(context).onPrimaryContainer,
-                mediumColor: ColorScheme.of(context).primaryContainer,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

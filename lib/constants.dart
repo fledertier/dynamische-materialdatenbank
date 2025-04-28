@@ -20,6 +20,7 @@ class Attributes {
   static const biobased = "biobased";
   static const manufacturer = "manufacturer";
   static const weight = "weight";
+  static const lightTransmission = "light transmission";
 }
 
 class Metadata {

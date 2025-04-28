@@ -16,12 +16,15 @@ class LoadingText extends StatelessWidget {
       context,
       defaultStyle.copyWith(height: 0.8),
     );
+    final width = this.width ?? letterHeight * 8;
+
     return SizedBox(
+      width: width,
       height: calculateTextHeight(context, defaultStyle),
       child: Align(
         alignment: Alignment.centerLeft,
         child: SizedBox(
-          width: width ?? letterHeight * 8,
+          width: width,
           height: letterHeight,
           child: DecoratedBox(
             decoration: BoxDecoration(
