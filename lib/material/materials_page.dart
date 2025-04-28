@@ -17,7 +17,7 @@ class MaterialsPage extends StatefulWidget {
 }
 
 class _MaterialsPageState extends State<MaterialsPage> {
-  bool showFilters = true;
+  bool showFilters = false;
 
   @override
   Widget build(BuildContext context) {
