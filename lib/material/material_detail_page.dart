@@ -12,6 +12,7 @@ import '../widgets/labeled.dart';
 import 'attribute/light_absorption_card.dart';
 import 'attribute/light_reflection_card.dart';
 import 'attribute/light_transmission_card.dart';
+import 'attribute/origin_country_card.dart';
 import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -46,6 +47,7 @@ class MaterialDetailPage extends ConsumerWidget {
                       LightAbsorptionCard(material),
                       LightTransmissionCard(material),
                       UValueCard(material),
+                      OriginCountryCard(material),
                     ],
                   ),
                 ),
