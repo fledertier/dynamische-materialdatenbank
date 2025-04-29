@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,15 +22,17 @@ class UValueCard extends ConsumerWidget {
     final transmittedRays = (value / 6 * 10).clamp(0, 10).round();
 
     return AttributeCard(
-      label: attribute?.name,
-      value: value.toStringAsFixed(1),
-      unit: 'W/m²K',
-      onChanged: (value) {
-        ref.read(materialServiceProvider).updateMaterial({
-          Attributes.id: material[Attributes.id],
-          Attributes.uValue: double.tryParse(value) ?? 0,
-        });
-      },
+      label: AttributeLabel(
+        label: attribute?.name,
+        value: value.toStringAsFixed(1),
+        unit: 'W/m²K',
+        onChanged: (value) {
+          ref.read(materialServiceProvider).updateMaterial({
+            Attributes.id: material[Attributes.id],
+            Attributes.uValue: double.tryParse(value) ?? 0,
+          });
+        },
+      ),
       child: RayVisualization(
         transmittedRays: transmittedRays,
         reflectedRays: 10 - transmittedRays,
