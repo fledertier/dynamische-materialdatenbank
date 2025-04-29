@@ -44,12 +44,13 @@ enum AttributeType {
       Operator.notEquals,
     },
   ),
-  boolean(baseType: 'bool', operators: {Operator.equals});
+  boolean(baseType: 'bool', operators: {Operator.equals}),
+  proportions(operators: {Operator.contains, Operator.notContains});
 
-  final String baseType;
+  final String? baseType;
   final Set<Operator> operators;
 
-  const AttributeType({required this.baseType, required this.operators});
+  const AttributeType({this.baseType, required this.operators});
 
   static AttributeType fromJson(dynamic json) {
     return AttributeType.values.byName(json);
@@ -65,6 +66,7 @@ extension AttributeTypeExtension on AttributeType {
       AttributeType.textarea => Symbols.article,
       AttributeType.number => Symbols.numbers,
       AttributeType.boolean => Symbols.toggle_on,
+      AttributeType.proportions => Symbols.pie_chart,
       // _ => Symbols.change_history,
     };
   }
@@ -74,6 +76,9 @@ extension AttributeTypeExtension on AttributeType {
   }
 
   List<AttributeType> get exchangeableTypes {
+    if (baseType == null) {
+      return [this];
+    }
     return AttributeType.values
         .where((value) => value.baseType == baseType)
         .toList();
