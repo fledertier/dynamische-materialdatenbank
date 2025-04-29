@@ -3,13 +3,49 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+class RayVisualization extends StatelessWidget {
+  const RayVisualization({
+    super.key,
+    this.incidentRays = 0,
+    this.reflectedRays = 0,
+    this.absorbedRays = 0,
+    this.transmittedRays = 0,
+  });
+
+  final num incidentRays;
+  final num reflectedRays;
+  final num absorbedRays;
+  final num transmittedRays;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: CustomPaint(
+        painter: _RayPainter(
+          rays: [
+            for (int i = 0; i < incidentRays; i++) Ray.incident,
+            for (int i = 0; i < transmittedRays; i++) Ray.transmitted,
+            for (int i = 0; i < absorbedRays; i++) Ray.absorbed,
+            for (int i = 0; i < reflectedRays; i++) Ray.reflected,
+          ],
+          spacing: 8,
+          mediumWidth: 30,
+          rayColor: ColorScheme.of(context).onPrimaryContainer,
+          mediumColor: ColorScheme.of(context).primaryContainer,
+        ),
+      ),
+    );
+  }
+}
+
 enum Ray { incident, reflected, absorbed, transmitted }
 
-class RayPainter extends CustomPainter {
-  RayPainter({
+class _RayPainter extends CustomPainter {
+  _RayPainter({
     required this.rays,
-    this.spacing = 8,
-    this.mediumWidth = 30,
+    required this.spacing,
+    required this.mediumWidth,
     required this.rayColor,
     required this.mediumColor,
   });
@@ -70,7 +106,7 @@ class RayPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    if (oldDelegate is! RayPainter) {
+    if (oldDelegate is! _RayPainter) {
       return true;
     }
     return oldDelegate.rays != rays ||

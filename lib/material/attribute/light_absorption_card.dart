@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../types.dart';
 import '../material_service.dart';
-import 'ray_painter.dart';
+import 'ray_visualization.dart';
 
 class LightAbsorptionCard extends ConsumerWidget {
   const LightAbsorptionCard(this.material, {super.key});
@@ -19,7 +19,6 @@ class LightAbsorptionCard extends ConsumerWidget {
     final value = material[Attributes.lightAbsorption] ?? 0;
 
     final absorbedRays = (value / 10).round();
-    final nonAbsorbedRays = 10 - absorbedRays;
 
     return AttributeCard(
       label: attribute?.name,
@@ -31,18 +30,9 @@ class LightAbsorptionCard extends ConsumerWidget {
           Attributes.lightAbsorption: double.tryParse(value) ?? 0,
         });
       },
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: CustomPaint(
-          painter: RayPainter(
-            rays: [
-              for (int i = 0; i < nonAbsorbedRays; i++) Ray.incident,
-              for (int i = 0; i < absorbedRays; i++) Ray.absorbed,
-            ],
-            rayColor: ColorScheme.of(context).onPrimaryContainer,
-            mediumColor: ColorScheme.of(context).primaryContainer,
-          ),
-        ),
+      child: RayVisualization(
+        incidentRays: 10 - absorbedRays,
+        absorbedRays: absorbedRays,
       ),
     );
   }

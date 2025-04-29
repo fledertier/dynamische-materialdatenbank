@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../types.dart';
 import '../material_service.dart';
 import 'attribute_card.dart';
-import 'ray_painter.dart';
+import 'ray_visualization.dart';
 
 class UValueCard extends ConsumerWidget {
   const UValueCard(this.material, {super.key});
@@ -19,7 +19,6 @@ class UValueCard extends ConsumerWidget {
     final value = material[Attributes.uValue] ?? 0;
 
     final transmittedRays = (value / 6 * 10).clamp(0, 10).round();
-    final reflectedRays = 10 - transmittedRays;
 
     return AttributeCard(
       label: attribute?.name,
@@ -31,18 +30,9 @@ class UValueCard extends ConsumerWidget {
           Attributes.uValue: double.tryParse(value) ?? 0,
         });
       },
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: CustomPaint(
-          painter: RayPainter(
-            rays: [
-              for (int i = 0; i < transmittedRays; i++) Ray.transmitted,
-              for (int i = 0; i < reflectedRays; i++) Ray.reflected,
-            ],
-            rayColor: ColorScheme.of(context).onPrimaryContainer,
-            mediumColor: ColorScheme.of(context).primaryContainer,
-          ),
-        ),
+      child: RayVisualization(
+        transmittedRays: transmittedRays,
+        reflectedRays: 10 - transmittedRays,
       ),
     );
   }

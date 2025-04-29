@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../types.dart';
 import '../material_service.dart';
-import 'ray_painter.dart';
+import 'ray_visualization.dart';
 
 class LightTransmissionCard extends ConsumerWidget {
   const LightTransmissionCard(this.material, {super.key});
@@ -21,7 +21,6 @@ class LightTransmissionCard extends ConsumerWidget {
     final value = material[Attributes.lightTransmission] ?? 0;
 
     final transmittedRays = (value / 10).round();
-    final nonTransmittedRays = 10 - transmittedRays;
 
     return AttributeCard(
       label: attribute?.name,
@@ -33,18 +32,9 @@ class LightTransmissionCard extends ConsumerWidget {
           Attributes.lightTransmission: double.tryParse(value) ?? 0,
         });
       },
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: CustomPaint(
-          painter: RayPainter(
-            rays: [
-              for (int i = 0; i < nonTransmittedRays; i++) Ray.incident,
-              for (int i = 0; i < transmittedRays; i++) Ray.transmitted,
-            ],
-            rayColor: ColorScheme.of(context).onPrimaryContainer,
-            mediumColor: ColorScheme.of(context).primaryContainer,
-          ),
-        ),
+      child: RayVisualization(
+        incidentRays: 10 - transmittedRays,
+        transmittedRays: transmittedRays,
       ),
     );
   }
