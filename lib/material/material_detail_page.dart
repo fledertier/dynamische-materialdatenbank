@@ -1,6 +1,4 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/composition/composition_card.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/u_value/u_value_card.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,11 +8,8 @@ import '../app/navigation.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
-import 'attribute/light/light_absorption_card.dart';
-import 'attribute/light/light_reflection_card.dart';
-import 'attribute/light/light_transmission_card.dart';
-import 'attribute/origin_country/origin_country_card.dart';
-import 'attribute/w_value/w_value_card.dart';
+import 'attribute/composition/composition_card.dart';
+import 'attribute/fire_behavior/fire_behavior_standard_card.dart';
 import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -43,13 +38,14 @@ class MaterialDetailPage extends ConsumerWidget {
                       spacing: 16,
                       runSpacing: 16,
                       children: [
-                        LightReflectionCard(material),
-                        LightAbsorptionCard(material),
-                        LightTransmissionCard(material),
-                        UValueCard(material),
-                        WValueCard(material),
-                        OriginCountryCard(material),
+                        // LightReflectionCard(material),
+                        // LightAbsorptionCard(material),
+                        // LightTransmissionCard(material),
+                        // UValueCard(material),
+                        // WValueCard(material),
+                        // OriginCountryCard(material),
                         CompositionCard(material),
+                        FireBehaviorStandardCard(material),
                       ],
                     ),
                   ),
