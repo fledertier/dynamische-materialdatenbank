@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/composition_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/u_value_card.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +48,9 @@ class MaterialDetailPage extends ConsumerWidget {
                         LightTransmissionCard(material),
                         UValueCard(material),
                         WValueCard(material),
-                        OriginCountryCard(material),
-                      ],
-                    ),
+                      OriginCountryCard(material),
+                      CompositionCard(material),
+                    ],),
                   ),
         ),
       ),

@@ -25,6 +25,7 @@ class Attributes {
   static const lightReflection = "light reflection";
   static const uValue = "u-value";
   static const wValue = "w-value";
+  static const composition = "composition";
 }
 
 class Metadata {
