@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'attribute.dart';
 import '../constants.dart';
+import 'attribute.dart';
 
 final attributeServiceProvider = Provider((ref) => AttributeService());
 
@@ -68,7 +69,7 @@ class AttributeService {
             .doc(Metadata.attributes)
             .get();
     final map = snapshot.dataOrNull() ?? {};
-    return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
+    return map.mapValues((json) => Attribute.fromJson(json));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {
@@ -78,7 +79,7 @@ class AttributeService {
         .snapshots()
         .map((snapshot) {
           final map = snapshot.dataOrNull() ?? {};
-          return map.map((id, json) => MapEntry(id, Attribute.fromJson(json)));
+          return map.mapValues((json) => Attribute.fromJson(json));
         });
   }
 
