@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/header/theme_mode.dart';
 import 'package:flutter/material.dart';
 
 import '../search/material_search.dart';
@@ -18,6 +19,7 @@ class Header extends StatelessWidget {
         canPop ? BackButton() : SizedBox.square(dimension: 40),
         Expanded(child: Center(child: MaterialSearch(onFilter: onFilter))),
         ...?actions,
+        ThemeModeButton(),
         UserAvatar(),
       ],
     );
