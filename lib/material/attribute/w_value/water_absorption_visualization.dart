@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/app/theme.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/corner_gap_shape.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/w_value/corner_gap_shape.dart';
 import 'package:flutter/material.dart';
 
 abstract class WaterAbsorption {

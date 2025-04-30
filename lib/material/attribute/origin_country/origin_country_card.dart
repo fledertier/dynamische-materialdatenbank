@@ -1,9 +1,9 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/world_map.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/origin_country/world_map.dart';
 import 'package:flutter/material.dart';
 
-import '../../types.dart';
+import '../../../types.dart';
 
 class OriginCountryCard extends StatelessWidget {
   const OriginCountryCard(this.material, {super.key});

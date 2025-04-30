@@ -4,10 +4,10 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../types.dart';
-import '../material_service.dart';
-import 'attribute_card.dart';
-import 'ray_visualization.dart';
+import '../../../types.dart';
+import '../../material_service.dart';
+import '../attribute_card.dart';
+import '../light/ray_visualization.dart';
 
 class UValueCard extends ConsumerWidget {
   const UValueCard(this.material, {super.key});

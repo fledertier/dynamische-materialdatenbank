@@ -1,12 +1,12 @@
-import 'package:dynamische_materialdatenbank/material/attribute/material_category.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/composition/material_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../attributes/attribute_provider.dart';
-import '../../constants.dart';
-import '../../types.dart';
-import 'attribute_card.dart';
-import 'attribute_label.dart';
+import '../../../attributes/attribute_provider.dart';
+import '../../../constants.dart';
+import '../../../types.dart';
+import '../attribute_card.dart';
+import '../attribute_label.dart';
 
 class CompositionCard extends ConsumerWidget {
   const CompositionCard(this.material, {super.key});

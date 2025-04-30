@@ -1,13 +1,13 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/water_absorption_visualization.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/w_value/water_absorption_visualization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../types.dart';
-import '../material_service.dart';
-import 'attribute_card.dart';
+import '../../../types.dart';
+import '../../material_service.dart';
+import '../attribute_card.dart';
 
 /// Also known as the water absorption coefficient
 class WValueCard extends ConsumerWidget {

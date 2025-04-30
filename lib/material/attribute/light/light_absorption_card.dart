@@ -5,21 +5,21 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../types.dart';
-import '../material_service.dart';
+import '../../../types.dart';
+import '../../material_service.dart';
 import 'ray_visualization.dart';
 
-class LightReflectionCard extends ConsumerWidget {
-  const LightReflectionCard(this.material, {super.key});
+class LightAbsorptionCard extends ConsumerWidget {
+  const LightAbsorptionCard(this.material, {super.key});
 
   final Json material;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(Attributes.lightReflection));
-    final value = material[Attributes.lightReflection] ?? 0;
+    final attribute = ref.watch(attributeProvider(Attributes.lightAbsorption));
+    final value = material[Attributes.lightAbsorption] ?? 0;
 
-    final reflectedRays = (value / 10).round();
+    final absorbedRays = (value / 10).round();
 
     return AttributeCard(
       label: AttributeLabel(
@@ -29,13 +29,13 @@ class LightReflectionCard extends ConsumerWidget {
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial({
             Attributes.id: material[Attributes.id],
-            Attributes.lightReflection: double.tryParse(value) ?? 0,
+            Attributes.lightAbsorption: double.tryParse(value) ?? 0,
           });
         },
       ),
       child: RayVisualization(
-        incidentRays: 10 - reflectedRays,
-        reflectedRays: reflectedRays,
+        incidentRays: 10 - absorbedRays,
+        absorbedRays: absorbedRays,
       ),
     );
   }
