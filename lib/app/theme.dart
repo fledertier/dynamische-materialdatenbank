@@ -34,3 +34,17 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
     ),
   );
 }
+
+extension ColorSchemeExtension on ColorScheme {
+  Color get water {
+    return brightness == Brightness.light
+        ? Color(0xffc2e8ff)
+        : Color(0xff004d67);
+  }
+
+  Color get onWater {
+    return brightness == Brightness.light
+        ? Color(0xff001e2c)
+        : Color(0xffc2e8ff);
+  }
+}

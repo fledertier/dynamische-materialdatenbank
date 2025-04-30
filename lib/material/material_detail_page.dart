@@ -13,6 +13,7 @@ import 'attribute/light_absorption_card.dart';
 import 'attribute/light_reflection_card.dart';
 import 'attribute/light_transmission_card.dart';
 import 'attribute/origin_country_card.dart';
+import 'attribute/w_value_card.dart';
 import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -31,26 +32,26 @@ class MaterialDetailPage extends ConsumerWidget {
       header: Header(actions: [EditModeButton()]),
       navigation: Navigation(page: Pages.materials),
       body: Container(
-        decoration: BoxDecoration(
-          color: ColorScheme.of(context).surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child:
-            asyncMaterial.isLoading
-                ? Center(child: CircularProgressIndicator())
-                : Center(
-                  child: Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: [
-                      LightReflectionCard(material),
-                      LightAbsorptionCard(material),
-                      LightTransmissionCard(material),
-                      UValueCard(material),
-                      OriginCountryCard(material),
-                    ],
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          child:
+              asyncMaterial.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : Center(
+                    child: Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        LightReflectionCard(material),
+                        LightAbsorptionCard(material),
+                        LightTransmissionCard(material),
+                        UValueCard(material),
+                        WValueCard(material),
+                        OriginCountryCard(material),
+                      ],
+                    ),
                   ),
-                ),
+        ),
       ),
       sidebar: Container(
         decoration: BoxDecoration(
