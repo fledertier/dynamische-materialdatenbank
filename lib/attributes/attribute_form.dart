@@ -95,6 +95,7 @@ class _AttributeFormState extends State<AttributeForm> {
                       initialSelection: widget.initialAttribute.type,
                       label: Text("Type"),
                       width: fieldWidth,
+                      requestFocusOnTap: false,
                       dropdownMenuEntries: [
                         for (final value
                             in widget
@@ -131,6 +132,8 @@ class _AttributeFormState extends State<AttributeForm> {
                         initialSelection: widget.initialAttribute.unitType,
                         label: Text("Unit type"),
                         width: fieldWidth,
+                        menuHeight: 500,
+                        enableFilter: true,
                         dropdownMenuEntries: [
                           for (final value in UnitType.values)
                             DropdownMenuEntry(value: value, label: value.name),

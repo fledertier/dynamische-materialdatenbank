@@ -50,7 +50,9 @@ class ConditionWidget extends ConsumerWidget {
             DropdownMenuFormField(
               hintText: "Attribute",
               enabled: enabled,
+              enableFilter: true,
               width: 200,
+              menuHeight: 500,
               initialSelection: attribute,
               dropdownMenuEntries:
                   attributes.map((attribute) {
@@ -78,6 +80,7 @@ class ConditionWidget extends ConsumerWidget {
               hintText: "Operator",
               initialSelection: condition.operator,
               enabled: enabled && condition.attribute != null,
+              requestFocusOnTap: false,
               dropdownMenuEntries:
                   operators.map((operation) {
                     return DropdownMenuEntry(

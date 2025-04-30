@@ -161,6 +161,7 @@ class _BooleanFieldState extends State<BooleanField> {
       ],
       onSelected: widget.onChanged,
       enableSearch: false,
+      requestFocusOnTap: false,
       validator: (value) {
         if (value == null) {
           if (widget.required) {

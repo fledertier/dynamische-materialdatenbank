@@ -52,6 +52,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
             DropdownMenuFormField(
               label: Text('Category'),
               expandedInsets: EdgeInsets.zero,
+              requestFocusOnTap: false,
               enabled: widget.initialCategory == null,
               initialSelection: widget.initialCategory,
               dropdownMenuEntries: [
