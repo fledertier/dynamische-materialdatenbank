@@ -3,8 +3,8 @@ import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.da
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'composition_card.dart';
 import 'material_category.dart';
+import 'proportion_widget.dart';
 
 class CompositionDialog extends StatefulWidget {
   const CompositionDialog({
@@ -13,7 +13,7 @@ class CompositionDialog extends StatefulWidget {
     this.initialCategory,
   });
 
-  final Composition composition;
+  final Proportion composition;
   final MaterialCategory? initialCategory;
 
   @override
