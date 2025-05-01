@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../query/condition_group.dart';
 import '../query/query_source_provider.dart';
 import '../widgets/resizable_builder.dart';
 import '../widgets/side_sheet.dart';
@@ -20,6 +24,9 @@ class AdvancedSearch extends ConsumerStatefulWidget {
 class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
   Key queryKey = UniqueKey();
   final promptController = TextEditingController();
+
+  CancelableOperation<ConditionGroup?>? operation;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +50,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
             IconButton(
               icon: Icon(Icons.refresh),
               tooltip: 'Reset',
-              onPressed: () {
-                queryKey = UniqueKey();
-                ref.read(advancedSearchQueryProvider.notifier).reset();
-                promptController.clear();
-              },
+              onPressed: clearQuery,
             ),
             IconButton(
               icon: Icon(Icons.close),
@@ -61,10 +64,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
             Expanded(
               child: MaterialPrompt(
                 controller: promptController,
-                onQuery: (query) {
-                  queryKey = UniqueKey();
-                  ref.read(advancedSearchQueryProvider.notifier).query = query;
-                },
+                onQuery: onQuery,
               ),
             ),
           ],
@@ -73,13 +73,23 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 24, 24),
               child: Form(
-                child: ConditionGroupWidget(
-                  key: queryKey,
-                  isRootNode: true,
-                  conditionGroup: query,
-                  onChanged: () {
-                    ref.read(advancedSearchQueryProvider.notifier).update();
-                  },
+                child: Stack(
+                  children: [
+                    ImageFiltered(
+                      enabled: isLoading,
+                      imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: ConditionGroupWidget(
+                        key: queryKey,
+                        isRootNode: true,
+                        conditionGroup: query,
+                        onChanged: updateQuery,
+                      ),
+                    ),
+                    if (isLoading)
+                      Positioned.fill(
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -87,5 +97,57 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
         );
       },
     );
+  }
+
+  void updateQuery() {
+    ref.read(advancedSearchQueryProvider.notifier).update();
+  }
+
+  void setQuery(ConditionGroup query) {
+    queryKey = UniqueKey();
+    ref.read(advancedSearchQueryProvider.notifier).query = query;
+  }
+
+  void clearQuery() {
+    queryKey = UniqueKey();
+    ref.read(advancedSearchQueryProvider.notifier).reset();
+    promptController.clear();
+  }
+
+  void onQuery(CancelableOperation<ConditionGroup?> operation) {
+    operation.then(
+      (query) {
+        setState(() {
+          isLoading = false;
+        });
+        if (query != null) {
+          setQuery(query);
+        }
+      },
+      onCancel: () {
+        setState(() {
+          isLoading = false;
+        });
+      },
+      onError: (error, stackTrace) {
+        setState(() {
+          isLoading = false;
+        });
+        showError(error);
+      },
+    );
+    setState(() {
+      isLoading = true;
+      this.operation = operation;
+    });
+  }
+
+  void showError(Object error) {
+    debugPrint('Error: $error');
+    Future.microtask(() {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Es ist ein Fehler aufgetreten')));
+    });
   }
 }

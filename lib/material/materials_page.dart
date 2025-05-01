@@ -25,7 +25,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
       header: Header(
         onFilter: () {
           setState(() {
-            showFilters = true;
+            showFilters = !showFilters;
           });
         },
       ),
