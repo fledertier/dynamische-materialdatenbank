@@ -1,4 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,16 +10,13 @@ import '../../../constants.dart';
 import '../../../types.dart';
 import '../../edit_mode_button.dart';
 import '../../material_service.dart';
-import '../attribute_card.dart';
-import '../attribute_label.dart';
+import 'composition_card.dart';
 import 'composition_dialog.dart';
 import 'composition_element.dart';
 import 'material_category.dart';
 
-typedef Composition = Map<String, num>;
-
-class CompositionCard extends ConsumerWidget {
-  const CompositionCard(this.material, {super.key});
+class CompositionCardSmall extends ConsumerWidget {
+  const CompositionCardSmall(this.material, {super.key});
 
   final Json material;
 
@@ -60,30 +59,33 @@ class CompositionCard extends ConsumerWidget {
     }
 
     return AttributeCard(
-      columns: 4,
+      columns: 2,
       label: AttributeLabel(label: attribute?.name),
-      child: SizedBox(
-        height: 40,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 8,
-          children: [
-            for (final entry in sortedComposition)
-              Flexible(
-                flex: entry.value.round(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 8,
+        children: [
+          for (final entry in sortedComposition)
+            SizedBox(
+              height: 40,
+              child: FractionallySizedBox(
+                widthFactor: entry.value / sortedComposition.first.value,
+                alignment: Alignment.centerLeft,
                 child: CompositionElement(
                   category: entry.key,
                   share: entry.value,
+                  alignment: Alignment.centerLeft,
                   onPressed: edit ? () => updateComposition(entry.key) : null,
                 ),
               ),
-            if (edit && composition.length < MaterialCategory.values.length)
-              IconButton.outlined(
-                icon: Icon(Icons.add),
-                onPressed: () => updateComposition(null),
-              ),
-          ],
-        ),
+            ),
+          if (edit && composition.length < MaterialCategory.values.length)
+            IconButton.outlined(
+              icon: Icon(Icons.add),
+              onPressed: () => updateComposition(null),
+            ),
+        ],
       ),
     );
   }
