@@ -9,7 +9,6 @@ import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
 import 'attribute/composition/composition_card.dart';
-import 'attribute/fire_behavior/fire_behavior_standard_card.dart';
 import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -45,7 +44,9 @@ class MaterialDetailPage extends ConsumerWidget {
                         // WValueCard(material),
                         // OriginCountryCard(material),
                         CompositionCard(material),
-                        FireBehaviorStandardCard(material),
+                        // FireBehaviorStandardCard(material),
+                        // ArealDensityCard(material),
+                        // DensityCard(material),
                       ],
                     ),
                   ),
