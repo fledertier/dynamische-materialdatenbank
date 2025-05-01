@@ -13,7 +13,7 @@ class CompositionDialog extends StatefulWidget {
     this.initialCategory,
   });
 
-  final Proportion composition;
+  final Proportions composition;
   final MaterialCategory? initialCategory;
 
   @override

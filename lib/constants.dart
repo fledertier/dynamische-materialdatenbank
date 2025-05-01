@@ -26,6 +26,7 @@ class Attributes {
   static const uValue = "u-value";
   static const wValue = "w-value";
   static const composition = "composition";
+  static const components = "components";
   static const fireBehaviorStandard = "fire behavior standard";
   static const arealDensity = "areal density";
   static const density = "density";

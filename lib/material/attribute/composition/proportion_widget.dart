@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-typedef Proportion = Map<String, num>;
+typedef Proportions = Map<String, num>;
 
 class ProportionWidget extends StatelessWidget {
   const ProportionWidget({
