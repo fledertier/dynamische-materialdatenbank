@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +9,7 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
+import 'composition.dart';
 import 'composition_dialog.dart';
 import 'material_category.dart';
 import 'proportion_widget.dart';
@@ -35,23 +35,20 @@ class CompositionCard extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
     final attribute = ref.watch(attributeProvider(Attributes.composition));
 
-    final composition = Proportions.from(
+    final value = List<Json>.from(
       material[Attributes.composition] ??
-          {
-            MaterialCategory.minerals.name: 58,
-            MaterialCategory.woods.name: 40,
-            MaterialCategory.plastics.name: 2,
-          },
+          [
+            {'category': MaterialCategory.minerals.name, 'share': 58},
+            {'category': MaterialCategory.woods.name, 'share': 40},
+            {'category': MaterialCategory.plastics.name, 'share': 2},
+          ],
     );
+    final composition = value.map(Composition.fromJson).toList();
     final sortedComposition =
-        composition
-            .mapKeys(MaterialCategory.values.byName)
-            .entries
-            .sortedBy((entry) => entry.value)
-            .reversed;
+        composition.sortedBy((composition) => composition.share).reversed;
 
     Future<void> updateComposition(MaterialCategory? category) async {
-      final updatedComposition = await showDialog<Proportions>(
+      final updatedComposition = await showDialog<List<Composition>>(
         context: context,
         builder: (context) {
           return CompositionDialog(
@@ -63,7 +60,9 @@ class CompositionCard extends ConsumerWidget {
       if (updatedComposition != null) {
         ref.read(materialServiceProvider).updateMaterial({
           Attributes.id: material[Attributes.id],
-          Attributes.composition: updatedComposition,
+          Attributes.composition: updatedComposition.map(
+            (composition) => composition.toJson(),
+          ),
         });
       }
     }
@@ -81,11 +80,14 @@ class CompositionCard extends ConsumerWidget {
           children: [
             for (final entry in sortedComposition)
               ProportionWidget(
-                label: entry.key.name,
-                color: entry.key.color,
-                share: entry.value,
-                maxShare: sortedComposition.first.value,
-                onPressed: edit ? () => updateComposition(entry.key) : null,
+                proportion: Proportion(
+                  label: entry.category.name,
+                  color: entry.category.color,
+                  share: entry.share,
+                ),
+                maxShare: sortedComposition.first.share,
+                onPressed:
+                    edit ? () => updateComposition(entry.category) : null,
                 axis: axis,
               ),
             if (edit && composition.length < MaterialCategory.values.length)

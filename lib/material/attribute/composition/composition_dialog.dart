@@ -3,8 +3,8 @@ import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.da
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'composition.dart';
 import 'material_category.dart';
-import 'proportion_widget.dart';
 
 class CompositionDialog extends StatefulWidget {
   const CompositionDialog({
@@ -13,7 +13,7 @@ class CompositionDialog extends StatefulWidget {
     this.initialCategory,
   });
 
-  final Proportions composition;
+  final List<Composition> composition;
   final MaterialCategory? initialCategory;
 
   @override
@@ -29,7 +29,9 @@ class _CompositionDialogState extends State<CompositionDialog> {
   Iterable<MaterialCategory> get availableCategories {
     if (widget.initialCategory == null) {
       return MaterialCategory.values.whereNot(
-        (category) => widget.composition.containsKey(category.name),
+        (category) => widget.composition.any(
+          (composition) => composition.category == category,
+        ),
       );
     } else {
       return MaterialCategory.values;
@@ -78,7 +80,13 @@ class _CompositionDialogState extends State<CompositionDialog> {
             ),
             TextFormField(
               initialValue:
-                  widget.composition[widget.initialCategory?.name]?.toString(),
+                  widget.composition
+                      .singleWhereOrNull(
+                        (composition) =>
+                            composition.category == widget.initialCategory,
+                      )
+                      ?.share
+                      .toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -110,7 +118,13 @@ class _CompositionDialogState extends State<CompositionDialog> {
           onPressed: () {
             if (formKey.currentState!.validate()) {
               formKey.currentState!.save();
-              context.pop({...widget.composition, category.name: share});
+              context.pop([
+                ...widget.composition.where(
+                  (composition) =>
+                      composition.category != widget.initialCategory,
+                ),
+                Composition(category: category, share: share),
+              ]);
             }
           },
         ),

@@ -11,6 +11,7 @@ import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
 import '../composition/proportion_widget.dart';
+import 'component.dart';
 
 class ComponentsCard extends ConsumerWidget {
   const ComponentsCard(this.material, {super.key})
@@ -33,21 +34,22 @@ class ComponentsCard extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
     final attribute = ref.watch(attributeProvider(Attributes.components));
 
-    final components = Proportions.from(
+    final value = List<Json>.from(
       material[Attributes.components] ??
-          {
-            'Portland cement': 44,
-            'Wood Swedish fir': 31,
-            'Water': 12,
-            'Limestone powder': 9,
-            'Paint, water based': 2,
-          },
+          [
+            {'name': 'Portland cement', 'share': 44},
+            {'name': 'Wood Swedish fir', 'share': 31},
+            {'name': 'Water', 'share': 12},
+            {'name': 'Limestone powder', 'share': 9},
+            {'name': 'Paint, water based', 'share': 2},
+          ],
     );
+    final components = value.map(Component.fromJson).toList();
     final sortedComponents =
-        components.entries.sortedBy((entry) => entry.value).reversed;
+        components.sortedBy((component) => component.share).reversed;
 
     Future<void> updateComponents(String? name) async {
-      final updatedComponents = await showDialog<Proportions>(
+      final updatedComponents = await showDialog<List<Component>>(
         context: context,
         builder: (context) {
           return ComponentsDialog(components: components, initialName: name);
@@ -56,7 +58,9 @@ class ComponentsCard extends ConsumerWidget {
       if (updatedComponents != null) {
         ref.read(materialServiceProvider).updateMaterial({
           Attributes.id: material[Attributes.id],
-          Attributes.components: updatedComponents,
+          Attributes.components: updatedComponents.map(
+            (component) => component.toJson(),
+          ),
         });
       }
     }
@@ -74,11 +78,13 @@ class ComponentsCard extends ConsumerWidget {
           children: [
             for (final entry in sortedComponents)
               ProportionWidget(
-                label: entry.key,
-                color: ColorScheme.of(context).primaryContainer,
-                share: entry.value,
-                maxShare: sortedComponents.first.value,
-                onPressed: edit ? () => updateComponents(entry.key) : null,
+                proportion: Proportion(
+                  label: entry.name,
+                  color: ColorScheme.of(context).primaryContainer,
+                  share: entry.share,
+                ),
+                maxShare: sortedComponents.first.share,
+                onPressed: edit ? () => updateComponents(entry.name) : null,
                 axis: axis,
               ),
             if (edit)

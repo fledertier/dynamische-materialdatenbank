@@ -1,7 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../composition/proportion_widget.dart';
+import 'component.dart';
 
 class ComponentsDialog extends StatefulWidget {
   const ComponentsDialog({
@@ -10,7 +11,7 @@ class ComponentsDialog extends StatefulWidget {
     this.initialName,
   });
 
-  final Proportions components;
+  final List<Component> components;
   final String? initialName;
 
   @override
@@ -50,7 +51,13 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
               },
             ),
             TextFormField(
-              initialValue: widget.components[widget.initialName]?.toString(),
+              initialValue:
+                  widget.components
+                      .singleWhereOrNull(
+                        (component) => component.name == widget.initialName,
+                      )
+                      ?.share
+                      .toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -82,7 +89,12 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
           onPressed: () {
             if (formKey.currentState!.validate()) {
               formKey.currentState!.save();
-              context.pop({...widget.components, name: share});
+              context.pop([
+                ...widget.components.where(
+                  (component) => component.name != widget.initialName,
+                ),
+                Component(name: name, share: share),
+              ]);
             }
           },
         ),

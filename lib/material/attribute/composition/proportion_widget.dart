@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 
-typedef Proportions = Map<String, num>;
-
-class ProportionWidget extends StatelessWidget {
-  const ProportionWidget({
-    super.key,
+class Proportion {
+  const Proportion({
     required this.label,
     required this.color,
     required this.share,
-    required this.maxShare,
-    required this.axis,
-    this.onPressed,
   });
 
   final String label;
   final Color color;
   final num share;
+}
+
+class ProportionWidget extends StatelessWidget {
+  const ProportionWidget({
+    super.key,
+    required this.proportion,
+    required this.maxShare,
+    required this.axis,
+    this.onPressed,
+  });
+
+  final Proportion proportion;
   final num maxShare;
   final Axis axis;
   final VoidCallback? onPressed;
@@ -27,7 +33,7 @@ class ProportionWidget extends StatelessWidget {
     final container = SizedBox(
       height: 40,
       child: Material(
-        color: color,
+        color: proportion.color,
         shape: StadiumBorder(),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -40,7 +46,7 @@ class ProportionWidget extends StatelessWidget {
                 Axis.vertical => Alignment.centerLeft,
               },
               child: Text(
-                label,
+                proportion.label,
                 style: textTheme.bodyMedium!.copyWith(
                   fontFamily: 'Lexend',
                   color: Colors.black,
@@ -55,9 +61,12 @@ class ProportionWidget extends StatelessWidget {
     );
 
     return switch (axis) {
-      Axis.horizontal => Flexible(flex: share.round(), child: container),
+      Axis.horizontal => Flexible(
+        flex: proportion.share.round(),
+        child: container,
+      ),
       Axis.vertical => FractionallySizedBox(
-        widthFactor: share / maxShare,
+        widthFactor: proportion.share / maxShare,
         alignment: Alignment.centerLeft,
         child: container,
       ),
