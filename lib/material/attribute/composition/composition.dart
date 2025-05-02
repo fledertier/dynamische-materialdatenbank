@@ -1,11 +1,12 @@
 import '../../../types.dart';
 import 'material_category.dart';
+import 'proportion.dart';
 
-class Composition {
-  const Composition({required this.category, required this.share});
+class Composition extends Proportion {
+  Composition({required this.category, required super.share})
+    : super(name: category.name, color: category.color);
 
   final MaterialCategory category;
-  final num share;
 
   factory Composition.fromJson(Json json) {
     return Composition(

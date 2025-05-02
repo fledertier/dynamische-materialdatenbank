@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +11,7 @@ import '../attribute_label.dart';
 import 'composition.dart';
 import 'composition_dialog.dart';
 import 'material_category.dart';
-import 'proportion_widget.dart';
+import 'proportions_widget.dart';
 
 class CompositionCard extends ConsumerWidget {
   const CompositionCard(this.material, {super.key})
@@ -44,8 +43,6 @@ class CompositionCard extends ConsumerWidget {
           ],
     );
     final composition = value.map(Composition.fromJson).toList();
-    final sortedComposition =
-        composition.sortedBy((composition) => composition.share).reversed;
 
     Future<void> updateComposition(MaterialCategory? category) async {
       final updatedComposition = await showDialog<List<Composition>>(
@@ -70,33 +67,16 @@ class CompositionCard extends ConsumerWidget {
     return AttributeCard(
       columns: columns,
       label: AttributeLabel(label: attribute?.name),
-      child: SizedBox(
+      child: ProportionsWidget(
         height: height,
-        child: Flex(
-          direction: axis,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          spacing: 8,
-          children: [
-            for (final entry in sortedComposition)
-              ProportionWidget(
-                proportion: Proportion(
-                  label: entry.category.name,
-                  color: entry.category.color,
-                  share: entry.share,
-                ),
-                maxShare: sortedComposition.first.share,
-                onPressed:
-                    edit ? () => updateComposition(entry.category) : null,
-                axis: axis,
-              ),
-            if (edit && composition.length < MaterialCategory.values.length)
-              IconButton.outlined(
-                icon: Icon(Icons.add),
-                onPressed: () => updateComposition(null),
-              ),
-          ],
-        ),
+        axis: axis,
+        edit: edit,
+        proportions: composition,
+        maxCount: MaterialCategory.values.length,
+        update: (composition) {
+          // todo: pass whole composition
+          updateComposition(composition?.category);
+        },
       ),
     );
   }

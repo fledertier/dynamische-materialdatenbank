@@ -89,6 +89,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
                   id: widget.id ?? generateId(),
                   name: name,
                   share: share,
+                  color: ColorScheme.of(context).primaryFixedDim,
                 ),
               ]);
             }

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/components/components_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,7 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
-import '../composition/proportion_widget.dart';
+import '../composition/proportions_widget.dart';
 import 'component.dart';
 
 class ComponentsCard extends ConsumerWidget {
@@ -37,16 +36,34 @@ class ComponentsCard extends ConsumerWidget {
     final value = List<Json>.from(
       material[Attributes.components] ??
           [
-            {'id': '1234', 'name': 'Portland cement', 'share': 44},
-            {'id': '2345', 'name': 'Wood Swedish fir', 'share': 31},
-            {'id': '3456', 'name': 'Water', 'share': 12},
-            {'id': '4567', 'name': 'Limestone powder', 'share': 9},
-            {'id': '5678', 'name': 'Paint, water based', 'share': 2},
+            {
+              'id': '1234',
+              'name': 'Portland cement',
+              'share': 44,
+              'color': 4288979605,
+            },
+            {
+              'id': '2345',
+              'name': 'Wood Swedish fir',
+              'share': 31,
+              'color': 4290027903,
+            },
+            {'id': '3456', 'name': 'Water', 'share': 12, 'color': 4287024366},
+            {
+              'id': '4567',
+              'name': 'Limestone powder',
+              'share': 9,
+              'color': 4291938740,
+            },
+            {
+              'id': '5678',
+              'name': 'Paint, water based',
+              'share': 2,
+              'color': 4279735534,
+            },
           ],
     );
     final components = value.map(Component.fromJson).toList();
-    final sortedComponents =
-        components.sortedBy((component) => component.share).reversed;
 
     Future<void> updateComponents(String? id) async {
       final updatedComponents = await showDialog<List<Component>>(
@@ -68,32 +85,15 @@ class ComponentsCard extends ConsumerWidget {
     return AttributeCard(
       columns: columns,
       label: AttributeLabel(label: attribute?.name),
-      child: SizedBox(
+      child: ProportionsWidget(
         height: height,
-        child: Flex(
-          direction: axis,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          spacing: 8,
-          children: [
-            for (final entry in sortedComponents)
-              ProportionWidget(
-                proportion: Proportion(
-                  label: entry.name,
-                  color: ColorScheme.of(context).primaryContainer,
-                  share: entry.share,
-                ),
-                maxShare: sortedComponents.first.share,
-                onPressed: edit ? () => updateComponents(entry.id) : null,
-                axis: axis,
-              ),
-            if (edit)
-              IconButton.outlined(
-                icon: Icon(Icons.add),
-                onPressed: () => updateComponents(null),
-              ),
-          ],
-        ),
+        axis: axis,
+        edit: edit,
+        proportions: components,
+        update: (component) {
+          // todo: pass whole component
+          updateComponents(component?.id);
+        },
       ),
     );
   }
