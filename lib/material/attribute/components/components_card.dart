@@ -37,22 +37,22 @@ class ComponentsCard extends ConsumerWidget {
     final value = List<Json>.from(
       material[Attributes.components] ??
           [
-            {'name': 'Portland cement', 'share': 44},
-            {'name': 'Wood Swedish fir', 'share': 31},
-            {'name': 'Water', 'share': 12},
-            {'name': 'Limestone powder', 'share': 9},
-            {'name': 'Paint, water based', 'share': 2},
+            {'id': '1234', 'name': 'Portland cement', 'share': 44},
+            {'id': '2345', 'name': 'Wood Swedish fir', 'share': 31},
+            {'id': '3456', 'name': 'Water', 'share': 12},
+            {'id': '4567', 'name': 'Limestone powder', 'share': 9},
+            {'id': '5678', 'name': 'Paint, water based', 'share': 2},
           ],
     );
     final components = value.map(Component.fromJson).toList();
     final sortedComponents =
         components.sortedBy((component) => component.share).reversed;
 
-    Future<void> updateComponents(String? name) async {
+    Future<void> updateComponents(String? id) async {
       final updatedComponents = await showDialog<List<Component>>(
         context: context,
         builder: (context) {
-          return ComponentsDialog(components: components, initialName: name);
+          return ComponentsDialog(components: components, id: id);
         },
       );
       if (updatedComponents != null) {
@@ -84,7 +84,7 @@ class ComponentsCard extends ConsumerWidget {
                   share: entry.share,
                 ),
                 maxShare: sortedComponents.first.share,
-                onPressed: edit ? () => updateComponents(entry.name) : null,
+                onPressed: edit ? () => updateComponents(entry.id) : null,
                 axis: axis,
               ),
             if (edit)

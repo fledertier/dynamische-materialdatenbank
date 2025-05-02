@@ -1,22 +1,27 @@
 import '../../../types.dart';
 
 class Component {
-  const Component({required this.name, required this.share});
+  const Component({required this.id, required this.name, required this.share});
 
+  final String id;
   final String name;
   final num share;
 
   factory Component.fromJson(Json json) {
-    return Component(name: json['name'] as String, share: json['share'] as num);
+    return Component(
+      id: json['id'],
+      name: json['name'] as String,
+      share: json['share'] as num,
+    );
   }
 
   Json toJson() {
-    return {'name': name, 'share': share};
+    return {'id': id, 'name': name, 'share': share};
   }
 
   @override
   int get hashCode {
-    return Object.hash(name, share);
+    return Object.hash(id, name, share);
   }
 
   @override
@@ -24,6 +29,6 @@ class Component {
     if (identical(this, other)) return true;
     if (other is! Component) return false;
 
-    return name == other.name && share == other.share;
+    return id == other.id && name == other.name && share == other.share;
   }
 }

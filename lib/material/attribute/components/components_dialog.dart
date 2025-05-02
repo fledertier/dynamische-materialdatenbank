@@ -1,18 +1,15 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'component.dart';
 
 class ComponentsDialog extends StatefulWidget {
-  const ComponentsDialog({
-    super.key,
-    required this.components,
-    this.initialName,
-  });
+  const ComponentsDialog({super.key, required this.components, this.id});
 
   final List<Component> components;
-  final String? initialName;
+  final String? id;
 
   @override
   State<ComponentsDialog> createState() => _ComponentsDialogState();
@@ -26,10 +23,11 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final component = widget.components.singleWhereOrNull(
+      (component) => component.id == widget.id,
+    );
     return AlertDialog(
-      title: Text(
-        widget.initialName == null ? 'Add component' : 'Edit component',
-      ),
+      title: Text(widget.id == null ? 'Add component' : 'Edit component'),
       content: Form(
         key: formKey,
         child: Column(
@@ -38,7 +36,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
           spacing: 16,
           children: [
             TextFormField(
-              initialValue: widget.initialName,
+              initialValue: component?.name,
               decoration: InputDecoration(labelText: 'Name'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -51,13 +49,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
               },
             ),
             TextFormField(
-              initialValue:
-                  widget.components
-                      .singleWhereOrNull(
-                        (component) => component.name == widget.initialName,
-                      )
-                      ?.share
-                      .toString(),
+              initialValue: component?.share.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -91,9 +83,13 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
               formKey.currentState!.save();
               context.pop([
                 ...widget.components.where(
-                  (component) => component.name != widget.initialName,
+                  (component) => component.id != widget.id,
                 ),
-                Component(name: name, share: share),
+                Component(
+                  id: widget.id ?? generateId(),
+                  name: name,
+                  share: share,
+                ),
               ]);
             }
           },

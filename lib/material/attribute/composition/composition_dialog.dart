@@ -40,6 +40,9 @@ class _CompositionDialogState extends State<CompositionDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final composition = widget.composition.singleWhereOrNull(
+      (composition) => composition.category == widget.initialCategory,
+    );
     return AlertDialog(
       title: Text(
         widget.initialCategory == null ? 'Add category' : 'Edit category',
@@ -56,7 +59,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
               expandedInsets: EdgeInsets.zero,
               requestFocusOnTap: false,
               enabled: widget.initialCategory == null,
-              initialSelection: widget.initialCategory,
+              initialSelection: composition?.category,
               dropdownMenuEntries: [
                 for (final category in availableCategories)
                   DropdownMenuEntry(
@@ -79,14 +82,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
               },
             ),
             TextFormField(
-              initialValue:
-                  widget.composition
-                      .singleWhereOrNull(
-                        (composition) =>
-                            composition.category == widget.initialCategory,
-                      )
-                      ?.share
-                      .toString(),
+              initialValue: composition?.share.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
