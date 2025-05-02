@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
 import 'attribute/composition/composition_card.dart';
+import 'attribute/description/description_card.dart';
+import 'attribute/name/name_card.dart';
 import 'edit_mode_button.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
@@ -37,6 +40,8 @@ class MaterialDetailPage extends ConsumerWidget {
                       spacing: 16,
                       runSpacing: 16,
                       children: [
+                        NameCard(material),
+                        DescriptionCard(material),
                         // LightReflectionCard(material),
                         // LightAbsorptionCard(material),
                         // LightTransmissionCard(material),
@@ -64,7 +69,7 @@ class MaterialDetailPage extends ConsumerWidget {
                   width: 300,
                   child: ListView(
                     children: [
-                      for (final attribute in material.keys)
+                      for (final attribute in material.keys.sorted())
                         Labeled(
                           label: Text(attributes[attribute]?.name ?? attribute),
                           child: Text(material[attribute].toString()),
