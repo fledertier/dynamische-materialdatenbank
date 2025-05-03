@@ -64,7 +64,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
                       radius: 10,
                       backgroundColor: category.color,
                     ),
-                    label: category.name,
+                    label: category.nameDe,
                     value: category,
                   ),
               ],

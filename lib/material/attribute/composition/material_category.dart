@@ -10,13 +10,22 @@ enum MaterialCategory {
 }
 
 extension MaterialCategoryExtension on MaterialCategory {
-  String get label => switch (this) {
+  String get nameDe => switch (this) {
     MaterialCategory.minerals => 'Mineralien',
     MaterialCategory.metals => 'Metalle',
     MaterialCategory.woods => 'Hölzer',
     MaterialCategory.plantsAndAnimals => 'Pflanzen & Tiere',
     MaterialCategory.plastics => 'Kunststoffe',
     MaterialCategory.textiles => 'Textilien',
+  };
+
+  String get nameEn => switch (this) {
+    MaterialCategory.minerals => 'Minerals',
+    MaterialCategory.metals => 'Metals',
+    MaterialCategory.woods => 'Woods',
+    MaterialCategory.plantsAndAnimals => 'Plants & Animals',
+    MaterialCategory.plastics => 'Plastics',
+    MaterialCategory.textiles => 'Textiles',
   };
 
   Color get color => switch (this) {

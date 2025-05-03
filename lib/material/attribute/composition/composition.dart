@@ -4,7 +4,11 @@ import 'proportion.dart';
 
 class Composition extends Proportion {
   Composition({required this.category, required super.share})
-    : super(name: category.name, color: category.color);
+    : super(
+        nameDe: category.nameDe,
+        nameEn: category.nameEn,
+        color: category.color,
+      );
 
   final MaterialCategory category;
 

@@ -21,7 +21,8 @@ class ComponentsDialog extends StatefulWidget {
 class _ComponentsDialogState extends State<ComponentsDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late String name;
+  late String nameDe;
+  late String? nameEn;
   late num share;
 
   @override
@@ -38,8 +39,8 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
           spacing: 16,
           children: [
             TextFormField(
-              initialValue: widget.initialComponent?.name,
-              decoration: InputDecoration(labelText: 'Name'),
+              initialValue: widget.initialComponent?.nameDe,
+              decoration: InputDecoration(labelText: 'Name (De)'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a name';
@@ -47,7 +48,14 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
                 return null;
               },
               onSaved: (value) {
-                name = value!;
+                nameDe = value!;
+              },
+            ),
+            TextFormField(
+              initialValue: widget.initialComponent?.nameEn,
+              decoration: InputDecoration(labelText: 'Name (En)'),
+              onSaved: (value) {
+                nameEn = value;
               },
             ),
             TextFormField(
@@ -89,7 +97,8 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
                 ),
                 Component(
                   id: widget.initialComponent?.id ?? generateId(),
-                  name: name,
+                  nameDe: nameDe,
+                  nameEn: nameEn,
                   share: share,
                   color: ColorScheme.of(context).primaryFixedDim,
                 ),
