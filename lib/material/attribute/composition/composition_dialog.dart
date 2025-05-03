@@ -23,8 +23,8 @@ class CompositionDialog extends StatefulWidget {
 class _CompositionDialogState extends State<CompositionDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late MaterialCategory category;
-  late num share;
+  late final category = ValueNotifier(widget.initialComposition?.category);
+  late final share = ValueNotifier(widget.initialComposition?.share);
 
   Iterable<MaterialCategory> get availableCategories {
     if (widget.initialComposition == null) {
@@ -56,7 +56,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
               expandedInsets: EdgeInsets.zero,
               requestFocusOnTap: false,
               enabled: widget.initialComposition == null,
-              initialSelection: widget.initialComposition?.category,
+              initialSelection: category.value,
               dropdownMenuEntries: [
                 for (final category in availableCategories)
                   DropdownMenuEntry(
@@ -74,12 +74,12 @@ class _CompositionDialogState extends State<CompositionDialog> {
                 }
                 return null;
               },
-              onSaved: (value) {
-                category = value!;
+              onSelected: (value) {
+                category.value = value;
               },
             ),
             TextFormField(
-              initialValue: widget.initialComposition?.share.toString(),
+              initialValue: share.value?.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -92,8 +92,8 @@ class _CompositionDialogState extends State<CompositionDialog> {
                 }
                 return null;
               },
-              onSaved: (value) {
-                share = num.parse(value!);
+              onChanged: (value) {
+                share.value = num.tryParse(value);
               },
             ),
           ],
@@ -106,21 +106,34 @@ class _CompositionDialogState extends State<CompositionDialog> {
             context.pop();
           },
         ),
-        TextButton(
-          child: Text('Save'),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              formKey.currentState!.save();
-              context.pop([
-                ...widget.composition.where(
-                  (composition) => composition != widget.initialComposition,
-                ),
-                Composition(category: category, share: share),
-              ]);
-            }
+        ListenableBuilder(
+          listenable: Listenable.merge([category, share]),
+          builder: (context, child) {
+            return TextButton(
+              onPressed: hasChanges ? save : null,
+              child: Text('Save'),
+            );
           },
         ),
       ],
     );
+  }
+
+  bool get hasChanges {
+    return widget.initialComposition == null ||
+        widget.initialComposition!.category != category.value ||
+        widget.initialComposition!.share != share.value;
+  }
+
+  void save() {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    context.pop([
+      ...widget.composition.where(
+        (composition) => composition != widget.initialComposition,
+      ),
+      Composition(category: category.value!, share: share.value!),
+    ]);
   }
 }

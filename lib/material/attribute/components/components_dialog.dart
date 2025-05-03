@@ -21,9 +21,9 @@ class ComponentsDialog extends StatefulWidget {
 class _ComponentsDialogState extends State<ComponentsDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late String nameDe;
-  late String? nameEn;
-  late num share;
+  late final nameDe = ValueNotifier(widget.initialComponent?.nameDe);
+  late final nameEn = ValueNotifier(widget.initialComponent?.nameEn);
+  late final share = ValueNotifier(widget.initialComponent?.share);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
           spacing: 16,
           children: [
             TextFormField(
-              initialValue: widget.initialComponent?.nameDe,
+              initialValue: nameDe.value,
               decoration: InputDecoration(labelText: 'Name (De)'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -47,19 +47,27 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
                 }
                 return null;
               },
-              onSaved: (value) {
-                nameDe = value!;
+              onChanged: (value) {
+                nameDe.value = value;
+              },
+            ),
+            ListenableBuilder(
+              listenable: nameDe,
+              builder: (context, child) {
+                return TextFormField(
+                  initialValue: nameEn.value,
+                  decoration: InputDecoration(
+                    labelText: 'Name (En)',
+                    hintText: nameDe.value,
+                  ),
+                  onChanged: (value) {
+                    nameEn.value = value.isNotEmpty ? value : null;
+                  },
+                );
               },
             ),
             TextFormField(
-              initialValue: widget.initialComponent?.nameEn,
-              decoration: InputDecoration(labelText: 'Name (En)'),
-              onSaved: (value) {
-                nameEn = value;
-              },
-            ),
-            TextFormField(
-              initialValue: widget.initialComponent?.share.toString(),
+              initialValue: share.value?.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -72,8 +80,8 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
                 }
                 return null;
               },
-              onSaved: (value) {
-                share = num.parse(value!);
+              onChanged: (value) {
+                share.value = num.tryParse(value);
               },
             ),
           ],
@@ -86,27 +94,41 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
             context.pop();
           },
         ),
-        TextButton(
-          child: Text('Save'),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              formKey.currentState!.save();
-              context.pop([
-                ...widget.components.where(
-                  (component) => component != widget.initialComponent,
-                ),
-                Component(
-                  id: widget.initialComponent?.id ?? generateId(),
-                  nameDe: nameDe,
-                  nameEn: nameEn,
-                  share: share,
-                  color: ColorScheme.of(context).primaryFixedDim,
-                ),
-              ]);
-            }
+        ListenableBuilder(
+          listenable: Listenable.merge([nameDe, nameEn, share]),
+          builder: (context, child) {
+            return TextButton(
+              onPressed: hasChanges ? save : null,
+              child: Text('Save'),
+            );
           },
         ),
       ],
     );
+  }
+
+  bool get hasChanges {
+    return widget.initialComponent == null ||
+        widget.initialComponent!.nameDe != nameDe.value ||
+        widget.initialComponent!.nameEn != nameEn.value ||
+        widget.initialComponent!.share != share.value;
+  }
+
+  void save() {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    context.pop([
+      ...widget.components.where(
+        (component) => component != widget.initialComponent,
+      ),
+      Component(
+        id: widget.initialComponent?.id ?? generateId(),
+        nameDe: nameDe.value!,
+        nameEn: nameEn.value,
+        share: share.value!,
+        color: ColorScheme.of(context).primaryFixedDim,
+      ),
+    ]);
   }
 }
