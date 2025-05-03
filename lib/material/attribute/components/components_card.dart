@@ -15,17 +15,14 @@ import 'component.dart';
 class ComponentsCard extends ConsumerWidget {
   const ComponentsCard(this.material, {super.key})
     : columns = 4,
-      height = 40,
       axis = Axis.horizontal;
 
   const ComponentsCard.small(this.material, {super.key})
     : columns = 2,
-      height = null,
       axis = Axis.vertical;
 
   final Json material;
   final int columns;
-  final double? height;
   final Axis axis;
 
   @override
@@ -65,11 +62,14 @@ class ComponentsCard extends ConsumerWidget {
     );
     final components = value.map(Component.fromJson).toList();
 
-    Future<void> updateComponents(String? id) async {
+    Future<void> updateComponents(Component? initialComponent) async {
       final updatedComponents = await showDialog<List<Component>>(
         context: context,
         builder: (context) {
-          return ComponentsDialog(components: components, id: id);
+          return ComponentsDialog(
+            components: components,
+            initialComponent: initialComponent,
+          );
         },
       );
       if (updatedComponents != null) {
@@ -86,14 +86,11 @@ class ComponentsCard extends ConsumerWidget {
       columns: columns,
       label: AttributeLabel(label: attribute?.name),
       child: ProportionsWidget(
-        height: height,
+        height: 40,
         axis: axis,
         edit: edit,
         proportions: components,
-        update: (component) {
-          // todo: pass whole component
-          updateComponents(component?.id);
-        },
+        update: updateComponents,
       ),
     );
   }

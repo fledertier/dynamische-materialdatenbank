@@ -16,17 +16,14 @@ import 'proportions_widget.dart';
 class CompositionCard extends ConsumerWidget {
   const CompositionCard(this.material, {super.key})
     : columns = 4,
-      height = 40,
       axis = Axis.horizontal;
 
   const CompositionCard.small(this.material, {super.key})
     : columns = 2,
-      height = null,
       axis = Axis.vertical;
 
   final Json material;
   final int columns;
-  final double? height;
   final Axis axis;
 
   @override
@@ -44,13 +41,13 @@ class CompositionCard extends ConsumerWidget {
     );
     final composition = value.map(Composition.fromJson).toList();
 
-    Future<void> updateComposition(MaterialCategory? category) async {
+    Future<void> updateComposition(Composition? initialComposition) async {
       final updatedComposition = await showDialog<List<Composition>>(
         context: context,
         builder: (context) {
           return CompositionDialog(
             composition: composition,
-            initialCategory: category,
+            initialComposition: initialComposition,
           );
         },
       );
@@ -68,15 +65,12 @@ class CompositionCard extends ConsumerWidget {
       columns: columns,
       label: AttributeLabel(label: attribute?.name),
       child: ProportionsWidget(
-        height: height,
+        height: 40,
         axis: axis,
         edit: edit,
-        proportions: composition,
         maxCount: MaterialCategory.values.length,
-        update: (composition) {
-          // todo: pass whole composition
-          updateComposition(composition?.category);
-        },
+        proportions: composition,
+        update: updateComposition,
       ),
     );
   }

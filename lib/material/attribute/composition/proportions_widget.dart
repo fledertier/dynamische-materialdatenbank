@@ -27,7 +27,7 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
         proportions.sortedBy((proportion) => proportion.share).reversed;
 
     return SizedBox(
-      height: height,
+      height: axis == Axis.horizontal ? height : null,
       child: Flex(
         direction: axis,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,6 +40,7 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
               maxShare: sortedProportions.first.share,
               onPressed: edit ? () => update(proportion) : null,
               axis: axis,
+              height: height,
             ),
           if (edit && proportions.length < (maxCount ?? double.infinity))
             IconButton.outlined(
@@ -58,12 +59,14 @@ class ProportionWidget extends StatelessWidget {
     required this.proportion,
     required this.maxShare,
     required this.axis,
+    this.height,
     this.onPressed,
   });
 
   final Proportion proportion;
   final num maxShare;
   final Axis axis;
+  final double? height;
   final VoidCallback? onPressed;
 
   @override
@@ -71,7 +74,7 @@ class ProportionWidget extends StatelessWidget {
     final textTheme = TextTheme.of(context);
 
     final container = SizedBox(
-      height: 40,
+      height: height,
       child: Material(
         color: proportion.color,
         shape: StadiumBorder(),

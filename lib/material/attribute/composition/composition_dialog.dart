@@ -10,11 +10,11 @@ class CompositionDialog extends StatefulWidget {
   const CompositionDialog({
     super.key,
     required this.composition,
-    this.initialCategory,
+    this.initialComposition,
   });
 
   final List<Composition> composition;
-  final MaterialCategory? initialCategory;
+  final Composition? initialComposition;
 
   @override
   State<CompositionDialog> createState() => _CompositionDialogState();
@@ -27,7 +27,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
   late num share;
 
   Iterable<MaterialCategory> get availableCategories {
-    if (widget.initialCategory == null) {
+    if (widget.initialComposition == null) {
       return MaterialCategory.values.whereNot(
         (category) => widget.composition.any(
           (composition) => composition.category == category,
@@ -40,12 +40,9 @@ class _CompositionDialogState extends State<CompositionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final composition = widget.composition.singleWhereOrNull(
-      (composition) => composition.category == widget.initialCategory,
-    );
     return AlertDialog(
       title: Text(
-        widget.initialCategory == null ? 'Add category' : 'Edit category',
+        widget.initialComposition == null ? 'Add category' : 'Edit category',
       ),
       content: Form(
         key: formKey,
@@ -58,8 +55,8 @@ class _CompositionDialogState extends State<CompositionDialog> {
               label: Text('Category'),
               expandedInsets: EdgeInsets.zero,
               requestFocusOnTap: false,
-              enabled: widget.initialCategory == null,
-              initialSelection: composition?.category,
+              enabled: widget.initialComposition == null,
+              initialSelection: widget.initialComposition?.category,
               dropdownMenuEntries: [
                 for (final category in availableCategories)
                   DropdownMenuEntry(
@@ -82,7 +79,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
               },
             ),
             TextFormField(
-              initialValue: composition?.share.toString(),
+              initialValue: widget.initialComposition?.share.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -116,8 +113,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
               formKey.currentState!.save();
               context.pop([
                 ...widget.composition.where(
-                  (composition) =>
-                      composition.category != widget.initialCategory,
+                  (composition) => composition != widget.initialComposition,
                 ),
                 Composition(category: category, share: share),
               ]);

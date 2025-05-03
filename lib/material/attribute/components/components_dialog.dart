@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,10 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'component.dart';
 
 class ComponentsDialog extends StatefulWidget {
-  const ComponentsDialog({super.key, required this.components, this.id});
+  const ComponentsDialog({
+    super.key,
+    required this.components,
+    this.initialComponent,
+  });
 
   final List<Component> components;
-  final String? id;
+  final Component? initialComponent;
 
   @override
   State<ComponentsDialog> createState() => _ComponentsDialogState();
@@ -23,11 +26,10 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final component = widget.components.singleWhereOrNull(
-      (component) => component.id == widget.id,
-    );
     return AlertDialog(
-      title: Text(widget.id == null ? 'Add component' : 'Edit component'),
+      title: Text(
+        widget.initialComponent == null ? 'Add component' : 'Edit component',
+      ),
       content: Form(
         key: formKey,
         child: Column(
@@ -36,7 +38,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
           spacing: 16,
           children: [
             TextFormField(
-              initialValue: component?.name,
+              initialValue: widget.initialComponent?.name,
               decoration: InputDecoration(labelText: 'Name'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -49,7 +51,7 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
               },
             ),
             TextFormField(
-              initialValue: component?.share.toString(),
+              initialValue: widget.initialComponent?.share.toString(),
               decoration: InputDecoration(labelText: 'Share', suffixText: '%'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -83,10 +85,10 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
               formKey.currentState!.save();
               context.pop([
                 ...widget.components.where(
-                  (component) => component.id != widget.id,
+                  (component) => component != widget.initialComponent,
                 ),
                 Component(
-                  id: widget.id ?? generateId(),
+                  id: widget.initialComponent?.id ?? generateId(),
                   name: name,
                   share: share,
                   color: ColorScheme.of(context).primaryFixedDim,
