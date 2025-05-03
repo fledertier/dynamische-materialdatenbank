@@ -43,7 +43,7 @@ class _NameCardState extends ConsumerState<NameCard> {
 
     return AttributeCard(
       label: AttributeLabel(label: attribute?.name),
-      columns: 4,
+      columns: 5,
       child: TextField(
         enabled: edit,
         style: textTheme.headlineLarge?.copyWith(fontFamily: 'Lexend'),

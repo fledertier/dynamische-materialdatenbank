@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 
 import '../types.dart';
 import 'attribute_type.dart';
@@ -43,9 +43,7 @@ class Attribute extends AttributeData {
       nameDe: json['nameDe'],
       nameEn: json['nameEn'],
       type: AttributeType.fromJson(json['type']),
-      unitType: UnitType.values.firstWhereOrNull(
-        (value) => value.name == json['unitType'],
-      ),
+      unitType: UnitType.values.maybeByName(json['unitType']),
       required: json['required'],
     );
   }

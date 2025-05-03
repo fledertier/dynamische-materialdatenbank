@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 
 import '../attributes/attribute_type.dart';
 import '../types.dart';
@@ -28,9 +28,7 @@ extension ConditionGroupTypeConverter on ConditionGroupType {
     if (name == null) {
       return null;
     }
-    return ConditionGroupType.values.firstWhereOrNull(
-      (type) => type.name == name,
-    );
+    return ConditionGroupType.values.maybeByName(name);
   }
 }
 
@@ -64,7 +62,7 @@ extension ConditionConverter on Condition {
       return null;
     }
     final attribute = json['attribute'] as String?;
-    final operator = OperatorConverter.maybeFromJson(json['operator']);
+    final operator = Operator.values.maybeByName(json['operator']);
     final parameter = json['parameter'];
 
     if (attribute == null || operator == null || parameter == null) {
@@ -74,17 +72,6 @@ extension ConditionConverter on Condition {
       attribute: attribute,
       operator: operator,
       parameter: parameter,
-    );
-  }
-}
-
-extension OperatorConverter on Operator {
-  static Operator? maybeFromJson(String? name) {
-    if (name == null) {
-      return null;
-    }
-    return Operator.values.firstWhereOrNull(
-      (operator) => operator.name == name,
     );
   }
 }

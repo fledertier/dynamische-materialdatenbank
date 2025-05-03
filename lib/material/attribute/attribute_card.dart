@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 
 class AttributeCard extends StatelessWidget {
@@ -25,7 +26,7 @@ class AttributeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: columns * 158 + (columns - 1) * 16,
+      width: widthByColumns(columns),
       decoration: BoxDecoration(
         color: ColorScheme.of(context).surfaceContainerLow,
         borderRadius: borderRadius,

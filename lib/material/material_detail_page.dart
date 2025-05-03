@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,26 +37,29 @@ class MaterialDetailPage extends ConsumerWidget {
               asyncMaterial.isLoading
                   ? Center(child: CircularProgressIndicator())
                   : Center(
-                    child: Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: [
-                        NameCard(material),
-                        DescriptionCard(material),
-                        // LightReflectionCard(material),
-                        // LightAbsorptionCard(material),
-                        // LightTransmissionCard(material),
-                        // UValueCard(material),
-                        // WValueCard(material),
-                        // OriginCountryCard(material),
-                        // CompositionCard(material),
-                        // CompositionCard.small(material),
-                        // FireBehaviorStandardCard(material),
-                        // ArealDensityCard(material),
-                        // DensityCard(material),
-                        ComponentsCard(material),
-                        // ComponentsCard.small(material),
-                      ],
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: widthByColumns(5)),
+                      child: Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: [
+                          NameCard(material),
+                          DescriptionCard(material),
+                          // LightReflectionCard(material),
+                          // LightAbsorptionCard(material),
+                          // LightTransmissionCard(material),
+                          // UValueCard(material),
+                          // WValueCard(material),
+                          // OriginCountryCard(material),
+                          // CompositionCard(material),
+                          // CompositionCard.small(material),
+                          // FireBehaviorStandardCard(material),
+                          // ArealDensityCard(material),
+                          // DensityCard(material),
+                          ComponentsCard(material),
+                          // ComponentsCard.small(material),
+                        ],
+                      ),
                     ),
                   ),
         ),

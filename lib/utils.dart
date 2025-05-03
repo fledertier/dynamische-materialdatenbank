@@ -21,17 +21,14 @@ extension MapExtension<K, V> on Map<K, V> {
 }
 
 extension EnumByName<T extends Enum> on Iterable<T> {
-  T byName(String name) {
-    for (final value in this) {
-      if (value.name == name) return value;
-    }
-    throw ArgumentError.value(name, "name", "No enum value with that name");
-  }
-
   T? maybeByName(String? name) {
     for (final value in this) {
       if (value.name == name) return value;
     }
     return null;
   }
+}
+
+double widthByColumns(int columns) {
+  return columns * 158 + (columns - 1) * 16;
 }

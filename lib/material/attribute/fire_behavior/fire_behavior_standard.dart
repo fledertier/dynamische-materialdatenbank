@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/utils.dart';
 
+// ignore: constant_identifier_names
 enum ReactionToFire { A1, A2, B, C, D, E, F }
 
 enum SmokeProduction { s1, s2, s3 }

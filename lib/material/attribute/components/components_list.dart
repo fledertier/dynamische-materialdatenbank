@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'component.dart';
@@ -22,7 +23,7 @@ class ComponentsList extends StatelessWidget {
 
     return GridView(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 3 * (158 + 16) - 16,
+        maxCrossAxisExtent: widthByColumns(3),
         mainAxisExtent: 72,
       ),
       shrinkWrap: true,
