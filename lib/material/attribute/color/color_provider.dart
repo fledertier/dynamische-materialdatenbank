@@ -6,7 +6,7 @@ final materialColorProvider = Provider.family((ref, String name) {
   final colors = ref.watch(materialColorsStreamProvider).value;
   final color = colors?[name];
   if (color == null) {
-    ref.read(colorServiceProvider).requestMaterialColor(name);
+    ref.read(colorServiceProvider).createMaterialColor(name);
   }
   return color;
 });

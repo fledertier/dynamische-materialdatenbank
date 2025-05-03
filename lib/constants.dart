@@ -37,3 +37,10 @@ abstract class Attributes {
   static const arealDensity = "areal density";
   static const density = "density";
 }
+
+const region = "us-east1";
+
+abstract class Functions {
+  static const colorFromName = "colorFromName";
+  static const chat = "chat";
+}

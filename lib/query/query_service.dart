@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute.dart';
 import '../attributes/attribute_type.dart';
+import '../constants.dart';
 import '../types.dart';
 import 'condition_group.dart';
 
@@ -32,8 +33,9 @@ class QueryService {
   ) async {
     // return exampleAnswer;
 
-    final chat = FirebaseFunctions.instance.httpsCallable("chat");
-    final result = await chat({
+    final result = await FirebaseFunctions.instanceFor(
+      region: region,
+    ).httpsCallable(Functions.chat).call({
       "prompt": prompt,
       "attributes":
           attributes.map((attribute) {
