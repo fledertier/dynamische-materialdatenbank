@@ -1,17 +1,23 @@
-class Pages {
+abstract class Pages {
   static const materials = "materials";
   static const material = "material";
   static const attributes = "attributes";
   static const customSearch = "custom-search";
 }
 
-class Collections {
+abstract class Collections {
   static const materials = "materials";
   static const attributes = "attributes";
   static const metadata = "metadata";
+  static const colors = "colors";
 }
 
-class Attributes {
+abstract class Docs {
+  static const materials = "materials";
+  static const attributes = "attributes";
+}
+
+abstract class Attributes {
   static const id = "id";
   static const name = "name";
   static const description = "description";
@@ -30,8 +36,4 @@ class Attributes {
   static const fireBehaviorStandard = "fire behavior standard";
   static const arealDensity = "areal density";
   static const density = "density";
-}
-
-class Metadata {
-  static const attributes = "attributes";
 }

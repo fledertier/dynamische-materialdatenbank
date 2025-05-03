@@ -58,7 +58,7 @@ class AttributeService {
 
     FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc(Metadata.attributes)
+        .doc(Docs.attributes)
         .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
   }
 
@@ -66,7 +66,7 @@ class AttributeService {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.metadata)
-            .doc(Metadata.attributes)
+            .doc(Docs.attributes)
             .get();
     final map = snapshot.dataOrNull() ?? {};
     return map.mapValues((json) => Attribute.fromJson(json));
@@ -75,7 +75,7 @@ class AttributeService {
   Stream<Map<String, Attribute>> getAttributesStream() {
     return FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc(Metadata.attributes)
+        .doc(Docs.attributes)
         .snapshots()
         .map((snapshot) {
           final map = snapshot.dataOrNull() ?? {};
@@ -87,7 +87,7 @@ class AttributeService {
     final id = attribute.id;
     await FirebaseFirestore.instance
         .collection(Collections.metadata)
-        .doc(Metadata.attributes)
+        .doc(Docs.attributes)
         .set({id: attribute.toJson()}, SetOptions(merge: true));
   }
 
