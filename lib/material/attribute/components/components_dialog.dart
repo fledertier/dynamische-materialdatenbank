@@ -127,7 +127,6 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
         nameDe: nameDe.value!,
         nameEn: nameEn.value,
         share: share.value!,
-        color: ColorScheme.of(context).primaryFixedDim,
       ),
     ]);
   }

@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../color/color_provider.dart';
 import '../composition/proportion.dart';
 
 class ProportionsWidget<T extends Proportion> extends StatelessWidget {
@@ -53,7 +55,7 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
   }
 }
 
-class ProportionWidget extends StatelessWidget {
+class ProportionWidget extends ConsumerWidget {
   const ProportionWidget({
     super.key,
     required this.proportion,
@@ -70,13 +72,16 @@ class ProportionWidget extends StatelessWidget {
   final VoidCallback? onPressed;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
+
+    late final color = ref.watch(materialColorProvider(proportion.name));
 
     final container = SizedBox(
       height: height,
       child: Material(
-        color: proportion.color,
+        color: proportion.color ?? color ?? colorScheme.surfaceContainerHighest,
         shape: StadiumBorder(),
         clipBehavior: Clip.antiAlias,
         child: InkWell(

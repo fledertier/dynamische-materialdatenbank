@@ -1,5 +1,3 @@
-import 'dart:ui' show Color;
-
 import '../../../types.dart';
 import '../composition/proportion.dart';
 
@@ -9,7 +7,6 @@ class Component extends Proportion {
     required super.nameDe,
     required super.nameEn,
     required super.share,
-    required super.color,
   });
 
   final String id;
@@ -20,23 +17,16 @@ class Component extends Proportion {
       nameDe: json['nameDe'] as String,
       nameEn: json['nameEn'] as String?,
       share: json['share'] as num,
-      color: Color(json['color'] as int),
     );
   }
 
   Json toJson() {
-    return {
-      'id': id,
-      'nameDe': nameDe,
-      'nameEn': nameEn,
-      'share': share,
-      'color': color.toARGB32(),
-    };
+    return {'id': id, 'nameDe': nameDe, 'nameEn': nameEn, 'share': share};
   }
 
   @override
   int get hashCode {
-    return Object.hash(id, nameDe, nameEn, share, color);
+    return Object.hash(id, nameDe, nameEn, share);
   }
 
   @override
@@ -47,7 +37,6 @@ class Component extends Proportion {
     return id == other.id &&
         nameDe == other.nameDe &&
         nameEn == other.nameEn &&
-        share == other.share &&
-        color == other.color;
+        share == other.share;
   }
 }

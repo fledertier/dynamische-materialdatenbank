@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../color/color_provider.dart';
 import 'component.dart';
 
 class ComponentsList extends StatelessWidget {
@@ -47,7 +49,7 @@ class ComponentsList extends StatelessWidget {
   }
 }
 
-class ComponentTile extends StatelessWidget {
+class ComponentTile extends ConsumerWidget {
   const ComponentTile({
     super.key,
     required this.edit,
@@ -60,11 +62,16 @@ class ComponentTile extends StatelessWidget {
   final void Function() onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = ColorScheme.of(context);
+    final color = ref.watch(materialColorProvider(component.name));
+
     return Material(
       type: MaterialType.transparency,
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: component.color),
+        leading: CircleAvatar(
+          backgroundColor: color ?? colorScheme.surfaceContainerHighest,
+        ),
         title: Text(component.name),
         subtitle: Text('${component.share} %'),
         onTap: edit ? onTap : null,

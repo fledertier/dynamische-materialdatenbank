@@ -5,7 +5,7 @@ class Proportion {
     required this.nameDe,
     required this.nameEn,
     required this.share,
-    required this.color,
+    this.color,
   });
 
   String get name => nameDe;
@@ -13,5 +13,5 @@ class Proportion {
   final String nameDe;
   final String? nameEn;
   final num share;
-  final Color color;
+  final Color? color;
 }
