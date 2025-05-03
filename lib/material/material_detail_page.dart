@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app/app_scaffold.dart';
 import '../app/navigation.dart';
+import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
-import 'attribute/composition/composition_card.dart';
+import 'attribute/components/components_card.dart';
 import 'attribute/description/description_card.dart';
 import 'attribute/name/name_card.dart';
 import 'edit_mode_button.dart';
+import 'material_provider.dart';
 
 class MaterialDetailPage extends ConsumerWidget {
   const MaterialDetailPage({super.key, required this.materialId});
@@ -48,10 +48,13 @@ class MaterialDetailPage extends ConsumerWidget {
                         // UValueCard(material),
                         // WValueCard(material),
                         // OriginCountryCard(material),
-                        CompositionCard(material),
+                        // CompositionCard(material),
+                        // CompositionCard.small(material),
                         // FireBehaviorStandardCard(material),
                         // ArealDensityCard(material),
                         // DensityCard(material),
+                        ComponentsCard(material),
+                        // ComponentsCard.small(material),
                       ],
                     ),
                   ),

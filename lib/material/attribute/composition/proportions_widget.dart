@@ -44,7 +44,7 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
             ),
           if (edit && proportions.length < (maxCount ?? double.infinity))
             IconButton.outlined(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.add, size: 18),
               onPressed: () => update(null),
             ),
         ],

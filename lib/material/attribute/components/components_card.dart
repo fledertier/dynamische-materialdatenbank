@@ -11,6 +11,7 @@ import '../attribute_card.dart';
 import '../attribute_label.dart';
 import '../composition/proportions_widget.dart';
 import 'component.dart';
+import 'components_list.dart';
 
 class ComponentsCard extends ConsumerWidget {
   const ComponentsCard(this.material, {super.key})
@@ -85,12 +86,28 @@ class ComponentsCard extends ConsumerWidget {
     return AttributeCard(
       columns: columns,
       label: AttributeLabel(label: attribute?.name),
-      child: ProportionsWidget(
-        height: 40,
-        axis: axis,
-        edit: edit,
-        proportions: components,
-        update: updateComponents,
+      childPadding: EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 16,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: ProportionsWidget(
+              height: 40,
+              axis: axis,
+              edit: edit,
+              proportions: components,
+              update: updateComponents,
+            ),
+          ),
+          if (axis == Axis.horizontal)
+            ComponentsList(
+              edit: edit,
+              components: components,
+              update: updateComponents,
+            ),
+        ],
       ),
     );
   }
