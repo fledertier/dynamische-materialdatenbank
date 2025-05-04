@@ -38,7 +38,7 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
       width: 600,
       maxWidth: screenSize.width - 300,
       builder: (context, width) {
-        return SideSheet.detached(
+        return SideSheet(
           leading: BackButton(
             onPressed: () {
               ref.read(querySourceProvider.notifier).state =
@@ -59,7 +59,6 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
             ),
           ],
           width: width,
-          margin: EdgeInsets.zero,
           bottomActions: [
             Expanded(
               child: MaterialPrompt(
@@ -145,8 +144,9 @@ class _AdvancedSearchState extends ConsumerState<AdvancedSearch> {
   void showError(Object error) {
     debugPrint('Error: $error');
     Future.microtask(() {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
-        context,
+        context, // ignore: use_build_context_synchronously
       ).showSnackBar(SnackBar(content: Text('Es ist ein Fehler aufgetreten')));
     });
   }

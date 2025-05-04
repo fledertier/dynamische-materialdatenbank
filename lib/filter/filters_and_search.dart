@@ -43,7 +43,7 @@ class Filters extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
-    return SideSheet.detached(
+    return SideSheet(
       title: Text('Filters'),
       topActions: [
         IconButton(
@@ -70,7 +70,6 @@ class Filters extends ConsumerWidget {
         ),
       ],
       width: 280,
-      margin: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

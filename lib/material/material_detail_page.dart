@@ -9,6 +9,7 @@ import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
+import '../widgets/sheet.dart';
 import 'attribute/components/components_card.dart';
 import 'attribute/description/description_card.dart';
 import 'attribute/name/name_card.dart';
@@ -30,61 +31,52 @@ class MaterialDetailPage extends ConsumerWidget {
     return AppScaffold(
       header: Header(actions: [EditModeButton()]),
       navigation: Navigation(page: Pages.materials),
-      body: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-        child: SingleChildScrollView(
-          child:
-              asyncMaterial.isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                      child: Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
-                        children: [
-                          NameCard(material),
-                          DescriptionCard(material),
-                          // LightReflectionCard(material),
-                          // LightAbsorptionCard(material),
-                          // LightTransmissionCard(material),
-                          // UValueCard(material),
-                          // WValueCard(material),
-                          // OriginCountryCard(material),
-                          // CompositionCard(material),
-                          // CompositionCard.small(material),
-                          // FireBehaviorStandardCard(material),
-                          // ArealDensityCard(material),
-                          // DensityCard(material),
-                          ComponentsCard(material),
-                          // ComponentsCard.small(material),
-                        ],
-                      ),
-                    ),
-                  ),
-        ),
-      ),
-      sidebar: Container(
-        decoration: BoxDecoration(
-          color: ColorScheme.of(context).surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
-        ),
+      body: SingleChildScrollView(
         child:
             asyncMaterial.isLoading
-                ? null
-                : SizedBox(
-                  width: 300,
-                  child: ListView(
-                    children: [
-                      for (final attribute in material.keys.sorted())
-                        Labeled(
-                          label: Text(attributes[attribute]?.name ?? attribute),
-                          child: Text(material[attribute].toString()),
-                        ),
-                    ],
+                ? Center(child: CircularProgressIndicator())
+                : Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: widthByColumns(5)),
+                    child: Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        NameCard(material),
+                        DescriptionCard(material),
+                        // LightReflectionCard(material),
+                        // LightAbsorptionCard(material),
+                        // LightTransmissionCard(material),
+                        // UValueCard(material),
+                        // WValueCard(material),
+                        // OriginCountryCard(material),
+                        // CompositionCard(material),
+                        // CompositionCard.small(material),
+                        // FireBehaviorStandardCard(material),
+                        // ArealDensityCard(material),
+                        // DensityCard(material),
+                        ComponentsCard(material),
+                        // ComponentsCard.small(material),
+                      ],
+                    ),
                   ),
                 ),
       ),
+      sidebar:
+          asyncMaterial.isLoading
+              ? null
+              : Sheet(
+                width: 300,
+                child: ListView(
+                  children: [
+                    for (final attribute in material.keys.sorted())
+                      Labeled(
+                        label: Text(attributes[attribute]?.name ?? attribute),
+                        child: Text(material[attribute].toString()),
+                      ),
+                  ],
+                ),
+              ),
     );
   }
 }
