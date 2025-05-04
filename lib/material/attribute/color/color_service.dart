@@ -2,16 +2,24 @@ import 'dart:async';
 import 'dart:ui' show Color;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../image/image_search_service.dart';
 import 'hex_color.dart';
 
-final colorServiceProvider = Provider((ref) => ColorService());
+final colorServiceProvider = Provider((ref) {
+  return ColorService(
+    imageSearchService: ref.watch(imageSearchServiceProvider),
+  );
+});
 
 class ColorService {
+  const ColorService({required this.imageSearchService});
+
+  final ImageSearchService imageSearchService;
+
   Stream<Map<String, Color>> getMaterialColorsStream() {
     return FirebaseFirestore.instance
         .collection(Collections.colors)
@@ -24,14 +32,11 @@ class ColorService {
   }
 
   Future<Color?> createMaterialColor(String name) async {
-    final result = await FirebaseFunctions.instanceFor(
-      region: region,
-    ).httpsCallable(Functions.colorFromName).call({"name": name});
-    final hex = result.data as String?;
-    if (hex == null) {
+    final result = await imageSearchService.searchImages(name);
+    final color = result?.color;
+    if (color == null) {
       return null;
     }
-    final color = HexColor.fromHex(hex);
     setMaterialColor(name, color);
     return color;
   }

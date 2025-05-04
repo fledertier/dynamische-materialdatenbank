@@ -41,6 +41,6 @@ abstract class Attributes {
 const region = "us-east1";
 
 abstract class Functions {
-  static const colorFromName = "colorFromName";
+  static const search = "search";
   static const chat = "chat";
 }
