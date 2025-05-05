@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/subjective_impressions/subjective_impressions_card.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,6 @@ import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
-import 'attribute/components/components_card.dart';
 import 'attribute/description/description_card.dart';
 import 'attribute/name/name_card.dart';
 import 'edit_mode_button.dart';
@@ -55,8 +55,9 @@ class MaterialDetailPage extends ConsumerWidget {
                         // FireBehaviorStandardCard(material),
                         // ArealDensityCard(material),
                         // DensityCard(material),
-                        ComponentsCard(material),
+                        // ComponentsCard(material),
                         // ComponentsCard.small(material),
+                        SubjectiveImpressionsCard(material),
                       ],
                     ),
                   ),
