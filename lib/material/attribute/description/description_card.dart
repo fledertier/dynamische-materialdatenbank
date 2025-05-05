@@ -46,7 +46,7 @@ class _DescriptionCardState extends ConsumerState<DescriptionCard> {
       columns: 2,
       child: TextField(
         enabled: edit,
-        style: textTheme.bodyLarge?.copyWith(fontFamily: 'Lexend'),
+        style: textTheme.bodyMedium?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: attribute?.name),
         maxLines: null,
         controller: controller,

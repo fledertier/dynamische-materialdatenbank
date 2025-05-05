@@ -42,6 +42,7 @@ class MaterialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card.filled(
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: () {
@@ -49,8 +50,13 @@ class MaterialItem extends StatelessWidget {
         },
         child: HoverBuilder(
           builder: (context, hovered, child) {
+            final image = item[Attributes.image];
             return Stack(
               children: [
+                if (image != null)
+                  Positioned.fill(
+                    child: Image.network(image, fit: BoxFit.cover),
+                  ),
                 Positioned(
                   top: 4,
                   right: 4,

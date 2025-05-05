@@ -36,6 +36,8 @@ abstract class Attributes {
   static const fireBehaviorStandard = "fire behavior standard";
   static const arealDensity = "areal density";
   static const density = "density";
+  static const images = "images";
+  static const image = "image";
 }
 
 const region = "us-east1";

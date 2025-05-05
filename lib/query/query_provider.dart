@@ -14,7 +14,11 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
     QuerySource.searchAndFilter => ref.watch(searchAndFilterQueryProvider),
     QuerySource.advancedSearch => ref.watch(advancedSearchQueryProvider).query,
   };
-  final parameter = AttributesParameter({Attributes.name, ...query.attributes});
+  final parameter = AttributesParameter({
+    Attributes.name,
+    Attributes.image,
+    ...query.attributes,
+  });
   final materialsById = await ref.watch(
     attributesValuesStreamProvider(parameter).future,
   );
