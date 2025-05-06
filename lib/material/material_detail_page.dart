@@ -12,6 +12,7 @@ import '../header/header.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/description/description_card.dart';
+import 'attribute/image/image_card.dart';
 import 'attribute/name/name_card.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
@@ -44,6 +45,7 @@ class MaterialDetailPage extends ConsumerWidget {
                       children: [
                         NameCard(material),
                         DescriptionCard(material),
+                        ImageCard(material),
                         // LightReflectionCard(material),
                         // LightAbsorptionCard(material),
                         // LightTransmissionCard(material),

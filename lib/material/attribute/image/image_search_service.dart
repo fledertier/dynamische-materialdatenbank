@@ -53,10 +53,13 @@ class ImageSearchResult {
 }
 
 class SearchImage {
-  final String contextLink;
   final String thumbnailLink;
-  final int width, height;
-  final int thumbnailWidth, thumbnailHeight;
+  final int thumbnailWidth;
+  final int thumbnailHeight;
+  final String contextLink;
+  final String link;
+  final int width;
+  final int height;
   final int byteSize;
 
   const SearchImage({
@@ -64,6 +67,7 @@ class SearchImage {
     required this.thumbnailWidth,
     required this.thumbnailHeight,
     required this.contextLink,
+    required this.link,
     required this.width,
     required this.height,
     required this.byteSize,
@@ -75,6 +79,7 @@ class SearchImage {
       thumbnailWidth: json['thumbnailWidth'],
       thumbnailHeight: json['thumbnailHeight'],
       contextLink: json['contextLink'],
+      link: json['link'],
       width: json['width'],
       height: json['height'],
       byteSize: json['byteSize'],
@@ -87,6 +92,7 @@ class SearchImage {
       'thumbnailWidth': thumbnailWidth,
       'thumbnailHeight': thumbnailHeight,
       'contextLink': contextLink,
+      'link': link,
       'width': width,
       'height': height,
       'byteSize': byteSize,
