@@ -5,7 +5,7 @@ import '../../../utils.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
 import 'subjective_impression.dart';
-import 'subjective_impressions_visualization.dart';
+import 'subjective_impression_balls.dart';
 
 class SubjectiveImpressionsCard extends StatelessWidget {
   const SubjectiveImpressionsCard(this.material, {super.key});
@@ -32,7 +32,7 @@ class SubjectiveImpressionsCard extends StatelessWidget {
       label: AttributeLabel(label: 'Subjective impressions'),
       childPadding: EdgeInsets.zero,
       clip: Clip.antiAlias,
-      child: SubjectiveImpressionsVisualization(
+      child: SubjectiveImpressionBalls(
         width: widthByColumns(2),
         height: 260,
         impressions: impressions,

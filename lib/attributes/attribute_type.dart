@@ -45,7 +45,8 @@ enum AttributeType {
     },
   ),
   boolean(baseType: 'bool', operators: {Operator.equals}),
-  proportions(operators: {Operator.contains, Operator.notContains});
+  proportions(operators: {Operator.contains, Operator.notContains}),
+  countedTag(operators: {Operator.contains, Operator.notContains});
 
   final String? baseType;
   final Set<Operator> operators;
@@ -67,6 +68,7 @@ extension AttributeTypeExtension on AttributeType {
       AttributeType.number => Symbols.numbers,
       AttributeType.boolean => Symbols.toggle_on,
       AttributeType.proportions => Symbols.pie_chart,
+      AttributeType.countedTag => Symbols.voting_chip,
       // _ => Symbols.change_history,
     };
   }

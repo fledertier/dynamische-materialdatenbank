@@ -14,8 +14,8 @@ final _colors = [
   Color(0xFFF3DE8A),
 ];
 
-class SubjectiveImpressionsVisualization extends StatefulWidget {
-  const SubjectiveImpressionsVisualization({
+class SubjectiveImpressionBalls extends StatefulWidget {
+  const SubjectiveImpressionBalls({
     super.key,
     required this.width,
     required this.height,
@@ -35,12 +35,11 @@ class SubjectiveImpressionsVisualization extends StatefulWidget {
   final double timeStep = 0.1;
 
   @override
-  State<SubjectiveImpressionsVisualization> createState() =>
-      _SubjectiveImpressionsVisualizationState();
+  State<SubjectiveImpressionBalls> createState() =>
+      _SubjectiveImpressionBallsState();
 }
 
-class _SubjectiveImpressionsVisualizationState
-    extends State<SubjectiveImpressionsVisualization>
+class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
     with SingleTickerProviderStateMixin {
   late final AnimationController controller;
   late final List<_Ball> balls;
