@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math.dart' hide Colors;
 
 import 'subjective_impression.dart';
 
@@ -13,6 +13,8 @@ class SubjectiveImpressionBalls extends StatefulWidget {
     this.padding = const EdgeInsets.all(-12),
     this.spacing = 4,
     required this.impressions,
+    required this.onUpdate,
+    this.edit = false,
   });
 
   final double width;
@@ -20,6 +22,8 @@ class SubjectiveImpressionBalls extends StatefulWidget {
   final EdgeInsets padding;
   final double spacing;
   final List<SubjectiveImpression> impressions;
+  final void Function(SubjectiveImpression? impression) onUpdate;
+  final bool edit;
 
   final double gravity = 0.3;
   final double airResistance = 0.01;
@@ -33,7 +37,7 @@ class SubjectiveImpressionBalls extends StatefulWidget {
 class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
     with SingleTickerProviderStateMixin {
   late final AnimationController controller;
-  late final List<_Ball> balls;
+  late final List<Ball> balls;
 
   @override
   void initState() {
@@ -54,16 +58,19 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
     );
     balls = [
       for (final impression in widget.impressions)
-        _Ball(
+        Ball.impression(
           position: Vector2(
             random.nextDouble() * widget.width,
             random.nextDouble() * widget.height,
           ),
           velocity: Vector2.zero(),
           rotation: random.nextDouble() * radians(40) - radians(20),
-          radius: impression.count * 10 + 20,
-          color: colorOf(impression),
-          label: impression.name,
+          impression: impression,
+        ),
+      if (widget.edit)
+        Ball.add(
+          position: Vector2(widget.width / 2, 0),
+          velocity: Vector2.zero(),
         ),
     ];
   }
@@ -77,9 +84,26 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
   @override
   Widget build(BuildContext context) {
     update();
-    return CustomPaint(
-      painter: _BallPainter(balls),
-      size: Size(widget.width, widget.height),
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          for (final ball in balls)
+            Positioned.fromRect(
+              rect: Rect.fromCircle(
+                center: Offset(ball.position.x, ball.position.y),
+                radius: ball.radius,
+              ),
+              child: SubjectiveImpressionButton(
+                ball: ball,
+                onUpdate: widget.onUpdate,
+                edit: widget.edit,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -140,74 +164,65 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
   }
 }
 
-class _BallPainter extends CustomPainter {
-  const _BallPainter(this.balls);
+class SubjectiveImpressionButton extends StatelessWidget {
+  const SubjectiveImpressionButton({
+    super.key,
+    required this.ball,
+    required this.onUpdate,
+    this.edit = false,
+  });
 
-  final List<_Ball> balls;
+  final Ball ball;
+  final void Function(SubjectiveImpression? impression) onUpdate;
+  final bool edit;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    for (final ball in balls) {
-      drawBackground(ball, canvas);
-      drawLabel(ball, canvas);
+  Widget build(BuildContext context) {
+    if (ball.impression == null) {
+      return IconButton.outlined(
+        constraints: BoxConstraints.tight(Size.fromRadius(ball.radius)),
+        icon: Icon(Icons.add, size: 18),
+        onPressed: () => onUpdate(null),
+      );
     }
-  }
-
-  void drawBackground(_Ball ball, Canvas canvas) {
-    final paint = Paint()..color = ball.color;
-    final offset = Offset(ball.position.x, ball.position.y);
-
-    canvas.drawCircle(offset, ball.radius, paint);
-  }
-
-  void drawLabel(_Ball ball, Canvas canvas) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: ball.label,
-        style: TextStyle(fontSize: sqrt(ball.radius) * 2),
+    return FilledButton(
+      style: FilledButton.styleFrom(
+        foregroundColor: Colors.black,
+        disabledForegroundColor: Colors.black,
+        backgroundColor: ball.color,
+        disabledBackgroundColor: ball.color,
+        fixedSize: Size.fromRadius(ball.radius),
+        shape: CircleBorder(),
+        padding: EdgeInsets.all(16),
       ),
-      textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
-    )..layout(maxWidth: (ball.radius - 16) * 2);
-
-    final offset = Offset(
-      ball.position.x - textPainter.width / 2,
-      ball.position.y - textPainter.height / 2,
+      onPressed: edit ? () => onUpdate(ball.impression) : null,
+      child: Transform.rotate(
+        angle: ball.rotation,
+        child: Text(
+          ball.label,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: sqrt(ball.radius * 3.6)),
+        ),
+      ),
     );
-
-    drawRotatedText(canvas, offset, ball.rotation, textPainter);
-  }
-
-  void drawRotatedText(
-    Canvas canvas,
-    Offset offset,
-    double radians,
-    TextPainter textPainter,
-  ) {
-    canvas.save();
-    final pivot = textPainter.size.center(offset);
-    canvas.translate(pivot.dx, pivot.dy);
-    canvas.rotate(radians);
-    canvas.translate(-pivot.dx, -pivot.dy);
-    textPainter.paint(canvas, offset);
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
 
-class _Ball {
-  _Ball({
+class Ball {
+  Ball.impression({
     required this.position,
     required this.velocity,
     required this.rotation,
-    required this.radius,
-    required this.color,
-    required this.label,
-  });
+    required SubjectiveImpression this.impression,
+  }) : radius = impression.count * 10 + 20,
+       color = colorOf(impression),
+       label = impression.name;
+
+  Ball.add({required this.position, required this.velocity})
+    : rotation = 0,
+      radius = 40,
+      color = Colors.transparent,
+      label = '';
 
   Vector2 position;
   Vector2 velocity;
@@ -215,4 +230,5 @@ class _Ball {
   double radius;
   Color color;
   String label;
+  SubjectiveImpression? impression;
 }

@@ -85,10 +85,15 @@ class SubjectiveImpressionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = TextTheme.of(context);
+
     return IgnorePointer(
       ignoring: !edit,
       child: ActionChip(
-        label: Text(impression.name),
+        label: Text(
+          impression.name,
+          style: textTheme.bodyMedium!.copyWith(color: Colors.black),
+        ),
         shape: StadiumBorder(),
         side: BorderSide.none,
         backgroundColor: colorOf(impression),

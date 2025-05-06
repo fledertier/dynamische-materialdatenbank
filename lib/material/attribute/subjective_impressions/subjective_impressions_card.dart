@@ -5,6 +5,7 @@ import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
 import '../../../utils.dart';
+import '../../edit_mode_button.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
 import 'subjective_impression.dart';
@@ -17,6 +18,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final edit = ref.watch(editModeProvider);
     final attribute = ref.watch(
       attributeProvider(Attributes.subjectiveImpressions),
     );
@@ -45,9 +47,12 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,
       child: SubjectiveImpressionBalls(
+        key: ValueKey(edit),
         width: widthByColumns(2),
         height: 260,
         impressions: impressions,
+        onUpdate: (impression) {},
+        edit: edit,
       ),
     );
   }
