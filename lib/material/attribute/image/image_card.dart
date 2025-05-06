@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/image/image_search_service.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/image/web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../../../../types.dart' hide Material;
 import '../../edit_mode_button.dart';
@@ -46,8 +49,8 @@ class _ImageCardState extends ConsumerState<ImageCard> {
         }).toList();
 
     if (foundImages?.isNotEmpty ?? false) {
-      setMainImage(foundImages!.first);
-      addImages(foundImages);
+      addImages(foundImages!);
+      setMainImage();
     }
   }
 
@@ -61,7 +64,19 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     });
   }
 
-  void setMainImage(Json image) {
+  void removeImage(int index) {
+    setState(() {
+      images.removeAt(index);
+      selectedIndex = min(selectedIndex, images.length - 1);
+    });
+    ref.read(materialServiceProvider).updateMaterial({
+      Attributes.id: widget.material[Attributes.id],
+      Attributes.images: images,
+    });
+  }
+
+  void setMainImage([int index = 0]) {
+    final image = images[index];
     final url = image["thumbnailLink"] as String? ?? image["link"] as String?;
     if (url == null) return;
     ref.read(materialServiceProvider).updateMaterial({
@@ -100,7 +115,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
                     Expanded(
                       child:
                           selectedImage != null
-                              ? buildImage(context, selectedImage)
+                              ? buildImage(context, selectedImage, edit)
                               : SizedBox(),
                     ),
                     buildThumbnails(context),
@@ -117,7 +132,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     );
   }
 
-  Widget buildImage(BuildContext context, Json image) {
+  Widget buildImage(BuildContext context, Json image, bool edit) {
     final thumbnail = image["thumbnailLink"] as String?;
     return Stack(
       fit: StackFit.expand,
@@ -134,6 +149,33 @@ class _ImageCardState extends ConsumerState<ImageCard> {
           objectFit: BoxFit.contain,
           borderRadius: BorderRadius.circular(16),
         ),
+        if (edit)
+          Positioned(
+            top: 8,
+            bottom: 8,
+            left: 8,
+            child: Column(
+              spacing: 4,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton.filledTonal(
+                  icon: Icon(Symbols.search),
+                  tooltip: "Search images",
+                  onPressed: () => searchImages(),
+                ),
+                IconButton.filledTonal(
+                  icon: Icon(Symbols.imagesmode),
+                  tooltip: "Set as main image",
+                  onPressed: () => setMainImage(selectedIndex),
+                ),
+                IconButton.filledTonal(
+                  icon: Icon(Symbols.delete),
+                  tooltip: "Remove image",
+                  onPressed: () => removeImage(selectedIndex),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
