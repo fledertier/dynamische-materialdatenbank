@@ -5,15 +5,6 @@ import 'package:vector_math/vector_math.dart';
 
 import 'subjective_impression.dart';
 
-final _colors = [
-  Color(0xFFA6ACDC),
-  Color(0xFF7DA4DB),
-  Color(0xFF8E9867),
-  Color(0xFFE1927F),
-  Color(0xFFEEDBD1),
-  Color(0xFFF3DE8A),
-];
-
 class SubjectiveImpressionBalls extends StatefulWidget {
   const SubjectiveImpressionBalls({
     super.key,
@@ -71,7 +62,7 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
           velocity: Vector2.zero(),
           rotation: random.nextDouble() * radians(40) - radians(20),
           radius: impression.count * 10 + 20,
-          color: _colors[random.nextInt(_colors.length)],
+          color: colorOf(impression),
           label: impression.name,
         ),
     ];

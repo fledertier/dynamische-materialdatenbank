@@ -38,6 +38,7 @@ abstract class Attributes {
   static const density = "density";
   static const images = "images";
   static const image = "image";
+  static const subjectiveImpressions = "subjective impressions";
 }
 
 const region = "us-east1";
