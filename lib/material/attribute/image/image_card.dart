@@ -79,9 +79,18 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     final image = images[index];
     final url = image["thumbnailLink"] as String? ?? image["link"] as String?;
     if (url == null) return;
+    setState(() {
+      images.removeAt(index);
+      images.insert(0, image);
+      selectedIndex = 0;
+    });
     ref.read(materialServiceProvider).updateMaterial({
       Attributes.id: widget.material[Attributes.id],
       Attributes.image: url,
+    });
+    ref.read(materialServiceProvider).updateMaterial({
+      Attributes.id: widget.material[Attributes.id],
+      Attributes.images: images,
     });
   }
 
@@ -99,12 +108,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     return AttributeCard(
       label: AttributeLabel(label: attribute?.name),
       columns: 3,
-      childPadding:
-          images.isNotEmpty
-              ? EdgeInsets.all(
-                padding,
-              ).copyWith(right: padding - scrollbarWidth)
-              : EdgeInsets.all(padding),
+      childPadding: EdgeInsets.all(padding),
       child: AspectRatio(
         aspectRatio: 1.6,
         child:
