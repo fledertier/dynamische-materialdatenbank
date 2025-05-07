@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
 import 'package:dynamische_materialdatenbank/material/material_service.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +20,28 @@ import 'attribute/name/name_card.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
 
-class MaterialDetailPage extends ConsumerWidget {
+class MaterialDetailPage extends ConsumerStatefulWidget {
   const MaterialDetailPage({super.key, required this.materialId});
 
   final String materialId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncMaterial = ref.watch(materialStreamProvider(materialId));
+  ConsumerState<MaterialDetailPage> createState() => _MaterialDetailPageState();
+}
+
+class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(materialStreamProvider(widget.materialId).future).then((material) {
+      final name = material[Attributes.name] as String;
+      ref.read(colorServiceProvider).createMaterialColor(name);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final asyncMaterial = ref.watch(materialStreamProvider(widget.materialId));
     final material = asyncMaterial.value ?? {};
 
     final attributes = ref.watch(attributesStreamProvider).value ?? {};

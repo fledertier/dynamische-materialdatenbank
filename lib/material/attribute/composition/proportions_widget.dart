@@ -76,7 +76,9 @@ class ProportionWidget extends ConsumerWidget {
     final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
 
-    late final color = ref.watch(materialColorProvider(proportion.name));
+    late final color = ref.watch(
+      requestingMaterialColorProvider(proportion.name),
+    );
 
     final container = SizedBox(
       height: height,

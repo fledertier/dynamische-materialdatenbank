@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
+import 'attribute/color/color_provider.dart';
 import 'material_service.dart';
 
 class MaterialGrid extends StatelessWidget {
@@ -32,17 +33,23 @@ class MaterialGrid extends StatelessWidget {
   }
 }
 
-class MaterialItem extends StatelessWidget {
+class MaterialItem extends ConsumerWidget {
   const MaterialItem({super.key, required this.item});
 
   final Map<String, dynamic> item;
 
   String get id => item[Attributes.id];
 
+  String get name => item[Attributes.name];
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = TextTheme.of(context);
+    final color = ref.watch(materialColorProvider(name));
+
     return Card.filled(
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: () {
@@ -66,12 +73,27 @@ class MaterialItem extends StatelessWidget {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      item[Attributes.name],
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.3),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12).copyWith(top: 32),
+                      child: Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: textTheme.bodySmall!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
