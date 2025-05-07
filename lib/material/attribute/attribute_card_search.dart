@@ -18,6 +18,7 @@ class _AttributeCardSearchState extends State<AttributeCardSearch> {
   @override
   Widget build(BuildContext context) {
     return AttributeSearch(
+      autofocus: true,
       onSubmit: (attributes) {
         final attributeCards = findAttributeCardsForAttributes(attributes);
         widget.onSubmit.call(attributeCards);
