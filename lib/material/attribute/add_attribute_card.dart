@@ -1,20 +1,31 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_search.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants.dart';
+import '../../types.dart' hide Material;
 import 'attribute_card_factory.dart';
 import 'attribute_cards.dart';
 
 class AddAttributeCardButton extends StatelessWidget {
-  const AddAttributeCardButton({super.key, required this.onAdded});
+  const AddAttributeCardButton({
+    super.key,
+    required this.material,
+    required this.onAdded,
+  });
 
+  final Json material;
   final void Function(AttributeCards card) onAdded;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      child: Padding(padding: const EdgeInsets.all(32), child: Icon(Icons.add)),
+    return IconButton.outlined(
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+        fixedSize: Size.square(widthByColumns(1)),
+      ),
+      icon: Icon(Icons.add),
       onPressed: () async {
         final card = await showAddAttributeCardDialog(context);
         if (card != null) {
@@ -23,26 +34,28 @@ class AddAttributeCardButton extends StatelessWidget {
       },
     );
   }
-}
 
-Future<AttributeCards?> showAddAttributeCardDialog(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AddAttributeCardDialog();
-    },
-  );
+  Future<AttributeCards?> showAddAttributeCardDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AddAttributeCardDialog(material: material);
+      },
+    );
+  }
 }
 
 class AddAttributeCardDialog extends StatefulWidget {
-  const AddAttributeCardDialog({super.key});
+  const AddAttributeCardDialog({super.key, required this.material});
+
+  final Json material;
 
   @override
   State<AddAttributeCardDialog> createState() => _AddAttributeDialogState();
 }
 
 class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
-  Set<AttributeCards> attributeCards = AttributeCards.values.toSet();
+  Set<AttributeCards> attributeCards = {};
 
   final exampleMaterial = {
     Attributes.id: "example",
@@ -70,6 +83,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
         children: [
           SizedBox(height: 32),
           AttributeCardSearch(
+            material: widget.material,
             onSubmit: (attributeCards) {
               setState(() {
                 this.attributeCards = attributeCards;
@@ -95,10 +109,10 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                             context.pop(card);
                           },
                           child: AbsorbPointer(
-                            child: AttributeCardFactory.create(
-                              card,
-                              exampleMaterial,
-                            ),
+                            child: AttributeCardFactory.create(card, {
+                              ...exampleMaterial,
+                              ...widget.material,
+                            }),
                           ),
                         ),
                       ),

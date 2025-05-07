@@ -1,13 +1,21 @@
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../attributes/attribute.dart';
 import '../../attributes/attribute_type.dart';
+import '../../constants.dart';
+import '../../types.dart';
 import 'attribute_cards.dart';
 import 'attribute_search.dart';
 
 class AttributeCardSearch extends StatefulWidget {
-  const AttributeCardSearch({super.key, required this.onSubmit});
+  const AttributeCardSearch({
+    super.key,
+    required this.material,
+    required this.onSubmit,
+  });
 
+  final Json material;
   final void Function(Set<AttributeCards>) onSubmit;
 
   @override
@@ -20,10 +28,18 @@ class _AttributeCardSearchState extends State<AttributeCardSearch> {
     return AttributeSearch(
       autofocus: true,
       onSubmit: (attributes) {
+        final selectedAttributeCards = getSelectedAttributeCards();
         final attributeCards = findAttributeCardsForAttributes(attributes);
-        widget.onSubmit.call(attributeCards);
+        widget.onSubmit.call(attributeCards.difference(selectedAttributeCards));
       },
     );
+  }
+
+  Set<AttributeCards> getSelectedAttributeCards() {
+    final widgets = List<String>.from(
+      widget.material[Attributes.widgets] ?? [],
+    );
+    return widgets.map(AttributeCards.values.maybeByName).nonNulls.toSet();
   }
 }
 

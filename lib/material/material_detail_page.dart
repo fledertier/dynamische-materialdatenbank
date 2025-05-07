@@ -46,12 +46,12 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
 
     final attributes = ref.watch(attributesStreamProvider).value ?? {};
 
+    final edit = ref.watch(editModeProvider);
+
     final widgets =
-        (material[Attributes.widgets] as List?)
-            ?.map((name) => AttributeCards.values.maybeByName(name as String?))
-            .nonNulls
-            .toList() ??
-        [];
+        List<String>.from(
+          material[Attributes.widgets] ?? [],
+        ).map(AttributeCards.values.maybeByName).nonNulls.toList();
 
     return AppScaffold(
       header: Header(actions: [EditModeButton()]),
@@ -87,17 +87,19 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         // ComponentsCard.small(material),
                         // SubjectiveImpressionsCard(material),
                         // SubjectiveImpressionsCard.small(material),
-                        AddAttributeCardButton(
-                          onAdded: (card) {
-                            ref.read(materialServiceProvider).updateMaterial({
-                              Attributes.id: material[Attributes.id],
-                              Attributes.widgets: {
-                                ...?material[Attributes.widgets],
-                                card.name,
-                              },
-                            });
-                          },
-                        ),
+                        if (edit)
+                          AddAttributeCardButton(
+                            material: material,
+                            onAdded: (card) {
+                              ref.read(materialServiceProvider).updateMaterial({
+                                Attributes.id: material[Attributes.id],
+                                Attributes.widgets: {
+                                  ...?material[Attributes.widgets],
+                                  card.name,
+                                },
+                              });
+                            },
+                          ),
                       ],
                     ),
                   ),
