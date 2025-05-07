@@ -10,11 +10,16 @@ import '../attribute_card.dart';
 import '../attribute_label.dart';
 import 'subjective_impression.dart';
 import 'subjective_impression_balls.dart';
+import 'subjective_impression_chips.dart';
 
 class SubjectiveImpressionsCard extends ConsumerWidget {
-  const SubjectiveImpressionsCard(this.material, {super.key});
+  const SubjectiveImpressionsCard(this.material, {super.key}) : small = false;
+
+  const SubjectiveImpressionsCard.small(this.material, {super.key})
+    : small = true;
 
   final Json material;
+  final bool small;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,14 +51,23 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
       label: AttributeLabel(label: attribute?.name),
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,
-      child: SubjectiveImpressionBalls(
-        key: ValueKey(edit),
-        width: widthByColumns(2),
-        height: 260,
-        impressions: impressions,
-        onUpdate: (impression) {},
-        edit: edit,
-      ),
+      child: switch (small) {
+        false => SubjectiveImpressionBalls(
+          key: ValueKey(edit),
+          width: widthByColumns(2),
+          height: 260,
+          impressions: impressions,
+          onUpdate: update,
+          edit: edit,
+        ),
+        true => SubjectiveImpressionChips(
+          impressions: impressions,
+          onUpdate: update,
+          edit: edit,
+        ),
+      },
     );
   }
+
+  void update(SubjectiveImpression? impression) {}
 }
