@@ -28,14 +28,13 @@ class _AttributeCardSearchState extends State<AttributeCardSearch> {
     return AttributeSearch(
       autofocus: true,
       onSubmit: (attributes) {
-        final selectedAttributeCards = getSelectedAttributeCards();
         final attributeCards = findAttributeCardsForAttributes(attributes);
         widget.onSubmit.call(attributeCards.difference(selectedAttributeCards));
       },
     );
   }
 
-  Set<AttributeCards> getSelectedAttributeCards() {
+  Set<AttributeCards> get selectedAttributeCards {
     final widgets = List<String>.from(
       widget.material[Attributes.widgets] ?? [],
     );

@@ -1,4 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,11 +62,11 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
   }
 
   Future<List<Attribute>> searchAttributes(String query) async {
-    final name = query.trim().toLowerCase();
+    final name = query.trim();
     final attributes = await ref.read(attributesStreamProvider.future);
     return attributes.values
-        .where((attribute) => attribute.name.toLowerCase().contains(name))
-        .toSet()
+        .where((attribute) => attribute.name.containsIgnoreCase(name))
+        .sortedBy((attribute) => attribute.name)
         .toList();
   }
 }

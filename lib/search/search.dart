@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+const double minViewHeight = 240 - 56 - 1;
+
 class Search<T> extends StatelessWidget {
   const Search({
     super.key,
@@ -41,6 +43,10 @@ class Search<T> extends StatelessWidget {
       barHintText: hintText,
       barTrailing: [if (onFilter != null) filter],
       barPadding: WidgetStatePropertyAll(EdgeInsets.only(left: 16, right: 8)),
+      viewLeading: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(Icons.search),
+      ),
       viewTrailing: [
         ValueListenableBuilder(
           valueListenable: controller,
@@ -50,13 +56,20 @@ class Search<T> extends StatelessWidget {
         ),
         if (onFilter != null) filter,
       ],
+      viewBuilder: (suggestions) {
+        final query = controller.text;
+        if (query.isNotEmpty && suggestions.isEmpty) {
+          return SizedBox(
+            height: minViewHeight,
+            child: Center(child: Text('No results found')),
+          );
+        }
+        return ListView(shrinkWrap: true, children: suggestions.toList());
+      },
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       suggestionsBuilder: (context, controller) async {
         final query = controller.text;
-        if (query.isEmpty) {
-          return [];
-        }
         final suggestions = await search(query);
         return suggestions.map(
           (suggestion) => buildSuggestion(suggestion, query),

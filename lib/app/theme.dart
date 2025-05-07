@@ -9,10 +9,7 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
       elevation: WidgetStatePropertyAll(0),
       constraints: BoxConstraints(maxWidth: 720, minHeight: 56),
     ),
-    searchViewTheme: SearchViewThemeData(
-      constraints: BoxConstraints(minHeight: 0),
-      shrinkWrap: true,
-    ),
+    searchViewTheme: SearchViewThemeData(shrinkWrap: true),
     sliderTheme: SliderThemeData(
       // ignore: deprecated_member_use
       year2023: false,
