@@ -14,9 +14,9 @@ class Component extends Proportion {
   factory Component.fromJson(Json json) {
     return Component(
       id: json['id'],
-      nameDe: json['nameDe'] as String,
-      nameEn: json['nameEn'] as String?,
-      share: json['share'] as num,
+      nameDe: json['nameDe'],
+      nameEn: json['nameEn'],
+      share: json['share'],
     );
   }
 

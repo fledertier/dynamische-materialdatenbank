@@ -86,6 +86,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         // ComponentsCard(material),
                         // ComponentsCard.small(material),
                         // SubjectiveImpressionsCard(material),
+                        // SubjectiveImpressionsCard.small(material),
                         AddAttributeCardButton(
                           onAdded: (card) {
                             ref.read(materialServiceProvider).updateMaterial({

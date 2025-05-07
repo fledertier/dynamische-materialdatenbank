@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:uuid/uuid.dart';
 
 String generateId() {
@@ -49,4 +51,8 @@ extension EnumByName<T extends Enum> on Iterable<T> {
 
 double widthByColumns(int columns) {
   return columns * 158 + (columns - 1) * 16;
+}
+
+extension SizeExtension on Size {
+  double get area => width * height;
 }
