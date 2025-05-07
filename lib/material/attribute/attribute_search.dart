@@ -7,8 +7,13 @@ import '../../search/search.dart';
 import '../../widgets/highlighted_text.dart';
 
 class AttributeSearch extends ConsumerStatefulWidget {
-  const AttributeSearch({super.key, required this.onSubmit});
+  const AttributeSearch({
+    super.key,
+    this.autofocus = false,
+    required this.onSubmit,
+  });
 
+  final bool autofocus;
   final void Function(List<Attribute>) onSubmit;
 
   @override
@@ -17,6 +22,16 @@ class AttributeSearch extends ConsumerStatefulWidget {
 
 class _AttributeSearchState extends ConsumerState<AttributeSearch> {
   final controller = SearchController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autofocus) {
+      Future.delayed(Duration.zero, () {
+        if (!controller.isOpen) controller.openView();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

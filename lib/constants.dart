@@ -40,6 +40,7 @@ abstract class Attributes {
   static const image = "image";
   static const subjectiveImpressions = "subjective impressions";
   static const originCountry = "originCountry";
+  static const widgets = "widgets";
 }
 
 const region = "us-east1";
