@@ -4,30 +4,42 @@ import 'dart:ui';
 import '../../../types.dart';
 
 class SubjectiveImpression {
-  const SubjectiveImpression({required this.name, required this.count});
+  const SubjectiveImpression({
+    required this.nameDe,
+    required this.nameEn,
+    required this.count,
+  });
 
-  final String name;
+  final String nameDe;
+  final String? nameEn;
   final int count;
 
+  String get name => nameDe;
+
   factory SubjectiveImpression.fromJson(Json json) {
-    return SubjectiveImpression(name: json['name'], count: json['count']);
+    return SubjectiveImpression(
+      nameDe: json['nameDe'],
+      nameEn: json['nameEn'],
+      count: json['count'],
+    );
   }
 
   Json toJson() {
-    return {'name': name, 'count': count};
+    return {'nameDe': nameDe, 'nameEn': nameEn, 'count': count};
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is SubjectiveImpression &&
-        other.name == name &&
+        other.nameDe == nameDe &&
+        other.nameEn == nameEn &&
         other.count == count;
   }
 
   @override
   int get hashCode {
-    return Object.hash(name, count);
+    return Object.hash(nameDe, nameEn, count);
   }
 }
 
@@ -43,4 +55,8 @@ final _colors = [
 Color colorOf(SubjectiveImpression impression) {
   final random = Random(impression.name.hashCode);
   return _colors[random.nextInt(_colors.length)];
+}
+
+double radiusOf(SubjectiveImpression impression) {
+  return impression.count * 10 + 20;
 }

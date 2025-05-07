@@ -1,21 +1,22 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 
 import 'subjective_impression.dart';
 
 class SubjectiveImpressionBalls extends StatefulWidget {
-  const SubjectiveImpressionBalls({
+  SubjectiveImpressionBalls({
     super.key,
     required this.width,
-    required this.height,
     this.padding = const EdgeInsets.all(-12),
     this.spacing = 4,
     required this.impressions,
     required this.onUpdate,
     this.edit = false,
-  });
+  }) : height = calculateHeight(impressions, width);
 
   final double width;
   final double height;
@@ -28,6 +29,16 @@ class SubjectiveImpressionBalls extends StatefulWidget {
   final double gravity = 0.3;
   final double airResistance = 0.01;
   final double timeStep = 0.1;
+
+  static double calculateHeight(
+    List<SubjectiveImpression> impressions,
+    double width,
+  ) {
+    final areas = impressions.map(
+      (impression) => Size.fromRadius(radiusOf(impression)).area,
+    );
+    return areas.sum / width;
+  }
 
   @override
   State<SubjectiveImpressionBalls> createState() =>
@@ -44,12 +55,12 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 10),
+      duration: Duration(seconds: 1),
     );
     controller.addListener(() {
       setState(() {});
     });
-    controller.forward();
+    controller.repeat();
 
     final random = Random(
       Object.hashAllUnordered(
@@ -214,7 +225,7 @@ class Ball {
     required this.velocity,
     required this.rotation,
     required SubjectiveImpression this.impression,
-  }) : radius = impression.count * 10 + 20,
+  }) : radius = radiusOf(impression),
        color = colorOf(impression),
        label = impression.name;
 

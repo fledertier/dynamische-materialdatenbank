@@ -6,11 +6,13 @@ import '../../../constants.dart';
 import '../../../types.dart';
 import '../../../utils.dart';
 import '../../edit_mode_button.dart';
+import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
 import 'subjective_impression.dart';
 import 'subjective_impression_balls.dart';
 import 'subjective_impression_chips.dart';
+import 'subjective_impression_dialog.dart';
 
 class SubjectiveImpressionsCard extends ConsumerWidget {
   const SubjectiveImpressionsCard(this.material, {super.key}) : small = false;
@@ -31,43 +33,58 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
     final value = List<Json>.from(
       material[Attributes.subjectiveImpressions] ??
           [
-            {'name': 'Happiness', 'count': 3},
-            {'name': 'Stress', 'count': 2},
-            {'name': 'Calmness', 'count': 4},
-            {'name': 'Guilt', 'count': 1},
-            {'name': 'Sadness', 'count': 3},
-            {'name': 'Anger', 'count': 2},
-            {'name': 'Gratitude', 'count': 4},
-            {'name': 'Love', 'count': 3},
-            {'name': 'Relief', 'count': 1},
-            {'name': 'Loneliness', 'count': 2},
-            {'name': 'Fear', 'count': 1},
+            {'nameDe': 'rau', 'nameEn': 'rough', 'count': 4},
+            {'nameDe': 'glatt', 'nameEn': 'smooth', 'count': 1},
+            {'nameDe': 'kalt', 'nameEn': 'cold', 'count': 2},
+            {'nameDe': 'warm', 'nameEn': 'warm', 'count': 3},
+            {'nameDe': 'weich', 'nameEn': 'soft', 'count': 1},
+            {'nameDe': 'hart', 'nameEn': 'hard', 'count': 2},
           ],
     );
     final impressions = value.map(SubjectiveImpression.fromJson).toList();
+
+    Future<void> updateSubjectiveImpressions(
+      SubjectiveImpression? initialSubjectiveImpression,
+    ) async {
+      final updatedSubjectiveImpressions =
+          await showDialog<List<SubjectiveImpression>>(
+            context: context,
+            builder: (context) {
+              return SubjectiveImpressionDialog(
+                subjectiveImpressions: impressions,
+                initialSubjectiveImpression: initialSubjectiveImpression,
+              );
+            },
+          );
+      if (updatedSubjectiveImpressions != null) {
+        ref.read(materialServiceProvider).updateMaterial({
+          Attributes.id: material[Attributes.id],
+          Attributes.subjectiveImpressions: updatedSubjectiveImpressions.map(
+            (subjectiveImpression) => subjectiveImpression.toJson(),
+          ),
+        });
+      }
+    }
 
     return AttributeCard(
       columns: 2,
       label: AttributeLabel(label: attribute?.name),
       clip: Clip.antiAlias,
-      childPadding: EdgeInsets.zero,
+      childPadding: small ? EdgeInsets.all(16) : EdgeInsets.zero,
       child: switch (small) {
         false => SubjectiveImpressionBalls(
-          key: ValueKey(edit),
+          key: ValueKey([edit, impressions]),
           width: widthByColumns(2),
-          height: 260,
           impressions: impressions,
-          onUpdate: update,
+          onUpdate: updateSubjectiveImpressions,
           edit: edit,
         ),
         true => SubjectiveImpressionChips(
           impressions: impressions,
-          onUpdate: update,
+          onUpdate: updateSubjectiveImpressions,
           edit: edit,
         ),
       },
     );
   }
-
-  void update(SubjectiveImpression? impression) {}
 }
