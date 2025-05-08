@@ -26,19 +26,10 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
   final controller = SearchController();
 
   @override
-  void initState() {
-    super.initState();
-    if (widget.autofocus) {
-      Future.delayed(Duration.zero, () {
-        if (!controller.isOpen) controller.openView();
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Search(
       hintText: 'Search for attributes',
+      autoFocus: widget.autofocus,
       controller: controller,
       search: searchAttributes,
       buildSuggestion: (attribute, query) {
@@ -51,12 +42,8 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
         );
       },
       onSubmitted: (query) async {
-        controller.closeView(query);
         final attributes = await searchAttributes(query);
         widget.onSubmit.call(attributes);
-      },
-      onClear: () {
-        controller.closeView('');
       },
     );
   }

@@ -10,21 +10,47 @@ import '../widgets/highlighted_text.dart';
 import 'search.dart';
 import 'search_service.dart';
 
-class MaterialSearch extends ConsumerWidget {
+class MaterialSearch extends ConsumerStatefulWidget {
   const MaterialSearch({super.key, this.onFilter});
 
   final void Function()? onFilter;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(searchControllerProvider);
+  ConsumerState<MaterialSearch> createState() => _MaterialSearchState();
+}
+
+class _MaterialSearchState extends ConsumerState<MaterialSearch> {
+  late final SearchController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SearchController();
+    controller.text = ref.read(searchProvider);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(searchProvider, (previous, next) {
+      controller.text = next;
+    });
+
+    final filter = IconButton(
+      icon: Icon(Icons.tune),
+      tooltip: 'Filters',
+      onPressed: widget.onFilter,
+    );
+
     return Search(
       hintText: 'Search in materials',
       controller: controller,
       search: (query) async {
-        if (query.isEmpty) {
-          return [];
-        }
         final attributes = AttributesParameter({Attributes.name});
         final materials = await ref.read(
           materialsStreamProvider(attributes).future,
@@ -47,14 +73,12 @@ class MaterialSearch extends ConsumerWidget {
         );
       },
       onSubmitted: (query) {
-        controller.closeView(query);
         ref.read(searchProvider.notifier).state = query;
       },
       onClear: () {
-        controller.closeView('');
         ref.read(searchProvider.notifier).state = '';
       },
-      onFilter: onFilter,
+      trailing: widget.onFilter != null ? filter : null,
     );
   }
 }

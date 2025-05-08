@@ -14,7 +14,8 @@ class Search<T> extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.onClear,
-    this.onFilter,
+    this.trailing,
+    this.autoFocus = false,
   });
 
   final String? hintText;
@@ -24,29 +25,48 @@ class Search<T> extends StatelessWidget {
   final void Function(String value)? onChanged;
   final void Function(String value)? onSubmitted;
   final void Function()? onClear;
-  final void Function()? onFilter;
+  final Widget? trailing;
+  final bool autoFocus;
 
   @override
   Widget build(BuildContext context) {
+    final leading = Padding(
+      padding: const EdgeInsets.all(8),
+      child: Icon(Icons.search),
+    );
     final clear = IconButton(
       icon: const Icon(Icons.close),
       tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
-      onPressed: onClear,
+      onPressed: () {
+        controller.closeView('');
+        onClear?.call();
+      },
     );
-    final filter = IconButton(
-      icon: Icon(Icons.tune),
-      tooltip: 'Filters',
-      onPressed: onFilter,
-    );
-    return SearchAnchor.bar(
+    return SearchAnchor(
       searchController: controller,
-      barHintText: hintText,
-      barTrailing: [if (onFilter != null) filter],
-      barPadding: WidgetStatePropertyAll(EdgeInsets.only(left: 16, right: 8)),
-      viewLeading: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Icon(Icons.search),
-      ),
+      builder: (context, controller) {
+        return SearchBar(
+          autoFocus: autoFocus,
+          hintText: hintText,
+          controller: controller,
+          onTap: () {
+            controller.openView();
+          },
+          onChanged: (value) {
+            controller.openView();
+          },
+          onSubmitted: onSubmitted,
+          leading: leading,
+          trailing: [if (trailing != null) trailing!],
+        );
+      },
+      viewHintText: hintText,
+      viewOnChanged: onChanged,
+      viewOnSubmitted: (value) {
+        controller.closeView(value);
+        onSubmitted?.call(value);
+      },
+      viewLeading: leading,
       viewTrailing: [
         ValueListenableBuilder(
           valueListenable: controller,
@@ -54,7 +74,7 @@ class Search<T> extends StatelessWidget {
             return value.text.isEmpty ? const SizedBox() : clear;
           },
         ),
-        if (onFilter != null) filter,
+        if (trailing != null) trailing!,
       ],
       viewBuilder: (suggestions) {
         final query = controller.text;
@@ -66,10 +86,11 @@ class Search<T> extends StatelessWidget {
         }
         return ListView(shrinkWrap: true, children: suggestions.toList());
       },
-      onChanged: onChanged,
-      onSubmitted: onSubmitted,
       suggestionsBuilder: (context, controller) async {
         final query = controller.text;
+        if (query.isEmpty) {
+          return [];
+        }
         final suggestions = await search(query);
         return suggestions.map(
           (suggestion) => buildSuggestion(suggestion, query),
