@@ -70,7 +70,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
     Attributes.uValue: 2,
     Attributes.wValue: 3.6,
     Attributes.fireBehaviorStandard: "C-s2,d1",
-    Attributes.originCountry: "Se",
+    Attributes.originCountry: ["SE"],
   };
 
   @override

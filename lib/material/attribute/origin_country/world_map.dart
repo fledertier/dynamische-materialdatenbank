@@ -4,12 +4,13 @@ import 'package:countries_world_map/countries_world_map.dart';
 import 'package:countries_world_map/data/maps/world_map.dart';
 import 'package:flutter/material.dart';
 
+import 'countries.dart';
 import 'focusable_interactive_viewer.dart';
 
 class WorldMap extends StatefulWidget {
   const WorldMap({super.key, required this.highlightedCountries});
 
-  final List<String> highlightedCountries;
+  final List<Country> highlightedCountries;
 
   @override
   State<WorldMap> createState() => _WorldMapState();
@@ -28,24 +29,21 @@ class _WorldMapState extends State<WorldMap> {
     attributes = MapAttributes(SMapWorld.instructions);
     final points =
         widget.highlightedCountries
-            .expand((code) => pointsOfCountry(code, attributes))
+            .expand((country) => pointsOfCountry(country, attributes))
             .toList();
     boundingBox = boundingBoxFrom(points);
   }
 
-  List<Offset> pointsOfCountry(String countryCode, MapAttributes attributes) {
-    final instructionsList = instructionsForCountry(countryCode, attributes);
+  List<Offset> pointsOfCountry(Country country, MapAttributes attributes) {
+    final instructionsList = instructionsForCountry(country, attributes);
     return instructionsList
         .expand((instructions) => extractPositions(instructions))
         .toList();
   }
 
-  List<List> instructionsForCountry(
-    String countryCode,
-    MapAttributes attributes,
-  ) {
+  List<List> instructionsForCountry(Country country, MapAttributes attributes) {
     return attributes.drawingInstructions
-        .where((e) => e["u"] == countryCode)
+        .where((e) => e["u"] == country.iso.toLowerCase())
         .map((e) => e["i"] as List)
         .toList();
   }
@@ -90,8 +88,8 @@ class _WorldMapState extends State<WorldMap> {
               instructions: SMapWorld.instructions,
               defaultColor: colorScheme.primaryContainer,
               colors: {
-                for (final code in widget.highlightedCountries)
-                  code: colorScheme.primary,
+                for (final country in widget.highlightedCountries)
+                  country.iso.toLowerCase(): colorScheme.primary,
               },
               countryBorder: CountryBorder(
                 width: 0.5,

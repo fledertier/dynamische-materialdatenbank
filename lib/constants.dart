@@ -39,7 +39,7 @@ abstract class Attributes {
   static const images = "images";
   static const image = "image";
   static const subjectiveImpressions = "subjective impressions";
-  static const originCountry = "originCountry";
+  static const originCountry = "origin country";
   static const widgets = "widgets";
 }
 
