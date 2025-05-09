@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
-import '../cards.dart';
 import '../../edit_mode_button.dart';
+import '../cards.dart';
 import 'countries.dart';
 
 class OriginCountryCard extends ConsumerWidget {
@@ -26,7 +26,7 @@ class OriginCountryCard extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
     final attribute = ref.watch(attributeProvider(Attributes.originCountry));
     final countries = parseCountries(
-      material[Attributes.originCountry] ?? ['SE'],
+      material[Attributes.originCountry] ?? ['se'],
     );
 
     return AttributeCard(
@@ -35,7 +35,10 @@ class OriginCountryCard extends ConsumerWidget {
         label: attribute?.name,
         value: countries.map((country) => country.name).join(', '),
       ),
-      child: WorldMap(highlightedCountries: countries),
+      child:
+          size > CardSize.small
+              ? WorldMap(highlightedCountries: countries)
+              : null,
     );
   }
 

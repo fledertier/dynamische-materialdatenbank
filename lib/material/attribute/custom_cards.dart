@@ -30,28 +30,22 @@ enum CustomCards implements Cards {
   ),
   imageCard(
     attributes: {Attributes.image, Attributes.images},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
   lightReflectionCard(
     attributes: {Attributes.lightReflection},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
   lightAbsorptionCard(
     attributes: {Attributes.lightAbsorption},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
   lightTransmissionCard(
     attributes: {Attributes.lightTransmission},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
-  uValueCard(
-    attributes: {Attributes.uValue},
-    sizes: {CardSize.small, CardSize.large},
-  ),
-  wValueCard(
-    attributes: {Attributes.wValue},
-    sizes: {CardSize.small, CardSize.large},
-  ),
+  uValueCard(attributes: {Attributes.uValue}, sizes: {CardSize.large}),
+  wValueCard(attributes: {Attributes.wValue}, sizes: {CardSize.large}),
   originCountryCard(
     attributes: {Attributes.originCountry},
     sizes: {CardSize.small, CardSize.large},
@@ -62,7 +56,7 @@ enum CustomCards implements Cards {
   ),
   fireBehaviorStandardCard(
     attributes: {Attributes.fireBehaviorStandard},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
   arealDensityCard(
     attributes: {Attributes.arealDensity},
