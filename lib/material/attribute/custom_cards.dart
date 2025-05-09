@@ -66,12 +66,9 @@ enum CustomCards implements Cards {
   ),
   arealDensityCard(
     attributes: {Attributes.arealDensity},
-    sizes: {CardSize.small, CardSize.large},
+    sizes: {CardSize.large},
   ),
-  densityCard(
-    attributes: {Attributes.density},
-    sizes: {CardSize.small, CardSize.large},
-  ),
+  densityCard(attributes: {Attributes.density}, sizes: {CardSize.large}),
   componentsCard(
     attributes: {Attributes.components},
     sizes: {CardSize.small, CardSize.large},

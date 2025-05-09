@@ -3,36 +3,35 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../types.dart';
+import '../../../types.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../cards.dart';
 
-class TextCard extends ConsumerWidget {
-  const TextCard({
+class NumberCard extends ConsumerWidget {
+  const NumberCard({
     super.key,
     required this.material,
     required this.attribute,
     required this.size,
-    this.textStyle,
   });
 
   final Json material;
   final String attribute;
   final CardSize size;
-  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final metadata = ref.watch(attributeProvider(attribute));
+    final value = material[attribute] ?? 0;
 
     return AttributeCard(
       label: AttributeLabel(
         label: metadata?.name,
-        value: material[attribute],
+        value: value.toStringAsFixed(1),
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
-            attribute: value,
+            attribute: double.tryParse(value) ?? 0,
           });
         },
       ),
