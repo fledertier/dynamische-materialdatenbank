@@ -6,8 +6,8 @@ import '../../constants.dart';
 import '../../types.dart';
 import 'attribute_search.dart';
 import 'cards.dart';
-import 'custom_cards.dart';
-import 'default_cards.dart';
+import 'custom/custom_cards.dart';
+import 'default/default_cards.dart';
 
 class AttributeCardSearch extends StatefulWidget {
   const AttributeCardSearch({

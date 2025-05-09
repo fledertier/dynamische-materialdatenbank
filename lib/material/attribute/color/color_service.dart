@@ -6,7 +6,7 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../image/image_search_service.dart';
+import '../custom/image/image_search_service.dart';
 import 'hex_color.dart';
 
 final colorServiceProvider = Provider((ref) {

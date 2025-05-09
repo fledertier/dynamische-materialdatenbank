@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/material/attribute/fire_behavior/fire_behavior_standard.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/fire_behavior_standard.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

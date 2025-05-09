@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
 import '../types.dart';
-import 'attribute/custom_cards.dart';
+import 'attribute/custom/custom_cards.dart';
 import 'placeholder.dart';
 
 final materialServiceProvider = Provider((ref) => MaterialService());

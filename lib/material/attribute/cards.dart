@@ -1,9 +1,9 @@
-import 'package:dynamische_materialdatenbank/material/attribute/custom_cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../types.dart';
-import 'default_cards.dart';
+import 'default/default_cards.dart';
 
 enum CardSize { small, large }
 
