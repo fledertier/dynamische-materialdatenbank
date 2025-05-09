@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/w_value/water_absorption_visualization.dart';
@@ -19,12 +18,11 @@ class WValueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(Attributes.wValue));
     final value = material[Attributes.wValue] ?? 0;
 
     return AttributeCard(
       label: AttributeLabel(
-        label: attribute?.name,
+        attribute: Attributes.wValue,
         value: value.toStringAsFixed(1),
         unit: 'kg/(m²√h)',
         onChanged: (value) {

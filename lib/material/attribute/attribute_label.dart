@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../attributes/attribute_provider.dart';
 import '../../widgets/loading_text.dart';
 import '../edit_mode_button.dart';
 
 class AttributeLabel extends ConsumerStatefulWidget {
   const AttributeLabel({
     super.key,
-    required this.label,
+    required this.attribute,
     this.value,
     this.unit,
     this.onChanged,
   });
 
-  final String? label;
+  final String attribute;
   final String? value;
   final String? unit;
   final ValueChanged<String>? onChanged;
@@ -42,13 +43,14 @@ class _AttributeLabelState extends ConsumerState<AttributeLabel> {
     final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
 
+    final attribute = ref.watch(attributeProvider(widget.attribute));
     final edit = ref.watch(editModeProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: [
-        LoadingText(widget.label, style: textTheme.labelMedium),
+        LoadingText(attribute?.name, style: textTheme.labelMedium),
         if (widget.value != null)
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,

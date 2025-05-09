@@ -2,7 +2,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/components/compo
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
 import '../../edit_mode_button.dart';
@@ -37,7 +36,6 @@ class ComponentsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(Attributes.components));
 
     final value = List<Json>.from(
       material[Attributes.components] ??
@@ -92,7 +90,7 @@ class ComponentsCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: columns,
-      label: AttributeLabel(label: attribute?.name),
+      label: AttributeLabel(attribute: Attributes.components),
       childPadding: EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

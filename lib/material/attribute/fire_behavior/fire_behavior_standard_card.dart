@@ -28,7 +28,7 @@ class FireBehaviorStandardCard extends ConsumerWidget {
     return AttributeCard(
       columns: 3,
       label: AttributeLabel(
-        label: 'Fire Behavior (EN 13501-1)',
+        attribute: Attributes.fireBehaviorStandard,
         value: value,
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {

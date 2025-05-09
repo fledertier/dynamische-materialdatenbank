@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/image/image_search_service.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/image/web_image.dart';
@@ -98,11 +97,10 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   @override
   Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(Attributes.images));
     final selectedImage = images.elementAtOrNull(selectedIndex);
 
     return AttributeCard(
-      label: AttributeLabel(label: attribute?.name),
+      label: AttributeLabel(attribute: Attributes.images),
       columns: 3,
       childPadding: EdgeInsets.all(padding),
       child: AspectRatio(

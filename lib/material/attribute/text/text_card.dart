@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,11 +23,9 @@ class TextCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final metadata = ref.watch(attributeProvider(attribute));
-
     return AttributeCard(
       label: AttributeLabel(
-        label: metadata?.name,
+        attribute: attribute,
         value: material[attribute],
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {

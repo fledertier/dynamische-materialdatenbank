@@ -54,7 +54,7 @@ class _TextAreaCardState extends ConsumerState<TextareaCard> {
     final attribute = ref.watch(attributeProvider(widget.attribute));
 
     return AttributeCard(
-      label: AttributeLabel(label: attribute?.name),
+      label: AttributeLabel(attribute: widget.attribute),
       columns: 2,
       child: TextField(
         enabled: edit,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
 import '../../../utils.dart';
@@ -28,9 +27,6 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(
-      attributeProvider(Attributes.subjectiveImpressions),
-    );
 
     final value = List<Json>.from(
       material[Attributes.subjectiveImpressions] ??
@@ -69,7 +65,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: 2,
-      label: AttributeLabel(label: attribute?.name),
+      label: AttributeLabel(attribute: Attributes.subjectiveImpressions),
       clip: Clip.antiAlias,
       childPadding:
           size == CardSize.small ? EdgeInsets.all(16) : EdgeInsets.zero,

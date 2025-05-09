@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
@@ -22,14 +21,13 @@ class LightReflectionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(Attributes.lightReflection));
     final value = material[Attributes.lightReflection] ?? 0;
 
     final reflectedRays = (value / 10).round();
 
     return AttributeCard(
       label: AttributeLabel(
-        label: attribute?.name,
+        attribute: Attributes.lightReflection,
         value: value.toStringAsFixed(0),
         unit: '%',
         onChanged: (value) {

@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/density/density_visualization.dart';
@@ -18,12 +17,11 @@ class DensityCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(Attributes.density));
     final value = material[Attributes.density] ?? 1000;
 
     return AttributeCard(
       label: AttributeLabel(
-        label: attribute?.name,
+        attribute: Attributes.arealDensity,
         value: value.toStringAsFixed(1),
         unit: 'kg/m³',
         onChanged: (value) {

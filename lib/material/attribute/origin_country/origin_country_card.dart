@@ -4,10 +4,8 @@ import 'package:dynamische_materialdatenbank/material/attribute/origin_country/w
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
-import '../../edit_mode_button.dart';
 import '../cards.dart';
 import 'countries.dart';
 
@@ -23,8 +21,6 @@ class OriginCountryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(Attributes.originCountry));
     final countries = parseCountries(
       material[Attributes.originCountry] ?? ['se'],
     );
@@ -32,7 +28,7 @@ class OriginCountryCard extends ConsumerWidget {
     return AttributeCard(
       columns: 2,
       label: AttributeLabel(
-        label: attribute?.name,
+        attribute: Attributes.originCountry,
         value: countries.map((country) => country.name).join(', '),
       ),
       child:

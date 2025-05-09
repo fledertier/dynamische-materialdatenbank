@@ -44,7 +44,7 @@ class _NameCardState extends ConsumerState<NameCard> {
     final attribute = ref.watch(attributeProvider(Attributes.name));
 
     return AttributeCard(
-      label: AttributeLabel(label: attribute?.name),
+      label: AttributeLabel(attribute: Attributes.name),
       columns: 5,
       child: TextField(
         enabled: edit,
