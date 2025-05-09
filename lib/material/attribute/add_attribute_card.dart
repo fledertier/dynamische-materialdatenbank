@@ -1,12 +1,11 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_search.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants.dart';
 import '../../types.dart' hide Material;
-import 'attribute_card_factory.dart';
-import 'attribute_cards.dart';
+import '../../utils.dart';
+import 'cards.dart';
 
 class AddAttributeCardButton extends StatelessWidget {
   const AddAttributeCardButton({
@@ -16,7 +15,7 @@ class AddAttributeCardButton extends StatelessWidget {
   });
 
   final Json material;
-  final void Function(AttributeCards card) onAdded;
+  final void Function(CardData card) onAdded;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class AddAttributeCardButton extends StatelessWidget {
     );
   }
 
-  Future<AttributeCards?> showAddAttributeCardDialog(BuildContext context) {
+  Future<CardData?> showAddAttributeCardDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -55,7 +54,7 @@ class AddAttributeCardDialog extends StatefulWidget {
 }
 
 class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
-  Set<AttributeCards> attributeCards = {};
+  List<CardData> cards = [];
 
   final exampleMaterial = {
     Attributes.id: "example",
@@ -84,9 +83,9 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
           SizedBox(height: 32),
           AttributeCardSearch(
             material: widget.material,
-            onSubmit: (attributeCards) {
+            onSubmit: (cards) {
               setState(() {
-                this.attributeCards = attributeCards;
+                this.cards = cards;
               });
             },
           ),
@@ -101,7 +100,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    for (final card in attributeCards)
+                    for (final card in cards)
                       Material(
                         type: MaterialType.transparency,
                         child: InkWell(
@@ -109,7 +108,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                             context.pop(card);
                           },
                           child: AbsorbPointer(
-                            child: AttributeCardFactory.create(card, {
+                            child: CardFactory.create(card, {
                               ...exampleMaterial,
                               ...widget.material,
                             }),

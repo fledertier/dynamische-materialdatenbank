@@ -8,23 +8,35 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
+import '../cards.dart';
 import 'composition.dart';
 import 'composition_dialog.dart';
 import 'material_category.dart';
 import 'proportions_widget.dart';
 
 class CompositionCard extends ConsumerWidget {
-  const CompositionCard(this.material, {super.key})
-    : columns = 4,
-      axis = Axis.horizontal;
-
-  const CompositionCard.small(this.material, {super.key})
-    : columns = 2,
-      axis = Axis.vertical;
+  const CompositionCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
-  final int columns;
-  final Axis axis;
+  final CardSize size;
+
+  int get columns {
+    return switch (size) {
+      CardSize.large => 4,
+      CardSize.small => 2,
+    };
+  }
+
+  Axis get axis {
+    return switch (size) {
+      CardSize.large => Axis.horizontal,
+      CardSize.small => Axis.vertical,
+    };
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,8 +64,7 @@ class CompositionCard extends ConsumerWidget {
         },
       );
       if (updatedComposition != null) {
-        ref.read(materialServiceProvider).updateMaterial({
-          Attributes.id: material[Attributes.id],
+        ref.read(materialServiceProvider).updateMaterial(material, {
           Attributes.composition: updatedComposition.map(
             (composition) => composition.toJson(),
           ),

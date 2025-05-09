@@ -7,12 +7,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../types.dart';
 import '../../material_service.dart';
+import '../cards.dart';
 import 'ray_visualization.dart';
 
 class LightTransmissionCard extends ConsumerWidget {
-  const LightTransmissionCard(this.material, {super.key});
+  const LightTransmissionCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,8 +35,7 @@ class LightTransmissionCard extends ConsumerWidget {
         value: value.toStringAsFixed(0),
         unit: '%',
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial({
-            Attributes.id: material[Attributes.id],
+          ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.lightTransmission: double.tryParse(value) ?? 0,
           });
         },

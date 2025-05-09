@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../types.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
+import '../cards.dart';
 import '../light/ray_visualization.dart';
 
 class UValueCard extends ConsumerWidget {
-  const UValueCard(this.material, {super.key});
+  const UValueCard({super.key, required this.material, required this.size});
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,8 +29,7 @@ class UValueCard extends ConsumerWidget {
         value: value.toStringAsFixed(1),
         unit: 'W/m²K',
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial({
-            Attributes.id: material[Attributes.id],
+          ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.uValue: double.tryParse(value) ?? 0,
           });
         },

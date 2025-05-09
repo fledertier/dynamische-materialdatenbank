@@ -10,13 +10,11 @@ import '../app/navigation.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
+import '../types.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/add_attribute_card.dart';
-import 'attribute/attribute_card_factory.dart';
-import 'attribute/attribute_cards.dart';
-import 'attribute/description/description_card.dart';
-import 'attribute/name/name_card.dart';
+import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
 
@@ -48,10 +46,10 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
 
     final edit = ref.watch(editModeProvider);
 
-    final widgets =
-        List<String>.from(
-          material[Attributes.widgets] ?? [],
-        ).map(AttributeCards.values.maybeByName).nonNulls.toList();
+    final cards =
+        List<Json>.from(
+          material[Attributes.cards] ?? [],
+        ).map(CardData.fromJson).toList();
 
     return AppScaffold(
       header: Header(actions: [EditModeButton()]),
@@ -67,37 +65,21 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                       spacing: 16,
                       runSpacing: 16,
                       children: [
-                        NameCard(material),
-                        DescriptionCard(material),
-                        for (final card in widgets)
-                          AttributeCardFactory.create(card, material),
-                        // ImageCard(material),
-                        // LightReflectionCard(material),
-                        // LightAbsorptionCard(material),
-                        // LightTransmissionCard(material),
-                        // UValueCard(material),
-                        // WValueCard(material),
-                        // OriginCountryCard(material),
-                        // CompositionCard(material),
-                        // CompositionCard.small(material),
-                        // FireBehaviorStandardCard(material),
-                        // ArealDensityCard(material),
-                        // DensityCard(material),
-                        // ComponentsCard(material),
-                        // ComponentsCard.small(material),
-                        // SubjectiveImpressionsCard(material),
-                        // SubjectiveImpressionsCard.small(material),
+                        for (final card in cards)
+                          CardFactory.create(card, material),
                         if (edit)
                           AddAttributeCardButton(
                             material: material,
                             onAdded: (card) {
-                              ref.read(materialServiceProvider).updateMaterial({
-                                Attributes.id: material[Attributes.id],
-                                Attributes.widgets: {
-                                  ...?material[Attributes.widgets],
-                                  card.name,
+                              ref.read(materialServiceProvider).updateMaterial(
+                                material,
+                                {
+                                  Attributes.cards: [
+                                    ...?material[Attributes.cards],
+                                    card.toJson(),
+                                  ],
                                 },
-                              });
+                              );
                             },
                           ),
                       ],

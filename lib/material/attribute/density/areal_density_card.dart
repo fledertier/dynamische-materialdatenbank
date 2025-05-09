@@ -8,11 +8,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../types.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
+import '../cards.dart';
 
 class ArealDensityCard extends ConsumerWidget {
-  const ArealDensityCard(this.material, {super.key});
+  const ArealDensityCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,8 +31,7 @@ class ArealDensityCard extends ConsumerWidget {
         value: value.toStringAsFixed(1),
         unit: 'kg/m²',
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial({
-            Attributes.id: material[Attributes.id],
+          ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.arealDensity: double.tryParse(value) ?? 0,
           });
         },

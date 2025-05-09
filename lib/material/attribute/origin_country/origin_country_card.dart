@@ -7,13 +7,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../attributes/attribute_provider.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
+import '../cards.dart';
 import '../../edit_mode_button.dart';
 import 'countries.dart';
 
 class OriginCountryCard extends ConsumerWidget {
-  const OriginCountryCard(this.material, {super.key});
+  const OriginCountryCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

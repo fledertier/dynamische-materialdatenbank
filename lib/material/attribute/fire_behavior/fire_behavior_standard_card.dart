@@ -6,13 +6,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants.dart';
 import '../../../types.dart';
 import '../../material_service.dart';
+import '../cards.dart';
 import 'fire_behavior_standard.dart';
 import 'fire_behavior_standard_visualization.dart';
 
 class FireBehaviorStandardCard extends ConsumerWidget {
-  const FireBehaviorStandardCard(this.material, {super.key});
+  const FireBehaviorStandardCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,8 +31,7 @@ class FireBehaviorStandardCard extends ConsumerWidget {
         label: 'Fire Behavior (EN 13501-1)',
         value: value,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial({
-            Attributes.id: material[Attributes.id],
+          ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.fireBehaviorStandard: value,
           });
         },

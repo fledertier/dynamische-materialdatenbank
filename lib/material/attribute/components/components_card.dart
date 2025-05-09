@@ -9,22 +9,30 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
+import '../cards.dart';
 import '../composition/proportions_widget.dart';
 import 'component.dart';
 import 'components_list.dart';
 
 class ComponentsCard extends ConsumerWidget {
-  const ComponentsCard(this.material, {super.key})
-    : columns = 4,
-      axis = Axis.horizontal;
-
-  const ComponentsCard.small(this.material, {super.key})
-    : columns = 2,
-      axis = Axis.vertical;
+  const ComponentsCard({super.key, required this.material, required this.size});
 
   final Json material;
-  final int columns;
-  final Axis axis;
+  final CardSize size;
+
+  int get columns {
+    return switch (size) {
+      CardSize.large => 4,
+      CardSize.small => 2,
+    };
+  }
+
+  Axis get axis {
+    return switch (size) {
+      CardSize.large => Axis.horizontal,
+      CardSize.small => Axis.vertical,
+    };
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,8 +82,7 @@ class ComponentsCard extends ConsumerWidget {
         },
       );
       if (updatedComponents != null) {
-        ref.read(materialServiceProvider).updateMaterial({
-          Attributes.id: material[Attributes.id],
+        ref.read(materialServiceProvider).updateMaterial(material, {
           Attributes.components: updatedComponents.map(
             (component) => component.toJson(),
           ),

@@ -8,12 +8,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../types.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
+import '../cards.dart';
 
 /// Also known as the water absorption coefficient
 class WValueCard extends ConsumerWidget {
-  const WValueCard(this.material, {super.key});
+  const WValueCard({super.key, required this.material, required this.size});
 
   final Json material;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,8 +28,7 @@ class WValueCard extends ConsumerWidget {
         value: value.toStringAsFixed(1),
         unit: 'kg/(m²√h)',
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial({
-            Attributes.id: material[Attributes.id],
+          ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.wValue: double.tryParse(value) ?? 0,
           });
         },

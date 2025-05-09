@@ -9,19 +9,21 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
+import '../cards.dart';
 import 'subjective_impression.dart';
 import 'subjective_impression_balls.dart';
 import 'subjective_impression_chips.dart';
 import 'subjective_impression_dialog.dart';
 
 class SubjectiveImpressionsCard extends ConsumerWidget {
-  const SubjectiveImpressionsCard(this.material, {super.key}) : small = false;
-
-  const SubjectiveImpressionsCard.small(this.material, {super.key})
-    : small = true;
+  const SubjectiveImpressionsCard({
+    super.key,
+    required this.material,
+    required this.size,
+  });
 
   final Json material;
-  final bool small;
+  final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,8 +59,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
             },
           );
       if (updatedSubjectiveImpressions != null) {
-        ref.read(materialServiceProvider).updateMaterial({
-          Attributes.id: material[Attributes.id],
+        ref.read(materialServiceProvider).updateMaterial(material, {
           Attributes.subjectiveImpressions: updatedSubjectiveImpressions.map(
             (subjectiveImpression) => subjectiveImpression.toJson(),
           ),
@@ -70,16 +71,17 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
       columns: 2,
       label: AttributeLabel(label: attribute?.name),
       clip: Clip.antiAlias,
-      childPadding: small ? EdgeInsets.all(16) : EdgeInsets.zero,
-      child: switch (small) {
-        false => SubjectiveImpressionBalls(
+      childPadding:
+          size == CardSize.small ? EdgeInsets.all(16) : EdgeInsets.zero,
+      child: switch (size) {
+        CardSize.large => SubjectiveImpressionBalls(
           key: ValueKey([edit, impressions]),
           width: widthByColumns(2),
           impressions: impressions,
           onUpdate: updateSubjectiveImpressions,
           edit: edit,
         ),
-        true => SubjectiveImpressionChips(
+        CardSize.small => SubjectiveImpressionChips(
           impressions: impressions,
           onUpdate: updateSubjectiveImpressions,
           edit: edit,

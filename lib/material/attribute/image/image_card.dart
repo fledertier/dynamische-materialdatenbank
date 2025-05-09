@@ -13,12 +13,14 @@ import '../../edit_mode_button.dart';
 import '../../material_service.dart';
 import '../attribute_card.dart';
 import '../attribute_label.dart';
+import '../cards.dart';
 import 'constrained_image.dart';
 
 class ImageCard extends ConsumerStatefulWidget {
-  const ImageCard(this.material, {super.key});
+  const ImageCard({super.key, required this.material, required this.size});
 
   final Json material;
+  final CardSize size;
 
   @override
   ConsumerState<ImageCard> createState() => _ImageCardState();
@@ -58,8 +60,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     setState(() {
       images.addAll(foundImages);
     });
-    ref.read(materialServiceProvider).updateMaterial({
-      Attributes.id: widget.material[Attributes.id],
+    ref.read(materialServiceProvider).updateMaterial(widget.material, {
       Attributes.images: images,
     });
   }
@@ -69,8 +70,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.removeAt(index);
       selectedIndex = min(selectedIndex, images.length - 1);
     });
-    ref.read(materialServiceProvider).updateMaterial({
-      Attributes.id: widget.material[Attributes.id],
+    ref.read(materialServiceProvider).updateMaterial(widget.material, {
       Attributes.images: images,
     });
   }
@@ -84,12 +84,8 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.insert(0, image);
       selectedIndex = 0;
     });
-    ref.read(materialServiceProvider).updateMaterial({
-      Attributes.id: widget.material[Attributes.id],
+    ref.read(materialServiceProvider).updateMaterial(widget.material, {
       Attributes.image: url,
-    });
-    ref.read(materialServiceProvider).updateMaterial({
-      Attributes.id: widget.material[Attributes.id],
       Attributes.images: images,
     });
   }

@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
+import '../types.dart';
+import 'attribute/custom_cards.dart';
 import 'placeholder.dart';
 
 final materialServiceProvider = Provider((ref) => MaterialService());
@@ -15,6 +18,10 @@ class MaterialService {
       Attributes.id: generateId(),
       Attributes.name: randomName(),
       Attributes.description: randomDescription(),
+      Attributes.cards: [
+        CardData.fromCustomCard(CustomCards.nameCard).toJson(),
+        CardData.fromCustomCard(CustomCards.descriptionCard).toJson(),
+      ],
       if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
@@ -22,23 +29,23 @@ class MaterialService {
       if (Random().nextBool()) Attributes.weight: randomWeight(),
     };
 
-    await updateMaterial(material);
+    await updateMaterial(material, material);
   }
 
-  Future<void> updateMaterial(Map<String, dynamic> material) async {
-    assert(material[Attributes.id] != null, "Material must have an id");
-    final id = material[Attributes.id];
+  Future<void> updateMaterial(Json material, Json data) async {
+    assert(material[Attributes.id] is String, "Material must have an id");
+    final id = material[Attributes.id] as String;
 
     await FirebaseFirestore.instance
         .collection(Collections.materials)
         .doc(id)
-        .set(material, SetOptions(merge: true));
+        .set({Attributes.id: id, ...data}, SetOptions(merge: true));
 
-    for (final attribute in material.keys) {
+    for (final attribute in data.keys) {
       await FirebaseFirestore.instance
           .collection(Collections.attributes)
           .doc(attribute)
-          .set({id: material[attribute]}, SetOptions(merge: true));
+          .set({id: data[attribute]}, SetOptions(merge: true));
     }
   }
 
