@@ -1,5 +1,7 @@
+import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../../attributes/attribute_provider.dart';
 import '../../widgets/loading_text.dart';
@@ -38,7 +40,6 @@ class _AttributeLabelState extends ConsumerState<AttributeLabel> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
 
     final attribute = ref.watch(attributeProvider(widget.attribute));
@@ -66,15 +67,58 @@ class _AttributeLabelState extends ConsumerState<AttributeLabel> {
                 ),
               ),
               if (attribute?.unitType != null)
-                Text(
-                  attribute!.unitType!.base,
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
+                UnitDropdown(unitType: attribute!.unitType!, edit: edit),
             ],
           ),
       ],
+    );
+  }
+}
+
+class UnitDropdown extends StatelessWidget {
+  const UnitDropdown({super.key, required this.unitType, required this.edit});
+
+  final UnitType unitType;
+  final bool edit;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = ColorScheme.of(context);
+    final textTheme = TextTheme.of(context);
+
+    return MenuAnchor(
+      alignmentOffset: Offset(-12, 0),
+      menuChildren: [
+        for (final unit in unitType.units)
+          MenuItemButton(
+            requestFocusOnHover: false,
+            onPressed: () {},
+            child: Text(unit),
+          ),
+      ],
+      builder: (context, controller, child) {
+        if (!edit) {
+          return child!;
+        }
+        final arrow = Icon(
+          Symbols.arrow_drop_down,
+          size: textTheme.bodyMedium?.fontSize,
+          color: colorScheme.onSurfaceVariant,
+        );
+        return Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: controller.isOpen ? controller.close : controller.open,
+            child: Row(children: [child!, arrow]),
+          ),
+        );
+      },
+      child: Text(
+        unitType.base,
+        style: textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onSurfaceVariant,
+        ),
+      ),
     );
   }
 }
