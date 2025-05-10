@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class MaterialContextMenu extends ConsumerWidget {
       directionality: TextDirection.rtl,
       builder: (context, controller, child) {
         return IconButton(
-          onPressed: controller.isOpen ? controller.close : controller.open,
+          onPressed: controller.toggle,
           icon: Icon(controller.isOpen || visible ? Icons.more_vert : null),
         );
       },

@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -108,7 +109,7 @@ class UnitDropdown extends StatelessWidget {
         return Material(
           type: MaterialType.transparency,
           child: InkWell(
-            onTap: controller.isOpen ? controller.close : controller.open,
+            onTap: controller.toggle,
             child: Row(children: [child!, arrow]),
           ),
         );

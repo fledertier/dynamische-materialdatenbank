@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 String generateId() {
@@ -61,4 +60,8 @@ extension SizeExtension on Size {
 
 UnitType? unitTypeFromName(String? name) {
   return unitTypes.singleWhereOrNull((unit) => unit.name == name);
+}
+
+extension MenuControllerExtension on MenuController {
+  void toggle() => isOpen ? close() : open();
 }

@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_service.dart';
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,10 +48,7 @@ class AttributeDetails extends ConsumerWidget {
                       directionality: TextDirection.rtl,
                       builder: (context, controller, child) {
                         return IconButton(
-                          onPressed:
-                              controller.isOpen
-                                  ? controller.close
-                                  : controller.open,
+                          onPressed: controller.toggle,
                           icon: Icon(Icons.more_vert),
                         );
                       },

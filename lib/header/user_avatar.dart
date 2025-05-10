@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class UserAvatar extends StatelessWidget {
         return CircleAvatar(
           child: IconButton(
             icon: Icon(Icons.person),
-            onPressed: controller.isOpen ? controller.close : controller.open,
+            onPressed: controller.toggle,
           ),
         );
       },
