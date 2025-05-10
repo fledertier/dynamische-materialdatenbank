@@ -1,13 +1,10 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_card.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../types.dart';
-import '../../../material_service.dart';
-import '../../cards.dart';
 import 'ray_visualization.dart';
 
 class LightTransmissionCard extends ConsumerWidget {
@@ -26,17 +23,10 @@ class LightTransmissionCard extends ConsumerWidget {
 
     final transmittedRays = (value / 10).round();
 
-    return AttributeCard(
-      label: AttributeLabel(attribute: Attributes.lightTransmission),
-      title: NumberAttributeField(
-        attribute: Attributes.lightTransmission,
-        value: value.toStringAsFixed(0),
-        onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
-            Attributes.lightTransmission: double.tryParse(value) ?? 0,
-          });
-        },
-      ),
+    return NumberCard(
+      material: material,
+      attribute: Attributes.lightTransmission,
+      size: size,
       child: RayVisualization(
         incidentRays: 10 - transmittedRays,
         transmittedRays: transmittedRays,

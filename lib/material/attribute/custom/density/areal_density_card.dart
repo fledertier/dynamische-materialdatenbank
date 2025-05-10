@@ -1,13 +1,10 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_card.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../types.dart';
-import '../../../material_service.dart';
-import '../../attribute_card.dart';
-import '../../cards.dart';
 import 'density_visualization.dart';
 
 class ArealDensityCard extends ConsumerWidget {
@@ -24,17 +21,10 @@ class ArealDensityCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final value = material[Attributes.arealDensity] ?? 1000;
 
-    return AttributeCard(
-      label: AttributeLabel(attribute: Attributes.arealDensity),
-      title: NumberAttributeField(
-        attribute: Attributes.arealDensity,
-        value: value.toStringAsFixed(1),
-        onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
-            Attributes.arealDensity: double.tryParse(value) ?? 0,
-          });
-        },
-      ),
+    return NumberCard(
+      material: material,
+      attribute: Attributes.arealDensity,
+      size: size,
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,
       child: AspectRatio(

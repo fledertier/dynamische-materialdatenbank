@@ -14,11 +14,19 @@ class NumberCard extends ConsumerWidget {
     required this.material,
     required this.attribute,
     required this.size,
+    this.spacing = 16,
+    this.clip = Clip.none,
+    this.childPadding = const EdgeInsets.all(16),
+    this.child,
   });
 
   final Json material;
   final String attribute;
   final CardSize size;
+  final double spacing;
+  final Clip clip;
+  final EdgeInsets childPadding;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,6 +43,10 @@ class NumberCard extends ConsumerWidget {
           });
         },
       ),
+      spacing: spacing,
+      clip: clip,
+      childPadding: childPadding,
+      child: child,
     );
   }
 }
