@@ -25,7 +25,6 @@ class UValueCard extends ConsumerWidget {
       label: AttributeLabel(
         attribute: Attributes.uValue,
         value: value.toStringAsFixed(1),
-        unit: 'W/m²K',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.uValue: double.tryParse(value) ?? 0,

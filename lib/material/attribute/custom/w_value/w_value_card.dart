@@ -24,7 +24,6 @@ class WValueCard extends ConsumerWidget {
       label: AttributeLabel(
         attribute: Attributes.wValue,
         value: value.toStringAsFixed(1),
-        unit: 'kg/(m²√h)',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.wValue: double.tryParse(value) ?? 0,

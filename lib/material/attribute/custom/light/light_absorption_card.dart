@@ -29,7 +29,6 @@ class LightAbsorptionCard extends ConsumerWidget {
       label: AttributeLabel(
         attribute: Attributes.lightAbsorption,
         value: value.toStringAsFixed(0),
-        unit: '%',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.lightAbsorption: double.tryParse(value) ?? 0,

@@ -11,6 +11,7 @@ final unitTypes = [
   force,
   length,
   mass,
+  percentage,
   power,
   temperature,
   time,
@@ -171,6 +172,12 @@ final uValue = UnitType(
   name: 'uValue',
   base: 'W/m²K',
   fromBase: {'W/m²K': (u) => u * power['W'] / area['m²'] / temperature['K']},
+);
+
+final percentage = UnitType(
+  name: 'percentage',
+  base: '%',
+  fromBase: {'%': (p) => p, '‰': (p) => p / 10},
 );
 
 typedef UnitConverter = Map<String, num Function(num)>;

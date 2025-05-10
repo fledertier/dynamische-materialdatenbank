@@ -17,9 +17,10 @@ class SliderFilterOption extends ConsumerWidget {
     final minWeight = extrema?.min ?? 0;
     final maxWeight = extrema?.max ?? 1;
     final weight = options[attribute]?.clamp(minWeight, maxWeight) ?? maxWeight;
+    final unitType = ref.watch(attributeProvider(attribute))?.unitType;
 
     return Slider(
-      label: '${weight.toStringAsFixed(1)} Kg',
+      label: '${weight.toStringAsFixed(1)} ${unitType?.base}',
       min: minWeight,
       max: maxWeight,
       value: weight,

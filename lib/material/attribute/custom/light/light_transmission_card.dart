@@ -29,7 +29,6 @@ class LightTransmissionCard extends ConsumerWidget {
       label: AttributeLabel(
         attribute: Attributes.lightTransmission,
         value: value.toStringAsFixed(0),
-        unit: '%',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.lightTransmission: double.tryParse(value) ?? 0,

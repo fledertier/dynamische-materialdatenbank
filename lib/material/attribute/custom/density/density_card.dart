@@ -21,9 +21,8 @@ class DensityCard extends ConsumerWidget {
 
     return AttributeCard(
       label: AttributeLabel(
-        attribute: Attributes.arealDensity,
+        attribute: Attributes.density,
         value: value.toStringAsFixed(1),
-        unit: 'kg/m³',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.density: double.tryParse(value) ?? 0,

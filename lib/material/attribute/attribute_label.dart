@@ -10,13 +10,11 @@ class AttributeLabel extends ConsumerStatefulWidget {
     super.key,
     required this.attribute,
     this.value,
-    this.unit,
     this.onChanged,
   });
 
   final String attribute;
   final String? value;
-  final String? unit;
   final ValueChanged<String>? onChanged;
 
   @override
@@ -67,9 +65,9 @@ class _AttributeLabelState extends ConsumerState<AttributeLabel> {
                   onChanged: widget.onChanged,
                 ),
               ),
-              if (widget.unit != null)
+              if (attribute?.unitType != null)
                 Text(
-                  widget.unit!,
+                  attribute!.unitType!.base,
                   style: textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),

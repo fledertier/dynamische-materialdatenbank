@@ -29,7 +29,6 @@ class LightReflectionCard extends ConsumerWidget {
       label: AttributeLabel(
         attribute: Attributes.lightReflection,
         value: value.toStringAsFixed(0),
-        unit: '%',
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterial(material, {
             Attributes.lightReflection: double.tryParse(value) ?? 0,
