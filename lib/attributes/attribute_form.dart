@@ -1,6 +1,6 @@
+import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 
-import '../types.dart';
 import '../widgets/dropdown_menu_form_field.dart';
 import 'attribute.dart';
 import 'attribute_type.dart';
@@ -134,8 +134,9 @@ class _AttributeFormState extends State<AttributeForm> {
                         width: fieldWidth,
                         menuHeight: 500,
                         enableFilter: true,
+                        enableSearch: false,
                         dropdownMenuEntries: [
-                          for (final value in UnitType.values)
+                          for (final value in unitTypes)
                             DropdownMenuEntry(value: value, label: value.name),
                         ],
                         onSelected: (value) {

@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:uuid/uuid.dart';
 
 String generateId() {
@@ -55,4 +57,8 @@ double widthByColumns(int columns) {
 
 extension SizeExtension on Size {
   double get area => width * height;
+}
+
+UnitType? unitTypeFromName(String? name) {
+  return unitTypes.singleWhereOrNull((unit) => unit.name == name);
 }

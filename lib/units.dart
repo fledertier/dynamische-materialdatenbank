@@ -2,8 +2,26 @@ import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/utils.dart';
 
-final time = Unit(
-  name: 'Time',
+final unitTypes = [
+  acceleration,
+  area,
+  arealDensity,
+  density,
+  energy,
+  force,
+  length,
+  mass,
+  power,
+  temperature,
+  time,
+  uValue,
+  velocity,
+  volume,
+  wValue,
+];
+
+final time = UnitType(
+  name: 'time',
   base: 's',
   fromBase: {
     'ms': (t) => t * 1000,
@@ -14,8 +32,8 @@ final time = Unit(
   },
 );
 
-final length = Unit(
-  name: 'Length',
+final length = UnitType(
+  name: 'length',
   base: 'm',
   fromBase: {
     'mm': (l) => l * 1000,
@@ -26,8 +44,8 @@ final length = Unit(
   },
 );
 
-final mass = Unit(
-  name: 'Mass',
+final mass = UnitType(
+  name: 'mass',
   base: 'kg',
   fromBase: {
     'mg': (m) => m * 1000000,
@@ -37,8 +55,8 @@ final mass = Unit(
   },
 );
 
-final temperature = Unit(
-  name: 'Temperature',
+final temperature = UnitType(
+  name: 'temperature',
   base: 'K',
   fromBase: {
     'K': (t) => t,
@@ -52,8 +70,8 @@ final temperature = Unit(
   },
 );
 
-final velocity = Unit(
-  name: 'Velocity',
+final velocity = UnitType(
+  name: 'velocity',
   base: 'm/s',
   fromBase: {
     'm/s': (v) => v * length['m'] / time['s'],
@@ -61,8 +79,8 @@ final velocity = Unit(
   },
 );
 
-final acceleration = Unit(
-  name: 'Acceleration',
+final acceleration = UnitType(
+  name: 'acceleration',
   base: 'm/s²',
   fromBase: {
     'm/s²': (a) => a * length['m'] / pow(time['s'], 2),
@@ -70,8 +88,8 @@ final acceleration = Unit(
   },
 );
 
-final force = Unit(
-  name: 'Force',
+final force = UnitType(
+  name: 'force',
   base: 'N',
   fromBase: {
     'N': (f) => f * mass['kg'] * acceleration['m/s²'],
@@ -79,8 +97,8 @@ final force = Unit(
   },
 );
 
-final energy = Unit(
-  name: 'Energy',
+final energy = UnitType(
+  name: 'energy',
   base: 'J',
   fromBase: {
     'J': (e) => e * force['N'] * length['m'],
@@ -88,8 +106,8 @@ final energy = Unit(
   },
 );
 
-final power = Unit(
-  name: 'Power',
+final power = UnitType(
+  name: 'power',
   base: 'W',
   fromBase: {
     'W': (p) => p * energy['J'] / time['s'],
@@ -97,8 +115,8 @@ final power = Unit(
   },
 );
 
-final area = Unit(
-  name: 'Area',
+final area = UnitType(
+  name: 'area',
   base: 'm²',
   fromBase: {
     'cm²': (a) => a * pow(length['cm'], 2),
@@ -106,8 +124,8 @@ final area = Unit(
   },
 );
 
-final volume = Unit(
-  name: 'Volume',
+final volume = UnitType(
+  name: 'volume',
   base: 'm³',
   fromBase: {
     'cm³': (v) => v * pow(length['cm'], 3),
@@ -116,8 +134,8 @@ final volume = Unit(
   },
 );
 
-final arealDensity = Unit(
-  name: 'Areal density',
+final arealDensity = UnitType(
+  name: 'arealDensity',
   base: 'kg/m²',
   fromBase: {
     'g/cm²': (a) => a * mass['g'] / area['cm²'],
@@ -127,8 +145,8 @@ final arealDensity = Unit(
   },
 );
 
-final density = Unit(
-  name: 'Density',
+final density = UnitType(
+  name: 'density',
   base: 'kg/m³',
   fromBase: {
     'mg/cm³': (d) => d * mass['mg'] / volume['cm³'],
@@ -139,8 +157,8 @@ final density = Unit(
   },
 );
 
-final wValue = Unit(
-  name: 'W-value',
+final wValue = UnitType(
+  name: 'wValue',
   base: 'kg/m²√h',
   fromBase: {
     'kg/m²√s': (w) => w * mass['kg'] / (area['m²'] * sqrt(time['s']) * 60),
@@ -149,34 +167,16 @@ final wValue = Unit(
   },
 );
 
-final uValue = Unit(
-  name: 'U-value',
+final uValue = UnitType(
+  name: 'uValue',
   base: 'W/m²K',
   fromBase: {'W/m²K': (u) => u * power['W'] / area['m²'] / temperature['K']},
 );
 
-final units = [
-  time,
-  length,
-  mass,
-  temperature,
-  velocity,
-  acceleration,
-  force,
-  energy,
-  power,
-  area,
-  volume,
-  arealDensity,
-  density,
-  wValue,
-  uValue,
-];
-
 typedef UnitConverter = Map<String, num Function(num)>;
 
-class Unit {
-  Unit({
+class UnitType {
+  UnitType({
     required this.name,
     required this.base,
     required this.fromBase,
@@ -208,5 +208,13 @@ class Unit {
       value = fromBase[toUnit]!(value);
     }
     return value;
+  }
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is UnitType && name == other.name;
   }
 }

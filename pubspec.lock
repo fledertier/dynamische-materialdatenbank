@@ -605,14 +605,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
-  units_converter:
-    dependency: "direct main"
-    description:
-      name: units_converter
-      sha256: dfb40a9bd0df48701466ae17fd9a763eed3abe9b98b97be1d04a2fecb99673a6
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.3"
   uuid:
     dependency: "direct main"
     description:
