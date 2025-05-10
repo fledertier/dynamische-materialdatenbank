@@ -19,7 +19,7 @@ class LightReflectionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.lightReflection] ?? 0;
+    final value = material[Attributes.lightReflection]?['value'] ?? 0;
 
     final reflectedRays = (value / 10).round();
 

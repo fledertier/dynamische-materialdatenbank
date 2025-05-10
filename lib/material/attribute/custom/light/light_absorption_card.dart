@@ -19,7 +19,7 @@ class LightAbsorptionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.lightAbsorption] ?? 0;
+    final value = material[Attributes.lightAbsorption]?['value'] ?? 0;
 
     final absorbedRays = (value / 10).round();
 

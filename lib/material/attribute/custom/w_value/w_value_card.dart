@@ -16,7 +16,7 @@ class WValueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.wValue] ?? 0;
+    final value = material[Attributes.wValue]?['value'] ?? 0;
 
     return NumberCard(
       material: material,

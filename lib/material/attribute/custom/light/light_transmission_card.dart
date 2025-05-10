@@ -19,7 +19,7 @@ class LightTransmissionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.lightTransmission] ?? 0;
+    final value = material[Attributes.lightTransmission]?['value'] ?? 0;
 
     final transmittedRays = (value / 10).round();
 

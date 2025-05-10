@@ -14,7 +14,7 @@ class UValueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.uValue] ?? 0;
+    final value = material[Attributes.uValue]?['value'] ?? 0;
 
     final transmittedRays = (value / 6 * 10).clamp(0, 10).round();
 

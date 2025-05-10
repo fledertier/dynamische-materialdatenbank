@@ -26,7 +26,7 @@ class MaterialService {
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
       if (Random().nextBool()) Attributes.manufacturer: randomManufacturer(),
-      if (Random().nextBool()) Attributes.weight: randomWeight(),
+      if (Random().nextBool()) Attributes.weight: {'value': randomWeight()},
     };
 
     await updateMaterial(material, material);

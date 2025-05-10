@@ -15,7 +15,7 @@ class DensityCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.density] ?? 1000;
+    final value = material[Attributes.density]?['value'] ?? 1000;
 
     return NumberCard(
       material: material,

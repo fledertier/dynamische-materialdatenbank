@@ -19,7 +19,7 @@ class ArealDensityCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = material[Attributes.arealDensity] ?? 1000;
+    final value = material[Attributes.arealDensity]?['value'] ?? 1000;
 
     return NumberCard(
       material: material,
