@@ -31,7 +31,7 @@ class NumberCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final number = UnitNumber.fromJson(material[attribute] ?? {'value': 0});
+    final number = UnitNumber.fromJson(material[attribute]);
 
     return AttributeCard(
       label: AttributeLabel(attribute: attribute),
