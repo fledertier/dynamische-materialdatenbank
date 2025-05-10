@@ -44,9 +44,9 @@ class _NameCardState extends ConsumerState<NameCard> {
     final attribute = ref.watch(attributeProvider(Attributes.name));
 
     return AttributeCard(
-      label: AttributeLabel(attribute: Attributes.name),
       columns: 5,
-      child: TextField(
+      label: AttributeLabel(attribute: Attributes.name),
+      title: TextField(
         enabled: edit,
         style: textTheme.headlineLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: attribute?.name),

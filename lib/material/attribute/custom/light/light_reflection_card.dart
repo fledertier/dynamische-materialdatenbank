@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +27,8 @@ class LightReflectionCard extends ConsumerWidget {
     final reflectedRays = (value / 10).round();
 
     return AttributeCard(
-      label: AttributeLabel(
+      label: AttributeLabel(attribute: Attributes.lightReflection),
+      title: NumberAttributeField(
         attribute: Attributes.lightReflection,
         value: value.toStringAsFixed(0),
         onChanged: (value) {

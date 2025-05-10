@@ -5,6 +5,7 @@ class AttributeCard extends StatelessWidget {
   const AttributeCard({
     super.key,
     this.label,
+    this.title,
     this.child,
     this.columns = 1,
     this.labelPadding = const EdgeInsets.all(16),
@@ -15,6 +16,7 @@ class AttributeCard extends StatelessWidget {
   });
 
   final Widget? label;
+  final Widget? title;
   final Widget? child;
   final int columns;
   final EdgeInsets labelPadding;
@@ -37,13 +39,21 @@ class AttributeCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: spacing,
         children: [
-          if (label != null)
+          if (label != null || title != null)
             Padding(
               padding:
                   child == null
                       ? labelPadding
                       : labelPadding.copyWith(bottom: 0),
-              child: label,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 8,
+                children: [
+                  if (label != null) label!,
+                  if (title != null) title!,
+                ],
+              ),
             ),
           if (child != null)
             Padding(
