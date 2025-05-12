@@ -21,12 +21,16 @@ class _WorldMapState extends State<WorldMap> {
   final boundingBoxKey = GlobalKey();
 
   late final MapAttributes attributes;
-  late final Rect boundingBox;
+  late Rect boundingBox;
 
   @override
   initState() {
     super.initState();
     attributes = MapAttributes(SMapWorld.instructions);
+    updateBoundingBox();
+  }
+
+  void updateBoundingBox() {
     final points =
         widget.highlightedCountries
             .expand((country) => pointsOfCountry(country, attributes))
@@ -43,7 +47,7 @@ class _WorldMapState extends State<WorldMap> {
 
   List<List> instructionsForCountry(Country country, MapAttributes attributes) {
     return attributes.drawingInstructions
-        .where((e) => e["u"] == country.iso.toLowerCase())
+        .where((e) => e["u"] == country.code.toLowerCase())
         .map((e) => e["i"] as List)
         .toList();
   }
@@ -69,6 +73,20 @@ class _WorldMapState extends State<WorldMap> {
   }
 
   @override
+  void didUpdateWidget(covariant WorldMap oldWidget) {
+    if (oldWidget.highlightedCountries == widget.highlightedCountries) {
+      return;
+    }
+    setState(() {
+      updateBoundingBox();
+    });
+    Future.delayed(Duration.zero, () {
+      focusCountries();
+    });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
 
@@ -80,7 +98,8 @@ class _WorldMapState extends State<WorldMap> {
         scaleFactor: 100,
         viewPaddingExponent: 20,
         initialFocusKey: boundingBoxKey,
-        initialDuration: Duration.zero,
+        initialDuration: Duration(milliseconds: 500),
+        initialCurve: Curves.easeInOut,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -89,7 +108,7 @@ class _WorldMapState extends State<WorldMap> {
               defaultColor: colorScheme.primaryContainer,
               colors: {
                 for (final country in widget.highlightedCountries)
-                  country.iso.toLowerCase(): colorScheme.primary,
+                  country.code.toLowerCase(): colorScheme.primary,
               },
               countryBorder: CountryBorder(
                 width: 0.5,
@@ -97,11 +116,7 @@ class _WorldMapState extends State<WorldMap> {
               ),
               callback: (id, name, tapDetails) {
                 debugPrint(id);
-                controller.focusOn(
-                  boundingBoxKey,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                );
+                focusCountries();
               },
             ),
             AspectRatio(
@@ -116,6 +131,14 @@ class _WorldMapState extends State<WorldMap> {
           ],
         ),
       ),
+    );
+  }
+
+  void focusCountries() {
+    controller.focusOn(
+      boundingBoxKey,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 }

@@ -3,6 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('country from iso', () {
-    expect(Country.fromIso('SE').name, 'Sweden');
+    expect(Country.fromCode('SE').name, 'Sweden');
   });
 }

@@ -23,7 +23,7 @@ class TagsEditingController<T> extends TextEditingController {
 
   final TagsController<T> controller;
   final TagBuilder<T> tagBuilder;
-  final TextExtractor textExtractor;
+  final TextExtractor<T> textExtractor;
 
   @override
   set value(TextEditingValue value) {

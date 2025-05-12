@@ -56,6 +56,8 @@ class TagsField<T> extends StatefulWidget {
     this.onCreate,
     required this.textExtractor,
     this.hideSuggestionsOnSelect = false,
+    this.onChanged,
+    this.initialTags,
   });
 
   final InputDecoration? decoration;
@@ -66,8 +68,10 @@ class TagsField<T> extends StatefulWidget {
   final SuggestCreationBuilder<T>? suggestCreationBuilder;
   final TagBuilder<T> tagBuilder;
   final FutureOr<T?> Function(String text)? onCreate;
-  final TextExtractor textExtractor;
+  final TextExtractor<T> textExtractor;
   final bool hideSuggestionsOnSelect;
+  final ValueChanged<List<T>>? onChanged;
+  final List<T>? initialTags;
 
   @override
   State<TagsField<T>> createState() => _TagsFieldState<T>();
@@ -75,7 +79,7 @@ class TagsField<T> extends StatefulWidget {
 
 class _TagsFieldState<T> extends State<TagsField<T>> {
   late final SuggestionsController<Suggestion<T>> _suggestionsController;
-  late final TagsController<T> _controller;
+  late final TagsController<T> _tagsController;
   late final TagsEditingController<T> _editingController;
   final _focusNode = FocusNode();
   final _compositingRange = ValueNotifier(TextRange.empty);
@@ -88,10 +92,14 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
     _suggestionsController =
         widget.suggestionsController ?? SuggestionsController<Suggestion<T>>();
 
-    _controller = widget.controller ?? TagsController();
+    _tagsController =
+        widget.controller ?? TagsController(tags: widget.initialTags);
+    _tagsController.addListener(() {
+      widget.onChanged?.call(_tagsController.tags);
+    });
 
     _editingController = TagsEditingController<T>(
-      controller: _controller,
+      controller: _tagsController,
       tagBuilder: widget.tagBuilder,
       textExtractor: widget.textExtractor,
     );
@@ -114,7 +122,7 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
       _suggestionsController.dispose();
     }
     if (widget.controller == null) {
-      _controller.dispose();
+      _tagsController.dispose();
     }
     _editingController.dispose();
     _focusNode.dispose();
@@ -180,7 +188,7 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
             }
           },
           suggestionsCallback: (_) {
-            if (_controller.maxNumberOfTagsReached()) {
+            if (_tagsController.maxNumberOfTagsReached()) {
               return [];
             }
             final search = _searchText();
@@ -300,7 +308,8 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
     }
     final matchingTags = _findMatching(tags, search);
     matchingTags.removeWhere(
-      (tag) => _findExact(_controller.tags, widget.textExtractor(tag)) != null,
+      (tag) =>
+          _findExact(_tagsController.tags, widget.textExtractor(tag)) != null,
     );
     return [
       if (search.isNotEmpty && widget.suggestCreationBuilder != null)
