@@ -16,6 +16,7 @@ class Search<T> extends StatelessWidget {
     this.onClear,
     this.trailing,
     this.autoFocus = false,
+    this.focusNode,
   });
 
   final String? hintText;
@@ -27,6 +28,7 @@ class Search<T> extends StatelessWidget {
   final void Function()? onClear;
   final Widget? trailing;
   final bool autoFocus;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class Search<T> extends StatelessWidget {
       builder: (context, controller) {
         return SearchBar(
           autoFocus: autoFocus,
+          focusNode: focusNode,
           hintText: hintText,
           controller: controller,
           onTap: () {
@@ -84,13 +87,13 @@ class Search<T> extends StatelessWidget {
             child: Center(child: Text('No results found')),
           );
         }
-        return ListView(shrinkWrap: true, children: suggestions.toList());
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 400),
+          child: ListView(shrinkWrap: true, children: suggestions.toList()),
+        );
       },
       suggestionsBuilder: (context, controller) async {
         final query = controller.text;
-        if (query.isEmpty) {
-          return [];
-        }
         final suggestions = await search(query);
         return suggestions.map(
           (suggestion) => buildSuggestion(suggestion, query),

@@ -28,17 +28,16 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
   );
 
-  final colorScheme = theme.colorScheme;
   final textTheme = theme.textTheme;
 
   return theme.copyWith(
     menuButtonTheme: MenuButtonThemeData(
       style: MenuItemButton.styleFrom(
         minimumSize: Size(120, 48),
-        maximumSize: Size(280, double.infinity),
-        iconSize: 20,
-        iconColor: colorScheme.onSurfaceVariant,
+        maximumSize: Size.fromWidth(280),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         textStyle: textTheme.labelLarge,
+        iconSize: 22,
       ),
     ),
     menuTheme: MenuThemeData(

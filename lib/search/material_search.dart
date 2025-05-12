@@ -51,6 +51,9 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
       hintText: 'Search in materials',
       controller: controller,
       search: (query) async {
+        if (query.isEmpty) {
+          return [];
+        }
         final attributes = AttributesParameter({Attributes.name});
         final materials = await ref.read(
           materialsStreamProvider(attributes).future,

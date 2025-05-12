@@ -24,12 +24,37 @@ class AttributeSearch extends ConsumerStatefulWidget {
 
 class _AttributeSearchState extends ConsumerState<AttributeSearch> {
   final controller = SearchController();
+  final focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autofocus) {
+      Future.delayed(Duration.zero, () {
+        if (!controller.isOpen) {
+          controller.openView();
+        }
+        // focusNode.addListener(() {
+        //   if (focusNode.hasFocus) {
+        //     context.pop();
+        //   }
+        // });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Search(
       hintText: 'Search for attributes',
       autoFocus: widget.autofocus,
+      focusNode: focusNode,
       controller: controller,
       search: searchAttributes,
       buildSuggestion: (attribute, query) {

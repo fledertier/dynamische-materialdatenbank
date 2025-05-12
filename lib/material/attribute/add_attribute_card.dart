@@ -93,34 +93,32 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                 });
               },
             ),
-            Flexible(
-              child: GestureDetector(
-                onTap: context.pop,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.all(64).copyWith(top: 32),
-                  child: Wrap(
-                    runAlignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: [
-                      for (final card in cards)
-                        Material(
-                          type: MaterialType.transparency,
-                          child: InkWell(
-                            onTap: () {
-                              context.pop(card);
-                            },
-                            child: AbsorbPointer(
-                              child: CardFactory.create(card, {
-                                ...exampleMaterial,
-                                ...widget.material,
-                              }),
-                            ),
+            GestureDetector(
+              onTap: context.pop,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(64).copyWith(top: 32),
+                child: Wrap(
+                  runAlignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    for (final card in cards)
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () {
+                            context.pop(card);
+                          },
+                          child: AbsorbPointer(
+                            child: CardFactory.create(card, {
+                              ...exampleMaterial,
+                              ...widget.material,
+                            }),
                           ),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
               ),
             ),
