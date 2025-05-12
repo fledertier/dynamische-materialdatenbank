@@ -14,7 +14,7 @@ class CheckboxFilterOption extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final attributes = ref.watch(attributesStreamProvider).value ?? {};
+    final attributes = ref.watch(attributesProvider).value ?? {};
 
     return CheckboxListTile(
       title: LoadingText(attributes[attribute]?.name),

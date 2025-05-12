@@ -1,19 +1,19 @@
 import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/custom/image/web_image.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_service.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../../../../types.dart' hide Material;
-import '../../../edit_mode_button.dart';
-import '../../../material_service.dart';
-import '../../attribute_card.dart';
-import '../../attribute_label.dart';
-import '../../cards.dart';
 import 'constrained_image.dart';
 import 'image_search_service.dart';
+import 'web_image.dart';
 
 class ImageCard extends ConsumerStatefulWidget {
   const ImageCard({super.key, required this.material, required this.size});

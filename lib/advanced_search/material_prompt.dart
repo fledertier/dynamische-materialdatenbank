@@ -74,7 +74,7 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
       _operation?.cancel();
     }
 
-    final attributes = await ref.read(attributesStreamProvider.future);
+    final attributes = await ref.read(attributesProvider.future);
     final queryService = ref.read(queryServiceProvider);
 
     final futureQuery = queryService.generateQuery(

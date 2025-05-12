@@ -30,7 +30,7 @@ class ConditionGroup extends ConditionNode {
   }
 
   @override
-  bool matches(Material material) {
+  bool matches(Json material) {
     final validNodes = nodes.where((node) => node.isValid);
     return switch (type) {
       ConditionGroupType.and => validNodes.every(

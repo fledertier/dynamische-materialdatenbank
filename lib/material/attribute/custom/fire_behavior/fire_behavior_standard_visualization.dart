@@ -2,7 +2,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_beha
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../../../../types.dart';
 import 'fire_behavior_standard.dart';
 
 class FireBehaviorStandardVisualization extends StatelessWidget {
@@ -36,7 +35,7 @@ class FireBehaviorStandardVisualization extends StatelessWidget {
               Text(labelForReactionToFire(context, value.reactionToFire)),
             ],
           ),
-          Dings(
+          Wrap(
             spacing: 32,
             runSpacing: 16,
             children: [

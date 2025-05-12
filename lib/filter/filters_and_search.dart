@@ -41,7 +41,7 @@ class Filters extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attributes = ref.watch(attributesStreamProvider).value ?? {};
+    final attributes = ref.watch(attributesProvider).value ?? {};
 
     return SideSheet(
       title: Text('Filters'),

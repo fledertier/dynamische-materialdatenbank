@@ -7,5 +7,5 @@ abstract class ConditionNode {
 
   Set<String> get attributes;
 
-  bool matches(Material material);
+  bool matches(Json material);
 }

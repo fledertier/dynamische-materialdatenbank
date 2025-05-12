@@ -10,15 +10,6 @@ import 'attribute.dart';
 final attributeServiceProvider = Provider((ref) => AttributeService());
 
 class AttributeService {
-  Future<Map<String, dynamic>> getAttribute(String attribute) async {
-    final snapshot =
-        await FirebaseFirestore.instance
-            .collection(Collections.attributes)
-            .doc(attribute)
-            .get();
-    return snapshot.exists ? snapshot.data() ?? {} : {};
-  }
-
   Stream<Map<String, dynamic>> getAttributeStream(String attribute) {
     return FirebaseFirestore.instance
         .collection(Collections.attributes)
@@ -60,16 +51,6 @@ class AttributeService {
         .collection(Collections.metadata)
         .doc(Docs.attributes)
         .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
-  }
-
-  Future<Map<String, Attribute>> getAttributes() async {
-    final snapshot =
-        await FirebaseFirestore.instance
-            .collection(Collections.metadata)
-            .doc(Docs.attributes)
-            .get();
-    final map = snapshot.dataOrNull() ?? {};
-    return map.mapValues((json) => Attribute.fromJson(json));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {

@@ -122,7 +122,7 @@ class AttributeDetails extends ConsumerWidget {
     AttributeData attribute,
   ) async {
     final name = attribute.nameEn ?? attribute.nameDe!;
-    final attributes = await ref.read(attributesStreamProvider.future);
+    final attributes = await ref.read(attributesProvider.future);
     return ref
         .read(attributeServiceProvider)
         .nearestAvailableAttributeId(name.toLowerCase(), attributes);

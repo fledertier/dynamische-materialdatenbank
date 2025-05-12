@@ -20,7 +20,7 @@ class Condition extends ConditionNode {
   Set<String> get attributes => {if (isValid) attribute!};
 
   @override
-  bool matches(Material material) {
+  bool matches(Json material) {
     final value = material[attribute!];
     if (value == null) {
       return false;

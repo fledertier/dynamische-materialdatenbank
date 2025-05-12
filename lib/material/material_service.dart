@@ -49,8 +49,8 @@ class MaterialService {
     }
   }
 
-  Future<void> deleteMaterial(String id) async {
-    final material = await getMaterial(id);
+  Future<void> deleteMaterial(Json material) async {
+    final id = material[Attributes.id] as String;
 
     FirebaseFirestore.instance
         .collection(Collections.materials)
@@ -63,15 +63,6 @@ class MaterialService {
           .doc(attribute)
           .update({id: FieldValue.delete()});
     }
-  }
-
-  Future<Map<String, dynamic>> getMaterial(String id) async {
-    final snapshot =
-        await FirebaseFirestore.instance
-            .collection(Collections.materials)
-            .doc(id)
-            .get();
-    return snapshot.exists ? snapshot.data() ?? {} : {};
   }
 
   Stream<Map<String, dynamic>> getMaterialStream(String id) {

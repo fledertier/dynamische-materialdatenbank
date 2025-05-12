@@ -42,7 +42,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
     final asyncMaterial = ref.watch(materialStreamProvider(widget.materialId));
     final material = asyncMaterial.value ?? {};
 
-    final attributes = ref.watch(attributesStreamProvider).value ?? {};
+    final attributes = ref.watch(attributesProvider).value ?? {};
 
     final edit = ref.watch(editModeProvider);
 

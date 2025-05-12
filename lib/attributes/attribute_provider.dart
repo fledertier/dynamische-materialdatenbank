@@ -16,9 +16,7 @@ final attributeExtremaProvider = FutureProvider.family((
   ref,
   String attribute,
 ) async {
-  final values = await ref.watch(
-    attributeValuesStreamProvider(attribute).future,
-  );
+  final values = await ref.watch(attributeValuesProvider(attribute).future);
   final numbers = values.values.map((value) => value as double);
   if (numbers.isEmpty) {
     return null;
@@ -26,18 +24,11 @@ final attributeExtremaProvider = FutureProvider.family((
   return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
 });
 
-final attributeValuesStreamProvider = StreamProvider.family((
-  ref,
-  String attribute,
-) {
+final attributeValuesProvider = StreamProvider.family((ref, String attribute) {
   return ref.read(attributeServiceProvider).getAttributeStream(attribute);
 });
 
-final attributeValuesProvider = FutureProvider.family((ref, String attribute) {
-  return ref.read(attributeServiceProvider).getAttribute(attribute);
-});
-
-final attributesValuesStreamProvider = FutureProvider.family((
+final attributesValuesProvider = FutureProvider.family((
   ref,
   AttributesParameter parameter,
 ) async {
@@ -72,11 +63,7 @@ class AttributesParameter {
   }
 }
 
-final attributesProvider = FutureProvider((ref) {
-  return ref.read(attributeServiceProvider).getAttributes();
-});
-
-final attributesStreamProvider = StreamProvider((ref) {
+final attributesProvider = StreamProvider((ref) {
   return ref.read(attributeServiceProvider).getAttributesStream();
 });
 

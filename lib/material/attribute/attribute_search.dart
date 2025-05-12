@@ -50,7 +50,7 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
 
   Future<List<Attribute>> searchAttributes(String query) async {
     final name = query.trim();
-    final attributes = await ref.read(attributesStreamProvider.future);
+    final attributes = await ref.read(attributesProvider.future);
     return attributes.values
         .where((attribute) => attribute.name.containsIgnoreCase(name))
         .sortedBy((attribute) => attribute.name)

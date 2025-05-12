@@ -130,8 +130,7 @@ class MaterialContextMenu extends ConsumerWidget {
       menuChildren: [
         MenuItemButton(
           onPressed: () {
-            final id = material[Attributes.id];
-            ref.read(materialServiceProvider).deleteMaterial(id);
+            ref.read(materialServiceProvider).deleteMaterial(material);
           },
           requestFocusOnHover: false,
           child: Text('Delete'),

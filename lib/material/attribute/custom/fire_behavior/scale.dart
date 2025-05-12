@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../types.dart';
-
 class Scale<T> extends StatelessWidget {
   const Scale({
     super.key,
@@ -20,7 +18,7 @@ class Scale<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
 
-    return Dings(
+    return Wrap(
       spacing: spacing,
       children: [
         for (var i = 1; i < values.length; i++)

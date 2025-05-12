@@ -34,7 +34,7 @@ class AttributesList extends StatelessWidget {
         Expanded(
           child: Consumer(
             builder: (context, ref, child) {
-              final snapshot = ref.watch(attributesStreamProvider);
+              final snapshot = ref.watch(attributesProvider);
 
               if (snapshot.isLoading) {
                 return Center(child: CircularProgressIndicator());
