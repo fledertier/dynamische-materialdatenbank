@@ -1,33 +1,38 @@
 import 'package:dynamische_materialdatenbank/types.dart';
 
 class UnitNumber {
-  UnitNumber({required this.value, this.unit});
+  UnitNumber({required this.value, this.displayUnit});
 
   final num value;
-  final String? unit; // todo: rename to display unit
+  final String? displayUnit;
 
   factory UnitNumber.fromJson(Json? json) {
     if (json == null) {
       return UnitNumber(value: 0);
     }
-    return UnitNumber(value: json['value'], unit: json['unit']);
+    return UnitNumber(value: json['value'], displayUnit: json['displayUnit']);
   }
 
   Json toJson() {
-    return {'value': value, 'unit': unit};
+    return {'value': value, 'displayUnit': displayUnit};
   }
 
-  UnitNumber copyWith({num? value, String? unit}) {
-    return UnitNumber(value: value ?? this.value, unit: unit ?? this.unit);
+  UnitNumber copyWith({num? value, String? displayUnit}) {
+    return UnitNumber(
+      value: value ?? this.value,
+      displayUnit: displayUnit ?? this.displayUnit,
+    );
   }
 
   @override
   int get hashCode {
-    return Object.hash(value, unit);
+    return Object.hash(value, displayUnit);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UnitNumber && other.value == value && other.unit == unit;
+    return other is UnitNumber &&
+        other.value == value &&
+        other.displayUnit == displayUnit;
   }
 }

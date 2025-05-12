@@ -34,47 +34,47 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
+    final textStyle = textTheme.titleLarge!.copyWith(fontFamily: 'Lexend');
 
     final attribute = ref.watch(attributeProvider(widget.attribute));
     final edit = ref.watch(editModeProvider);
 
     if (attribute == null) {
-      // todo: extract text style constant
-      return LoadingText(
-        null,
-        style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
-        width: 40,
-      );
+      return LoadingText(null, style: textStyle, width: 40);
     }
 
     final value = toDisplayUnit(widget.number, attribute.unitType);
     controller ??= TextEditingController(text: value.toStringAsFixed(1));
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
       spacing: 4,
       children: [
-        IntrinsicWidth(
-          child: TextField(
-            enabled: edit,
-            // todo: extract text style constant
-            style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
-            decoration: InputDecoration.collapsed(hintText: '0.0'),
-            controller: controller,
-            onChanged: (text) {
-              final value = double.tryParse(text) ?? 0.0;
-              widget.onChanged?.call(toBaseUnit(value, attribute.unitType));
-            },
+        Baseline(
+          baseline: textStyle.fontSize!,
+          baselineType: TextBaseline.alphabetic,
+          child: IntrinsicWidth(
+            child: TextField(
+              enabled: edit,
+              style: textStyle,
+              decoration: InputDecoration.collapsed(hintText: '0.0'),
+              controller: controller,
+              onChanged: (text) {
+                final value = double.tryParse(text) ?? 0.0;
+                widget.onChanged?.call(toBaseUnit(value, attribute.unitType));
+              },
+            ),
           ),
         ),
         if (attribute.unitType != null)
-          UnitDropdown(
-            unitType: attribute.unitType!,
-            selectedUnit: widget.number.unit,
-            edit: edit,
-            onChanged: widget.onUnitChanged,
+          Baseline(
+            baseline: textStyle.fontSize!,
+            baselineType: TextBaseline.alphabetic,
+            child: UnitDropdown(
+              unitType: attribute.unitType!,
+              selectedUnit: widget.number.displayUnit,
+              edit: edit,
+              onChanged: widget.onUnitChanged,
+            ),
           ),
       ],
     );
@@ -84,14 +84,14 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
     if (unitType == null) {
       return value;
     }
-    return unitType.convert(value, fromUnit: widget.number.unit);
+    return unitType.convert(value, fromUnit: widget.number.displayUnit);
   }
 
   num toDisplayUnit(UnitNumber number, UnitType? unitType) {
     if (unitType == null) {
       return number.value;
     }
-    return unitType.convert(number.value, toUnit: number.unit);
+    return unitType.convert(number.value, toUnit: number.displayUnit);
   }
 
   @override
@@ -145,7 +145,10 @@ class UnitDropdown extends StatelessWidget {
           type: MaterialType.transparency,
           child: InkWell(
             onTap: controller.toggle,
-            child: Row(children: [child!, arrow]),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [child!, arrow],
+            ),
           ),
         );
       },
