@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ThemeData buildTheme(BuildContext context, Brightness brightness) {
-  return ThemeData(
+  final theme = ThemeData(
     fontFamily: 'Roboto',
     brightness: brightness,
     visualDensity: VisualDensity.standard,
@@ -26,8 +26,23 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
       }),
     ),
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
+  );
+
+  final colorScheme = theme.colorScheme;
+  final textTheme = theme.textTheme;
+
+  return theme.copyWith(
     menuButtonTheme: MenuButtonThemeData(
-      style: MenuItemButton.styleFrom(minimumSize: Size(140, 48)),
+      style: MenuItemButton.styleFrom(
+        minimumSize: Size(120, 48),
+        maximumSize: Size(280, double.infinity),
+        iconSize: 20,
+        iconColor: colorScheme.onSurfaceVariant,
+        textStyle: textTheme.labelLarge,
+      ),
+    ),
+    menuTheme: MenuThemeData(
+      style: MenuStyle(padding: WidgetStatePropertyAll(EdgeInsets.zero)),
     ),
   );
 }

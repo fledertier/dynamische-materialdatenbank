@@ -5,6 +5,7 @@ import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../constants.dart';
 import 'attribute/color/color_provider.dart';
@@ -45,13 +46,15 @@ class MaterialItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
     final color = ref.watch(materialColorProvider(name));
 
     return Card.filled(
       clipBehavior: Clip.antiAlias,
-      color: color,
+      color: color ?? colorScheme.surfaceContainerHighest,
       child: InkWell(
+        hoverColor: colorScheme.scrim.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         onTap: () {
           context.pushNamed(Pages.material, pathParameters: {'materialId': id});
@@ -124,7 +127,10 @@ class MaterialContextMenu extends ConsumerWidget {
       builder: (context, controller, child) {
         return IconButton(
           onPressed: controller.toggle,
-          icon: Icon(controller.isOpen || visible ? Icons.more_vert : null),
+          icon: Icon(
+            controller.isOpen || visible ? Icons.more_vert : null,
+            color: Colors.white,
+          ),
         );
       },
       menuChildren: [
@@ -133,6 +139,7 @@ class MaterialContextMenu extends ConsumerWidget {
             ref.read(materialServiceProvider).deleteMaterial(material);
           },
           requestFocusOnHover: false,
+          leadingIcon: Icon(Symbols.delete),
           child: Text('Delete'),
         ),
       ],
