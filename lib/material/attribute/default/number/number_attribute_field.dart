@@ -2,21 +2,26 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
+
+import 'unit_number.dart';
 
 class NumberAttributeField extends ConsumerStatefulWidget {
   const NumberAttributeField({
     super.key,
     required this.attribute,
-    this.value,
+    required this.number,
     this.onChanged,
+    this.onUnitChanged,
   });
 
   final String attribute;
-  final String? value;
-  final ValueChanged<String>? onChanged;
+  final UnitNumber number;
+  final ValueChanged<num>? onChanged;
+  final ValueChanged<String>? onUnitChanged;
 
   @override
   ConsumerState<NumberAttributeField> createState() =>
@@ -24,19 +29,7 @@ class NumberAttributeField extends ConsumerStatefulWidget {
 }
 
 class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
-  late final TextEditingController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController(text: widget.value);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +37,18 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
 
     final attribute = ref.watch(attributeProvider(widget.attribute));
     final edit = ref.watch(editModeProvider);
+
+    if (attribute == null) {
+      // todo: extract text style constant
+      return LoadingText(
+        null,
+        style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
+        width: 40,
+      );
+    }
+
+    final value = toDisplayUnit(widget.number, attribute.unitType);
+    controller ??= TextEditingController(text: value.toStringAsFixed(1));
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -54,24 +59,61 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
         IntrinsicWidth(
           child: TextField(
             enabled: edit,
+            // todo: extract text style constant
             style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
-            decoration: InputDecoration.collapsed(hintText: '0'),
+            decoration: InputDecoration.collapsed(hintText: '0.0'),
             controller: controller,
-            onChanged: widget.onChanged,
+            onChanged: (text) {
+              final value = double.tryParse(text) ?? 0.0;
+              widget.onChanged?.call(toBaseUnit(value, attribute.unitType));
+            },
           ),
         ),
-        if (attribute?.unitType != null)
-          UnitDropdown(unitType: attribute!.unitType!, edit: edit),
+        if (attribute.unitType != null)
+          UnitDropdown(
+            unitType: attribute.unitType!,
+            selectedUnit: widget.number.unit,
+            edit: edit,
+            onChanged: widget.onUnitChanged,
+          ),
       ],
     );
+  }
+
+  num toBaseUnit(num value, UnitType? unitType) {
+    if (unitType == null) {
+      return value;
+    }
+    return unitType.convert(value, fromUnit: widget.number.unit);
+  }
+
+  num toDisplayUnit(UnitNumber number, UnitType? unitType) {
+    if (unitType == null) {
+      return number.value;
+    }
+    return unitType.convert(number.value, toUnit: number.unit);
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 }
 
 class UnitDropdown extends StatelessWidget {
-  const UnitDropdown({super.key, required this.unitType, required this.edit});
+  const UnitDropdown({
+    super.key,
+    required this.unitType,
+    this.selectedUnit,
+    required this.edit,
+    this.onChanged,
+  });
 
   final UnitType unitType;
+  final String? selectedUnit;
   final bool edit;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +126,9 @@ class UnitDropdown extends StatelessWidget {
         for (final unit in unitType.units)
           MenuItemButton(
             requestFocusOnHover: false,
-            onPressed: () {},
+            onPressed: () {
+              onChanged?.call(unit);
+            },
             child: Text(unit),
           ),
       ],
@@ -106,7 +150,7 @@ class UnitDropdown extends StatelessWidget {
         );
       },
       child: Text(
-        unitType.base,
+        selectedUnit ?? unitType.base,
         style: textTheme.bodyMedium?.copyWith(
           color: colorScheme.onSurfaceVariant,
         ),

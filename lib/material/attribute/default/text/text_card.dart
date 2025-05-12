@@ -1,5 +1,4 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +6,7 @@ import '../../../../../types.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
+import 'text_attribute_field.dart';
 
 class TextCard extends ConsumerWidget {
   const TextCard({
@@ -26,7 +26,7 @@ class TextCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AttributeCard(
       label: AttributeLabel(attribute: attribute),
-      title: NumberAttributeField(
+      title: TextAttributeField(
         attribute: attribute,
         value: material[attribute],
         onChanged: (value) {

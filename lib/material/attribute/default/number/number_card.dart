@@ -36,14 +36,17 @@ class NumberCard extends ConsumerWidget {
     return AttributeCard(
       label: AttributeLabel(attribute: attribute),
       title: NumberAttributeField(
+        key: ValueKey(number.unit),
         attribute: attribute,
-        value: number.value.toStringAsFixed(1),
+        number: number,
         onChanged: (value) {
-          final updatedNumber = number.copyWith(
-            value: double.tryParse(value) ?? 0,
-          );
           ref.read(materialServiceProvider).updateMaterial(material, {
-            attribute: updatedNumber.toJson(),
+            attribute: number.copyWith(value: value).toJson(),
+          });
+        },
+        onUnitChanged: (unit) {
+          ref.read(materialServiceProvider).updateMaterial(material, {
+            attribute: number.copyWith(unit: unit).toJson(),
           });
         },
       ),

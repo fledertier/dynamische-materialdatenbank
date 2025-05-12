@@ -4,7 +4,7 @@ class UnitNumber {
   UnitNumber({required this.value, this.unit});
 
   final num value;
-  final String? unit;
+  final String? unit; // todo: rename to display unit
 
   factory UnitNumber.fromJson(Json? json) {
     if (json == null) {
