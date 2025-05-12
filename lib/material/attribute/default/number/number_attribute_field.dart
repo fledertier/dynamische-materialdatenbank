@@ -47,7 +47,6 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
     controller ??= TextEditingController(text: value.toStringAsFixed(1));
 
     return Wrap(
-      spacing: 4,
       children: [
         Baseline(
           baseline: textStyle.fontSize!,
@@ -126,6 +125,7 @@ class UnitDropdown extends StatelessWidget {
         for (final unit in unitType.units)
           MenuItemButton(
             requestFocusOnHover: false,
+            autofocus: unit == selectedUnit,
             onPressed: () {
               onChanged?.call(unit);
             },
@@ -144,6 +144,7 @@ class UnitDropdown extends StatelessWidget {
         return Material(
           type: MaterialType.transparency,
           child: InkWell(
+            borderRadius: BorderRadius.circular(4),
             onTap: controller.toggle,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -152,10 +153,13 @@ class UnitDropdown extends StatelessWidget {
           ),
         );
       },
-      child: Text(
-        selectedUnit ?? unitType.base,
-        style: textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurfaceVariant,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Text(
+          selectedUnit ?? unitType.base,
+          style: textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

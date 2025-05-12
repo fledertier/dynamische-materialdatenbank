@@ -31,8 +31,8 @@ class _SubjectiveImpressionDialogState
     return AlertDialog(
       title: Text(
         widget.initialSubjectiveImpression == null
-            ? 'Add subjectiveImpression'
-            : 'Edit subjectiveImpression',
+            ? 'Add subjective impression'
+            : 'Edit subjective impression',
       ),
       content: Form(
         key: formKey,

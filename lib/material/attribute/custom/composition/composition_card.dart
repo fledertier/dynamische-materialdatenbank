@@ -74,7 +74,7 @@ class CompositionCard extends ConsumerWidget {
       columns: columns,
       label: AttributeLabel(attribute: Attributes.composition),
       child: ProportionsWidget(
-        height: 40,
+        height: 48,
         axis: axis,
         edit: edit,
         maxCount: MaterialCategory.values.length,
