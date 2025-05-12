@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';

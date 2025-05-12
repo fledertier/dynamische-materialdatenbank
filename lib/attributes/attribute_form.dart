@@ -136,7 +136,7 @@ class _AttributeFormState extends State<AttributeForm> {
                         enableFilter: true,
                         enableSearch: false,
                         dropdownMenuEntries: [
-                          for (final value in unitTypes)
+                          for (final value in UnitTypes.values)
                             DropdownMenuEntry(value: value, label: value.name),
                         ],
                         onSelected: (value) {

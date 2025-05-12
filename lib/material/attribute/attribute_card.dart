@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 
 class AttributeCard extends StatelessWidget {

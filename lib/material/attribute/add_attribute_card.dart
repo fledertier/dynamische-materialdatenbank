@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../constants.dart';
 import '../../types.dart' hide Material;
-import '../../utils.dart';
+import '../../utils/miscellaneous_utils.dart';
 import 'cards.dart';
 
 class AddAttributeCardButton extends StatelessWidget {

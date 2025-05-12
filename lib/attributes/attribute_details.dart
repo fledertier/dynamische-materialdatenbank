@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_service.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

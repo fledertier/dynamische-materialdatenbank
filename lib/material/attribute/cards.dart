@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../types.dart';

@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants.dart';
 import '../../../../types.dart';
+import '../../../../widgets/tags_field/selectable_tag.dart';
+import '../../../../widgets/tags_field/tags_field.dart';
 import '../../cards.dart';
 import 'countries.dart';
 
@@ -37,6 +39,28 @@ class OriginCountryCard extends ConsumerWidget {
           size > CardSize.small
               ? WorldMap(highlightedCountries: countries)
               : null,
+    );
+
+    SizedBox(
+      width: 300,
+      child: TagsField<String>(
+        decoration: InputDecoration(
+          hintText: "Tags",
+          border: const OutlineInputBorder(),
+        ),
+        suggestions: ["Schweden", "Deutschland", "Frankreich"],
+        suggestValueBuilder: (context, value) {
+          return ListTile(title: Text(value));
+        },
+        tagBuilder: (String value, bool isSelected) {
+          return SelectableTag(
+            label: Text(value),
+            backgroundColor: Color(0xffe5f6fe),
+            selected: isSelected,
+          );
+        },
+        textExtractor: (value) => value,
+      ),
     );
   }
 

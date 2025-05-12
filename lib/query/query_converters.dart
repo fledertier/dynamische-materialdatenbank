@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
 import '../attributes/attribute_type.dart';
 import '../types.dart';

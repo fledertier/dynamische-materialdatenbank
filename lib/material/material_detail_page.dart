@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
 import 'package:dynamische_materialdatenbank/material/material_service.dart';
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,6 +1,7 @@
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
+
 import '../attributes/attribute_type.dart';
 import '../types.dart';
-import '../utils.dart';
 import 'condition_node.dart';
 
 class Condition extends ConditionNode {

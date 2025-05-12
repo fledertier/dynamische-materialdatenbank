@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/utils.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
 // ignore: constant_identifier_names
 enum ReactionToFire { A1, A2, B, C, D, E, F }

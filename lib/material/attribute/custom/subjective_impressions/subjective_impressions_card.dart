@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants.dart';
 import '../../../../types.dart';
-import '../../../../utils.dart';
+import '../../../../utils/miscellaneous_utils.dart';
 import '../../../edit_mode_button.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
