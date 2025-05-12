@@ -11,7 +11,7 @@ class SubjectiveImpressionBalls extends StatefulWidget {
   SubjectiveImpressionBalls({
     super.key,
     required this.width,
-    this.padding = const EdgeInsets.all(-12),
+    this.padding = const EdgeInsets.fromLTRB(-12, 0, -12, -12),
     this.spacing = 4,
     required this.impressions,
     required this.onUpdate,

@@ -1,5 +1,7 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_search.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants.dart';
@@ -74,53 +76,56 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 16,
-        children: [
-          SizedBox(height: 32),
-          AttributeCardSearch(
-            material: widget.material,
-            onSubmit: (cards) {
-              setState(() {
-                this.cards = cards;
-              });
-            },
-          ),
-          Flexible(
-            child: GestureDetector(
-              onTap: context.pop,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(64).copyWith(top: 32),
-                child: Wrap(
-                  runAlignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: [
-                    for (final card in cards)
-                      Material(
-                        type: MaterialType.transparency,
-                        child: InkWell(
-                          onTap: () {
-                            context.pop(card);
-                          },
-                          child: AbsorbPointer(
-                            child: CardFactory.create(card, {
-                              ...exampleMaterial,
-                              ...widget.material,
-                            }),
+    return ProviderScope(
+      overrides: [editModeProvider.overrideWith((ref) => false)],
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 16,
+          children: [
+            SizedBox(height: 32),
+            AttributeCardSearch(
+              material: widget.material,
+              onSubmit: (cards) {
+                setState(() {
+                  this.cards = cards;
+                });
+              },
+            ),
+            Flexible(
+              child: GestureDetector(
+                onTap: context.pop,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(64).copyWith(top: 32),
+                  child: Wrap(
+                    runAlignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: [
+                      for (final card in cards)
+                        Material(
+                          type: MaterialType.transparency,
+                          child: InkWell(
+                            onTap: () {
+                              context.pop(card);
+                            },
+                            child: AbsorbPointer(
+                              child: CardFactory.create(card, {
+                                ...exampleMaterial,
+                                ...widget.material,
+                              }),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
