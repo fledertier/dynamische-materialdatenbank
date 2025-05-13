@@ -24,8 +24,6 @@ class OriginCountryCard extends ConsumerWidget {
   final Json material;
   final CardSize size;
 
-  // final controller = TagsController<Country>();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
@@ -37,7 +35,6 @@ class OriginCountryCard extends ConsumerWidget {
     late final field = SizedBox(
       width: 300,
       child: TagsField<Country>(
-        // controller: controller,
         decoration: InputDecoration(
           hintText: "Countries",
           border: const OutlineInputBorder(borderSide: BorderSide.none),
@@ -78,7 +75,10 @@ class OriginCountryCard extends ConsumerWidget {
               ),
       child:
           size > CardSize.small
-              ? WorldMap(highlightedCountries: countries)
+              ? WorldMap(
+                key: ValueKey(countries),
+                highlightedCountries: countries,
+              )
               : null,
     );
   }

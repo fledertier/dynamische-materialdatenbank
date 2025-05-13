@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
-import 'package:dynamische_materialdatenbank/material/material_service.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +10,9 @@ import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../types.dart';
+import '../widgets/drag_and_drop/dings.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
-import 'attribute/add_attribute_card.dart';
 import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
@@ -61,29 +60,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                 : Center(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                    child: Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: [
-                        for (final card in cards)
-                          CardFactory.create(card, material),
-                        if (edit)
-                          AddAttributeCardButton(
-                            material: material,
-                            onAdded: (card) {
-                              ref.read(materialServiceProvider).updateMaterial(
-                                material,
-                                {
-                                  Attributes.cards: [
-                                    ...?material[Attributes.cards],
-                                    card.toJson(),
-                                  ],
-                                },
-                              );
-                            },
-                          ),
-                      ],
-                    ),
+                    child: Dings(cards: cards, material: material),
                   ),
                 ),
       ),

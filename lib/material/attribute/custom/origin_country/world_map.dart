@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:countries_world_map/countries_world_map.dart';
 import 'package:countries_world_map/data/maps/world_map.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'countries.dart';
@@ -74,7 +75,10 @@ class _WorldMapState extends State<WorldMap> {
 
   @override
   void didUpdateWidget(covariant WorldMap oldWidget) {
-    if (oldWidget.highlightedCountries == widget.highlightedCountries) {
+    if (listEquals(
+      oldWidget.highlightedCountries,
+      widget.highlightedCountries,
+    )) {
       return;
     }
     setState(() {
