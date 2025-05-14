@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:local_hero/local_hero.dart';
 
 import '../../material/attribute/cards.dart';
+import '../../types.dart';
 import 'animated_draggable.dart';
 import 'local_hero_overlay.dart';
 
 class ReorderableCardSection extends StatefulWidget {
   const ReorderableCardSection({
     super.key,
+    required this.material,
     required this.cards,
     this.animationDuration = const Duration(milliseconds: 250),
     required this.itemBuilder,
@@ -16,6 +18,7 @@ class ReorderableCardSection extends StatefulWidget {
     this.trailing,
   });
 
+  final Json material;
   final List<CardData> cards;
   final Duration animationDuration;
   final IndexedWidgetBuilder itemBuilder;
@@ -74,8 +77,11 @@ class _ReorderableFilesGrid extends State<ReorderableCardSection> {
       },
       builder: (context, candidateData, rejectedData) {
         return AnimatedDraggable<CardData>(
+          tag: data.attribute,
+          // widget.material[data.attribute]
           data: data,
           onDragEnd: (details) {
+            // _resetScope();
             // Future.delayed(widget.animationDuration, _resetScope);
           },
           feedbackBuilder: (child) {

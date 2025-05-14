@@ -81,9 +81,7 @@ class _WorldMapState extends State<WorldMap> {
     )) {
       return;
     }
-    setState(() {
-      updateBoundingBox();
-    });
+    updateBoundingBox();
     Future.delayed(Duration.zero, () {
       focusCountries();
     });
@@ -102,7 +100,7 @@ class _WorldMapState extends State<WorldMap> {
         scaleFactor: 100,
         viewPaddingExponent: 20,
         initialFocusKey: boundingBoxKey,
-        initialDuration: Duration(milliseconds: 500),
+        initialDuration: Duration.zero,
         initialCurve: Curves.easeInOut,
         child: Stack(
           alignment: Alignment.center,

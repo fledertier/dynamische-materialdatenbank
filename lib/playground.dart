@@ -35,29 +35,49 @@ class _TransformDragWrapState extends State<TransformDragWrap>
     _controller.forward(from: 0);
   }
 
+  void reorder(int dragged, int target) {
+    final oldIndex = items.indexOf(dragged);
+    final newIndex = items.indexOf(target);
+
+    if (oldIndex != newIndex) {
+      setState(() {
+        items.removeAt(oldIndex);
+        items.insert(newIndex, dragged);
+      });
+    }
+  }
+
   Widget buildItem(int item) {
-    final draggable = Draggable<int>(
-      data: item,
-      onDragStarted: () {
-        currentOffset = Offset.zero;
+    final draggable = DragTarget<int>(
+      onWillAccept: (incoming) => incoming != item,
+      onAccept: (incoming) {
+        reorder(incoming, item);
       },
-      onDragUpdate: (details) {
-        currentOffset += details.delta;
+      builder: (context, candidateData, rejectedData) {
+        return Draggable<int>(
+          data: item,
+          onDragStarted: () {
+            currentOffset = Offset.zero;
+          },
+          onDragUpdate: (details) {
+            currentOffset += details.delta;
+          },
+          onDragEnd: (details) {
+            setState(() {
+              snappingItem = item;
+            });
+            startSnapBack();
+          },
+          feedback: Material(
+            color: Colors.transparent,
+            elevation: 8,
+            borderRadius: BorderRadius.circular(8),
+            child: itemBox(item),
+          ),
+          childWhenDragging: Opacity(opacity: 0, child: itemBox(item)),
+          child: itemBox(item),
+        );
       },
-      onDragEnd: (details) {
-        setState(() {
-          snappingItem = item;
-        });
-        startSnapBack();
-      },
-      feedback: Material(
-        color: Colors.transparent,
-        elevation: 8,
-        borderRadius: BorderRadius.circular(8),
-        child: itemBox(item),
-      ),
-      childWhenDragging: Opacity(opacity: 0, child: itemBox(item)),
-      child: itemBox(item),
     );
 
     if (item == snappingItem) {

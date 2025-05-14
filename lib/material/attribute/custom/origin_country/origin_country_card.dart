@@ -76,7 +76,9 @@ class OriginCountryCard extends ConsumerWidget {
       child:
           size > CardSize.small
               ? WorldMap(
-                key: ValueKey(countries),
+                key: ValueKey(
+                  countries.map((country) => country.code).join(','),
+                ),
                 highlightedCountries: countries,
               )
               : null,

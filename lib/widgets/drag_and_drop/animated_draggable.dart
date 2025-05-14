@@ -1,9 +1,10 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:local_hero/local_hero.dart';
 
 class AnimatedDraggable<T extends Object> extends StatelessWidget {
   const AnimatedDraggable({
     super.key,
+    required this.tag,
     required this.data,
     required this.child,
     this.onDragStarted,
@@ -12,6 +13,7 @@ class AnimatedDraggable<T extends Object> extends StatelessWidget {
     this.offset,
   });
 
+  final Object tag;
   final T data;
   final Widget child;
   final void Function()? onDragStarted;
@@ -34,11 +36,11 @@ class AnimatedDraggable<T extends Object> extends StatelessWidget {
               ? (draggable, context, position) => offset!
               : childDragAnchorStrategy,
       feedback: LocalHero(
-        tag: data,
+        tag: tag,
         child: feedbackBuilder?.call(child) ?? child,
       ),
       childWhenDragging: Opacity(opacity: 0, child: child),
-      child: LocalHero(tag: data, child: child),
+      child: LocalHero(tag: tag, child: child),
     );
   }
 }

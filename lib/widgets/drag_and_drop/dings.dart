@@ -31,14 +31,15 @@ class _DingsState extends State<Dings> {
   @override
   Widget build(BuildContext context) {
     return ReorderableCardSection(
+      material: widget.material,
       cards: notifier.cards,
       itemBuilder: (context, index) {
         final card = notifier.cards[index];
         return CardFactory.create(card, widget.material);
-        return children.putIfAbsent(
-          card,
-          () => CardFactory.create(card, widget.material),
-        );
+        // return children.putIfAbsent(
+        //   card,
+        //   () => CardFactory.create(card, widget.material),
+        // );
       },
       trailing: Consumer(
         builder: (context, ref, child) {
