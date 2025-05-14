@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_form_state.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,22 +28,7 @@ class AttributeForm extends ConsumerStatefulWidget {
 class _AttributeFormState extends ConsumerState<AttributeForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late final _id = ValueNotifier(widget.initialAttribute?.id);
-  late final _nameDe = ValueNotifier(widget.initialAttribute?.nameDe);
-  late final _nameEn = ValueNotifier(widget.initialAttribute?.nameEn);
-  late final _type = ValueNotifier(widget.initialAttribute?.type);
-  late final _unitType = ValueNotifier(widget.initialAttribute?.unitType);
-  late final _required = ValueNotifier(
-    widget.initialAttribute?.required ?? false,
-  );
-
-  late final _attribute = Listenable.merge([
-    _nameDe,
-    _nameEn,
-    _type,
-    _unitType,
-    _required,
-  ]);
+  late final _attribute = AttributeFormState(widget.initialAttribute);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +44,7 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
               runSpacing: 24,
               children: [
                 TextFormField(
-                  initialValue: _nameDe.value,
+                  initialValue: _attribute.nameDe.value,
                   decoration: InputDecoration(
                     labelText: "Name (De)",
                     constraints: BoxConstraints(maxWidth: fieldWidth),
@@ -70,21 +56,21 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                     return null;
                   },
                   onChanged: (value) {
-                    _nameDe.value = value;
+                    _attribute.nameDe.value = value;
                   },
                 ),
                 ListenableBuilder(
-                  listenable: _nameDe,
+                  listenable: _attribute.nameDe,
                   builder: (context, child) {
                     return TextFormField(
-                      initialValue: _nameEn.value,
+                      initialValue: _attribute.nameEn.value,
                       decoration: InputDecoration(
                         labelText: "Name (En)",
-                        hintText: _nameDe.value,
+                        hintText: _attribute.nameDe.value,
                         constraints: BoxConstraints(maxWidth: fieldWidth),
                       ),
                       onChanged: (value) {
-                        _nameEn.value = value;
+                        _attribute.nameEn.value = value;
                       },
                     );
                   },
@@ -92,9 +78,9 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
               ],
             ),
             ListenableBuilder(
-              listenable: _type,
+              listenable: _attribute.type,
               child: DropdownMenuFormField<AttributeType>(
-                initialSelection: _type.value,
+                initialSelection: _attribute.type.value,
                 label: Text("Type"),
                 width: fieldWidth,
                 requestFocusOnTap: false,
@@ -111,7 +97,7 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                 enabled:
                     widget.initialAttribute?.type.hasExchangeableTypes ?? true,
                 onSelected: (value) {
-                  _type.value = value;
+                  _attribute.type.value = value;
                 },
                 validator: (value) {
                   if (value == null) {
@@ -122,7 +108,7 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
               ),
               builder: (context, typeField) {
                 final unitDropdown = DropdownMenuFormField<UnitType>(
-                  initialSelection: _unitType.value,
+                  initialSelection: _attribute.unitType.value,
                   label: Text("Unit"),
                   width: fieldWidth,
                   menuHeight: 500,
@@ -133,7 +119,7 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                       DropdownMenuEntry(value: value, label: value.name),
                   ],
                   onSelected: (value) {
-                    _unitType.value = value;
+                    _attribute.unitType.value = value;
                   },
                 );
                 return Wrap(
@@ -146,12 +132,12 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
             Row(
               children: [
                 ListenableBuilder(
-                  listenable: _required,
+                  listenable: _attribute.required,
                   builder: (context, child) {
                     return Checkbox(
-                      value: _required.value,
+                      value: _attribute.required.value ?? false,
                       onChanged: (value) {
-                        _required.value = value!;
+                        _attribute.required.value = value;
                       },
                     );
                   },
@@ -165,7 +151,7 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                 listenable: _attribute,
                 builder: (context, child) {
                   return FilledButton(
-                    onPressed: hasChanges ? _submitForm : null,
+                    onPressed: _attribute.hasChanges ? _submitForm : null,
                     child: Text(
                       widget.initialAttribute != null ? "Save" : "Create",
                     ),
@@ -179,35 +165,33 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
-  bool get hasUnit => _type.value == AttributeType.number;
-
-  bool get hasChanges {
-    return _nameDe.value != widget.initialAttribute?.nameDe ||
-        _nameEn.value != widget.initialAttribute?.nameEn ||
-        _type.value != widget.initialAttribute?.type ||
-        _unitType.value != widget.initialAttribute?.unitType ||
-        _required.value != widget.initialAttribute?.required;
-  }
+  bool get hasUnit => _attribute.type.value == AttributeType.number;
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final attribute = Attribute(
-        id: _id.value ?? await _createId(),
-        nameDe: _nameDe.value!,
-        nameEn: _nameEn.value,
-        type: _type.value!,
-        unitType: hasUnit ? _unitType.value : null,
-        required: _required.value,
+        id: _attribute.id.value ?? await _createId(),
+        nameDe: _attribute.nameDe.value!,
+        nameEn: _attribute.nameEn.value,
+        type: _attribute.type.value!,
+        unitType: hasUnit ? _attribute.unitType.value : null,
+        required: _attribute.required.value ?? false,
       );
       widget.onSubmit(attribute);
     }
   }
 
   Future<String> _createId() async {
-    final name = _nameEn.value ?? _nameDe.value!;
+    final name = _attribute.nameEn.value ?? _attribute.nameDe.value!;
     final attributes = await ref.read(attributesProvider.future);
     return ref
         .read(attributeServiceProvider)
         .nearestAvailableAttributeId(name.toLowerCase(), attributes);
+  }
+
+  @override
+  void dispose() {
+    _attribute.dispose();
+    super.dispose();
   }
 }
