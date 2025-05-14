@@ -2,24 +2,34 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../material_provider.dart';
 import 'density_visualization.dart';
 
-class DensityCard extends StatelessWidget {
-  const DensityCard({super.key, required this.material, required this.size});
+class DensityCard extends ConsumerWidget {
+  const DensityCard({super.key, required this.materialId, required this.size});
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   @override
-  Widget build(BuildContext context) {
-    final number = UnitNumber.fromJson(material[Attributes.density]);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: materialId,
+          attributeId: Attributes.density,
+        ),
+      ),
+    );
+
+    final number = UnitNumber.fromJson(value);
 
     return NumberCard(
-      material: material[Attributes.id],
-      attribute: Attributes.density,
+      materialId: materialId,
+      attributeId: Attributes.density,
       size: size,
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,

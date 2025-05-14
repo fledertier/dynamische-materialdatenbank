@@ -3,8 +3,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/textarea
 import 'package:flutter/widgets.dart';
 
 import '../../../attributes/attribute_type.dart';
-import '../../../constants.dart';
-import '../../../types.dart';
 import '../cards.dart';
 import 'number/number_card.dart';
 
@@ -29,24 +27,24 @@ enum DefaultCards implements Cards {
 abstract class DefaultCardFactory {
   static Widget create(
     DefaultCards card,
-    Json material,
-    String attribute,
+    String materialId,
+    String attributeId,
     CardSize size,
   ) {
     return switch (card) {
       DefaultCards.textCard => TextCard(
-        material: material,
-        attribute: attribute,
+        materialId: materialId,
+        attributeId: attributeId,
         size: size,
       ),
       DefaultCards.textareaCard => TextareaCard(
-        material: material,
-        attribute: attribute,
+        materialId: materialId,
+        attributeId: attributeId,
         size: size,
       ),
       DefaultCards.numberCard => NumberCard(
-        material: material[Attributes.id],
-        attribute: attribute,
+        materialId: materialId,
+        attributeId: attributeId,
         size: size,
       ),
     };

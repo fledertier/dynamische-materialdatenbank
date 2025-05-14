@@ -3,8 +3,8 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../types.dart';
 import '../../../edit_mode_button.dart';
+import '../../../material_provider.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
@@ -12,14 +12,14 @@ import '../../cards.dart';
 class TextareaCard extends ConsumerStatefulWidget {
   const TextareaCard({
     super.key,
-    required this.material,
-    required this.attribute,
+    required this.materialId,
+    required this.attributeId,
     required this.size,
     this.textStyle,
   });
 
-  final Json material;
-  final String attribute;
+  final String materialId;
+  final String attributeId;
   final CardSize size;
   final TextStyle? textStyle;
 
@@ -33,7 +33,14 @@ class _TextAreaCardState extends ConsumerState<TextareaCard> {
   @override
   void initState() {
     super.initState();
-    final value = widget.material[widget.attribute];
+    final value = ref.read(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: widget.materialId,
+          attributeId: widget.attributeId,
+        ),
+      ),
+    );
     controller = TextEditingController(text: value);
   }
 
@@ -51,10 +58,10 @@ class _TextAreaCardState extends ConsumerState<TextareaCard> {
     );
 
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attribute));
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
 
     return AttributeCard(
-      label: AttributeLabel(attribute: widget.attribute),
+      label: AttributeLabel(attribute: widget.attributeId),
       columns: 2,
       child: TextField(
         enabled: edit,
@@ -63,9 +70,10 @@ class _TextAreaCardState extends ConsumerState<TextareaCard> {
         maxLines: null,
         controller: controller,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(widget.material, {
-            widget.attribute: value,
-          });
+          ref.read(materialServiceProvider).updateMaterialById(
+            widget.materialId,
+            {widget.attributeId: value},
+          );
         },
       ),
     );

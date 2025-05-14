@@ -30,10 +30,10 @@ final attributeValuesProvider = StreamProvider.family((ref, String attribute) {
 
 final attributesValuesProvider = FutureProvider.family((
   ref,
-  AttributesParameter parameter,
+  AttributesArgument argument,
 ) async {
   final materials = <String, Map<String, dynamic>>{};
-  for (final attribute in parameter.attributes) {
+  for (final attribute in argument.attributes) {
     final values = await ref.watch(attributeValuesProvider(attribute).future);
     values.forEach((id, value) {
       final material = materials.putIfAbsent(id, () => {Attributes.id: id});
@@ -43,8 +43,8 @@ final attributesValuesProvider = FutureProvider.family((
   return materials;
 });
 
-class AttributesParameter {
-  const AttributesParameter(this.attributes);
+class AttributesArgument {
+  const AttributesArgument(this.attributes);
 
   final Set<String> attributes;
 
@@ -53,7 +53,7 @@ class AttributesParameter {
     if (identical(this, other)) {
       return true;
     }
-    return other is AttributesParameter &&
+    return other is AttributesArgument &&
         setEquals(other.attributes, attributes);
   }
 

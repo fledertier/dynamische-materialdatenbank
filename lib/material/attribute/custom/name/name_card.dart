@@ -4,16 +4,16 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../types.dart';
 import '../../../edit_mode_button.dart';
+import '../../../material_provider.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
 
 class NameCard extends ConsumerStatefulWidget {
-  const NameCard({super.key, required this.material, required this.size});
+  const NameCard({super.key, required this.materialId, required this.size});
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   @override
@@ -26,7 +26,14 @@ class _NameCardState extends ConsumerState<NameCard> {
   @override
   void initState() {
     super.initState();
-    final value = widget.material[Attributes.name];
+    final value = ref.read(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: widget.materialId,
+          attributeId: Attributes.name,
+        ),
+      ),
+    );
     controller = TextEditingController(text: value);
   }
 
@@ -53,9 +60,10 @@ class _NameCardState extends ConsumerState<NameCard> {
         maxLines: null,
         controller: controller,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(widget.material, {
-            Attributes.name: value,
-          });
+          ref.read(materialServiceProvider).updateMaterialById(
+            widget.materialId,
+            {Attributes.name: value},
+          );
         },
       ),
     );

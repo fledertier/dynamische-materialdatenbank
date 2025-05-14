@@ -11,14 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../material_provider.dart';
 import 'constrained_image.dart';
 import 'image_search_service.dart';
 import 'web_image.dart';
 
 class ImageCard extends ConsumerStatefulWidget {
-  const ImageCard({super.key, required this.material, required this.size});
+  const ImageCard({super.key, required this.materialId, required this.size});
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   @override
@@ -34,13 +35,27 @@ class _ImageCardState extends ConsumerState<ImageCard> {
 
   @override
   void initState() {
-    final value = widget.material[Attributes.images] as List?;
-    images = value != null ? List<Json>.from(value) : [];
     super.initState();
+    final value = ref.watch(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: widget.materialId,
+          attributeId: Attributes.images,
+        ),
+      ),
+    );
+    images = value != null ? List<Json>.from(value) : [];
+  }
+
+  Future<String> materialName() async {
+    final material = await ref.read(
+      materialStreamProvider(widget.materialId).future,
+    );
+    return material[Attributes.name];
   }
 
   void searchImages() async {
-    final name = widget.material[Attributes.name] as String;
+    final name = await materialName();
     final result = await ref
         .read(imageSearchServiceProvider)
         .searchImages(name);
@@ -59,7 +74,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     setState(() {
       images.addAll(foundImages);
     });
-    ref.read(materialServiceProvider).updateMaterial(widget.material, {
+    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
       Attributes.images: images,
     });
   }
@@ -69,7 +84,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.removeAt(index);
       selectedIndex = min(selectedIndex, images.length - 1);
     });
-    ref.read(materialServiceProvider).updateMaterial(widget.material, {
+    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
       Attributes.images: images,
     });
   }
@@ -83,7 +98,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.insert(0, image);
       selectedIndex = 0;
     });
-    ref.read(materialServiceProvider).updateMaterial(widget.material, {
+    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
       Attributes.image: url,
       Attributes.images: images,
     });

@@ -2,7 +2,7 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../types.dart';
+import '../../../material_provider.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
@@ -11,27 +11,33 @@ import 'text_attribute_field.dart';
 class TextCard extends ConsumerWidget {
   const TextCard({
     super.key,
-    required this.material,
-    required this.attribute,
+    required this.materialId,
+    required this.attributeId,
     required this.size,
     this.textStyle,
   });
 
-  final Json material;
-  final String attribute;
+  final String materialId;
+  final String attributeId;
   final CardSize size;
   final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(
+      materialAttributeValueProvider(
+        AttributeArgument(materialId: materialId, attributeId: attributeId),
+      ),
+    );
+
     return AttributeCard(
-      label: AttributeLabel(attribute: attribute),
+      label: AttributeLabel(attribute: attributeId),
       title: TextAttributeField(
-        attribute: attribute,
-        value: material[attribute],
+        attributeId: attributeId,
+        value: value,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
-            attribute: value,
+          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+            attributeId: value,
           });
         },
       ),

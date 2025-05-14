@@ -54,7 +54,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
         if (query.isEmpty) {
           return [];
         }
-        final attributes = AttributesParameter({Attributes.name});
+        final attributes = AttributesArgument({Attributes.name});
         final materials = await ref.read(
           materialsStreamProvider(attributes).future,
         );

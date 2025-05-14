@@ -32,7 +32,7 @@ class MaterialService {
     await updateMaterial(material, material);
   }
 
-  Future<void> updateMaterialWithId(String id, Json data) async {
+  Future<void> updateMaterialById(String id, Json data) async {
     await FirebaseFirestore.instance
         .collection(Collections.materials)
         .doc(id)
@@ -50,7 +50,7 @@ class MaterialService {
     assert(material[Attributes.id] is String, "Material must have an id");
     final id = material[Attributes.id] as String;
 
-    await updateMaterialWithId(id, data);
+    await updateMaterialById(id, data);
   }
 
   Future<void> deleteMaterial(Json material) async {

@@ -32,7 +32,10 @@ class _ReorderableWrapState extends State<ReorderableWrap> {
     cards = widget.cards;
     children =
         widget.cards
-            .map((card) => CardFactory.create(card, widget.material))
+            .map(
+              (card) =>
+                  CardFactory.create(card, widget.material[Attributes.id]),
+            )
             .toList();
   }
 

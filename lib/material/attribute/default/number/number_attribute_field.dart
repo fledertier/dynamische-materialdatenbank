@@ -12,13 +12,13 @@ import 'unit_number.dart';
 class NumberAttributeField extends ConsumerStatefulWidget {
   const NumberAttributeField({
     super.key,
-    required this.attribute,
+    required this.attributeId,
     required this.number,
     this.onChanged,
     this.onUnitChanged,
   });
 
-  final String attribute;
+  final String attributeId;
   final UnitNumber number;
   final ValueChanged<num>? onChanged;
   final ValueChanged<String>? onUnitChanged;
@@ -36,7 +36,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
     final textTheme = TextTheme.of(context);
     final textStyle = textTheme.titleLarge!.copyWith(fontFamily: 'Lexend');
 
-    final attribute = ref.watch(attributeProvider(widget.attribute));
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);
 
     if (attribute == null) {

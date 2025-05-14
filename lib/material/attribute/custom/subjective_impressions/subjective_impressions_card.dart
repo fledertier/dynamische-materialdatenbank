@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants.dart';
-import '../../../../types.dart';
 import '../../../../utils/miscellaneous_utils.dart';
 import '../../../edit_mode_button.dart';
+import '../../../material_provider.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../attribute_label.dart';
@@ -17,28 +17,37 @@ import 'subjective_impression_dialog.dart';
 class SubjectiveImpressionsCard extends ConsumerWidget {
   const SubjectiveImpressionsCard({
     super.key,
-    required this.material,
+    required this.materialId,
     required this.size,
   });
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final value = List<Json>.from(
-      material[Attributes.subjectiveImpressions] ??
-          [
-            {'nameDe': 'rau', 'nameEn': 'rough', 'count': 4},
-            {'nameDe': 'glatt', 'nameEn': 'smooth', 'count': 1},
-            {'nameDe': 'kalt', 'nameEn': 'cold', 'count': 2},
-            {'nameDe': 'warm', 'nameEn': 'warm', 'count': 3},
-            {'nameDe': 'weich', 'nameEn': 'soft', 'count': 1},
-            {'nameDe': 'hart', 'nameEn': 'hard', 'count': 2},
-          ],
-    );
+    final exampleValue = [
+      {'nameDe': 'rau', 'nameEn': 'rough', 'count': 4},
+      {'nameDe': 'glatt', 'nameEn': 'smooth', 'count': 1},
+      {'nameDe': 'kalt', 'nameEn': 'cold', 'count': 2},
+      {'nameDe': 'warm', 'nameEn': 'warm', 'count': 3},
+      {'nameDe': 'weich', 'nameEn': 'soft', 'count': 1},
+      {'nameDe': 'hart', 'nameEn': 'hard', 'count': 2},
+    ];
+
+    final value =
+        ref.watch(
+          materialAttributeValueProvider(
+            AttributeArgument(
+              materialId: materialId,
+              attributeId: Attributes.subjectiveImpressions,
+            ),
+          ),
+        ) ??
+        exampleValue;
+
     final impressions = value.map(SubjectiveImpression.fromJson).toList();
 
     Future<void> updateSubjectiveImpressions(
@@ -55,7 +64,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
             },
           );
       if (updatedSubjectiveImpressions != null) {
-        ref.read(materialServiceProvider).updateMaterial(material, {
+        ref.read(materialServiceProvider).updateMaterialById(materialId, {
           Attributes.subjectiveImpressions: updatedSubjectiveImpressions.map(
             (subjectiveImpression) => subjectiveImpression.toJson(),
           ),

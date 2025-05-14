@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../constants.dart';
 import '../../../../types.dart';
 import '../../../edit_mode_button.dart';
+import '../../../material_provider.dart';
 import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../attribute_label.dart';
@@ -16,11 +17,11 @@ import 'proportions_widget.dart';
 class CompositionCard extends ConsumerWidget {
   const CompositionCard({
     super.key,
-    required this.material,
+    required this.materialId,
     required this.size,
   });
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   int get columns {
@@ -41,15 +42,25 @@ class CompositionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final value = List<Json>.from(
-      material[Attributes.composition] ??
-          [
-            {'category': MaterialCategory.minerals.name, 'share': 58},
-            {'category': MaterialCategory.woods.name, 'share': 40},
-            {'category': MaterialCategory.plastics.name, 'share': 2},
-          ],
-    );
-    final composition = value.map(Composition.fromJson).toList();
+    final exampleValue = [
+      {'category': MaterialCategory.minerals.name, 'share': 58},
+      {'category': MaterialCategory.woods.name, 'share': 40},
+      {'category': MaterialCategory.plastics.name, 'share': 2},
+    ];
+
+    final value =
+        ref.watch(
+          materialAttributeValueProvider(
+            AttributeArgument(
+              materialId: materialId,
+              attributeId: Attributes.composition,
+            ),
+          ),
+        ) ??
+        exampleValue;
+
+    final composition =
+        List<Json>.from(value).map(Composition.fromJson).toList();
 
     Future<void> updateComposition(Composition? initialComposition) async {
       final updatedComposition = await showDialog<List<Composition>>(
@@ -62,7 +73,7 @@ class CompositionCard extends ConsumerWidget {
         },
       );
       if (updatedComposition != null) {
-        ref.read(materialServiceProvider).updateMaterial(material, {
+        ref.read(materialServiceProvider).updateMaterialById(materialId, {
           Attributes.composition: updatedComposition.map(
             (composition) => composition.toJson(),
           ),

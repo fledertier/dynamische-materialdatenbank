@@ -7,30 +7,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants.dart';
-import '../../../../types.dart';
 import '../../../../widgets/tags_field/selectable_tag.dart';
 import '../../../../widgets/tags_field/tags_field.dart';
 import '../../../edit_mode_button.dart';
+import '../../../material_provider.dart';
 import '../../cards.dart';
 import 'countries.dart';
 
 class OriginCountryCard extends ConsumerWidget {
   const OriginCountryCard({
     super.key,
-    required this.material,
+    required this.materialId,
     required this.size,
   });
 
-  final Json material;
+  final String materialId;
   final CardSize size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final countries = parseCountries(
-      material[Attributes.originCountry] ?? ['se'],
+    final value = ref.watch(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: materialId,
+          attributeId: Attributes.originCountry,
+        ),
+      ),
     );
+
+    final countries = parseCountries(value ?? ['se']);
 
     late final field = SizedBox(
       width: 300,
@@ -55,7 +62,7 @@ class OriginCountryCard extends ConsumerWidget {
         textExtractor: (country) => country.name,
         initialTags: countries,
         onChanged: (countries) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
+          ref.read(materialServiceProvider).updateMaterialById(materialId, {
             Attributes.originCountry:
                 countries.map((country) => country.code).toList(),
           });
@@ -70,7 +77,7 @@ class OriginCountryCard extends ConsumerWidget {
           edit
               ? field
               : TextAttributeField(
-                attribute: Attributes.originCountry,
+                attributeId: Attributes.originCountry,
                 value: countries.map((country) => country.name).join(', '),
               ),
       child:

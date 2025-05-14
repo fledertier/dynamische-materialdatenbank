@@ -5,15 +5,15 @@ import 'package:dynamische_materialdatenbank/material/material_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../custom/light/light_reflection_card.dart';
+import '../../../material_provider.dart';
 import 'number_attribute_field.dart';
 import 'unit_number.dart';
 
 class NumberCard extends ConsumerWidget {
   const NumberCard({
     super.key,
-    required this.material,
-    required this.attribute,
+    required this.materialId,
+    required this.attributeId,
     required this.size,
     this.spacing = 16,
     this.clip = Clip.none,
@@ -21,8 +21,8 @@ class NumberCard extends ConsumerWidget {
     this.child,
   });
 
-  final String material;
-  final String attribute;
+  final String materialId;
+  final String attributeId;
   final CardSize size;
   final double spacing;
   final Clip clip;
@@ -31,27 +31,27 @@ class NumberCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final parameter = AttributeParameter(
-      material: material,
-      attribute: attribute,
+    final value = ref.watch(
+      materialAttributeValueProvider(
+        AttributeArgument(materialId: materialId, attributeId: attributeId),
+      ),
     );
-    final value = ref.watch(materialAttributeValueProvider(parameter));
     final number = UnitNumber.fromJson(value);
 
     return AttributeCard(
-      label: AttributeLabel(attribute: attribute),
+      label: AttributeLabel(attribute: attributeId),
       title: NumberAttributeField(
         key: ValueKey(number.displayUnit),
-        attribute: attribute,
+        attributeId: attributeId,
         number: number,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterialWithId(material, {
-            attribute: number.copyWith(value: value).toJson(),
+          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+            attributeId: number.copyWith(value: value).toJson(),
           });
         },
         onUnitChanged: (unit) {
-          ref.read(materialServiceProvider).updateMaterialWithId(material, {
-            attribute: number.copyWith(displayUnit: unit).toJson(),
+          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+            attributeId: number.copyWith(displayUnit: unit).toJson(),
           });
         },
       ),

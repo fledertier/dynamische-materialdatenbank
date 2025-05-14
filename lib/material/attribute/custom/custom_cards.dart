@@ -4,7 +4,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/custom/w_value/w
 import 'package:flutter/widgets.dart';
 
 import '../../../constants.dart';
-import '../../../types.dart';
 import '../cards.dart';
 import 'components/components_card.dart';
 import 'composition/composition_card.dart';
@@ -80,51 +79,54 @@ enum CustomCards implements Cards {
 }
 
 abstract class CustomCardFactory {
-  static Widget create(CustomCards card, Json material, CardSize size) {
+  static Widget create(CustomCards card, String materialId, CardSize size) {
     return switch (card) {
-      CustomCards.nameCard => NameCard(material: material, size: size),
+      CustomCards.nameCard => NameCard(materialId: materialId, size: size),
       CustomCards.descriptionCard => DescriptionCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
-      CustomCards.imageCard => ImageCard(material: material, size: size),
+      CustomCards.imageCard => ImageCard(materialId: materialId, size: size),
       CustomCards.lightReflectionCard => LightReflectionCard(
-        material: material[Attributes.id],
+        materialId: materialId,
         size: size,
       ),
       CustomCards.lightAbsorptionCard => LightAbsorptionCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
       CustomCards.lightTransmissionCard => LightTransmissionCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
-      CustomCards.uValueCard => UValueCard(material: material, size: size),
-      CustomCards.wValueCard => WValueCard(material: material, size: size),
+      CustomCards.uValueCard => UValueCard(materialId: materialId, size: size),
+      CustomCards.wValueCard => WValueCard(materialId: materialId, size: size),
       CustomCards.originCountryCard => OriginCountryCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
       CustomCards.compositionCard => CompositionCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
       CustomCards.fireBehaviorStandardCard => FireBehaviorStandardCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
       CustomCards.arealDensityCard => ArealDensityCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
-      CustomCards.densityCard => DensityCard(material: material, size: size),
+      CustomCards.densityCard => DensityCard(
+        materialId: materialId,
+        size: size,
+      ),
       CustomCards.componentsCard => ComponentsCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
       CustomCards.subjectiveImpressionsCard => SubjectiveImpressionsCard(
-        material: material,
+        materialId: materialId,
         size: size,
       ),
     };

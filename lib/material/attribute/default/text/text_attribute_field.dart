@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TextAttributeField extends ConsumerStatefulWidget {
   const TextAttributeField({
     super.key,
-    required this.attribute,
+    required this.attributeId,
     this.value,
     this.onChanged,
   });
 
-  final String attribute;
+  final String attributeId;
   final String? value;
   final ValueChanged<String>? onChanged;
 
@@ -39,7 +39,7 @@ class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
 
-    final attribute = ref.watch(attributeProvider(widget.attribute));
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);
 
     return IntrinsicWidth(

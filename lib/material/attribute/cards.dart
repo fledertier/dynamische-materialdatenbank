@@ -35,13 +35,13 @@ abstract class Cards implements Enum {
 }
 
 abstract class CardFactory {
-  static Widget create(CardData data, Json material) {
+  static Widget create(CardData data, String materialId) {
     final card = data.card;
     return switch (card) {
-      CustomCards() => CustomCardFactory.create(card, material, data.size),
+      CustomCards() => CustomCardFactory.create(card, materialId, data.size),
       DefaultCards() => DefaultCardFactory.create(
         card,
-        material,
+        materialId,
         data.attribute,
         data.size,
       ),

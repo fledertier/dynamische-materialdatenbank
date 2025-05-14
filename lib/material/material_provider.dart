@@ -11,7 +11,7 @@ import 'material_service.dart';
 final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
   final query = ref.watch(searchProvider);
   final filterOptions = ref.watch(filterOptionsProvider);
-  final attributes = AttributesParameter({
+  final attributes = AttributesArgument({
     Attributes.name,
     if (query.isNotEmpty) Attributes.description,
     ...filterOptions.keys,
@@ -26,14 +26,66 @@ final filteredMaterialItemsStreamProvider = FutureProvider((ref) async {
 
 final materialsStreamProvider = FutureProvider.family((
   ref,
-  AttributesParameter parameter,
+  AttributesArgument argument,
 ) async {
-  final attributes = await ref.watch(
-    attributesValuesProvider(parameter).future,
-  );
+  final attributes = await ref.watch(attributesValuesProvider(argument).future);
   return attributes.values.toList();
 });
 
 final materialStreamProvider = StreamProvider.family((ref, String id) {
   return ref.read(materialServiceProvider).getMaterialStream(id);
 });
+
+final materialAttributeValueProvider = Provider.family((
+  ref,
+  AttributeArgument arg,
+) {
+  if (arg.materialId == exampleMaterial[Attributes.id]) {
+    return exampleMaterial;
+  }
+  final material = ref.watch(materialStreamProvider(arg.materialId)).value;
+  return material?[arg.attributeId];
+});
+
+class AttributeArgument {
+  const AttributeArgument({
+    required this.materialId,
+    required this.attributeId,
+  });
+
+  final String materialId;
+  final String attributeId;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AttributeArgument &&
+        other.materialId == materialId &&
+        other.attributeId == attributeId;
+  }
+
+  @override
+  int get hashCode => materialId.hashCode ^ attributeId.hashCode;
+
+  @override
+  String toString() {
+    return 'AttributeParameter(material: $materialId, attribute: $attributeId)';
+  }
+}
+
+final Map<String, dynamic> exampleMaterial = {
+  Attributes.id: "example",
+  Attributes.name: "Acoustic Wood Wool",
+  Attributes.description:
+      "BAUX Acoustic Wood Wool is a functional, natural material made from two of the world’s oldest building materials, wood and cement. The combination is simple and ingenious. Wood fiber offers excellent insulation, heat retention and sound absorption. Cement, a proven and popular building material, is the binder that provides strength, moisture resistance and fire protection. Therefore, BAUX acoustic products are versatile and durable in all climates.",
+  Attributes.density: {'value': 4},
+  Attributes.arealDensity: {'value': 4},
+  Attributes.lightAbsorption: {'value': 56},
+  Attributes.lightReflection: {'value': 37},
+  Attributes.lightTransmission: {'value': 28},
+  Attributes.uValue: {'value': 2},
+  Attributes.wValue: {'value': 3.6},
+  Attributes.fireBehaviorStandard: "C-s2,d1",
+  Attributes.originCountry: ["SE"],
+};
