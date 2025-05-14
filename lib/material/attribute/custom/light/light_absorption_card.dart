@@ -23,7 +23,7 @@ class LightAbsorptionCard extends StatelessWidget {
     final absorbedRays = (number.value / 10).round();
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.lightAbsorption,
       size: size,
       child: RayVisualization(

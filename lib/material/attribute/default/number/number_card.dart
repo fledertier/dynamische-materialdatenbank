@@ -2,10 +2,10 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.d
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/material_service.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../custom/light/light_reflection_card.dart';
 import 'number_attribute_field.dart';
 import 'unit_number.dart';
 
@@ -21,7 +21,7 @@ class NumberCard extends ConsumerWidget {
     this.child,
   });
 
-  final Json material;
+  final String material;
   final String attribute;
   final CardSize size;
   final double spacing;
@@ -31,7 +31,12 @@ class NumberCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final number = UnitNumber.fromJson(material[attribute]);
+    final parameter = AttributeParameter(
+      material: material,
+      attribute: attribute,
+    );
+    final value = ref.watch(materialAttributeValueProvider(parameter));
+    final number = UnitNumber.fromJson(value);
 
     return AttributeCard(
       label: AttributeLabel(attribute: attribute),
@@ -40,12 +45,12 @@ class NumberCard extends ConsumerWidget {
         attribute: attribute,
         number: number,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
+          ref.read(materialServiceProvider).updateMaterialWithId(material, {
             attribute: number.copyWith(value: value).toJson(),
           });
         },
         onUnitChanged: (unit) {
-          ref.read(materialServiceProvider).updateMaterial(material, {
+          ref.read(materialServiceProvider).updateMaterialWithId(material, {
             attribute: number.copyWith(displayUnit: unit).toJson(),
           });
         },

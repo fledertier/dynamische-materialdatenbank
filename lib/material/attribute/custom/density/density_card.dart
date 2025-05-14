@@ -18,7 +18,7 @@ class DensityCard extends StatelessWidget {
     final number = UnitNumber.fromJson(material[Attributes.density]);
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.density,
       size: size,
       clip: Clip.antiAlias,

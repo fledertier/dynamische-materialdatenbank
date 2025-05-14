@@ -23,7 +23,7 @@ class LightTransmissionCard extends StatelessWidget {
     final transmittedRays = (number.value / 10).round();
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.lightTransmission,
       size: size,
       child: RayVisualization(

@@ -10,7 +10,6 @@ class AnimatedDraggable<T extends Object> extends StatelessWidget {
     this.onDragStarted,
     this.onDragEnd,
     this.feedbackBuilder,
-    this.offset,
   });
 
   final Object tag;
@@ -19,7 +18,6 @@ class AnimatedDraggable<T extends Object> extends StatelessWidget {
   final void Function()? onDragStarted;
   final void Function(DraggableDetails details)? onDragEnd;
   final Widget Function(Widget child)? feedbackBuilder;
-  final Offset? offset;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +29,6 @@ class AnimatedDraggable<T extends Object> extends StatelessWidget {
         onDragEnd?.call(details);
       },
       data: data,
-      dragAnchorStrategy:
-          offset != null
-              ? (draggable, context, position) => offset!
-              : childDragAnchorStrategy,
       feedback: LocalHero(
         tag: tag,
         child: feedbackBuilder?.call(child) ?? child,

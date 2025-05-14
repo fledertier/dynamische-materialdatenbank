@@ -60,7 +60,19 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                 : Center(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                    child: Dings(cards: cards, material: material),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ReorderableWrap(
+                          cards: cards.take(3).toList(),
+                          material: material,
+                        ),
+                        ReorderableWrap(
+                          cards: cards.skip(3).toList(),
+                          material: material,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
       ),

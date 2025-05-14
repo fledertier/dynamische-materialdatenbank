@@ -89,7 +89,7 @@ abstract class CustomCardFactory {
       ),
       CustomCards.imageCard => ImageCard(material: material, size: size),
       CustomCards.lightReflectionCard => LightReflectionCard(
-        material: material,
+        material: material[Attributes.id],
         size: size,
       ),
       CustomCards.lightAbsorptionCard => LightAbsorptionCard(

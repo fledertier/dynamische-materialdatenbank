@@ -19,7 +19,7 @@ class WValueCard extends StatelessWidget {
     final number = UnitNumber.fromJson(material[Attributes.wValue]);
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.wValue,
       size: size,
       spacing: 32,

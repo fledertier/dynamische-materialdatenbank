@@ -18,7 +18,7 @@ class UValueCard extends StatelessWidget {
     final transmittedRays = (number.value / 6 * 10).clamp(0, 10).round();
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.uValue,
       size: size,
       child: RayVisualization(

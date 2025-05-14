@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/textarea
 import 'package:flutter/widgets.dart';
 
 import '../../../attributes/attribute_type.dart';
+import '../../../constants.dart';
 import '../../../types.dart';
 import '../cards.dart';
 import 'number/number_card.dart';
@@ -44,7 +45,7 @@ abstract class DefaultCardFactory {
         size: size,
       ),
       DefaultCards.numberCard => NumberCard(
-        material: material,
+        material: material[Attributes.id],
         attribute: attribute,
         size: size,
       ),

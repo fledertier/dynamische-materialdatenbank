@@ -22,7 +22,7 @@ class ArealDensityCard extends StatelessWidget {
     final number = UnitNumber.fromJson(material[Attributes.arealDensity]);
 
     return NumberCard(
-      material: material,
+      material: material[Attributes.id],
       attribute: Attributes.arealDensity,
       size: size,
       clip: Clip.antiAlias,

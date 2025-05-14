@@ -31,17 +31,9 @@ class ReorderableCardSection extends StatefulWidget {
 }
 
 class _ReorderableFilesGrid extends State<ReorderableCardSection> {
-  var _scopeKey = UniqueKey();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return LocalHeroScope(
-      // key: _scopeKey,
       duration: widget.animationDuration,
       createRectTween: (begin, end) {
         return RectTween(begin: begin, end: end);
@@ -78,12 +70,7 @@ class _ReorderableFilesGrid extends State<ReorderableCardSection> {
       builder: (context, candidateData, rejectedData) {
         return AnimatedDraggable<CardData>(
           tag: data.attribute,
-          // widget.material[data.attribute]
           data: data,
-          onDragEnd: (details) {
-            // _resetScope();
-            // Future.delayed(widget.animationDuration, _resetScope);
-          },
           feedbackBuilder: (child) {
             return widget.decorator?.call(context, child) ??
                 _defaultDecorator(context, child);
@@ -97,12 +84,6 @@ class _ReorderableFilesGrid extends State<ReorderableCardSection> {
   void onDrag(CardData source, CardData target) {
     widget.onReorder?.call(source, target);
     setState(() {});
-  }
-
-  void _resetScope() {
-    setState(() {
-      _scopeKey = UniqueKey();
-    });
   }
 }
 
