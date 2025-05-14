@@ -85,17 +85,14 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                 width: fieldWidth,
                 requestFocusOnTap: false,
                 dropdownMenuEntries: [
-                  for (final value
-                      in widget.initialAttribute?.type.exchangeableTypes ??
-                          AttributeType.values)
+                  for (final value in AttributeType.values)
                     DropdownMenuEntry(
                       value: value,
                       label: value.name,
                       leadingIcon: Icon(value.icon),
                     ),
                 ],
-                enabled:
-                    widget.initialAttribute?.type.hasExchangeableTypes ?? true,
+                enabled: widget.initialAttribute == null,
                 onSelected: (value) {
                   _attribute.type.value = value;
                 },
