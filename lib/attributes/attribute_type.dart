@@ -25,14 +25,6 @@ enum AttributeType {
       Operator.notEquals,
     },
   ),
-  textarea(
-    operators: {
-      Operator.contains,
-      Operator.notContains,
-      Operator.equals,
-      Operator.notEquals,
-    },
-  ),
   number(
     operators: {
       Operator.greaterThan,
@@ -61,7 +53,6 @@ extension AttributeTypeExtension on AttributeType {
   IconData get icon {
     return switch (this) {
       AttributeType.text => Symbols.text_fields,
-      AttributeType.textarea => Symbols.article,
       AttributeType.number => Symbols.numbers,
       AttributeType.boolean => Symbols.toggle_on,
       AttributeType.proportions => Symbols.pie_chart,

@@ -122,25 +122,62 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
                 return Wrap(
                   spacing: 16,
                   runSpacing: 24,
-                  children: [typeField!, if (hasUnit) unitDropdown],
+                  children: [
+                    typeField!,
+                    if (_attribute.type.value == AttributeType.number)
+                      unitDropdown,
+                  ],
                 );
               },
             ),
-            Row(
-              children: [
-                ListenableBuilder(
-                  listenable: _attribute.required,
-                  builder: (context, child) {
-                    return Checkbox(
-                      value: _attribute.required.value ?? false,
-                      onChanged: (value) {
-                        _attribute.required.value = value;
-                      },
-                    );
-                  },
-                ),
-                Text("Required"),
-              ],
+            ListenableBuilder(
+              listenable: _attribute.type,
+              builder: (context, requiredCheckbox) {
+                final multilineCheckbox = Row(
+                  children: [
+                    Row(
+                      children: [
+                        ListenableBuilder(
+                          listenable: _attribute.multiline,
+                          builder: (context, child) {
+                            return Checkbox(
+                              value: _attribute.multiline.value ?? false,
+                              onChanged: (value) {
+                                _attribute.multiline.value = value;
+                              },
+                            );
+                          },
+                        ),
+                        Text("Multiline"),
+                      ],
+                    ),
+                  ],
+                );
+                return Column(
+                  spacing: 16,
+                  children: [
+                    if (_attribute.type.value == AttributeType.text)
+                      multilineCheckbox,
+                    requiredCheckbox!,
+                  ],
+                );
+              },
+              child: Row(
+                children: [
+                  ListenableBuilder(
+                    listenable: _attribute.required,
+                    builder: (context, child) {
+                      return Checkbox(
+                        value: _attribute.required.value ?? false,
+                        onChanged: (value) {
+                          _attribute.required.value = value;
+                        },
+                      );
+                    },
+                  ),
+                  Text("Required"),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
@@ -162,8 +199,6 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
-  bool get hasUnit => _attribute.type.value == AttributeType.number;
-
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final attribute = Attribute(
@@ -171,7 +206,14 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
         nameDe: _attribute.nameDe.value!,
         nameEn: _attribute.nameEn.value,
         type: _attribute.type.value!,
-        unitType: hasUnit ? _attribute.unitType.value : null,
+        unitType:
+            _attribute.type.value == AttributeType.number
+                ? _attribute.unitType.value
+                : null,
+        multiline:
+            _attribute.type.value == AttributeType.text
+                ? _attribute.multiline.value
+                : null,
         required: _attribute.required.value ?? false,
       );
       widget.onSubmit(attribute);
