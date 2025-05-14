@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 
+const absoluteZero = -273.15;
+
 abstract class UnitTypes {
   static final values = [
     acceleration,
@@ -26,11 +28,11 @@ abstract class UnitTypes {
     name: 'time',
     base: 's',
     fromBase: {
-      'ms': (t) => t * 1000,
+      'ms': (t) => t * Duration.millisecondsPerSecond,
       's': (t) => t,
-      'min': (t) => t / 60,
-      'h': (t) => t / 3600,
-      'd': (t) => t / 86400,
+      'min': (t) => t / Duration.secondsPerMinute,
+      'h': (t) => t / Duration.secondsPerHour,
+      'd': (t) => t / Duration.secondsPerDay,
     },
   );
 
@@ -62,13 +64,13 @@ abstract class UnitTypes {
     base: 'K',
     fromBase: {
       'K': (t) => t,
-      '°C': (t) => t - 273.15,
-      '°F': (t) => (t - 273.15) * 9 / 5 + 32,
+      '°C': (t) => t + absoluteZero,
+      '°F': (t) => (t + absoluteZero) * 9 / 5 + 32,
     },
     toBase: {
       'K': (t) => t,
-      '°C': (t) => t + 273.15,
-      '°F': (t) => (t - 32) * 5 / 9 + 273.15,
+      '°C': (t) => t - absoluteZero,
+      '°F': (t) => (t - 32) * 5 / 9 - absoluteZero,
     },
   );
 
@@ -140,10 +142,10 @@ abstract class UnitTypes {
     name: 'arealDensity',
     base: 'kg/m²',
     fromBase: {
-      'g/cm²': (a) => a * mass['g'] / area['cm²'],
-      'kg/m²': (a) => a * mass['kg'] / area['m²'],
       'mg/cm²': (a) => a * mass['mg'] / area['cm²'],
+      'g/cm²': (a) => a * mass['g'] / area['cm²'],
       'mg/m²': (a) => a * mass['mg'] / area['m²'],
+      'kg/m²': (a) => a * mass['kg'] / area['m²'],
     },
   );
 
@@ -178,7 +180,7 @@ abstract class UnitTypes {
   static final percentage = UnitType(
     name: 'percentage',
     base: '%',
-    fromBase: {'%': (p) => p, '‰': (p) => p / 10},
+    fromBase: {'%': (p) => p, '‰': (p) => p * 10},
   );
 }
 

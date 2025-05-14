@@ -130,7 +130,7 @@ class _AttributeFormState extends State<AttributeForm> {
                     if (_attribute.value.type == AttributeType.number)
                       DropdownMenuFormField<UnitType>(
                         initialSelection: widget.initialAttribute.unitType,
-                        label: Text("Unit type"),
+                        label: Text("Unit"),
                         width: fieldWidth,
                         menuHeight: 500,
                         enableFilter: true,
