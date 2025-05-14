@@ -9,7 +9,7 @@ import 'attribute_provider.dart';
 class AttributesList extends StatelessWidget {
   const AttributesList({super.key, required this.selectedAttribute});
 
-  final ValueNotifier<AttributeData?> selectedAttribute;
+  final ValueNotifier<Attribute?> selectedAttribute;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class AttributesList extends StatelessWidget {
                 label: Text("Add"),
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  selectedAttribute.value = AttributeData();
+                  // todo
                 },
               ),
             ],

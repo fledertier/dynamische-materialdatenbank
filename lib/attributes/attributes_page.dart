@@ -17,7 +17,7 @@ class AttributesPage extends StatefulWidget {
 }
 
 class _AttributesPageState extends State<AttributesPage> {
-  final selectedAttribute = ValueNotifier<AttributeData?>(null);
+  final selectedAttribute = ValueNotifier<Attribute?>(null);
 
   @override
   Widget build(BuildContext context) {

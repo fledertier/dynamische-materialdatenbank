@@ -1,6 +1,4 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_service.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,11 +8,12 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../widgets/directional_menu_anchor.dart';
 import 'attribute.dart';
 import 'attribute_form.dart';
+import 'attribute_service.dart';
 
 class AttributeDetails extends ConsumerWidget {
   const AttributeDetails({super.key, required this.selectedAttribute});
 
-  final ValueNotifier<AttributeData?> selectedAttribute;
+  final ValueNotifier<Attribute?> selectedAttribute;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +37,7 @@ class AttributeDetails extends ConsumerWidget {
                 child: Row(
                   children: [
                     Text(
-                      selectedAttribute.value is Attribute
+                      selectedAttribute.value != null
                           ? "Edit Attribute"
                           : "Create Attribute",
                       style: TextTheme.of(context).headlineSmall,
@@ -53,21 +52,22 @@ class AttributeDetails extends ConsumerWidget {
                         );
                       },
                       menuChildren: [
-                        if (selectedAttribute.value is Attribute)
+                        if (selectedAttribute.value != null)
                           MenuItemButton(
                             leadingIcon: Icon(Symbols.content_copy),
                             requestFocusOnHover: false,
                             onPressed: copyAttributeId,
                             child: Text('Copy id'),
                           ),
-                        MenuItemButton(
-                          leadingIcon: Icon(Symbols.delete),
-                          requestFocusOnHover: false,
-                          onPressed: () {
-                            deleteAttribute(context);
-                          },
-                          child: Text("Delete"),
-                        ),
+                        if (selectedAttribute.value != null)
+                          MenuItemButton(
+                            leadingIcon: Icon(Symbols.delete),
+                            requestFocusOnHover: false,
+                            onPressed: () {
+                              deleteAttribute(context);
+                            },
+                            child: Text("Delete"),
+                          ),
                       ],
                     ),
                   ],
@@ -79,12 +79,8 @@ class AttributeDetails extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: AttributeForm(
-                  initialAttribute: selectedAttribute.value!,
-                  onSubmit: (attribute) async {
-                    if (attribute is! Attribute) {
-                      final id = await nearestAvailableId(ref, attribute);
-                      attribute = Attribute.fromData(id, attribute);
-                    }
+                  initialAttribute: selectedAttribute.value,
+                  onSubmit: (attribute) {
                     ref
                         .read(attributeServiceProvider)
                         .updateAttribute(attribute);
@@ -100,31 +96,17 @@ class AttributeDetails extends ConsumerWidget {
   }
 
   Future<void> deleteAttribute(BuildContext context) async {
-    bool? deleted;
-    if (selectedAttribute.value is Attribute) {
-      deleted = await showAttributeDeleteDialog(
-        context,
-        selectedAttribute.value as Attribute,
-      );
-    }
-    if (deleted ?? true) {
+    final deleted = await showAttributeDeleteDialog(
+      context,
+      selectedAttribute.value!,
+    );
+    if (deleted) {
       selectedAttribute.value = null;
     }
   }
 
   void copyAttributeId() {
-    final attribute = selectedAttribute.value as Attribute;
+    final attribute = selectedAttribute.value!;
     Clipboard.setData(ClipboardData(text: attribute.id));
-  }
-
-  Future<String> nearestAvailableId(
-    WidgetRef ref,
-    AttributeData attribute,
-  ) async {
-    final name = attribute.nameEn ?? attribute.nameDe!;
-    final attributes = await ref.read(attributesProvider.future);
-    return ref
-        .read(attributeServiceProvider)
-        .nearestAvailableAttributeId(name.toLowerCase(), attributes);
   }
 }
