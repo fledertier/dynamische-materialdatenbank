@@ -34,7 +34,6 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
     menuButtonTheme: MenuButtonThemeData(
       style: MenuItemButton.styleFrom(
         minimumSize: Size(120, 48),
-        maximumSize: Size.fromWidth(280),
         padding: EdgeInsets.symmetric(horizontal: 12),
         textStyle: textTheme.labelLarge,
         iconSize: 22,

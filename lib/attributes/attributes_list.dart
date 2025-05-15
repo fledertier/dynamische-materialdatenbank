@@ -1,18 +1,20 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'attribute_provider.dart';
+import 'attribute_service.dart';
 
-class AttributesList extends StatelessWidget {
-  const AttributesList({super.key, required this.selectedAttribute});
+class AttributesList extends ConsumerWidget {
+  const AttributesList({super.key, required this.selectedAttributeId});
 
-  final ValueNotifier<Attribute?> selectedAttribute;
+  final ValueNotifier<String?> selectedAttributeId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Padding(
@@ -25,7 +27,7 @@ class AttributesList extends StatelessWidget {
                 label: Text("Add"),
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  // todo
+                  createAttribute(context, ref);
                 },
               ),
             ],
@@ -46,7 +48,7 @@ class AttributesList extends StatelessWidget {
               );
 
               return ListenableBuilder(
-                listenable: selectedAttribute,
+                listenable: selectedAttributeId,
                 builder: (context, child) {
                   return ListView.builder(
                     itemCount: attributes.length,
@@ -55,9 +57,9 @@ class AttributesList extends StatelessWidget {
 
                       return AttributeListTile(
                         attribute,
-                        selected: selectedAttribute.value == attribute,
+                        selected: selectedAttributeId.value == attribute.id,
                         onTap: () {
-                          selectedAttribute.value = attribute;
+                          selectedAttributeId.value = attribute.id;
                         },
                       );
                     },
@@ -69,6 +71,13 @@ class AttributesList extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> createAttribute(BuildContext context, WidgetRef ref) async {
+    final attribute = await showAttributeDialog(context);
+    if (attribute != null) {
+      ref.read(attributeServiceProvider).updateAttribute(attribute);
+    }
   }
 }
 

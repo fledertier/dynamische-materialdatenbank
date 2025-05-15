@@ -9,177 +9,157 @@ import 'attribute_provider.dart';
 import 'attribute_service.dart';
 import 'attribute_type.dart';
 
-const double fieldWidth = 280;
-
 class AttributeForm extends ConsumerStatefulWidget {
   const AttributeForm({
     super.key,
-    required this.initialAttribute,
+    required this.controller,
     required this.onSubmit,
   });
 
-  final Attribute? initialAttribute;
+  final AttributeFormController? controller;
   final void Function(Attribute attribute) onSubmit;
 
   @override
-  ConsumerState<AttributeForm> createState() => _AttributeFormState();
+  ConsumerState<AttributeForm> createState() => AttributeFormState();
 }
 
-class _AttributeFormState extends ConsumerState<AttributeForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  late final _attribute = AttributeFormState(widget.initialAttribute);
+class AttributeFormState extends ConsumerState<AttributeForm> {
+  final _form = GlobalKey<FormState>();
+  late final _controller = widget.controller ?? AttributeFormController();
 
   @override
   Widget build(BuildContext context) {
-    return FocusTraversalGroup(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 24,
-          children: [
-            Wrap(
-              spacing: 16,
-              runSpacing: 24,
-              children: [
-                TextFormField(
-                  initialValue: _attribute.nameDe.value,
-                  decoration: InputDecoration(
-                    labelText: "Name (De)",
-                    constraints: BoxConstraints(maxWidth: fieldWidth),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter a name";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    _attribute.nameDe.value = value;
-                  },
-                ),
-                ListenableBuilder(
-                  listenable: _attribute.nameDe,
-                  builder: (context, child) {
-                    return TextFormField(
-                      initialValue: _attribute.nameEn.value,
-                      decoration: InputDecoration(
-                        labelText: "Name (En)",
-                        hintText: _attribute.nameDe.value,
-                        constraints: BoxConstraints(maxWidth: fieldWidth),
-                      ),
-                      onChanged: (value) {
-                        _attribute.nameEn.value = value;
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            ListenableBuilder(
-              listenable: _attribute.type,
-              child: DropdownMenuFormField<AttributeType>(
-                initialSelection: _attribute.type.value,
-                label: Text("Type"),
-                width: fieldWidth,
-                requestFocusOnTap: false,
-                dropdownMenuEntries: [
-                  for (final value in AttributeType.values)
-                    DropdownMenuEntry(
-                      value: value,
-                      label: value.name,
-                      leadingIcon: Icon(value.icon),
-                    ),
-                ],
-                enabled: widget.initialAttribute == null,
-                onSelected: (value) {
-                  _attribute.type.value = value;
-                },
+    return Form(
+      key: _form,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 24,
+        children: [
+          Wrap(
+            spacing: 16,
+            runSpacing: 24,
+            children: [
+              TextFormField(
+                initialValue: _controller.nameDe.value,
+                decoration: InputDecoration(labelText: "Name (De)"),
                 validator: (value) {
-                  if (value == null) {
-                    return "Please select a type";
+                  if (value == null || value.isEmpty) {
+                    return "Please enter a name";
                   }
                   return null;
                 },
+                onChanged: (value) {
+                  _controller.nameDe.value = value;
+                },
               ),
-              builder: (context, typeField) {
-                final unitDropdown = DropdownMenuFormField<UnitType>(
-                  initialSelection: _attribute.unitType.value,
-                  label: Text("Unit"),
-                  width: fieldWidth,
-                  menuHeight: 500,
-                  enableFilter: true,
-                  enableSearch: false,
-                  dropdownMenuEntries: [
-                    for (final value in UnitTypes.values)
-                      DropdownMenuEntry(value: value, label: value.name),
-                  ],
-                  onSelected: (value) {
-                    _attribute.unitType.value = value;
-                  },
-                );
-                return Wrap(
-                  spacing: 16,
-                  runSpacing: 24,
-                  children: [typeField!, if (hasUnit) unitDropdown],
-                );
-              },
-            ),
-            Row(
-              children: [
-                ListenableBuilder(
-                  listenable: _attribute.required,
-                  builder: (context, child) {
-                    return Checkbox(
-                      value: _attribute.required.value ?? false,
-                      onChanged: (value) {
-                        _attribute.required.value = value;
-                      },
-                    );
-                  },
-                ),
-                Text("Required"),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: ListenableBuilder(
-                listenable: _attribute,
+              ListenableBuilder(
+                listenable: _controller.nameDe,
                 builder: (context, child) {
-                  return FilledButton(
-                    onPressed: _attribute.hasChanges ? _submitForm : null,
-                    child: Text(
-                      widget.initialAttribute != null ? "Save" : "Create",
+                  return TextFormField(
+                    initialValue: _controller.nameEn.value,
+                    decoration: InputDecoration(
+                      labelText: "Name (En)",
+                      hintText: _controller.nameDe.value,
                     ),
+                    onChanged: (value) {
+                      _controller.nameEn.value = value;
+                    },
                   );
                 },
               ),
+            ],
+          ),
+          ListenableBuilder(
+            listenable: _controller.type,
+            child: DropdownMenuFormField<AttributeType>(
+              initialSelection: _controller.type.value,
+              label: Text("Type"),
+              expandedInsets: EdgeInsets.zero,
+              requestFocusOnTap: false,
+              dropdownMenuEntries: [
+                for (final value in AttributeType.values)
+                  DropdownMenuEntry(
+                    value: value,
+                    label: value.name,
+                    leadingIcon: Icon(value.icon),
+                  ),
+              ],
+              enabled: _controller.initialAttribute == null,
+              onSelected: (value) {
+                _controller.type.value = value;
+              },
+              validator: (value) {
+                if (value == null) {
+                  return "Please select a type";
+                }
+                return null;
+              },
             ),
-          ],
-        ),
+            builder: (context, typeField) {
+              final unitDropdown = DropdownMenuFormField<UnitType>(
+                initialSelection: _controller.unitType.value,
+                label: Text("Unit"),
+                expandedInsets: EdgeInsets.zero,
+                menuHeight: 500,
+                enableFilter: true,
+                enableSearch: false,
+                dropdownMenuEntries: [
+                  for (final value in UnitTypes.values)
+                    DropdownMenuEntry(value: value, label: value.name),
+                ],
+                onSelected: (value) {
+                  _controller.unitType.value = value;
+                },
+              );
+              return Row(
+                spacing: 16,
+                children: [
+                  Expanded(child: typeField!),
+                  if (hasUnit) Expanded(child: unitDropdown),
+                ],
+              );
+            },
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListenableBuilder(
+                listenable: _controller.required,
+                builder: (context, child) {
+                  return Checkbox(
+                    value: _controller.required.value ?? false,
+                    onChanged: (value) {
+                      _controller.required.value = value;
+                    },
+                  );
+                },
+              ),
+              Text("Required"),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  bool get hasUnit => _attribute.type.value == AttributeType.number;
+  bool get hasUnit => _controller.type.value == AttributeType.number;
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
+  Future<void> submit() async {
+    if (_form.currentState!.validate()) {
       final attribute = Attribute(
-        id: _attribute.id.value ?? await _createId(),
-        nameDe: _attribute.nameDe.value!,
-        nameEn: _attribute.nameEn.value,
-        type: _attribute.type.value!,
-        unitType: hasUnit ? _attribute.unitType.value : null,
-        required: _attribute.required.value ?? false,
+        id: _controller.id.value ?? await _createId(),
+        nameDe: _controller.nameDe.value!,
+        nameEn: _controller.nameEn.value,
+        type: _controller.type.value!,
+        unitType: hasUnit ? _controller.unitType.value : null,
+        required: _controller.required.value ?? false,
       );
       widget.onSubmit(attribute);
     }
   }
 
   Future<String> _createId() async {
-    final name = _attribute.nameEn.value ?? _attribute.nameDe.value!;
+    final name = _controller.nameEn.value ?? _controller.nameDe.value!;
     final attributes = await ref.read(attributesProvider.future);
     return ref
         .read(attributeServiceProvider)
@@ -188,7 +168,9 @@ class _AttributeFormState extends ConsumerState<AttributeForm> {
 
   @override
   void dispose() {
-    _attribute.dispose();
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 }

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'attribute.dart';
 import 'attribute_type.dart';
 
-class AttributeFormState implements Listenable {
-  AttributeFormState(this.initialAttribute)
+class AttributeFormController implements Listenable {
+  AttributeFormController([this.initialAttribute])
     : id = ValueNotifier(initialAttribute?.id),
       nameDe = ValueNotifier(initialAttribute?.nameDe),
       nameEn = ValueNotifier(initialAttribute?.nameEn),

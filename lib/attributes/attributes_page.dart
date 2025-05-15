@@ -5,7 +5,6 @@ import '../app/navigation.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/sheet.dart';
-import 'attribute.dart';
 import 'attribute_details.dart';
 import 'attributes_list.dart';
 
@@ -17,7 +16,7 @@ class AttributesPage extends StatefulWidget {
 }
 
 class _AttributesPageState extends State<AttributesPage> {
-  final selectedAttribute = ValueNotifier<Attribute?>(null);
+  final selectedAttributeId = ValueNotifier<String?>(null);
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +28,11 @@ class _AttributesPageState extends State<AttributesPage> {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 412),
-            child: AttributesList(selectedAttribute: selectedAttribute),
+            child: AttributesList(selectedAttributeId: selectedAttributeId),
           ),
           Expanded(
             child: Sheet(
-              child: AttributeDetails(selectedAttribute: selectedAttribute),
+              child: AttributeDetails(selectedAttributeId: selectedAttributeId),
             ),
           ),
         ],
