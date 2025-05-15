@@ -11,7 +11,6 @@ class AttributeFormState implements Listenable {
       nameEn = ValueNotifier(initialAttribute?.nameEn),
       type = ValueNotifier(initialAttribute?.type),
       unitType = ValueNotifier(initialAttribute?.unitType),
-      multiline = ValueNotifier(initialAttribute?.multiline),
       required = ValueNotifier(initialAttribute?.required);
 
   final ValueNotifier<String?> id;
@@ -19,7 +18,6 @@ class AttributeFormState implements Listenable {
   final ValueNotifier<String?> nameEn;
   final ValueNotifier<AttributeType?> type;
   final ValueNotifier<UnitType?> unitType;
-  final ValueNotifier<bool?> multiline;
   final ValueNotifier<bool?> required;
 
   final Attribute? initialAttribute;
@@ -29,7 +27,6 @@ class AttributeFormState implements Listenable {
         nameEn.value != initialAttribute?.nameEn ||
         type.value != initialAttribute?.type ||
         unitType.value != initialAttribute?.unitType ||
-        multiline.value != initialAttribute?.multiline ||
         required.value != initialAttribute?.required;
   }
 
@@ -39,7 +36,6 @@ class AttributeFormState implements Listenable {
     nameEn,
     type,
     unitType,
-    multiline,
     required,
   ];
 

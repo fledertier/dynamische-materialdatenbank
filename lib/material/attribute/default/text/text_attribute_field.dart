@@ -9,13 +9,11 @@ class TextAttributeField extends ConsumerStatefulWidget {
     required this.attributeId,
     this.value,
     this.onChanged,
-    this.textStyle,
   });
 
   final String attributeId;
   final String? value;
   final ValueChanged<String>? onChanged;
-  final TextStyle? textStyle;
 
   @override
   ConsumerState<TextAttributeField> createState() =>
@@ -39,20 +37,16 @@ class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
 
   @override
   Widget build(BuildContext context) {
-    final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
-    final multiline = attribute?.multiline ?? false;
-
     final textTheme = TextTheme.of(context);
-    final textStyle = (multiline ? textTheme.bodySmall : textTheme.titleLarge)!
-        .copyWith(fontFamily: 'Lexend');
+
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final edit = ref.watch(editModeProvider);
 
     return IntrinsicWidth(
       child: TextField(
         enabled: edit,
-        style: widget.textStyle ?? textStyle,
+        style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: attribute?.name),
-        maxLines: multiline ? null : 1,
         controller: controller,
         onChanged: widget.onChanged,
       ),

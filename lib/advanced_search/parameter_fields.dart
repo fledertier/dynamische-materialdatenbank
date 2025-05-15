@@ -20,7 +20,7 @@ class ConditionParameterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (type) {
-      case AttributeType.text:
+      case AttributeType.text || AttributeType.textarea:
         return TextField(
           enabled: enabled,
           initialValue: value as String?,

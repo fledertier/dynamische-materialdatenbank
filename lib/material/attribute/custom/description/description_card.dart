@@ -1,7 +1,8 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_card.dart';
 import 'package:flutter/material.dart';
+
+import '../../default/textarea/textarea_card.dart';
 
 class DescriptionCard extends StatelessWidget {
   const DescriptionCard({
@@ -16,7 +17,7 @@ class DescriptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
-    return TextCard(
+    return TextareaCard(
       materialId: materialId,
       attributeId: Attributes.description,
       size: size,

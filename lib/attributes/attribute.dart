@@ -11,7 +11,6 @@ class Attribute {
     required this.nameEn,
     required this.type,
     required this.unitType,
-    required this.multiline,
     required this.required,
   });
 
@@ -20,7 +19,6 @@ class Attribute {
   final String? nameEn;
   final AttributeType type;
   final UnitType? unitType;
-  final bool? multiline;
   final bool required;
 
   String get name => nameDe;
@@ -32,7 +30,6 @@ class Attribute {
       nameEn: json['nameEn'],
       type: AttributeType.fromJson(json['type']),
       unitType: unitTypeFromName(json['unitType']),
-      multiline: json['multiline'],
       required: json['required'],
     );
   }
@@ -44,7 +41,6 @@ class Attribute {
       'nameEn': nameEn,
       'type': type.toJson(),
       'unitType': unitType?.name,
-      'multiline': multiline,
       'required': required,
     };
   }
@@ -57,12 +53,11 @@ class Attribute {
         nameEn == other.nameEn &&
         type == other.type &&
         unitType == other.unitType &&
-        multiline == other.multiline &&
         required == other.required;
   }
 
   @override
   int get hashCode {
-    return Object.hash(id, nameDe, nameEn, type, unitType, multiline, required);
+    return Object.hash(id, nameDe, nameEn, type, unitType, required);
   }
 }
