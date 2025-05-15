@@ -41,7 +41,7 @@ final materialAttributeValueProvider = Provider.family((
   AttributeArgument arg,
 ) {
   if (arg.materialId == exampleMaterial[Attributes.id]) {
-    return exampleMaterial;
+    return exampleMaterial[arg.attributeId];
   }
   final material = ref.watch(materialStreamProvider(arg.materialId)).value;
   return material?[arg.attributeId];

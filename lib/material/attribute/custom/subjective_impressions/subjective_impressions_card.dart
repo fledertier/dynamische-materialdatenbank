@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,7 +49,8 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
         ) ??
         exampleValue;
 
-    final impressions = value.map(SubjectiveImpression.fromJson).toList();
+    final impressions =
+        List<Json>.from(value).map(SubjectiveImpression.fromJson).toList();
 
     Future<void> updateSubjectiveImpressions(
       SubjectiveImpression? initialSubjectiveImpression,
