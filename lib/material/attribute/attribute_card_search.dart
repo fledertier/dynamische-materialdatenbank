@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../attributes/attribute.dart';
 import '../../attributes/attribute_type.dart';
 import '../../constants.dart';
 import '../../types.dart';
+import '../material_provider.dart';
 import 'attribute_search.dart';
 import 'cards.dart';
 import 'custom/custom_cards.dart';
 import 'default/default_cards.dart';
 
-class AttributeCardSearch extends StatefulWidget {
+class AttributeCardSearch extends ConsumerStatefulWidget {
   const AttributeCardSearch({
     super.key,
-    required this.material,
+    required this.materialId,
     this.sizes = const {CardSize.large, CardSize.small},
     required this.onSubmit,
   });
 
-  final Json material;
+  final String materialId;
   final Set<CardSize> sizes;
   final void Function(List<CardData>) onSubmit;
 
   @override
-  State<AttributeCardSearch> createState() => _AttributeCardSearchState();
+  ConsumerState<AttributeCardSearch> createState() =>
+      _AttributeCardSearchState();
 }
 
-class _AttributeCardSearchState extends State<AttributeCardSearch> {
+class _AttributeCardSearchState extends ConsumerState<AttributeCardSearch> {
   @override
   Widget build(BuildContext context) {
     return AttributeSearch(
@@ -39,9 +42,15 @@ class _AttributeCardSearchState extends State<AttributeCardSearch> {
   }
 
   Set<CardData> get selectedCards {
-    return List<Json>.from(
-      widget.material[Attributes.cards] ?? [],
-    ).map(CardData.fromJson).toSet();
+    final value = ref.read(
+      materialAttributeValueProvider(
+        AttributeArgument(
+          materialId: widget.materialId,
+          attributeId: Attributes.cards,
+        ),
+      ),
+    );
+    return List<Json>.from(value).map(CardData.fromJson).toSet();
   }
 }
 

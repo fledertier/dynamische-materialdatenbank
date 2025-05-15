@@ -10,7 +10,7 @@ import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
 import '../types.dart';
-import '../widgets/drag_and_drop/dings.dart';
+import '../widgets/drag_and_drop/reorderable_wrap.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/cards.dart';
@@ -62,14 +62,16 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                     constraints: BoxConstraints(maxWidth: widthByColumns(5)),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 32,
                       children: [
                         ReorderableWrap(
                           cards: cards.take(3).toList(),
-                          material: material,
+                          materialId: material[Attributes.id],
                         ),
                         ReorderableWrap(
                           cards: cards.skip(3).toList(),
-                          material: material,
+                          materialId: material[Attributes.id],
                         ),
                       ],
                     ),

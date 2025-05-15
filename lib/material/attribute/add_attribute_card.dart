@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants.dart';
-import '../../types.dart';
 import '../../utils/miscellaneous_utils.dart';
 import '../material_provider.dart';
 import 'cards.dart';
@@ -13,11 +12,11 @@ import 'cards.dart';
 class AddAttributeCardButton extends StatelessWidget {
   const AddAttributeCardButton({
     super.key,
-    required this.material,
+    required this.materialId,
     required this.onAdded,
   });
 
-  final Json material;
+  final String materialId;
   final void Function(CardData card) onAdded;
 
   @override
@@ -41,16 +40,16 @@ class AddAttributeCardButton extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) {
-        return AddAttributeCardDialog(material: material);
+        return AddAttributeCardDialog(materialId: materialId);
       },
     );
   }
 }
 
 class AddAttributeCardDialog extends StatefulWidget {
-  const AddAttributeCardDialog({super.key, required this.material});
+  const AddAttributeCardDialog({super.key, required this.materialId});
 
-  final Json material;
+  final String materialId;
 
   @override
   State<AddAttributeCardDialog> createState() => _AddAttributeDialogState();
@@ -71,7 +70,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
           children: [
             SizedBox(height: 32),
             AttributeCardSearch(
-              material: widget.material,
+              materialId: widget.materialId,
               onSubmit: (cards) {
                 setState(() {
                   this.cards = cards;
