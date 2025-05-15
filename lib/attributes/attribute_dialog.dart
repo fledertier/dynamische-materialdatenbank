@@ -5,18 +5,6 @@ import 'attribute.dart';
 import 'attribute_form.dart';
 import 'attribute_form_state.dart';
 
-Future<Attribute?> showAttributeDialog(
-  BuildContext context, [
-  Attribute? initialAttribute,
-]) {
-  return showDialog<Attribute>(
-    context: context,
-    builder: (context) {
-      return AttributeDialog(initialAttribute: initialAttribute);
-    },
-  );
-}
-
 class AttributeDialog extends StatefulWidget {
   const AttributeDialog({super.key, required this.initialAttribute});
 
@@ -77,4 +65,16 @@ class _AttributeDialogState extends State<AttributeDialog> {
     controller.dispose();
     super.dispose();
   }
+}
+
+Future<Attribute?> showAttributeDialog(
+  BuildContext context, [
+  Attribute? initialAttribute,
+]) {
+  return showDialog<Attribute>(
+    context: context,
+    builder: (context) {
+      return AttributeDialog(initialAttribute: initialAttribute);
+    },
+  );
 }

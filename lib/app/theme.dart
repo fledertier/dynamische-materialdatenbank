@@ -26,6 +26,10 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
       }),
     ),
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      width: 500,
+    ),
   );
 
   final textTheme = theme.textTheme;

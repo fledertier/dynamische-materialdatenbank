@@ -30,7 +30,7 @@ class AttributeDetails extends ConsumerWidget {
             if (selectedAttributeId.value == null) {
               return Center(
                 child: Text(
-                  "Select an attribute to edit",
+                  'Select an attribute to edit',
                   style: TextStyle(
                     color: ColorScheme.of(context).onSurfaceVariant,
                   ),
@@ -52,16 +52,8 @@ class AttributeDetails extends ConsumerWidget {
                         Spacer(),
                         IconButton(
                           icon: Icon(Symbols.edit),
-                          onPressed: () async {
-                            final updatedAttribute = await showAttributeDialog(
-                              context,
-                              attribute,
-                            );
-                            if (updatedAttribute != null) {
-                              ref
-                                  .read(attributeServiceProvider)
-                                  .updateAttribute(updatedAttribute);
-                            }
+                          onPressed: () {
+                            editAttribute(context, ref, attribute!);
                           },
                         ),
                         DirectionalMenuAnchor(
@@ -77,7 +69,7 @@ class AttributeDetails extends ConsumerWidget {
                               leadingIcon: Icon(Symbols.content_copy),
                               requestFocusOnHover: false,
                               onPressed: () {
-                                copyAttributeId(attribute!);
+                                copyAttributeId(context, attribute!);
                               },
                               child: Text('Copy id'),
                             ),
@@ -85,9 +77,9 @@ class AttributeDetails extends ConsumerWidget {
                               leadingIcon: Icon(Symbols.delete),
                               requestFocusOnHover: false,
                               onPressed: () {
-                                deleteAttribute(context, attribute!);
+                                deleteAttribute(context, ref, attribute!);
                               },
-                              child: Text("Delete"),
+                              child: Text('Delete'),
                             ),
                           ],
                         ),
@@ -107,17 +99,41 @@ class AttributeDetails extends ConsumerWidget {
     );
   }
 
-  Future<void> deleteAttribute(
+  Future<void> editAttribute(
     BuildContext context,
+    WidgetRef ref,
     Attribute attribute,
   ) async {
-    final deleted = await showAttributeDeleteDialog(context, attribute);
-    if (deleted) {
+    final updatedAttribute = await showAttributeDialog(context, attribute);
+    if (updatedAttribute != null) {
+      await ref
+          .read(attributeServiceProvider)
+          .updateAttribute(updatedAttribute);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+    }
+  }
+
+  Future<void> deleteAttribute(
+    BuildContext context,
+    WidgetRef ref,
+    Attribute attribute,
+  ) async {
+    final delete = await showAttributeDeleteDialog(context, attribute);
+    if (delete) {
+      await ref.read(attributeServiceProvider).deleteAttribute(attribute.id);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Attribute deleted')));
       selectedAttributeId.value = null;
     }
   }
 
-  void copyAttributeId(Attribute attribute) {
+  void copyAttributeId(BuildContext context, Attribute attribute) {
     Clipboard.setData(ClipboardData(text: attribute.id));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Id copied to clipboard')));
   }
 }

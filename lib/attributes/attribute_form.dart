@@ -76,6 +76,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               label: Text("Type"),
               expandedInsets: EdgeInsets.zero,
               requestFocusOnTap: false,
+              menuHeight: 300,
               dropdownMenuEntries: [
                 for (final value in AttributeType.values)
                   DropdownMenuEntry(
@@ -100,9 +101,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 initialSelection: _controller.unitType.value,
                 label: Text("Unit"),
                 expandedInsets: EdgeInsets.zero,
-                menuHeight: 500,
-                enableFilter: true,
-                enableSearch: false,
+                requestFocusOnTap: false,
+                menuHeight: 300,
                 dropdownMenuEntries: [
                   for (final value in UnitTypes.values)
                     DropdownMenuEntry(value: value, label: value.name),

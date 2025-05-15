@@ -76,7 +76,11 @@ class AttributesList extends ConsumerWidget {
   Future<void> createAttribute(BuildContext context, WidgetRef ref) async {
     final attribute = await showAttributeDialog(context);
     if (attribute != null) {
-      ref.read(attributeServiceProvider).updateAttribute(attribute);
+      await ref.read(attributeServiceProvider).updateAttribute(attribute);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Attribute created")));
+      selectedAttributeId.value = attribute.id;
     }
   }
 }
