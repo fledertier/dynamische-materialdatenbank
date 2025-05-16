@@ -1,14 +1,13 @@
 import 'package:dynamische_materialdatenbank/header/theme_mode.dart';
 import 'package:flutter/material.dart';
 
-import '../search/material_search.dart';
 import 'user_avatar.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key, this.actions, this.onFilter});
+  const Header({super.key, this.search, this.actions});
 
+  final Widget? search;
   final List<Widget>? actions;
-  final void Function()? onFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class Header extends StatelessWidget {
       spacing: 12,
       children: [
         canPop ? BackButton() : SizedBox.square(dimension: 40),
-        Expanded(child: Center(child: MaterialSearch(onFilter: onFilter))),
+        Expanded(child: Center(child: search ?? SizedBox())),
         ...?actions,
         ThemeModeButton(),
         UserAvatar(),

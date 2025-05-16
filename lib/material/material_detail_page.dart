@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
+import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +52,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
         ).map(CardData.fromJson).toList();
 
     return AppScaffold(
-      header: Header(actions: [EditModeButton()]),
+      header: Header(search: MaterialSearch(), actions: [EditModeButton()]),
       navigation: Navigation(page: Pages.materials),
       body: SingleChildScrollView(
         child:

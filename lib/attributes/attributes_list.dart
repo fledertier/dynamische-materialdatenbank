@@ -2,85 +2,106 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'attribute_provider.dart';
+import 'attribute_search_bar.dart';
 import 'attribute_service.dart';
 
-class AttributesList extends ConsumerWidget {
+class AttributesList extends ConsumerStatefulWidget {
   const AttributesList({super.key, required this.selectedAttributeId});
 
   final ValueNotifier<String?> selectedAttributeId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
+  ConsumerState<AttributesList> createState() => _AttributesListState();
+}
+
+class _AttributesListState extends ConsumerState<AttributesList> {
+  final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final snapshot = ref.watch(attributesProvider);
+    if (snapshot.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    final attributesById = snapshot.value ?? {};
+    final attributes = attributesById.values.sortedBy(
+      (attribute) => attribute.name,
+    );
+
+    return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Attributes", style: TextTheme.of(context).headlineSmall),
-              FilledButton.tonalIcon(
-                label: Text("Add"),
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  createAttribute(context, ref);
-                },
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Consumer(
-            builder: (context, ref, child) {
-              final snapshot = ref.watch(attributesProvider);
-
-              if (snapshot.isLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              final attributesById = snapshot.value ?? {};
-              final attributes = attributesById.values.sortedBy(
-                (attribute) => attribute.name,
-              );
-
-              return ListenableBuilder(
-                listenable: selectedAttributeId,
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AttributeSearchBar(controller: searchController),
+            ),
+            Expanded(
+              child: ListenableBuilder(
+                listenable: Listenable.merge([
+                  widget.selectedAttributeId,
+                  searchController,
+                ]),
                 builder: (context, child) {
+                  final search = searchController.text;
+                  final filterdAttributes = attributes.where(
+                    (attribute) => attribute.name.containsIgnoreCase(search),
+                  );
+
                   return ListView.builder(
-                    itemCount: attributes.length,
+                    itemCount: filterdAttributes.length,
                     itemBuilder: (context, index) {
-                      final attribute = attributes.elementAt(index);
+                      final attribute = filterdAttributes.elementAt(index);
 
                       return AttributeListTile(
                         attribute,
-                        selected: selectedAttributeId.value == attribute.id,
+                        selected:
+                            widget.selectedAttributeId.value == attribute.id,
                         onTap: () {
-                          selectedAttributeId.value = attribute.id;
+                          widget.selectedAttributeId.value = attribute.id;
                         },
                       );
                     },
                   );
                 },
-              );
-            },
+              ),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: 32,
+          right: 32,
+          width: 70,
+          height: 70,
+          child: FloatingActionButton(
+            onPressed: createAttribute,
+            child: Icon(Icons.add),
           ),
         ),
       ],
     );
   }
 
-  Future<void> createAttribute(BuildContext context, WidgetRef ref) async {
+  Future<void> createAttribute() async {
     final attribute = await showAttributeDialog(context);
     if (attribute != null) {
       await ref.read(attributeServiceProvider).updateAttribute(attribute);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Attribute created")));
-      selectedAttributeId.value = attribute.id;
+      widget.selectedAttributeId.value = attribute.id;
     }
   }
 }
