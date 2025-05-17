@@ -18,10 +18,23 @@ class MaterialService {
       Attributes.id: generateId(),
       Attributes.name: randomName(),
       Attributes.description: randomDescription(),
-      Attributes.cards: [
-        CardData.fromCustomCard(CustomCards.nameCard).toJson(),
-        CardData.fromCustomCard(CustomCards.descriptionCard).toJson(),
-      ],
+      Attributes.cardSections:
+          CardSections(
+            primary: [
+              CardSection(
+                cards: [
+                  CardData.fromCustomCard(CustomCards.nameCard),
+                  CardData.fromCustomCard(CustomCards.descriptionCard),
+                ],
+              ),
+              CardSection(
+                cards: [
+                  CardData.fromCustomCard(CustomCards.lightAbsorptionCard),
+                ],
+              ),
+            ],
+            secondary: [],
+          ).toJson(),
       if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),

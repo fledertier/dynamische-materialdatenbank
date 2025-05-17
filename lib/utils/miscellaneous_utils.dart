@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,4 +26,16 @@ extension SizeExtension on Size {
 
 extension MenuControllerExtension on MenuController {
   void toggle() => isOpen ? close() : open();
+}
+
+extension RandomColor on Color {
+  static Color rgb() {
+    final random = Random();
+    return Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+  }
 }
