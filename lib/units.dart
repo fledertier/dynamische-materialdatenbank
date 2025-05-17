@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 
 const absoluteZero = -273.15;
@@ -219,6 +220,12 @@ class UnitType {
       value = fromBase[toUnit]!(value);
     }
     return value;
+  }
+
+  dynamic toJson() => name;
+
+  static UnitType? maybeFromJson(dynamic name) {
+    return UnitTypes.values.singleWhereOrNull((unit) => unit.name == name);
   }
 
   @override

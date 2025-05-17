@@ -70,34 +70,56 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
             ],
           ),
           ListenableBuilder(
-            listenable: _controller.type,
-            child: DropdownMenuFormField<AttributeType>(
-              initialSelection: _controller.type.value,
-              label: Text("Type"),
-              expandedInsets: EdgeInsets.zero,
-              requestFocusOnTap: false,
-              menuHeight: 300,
-              dropdownMenuEntries: [
-                for (final value in AttributeType.values)
-                  DropdownMenuEntry(
-                    value: value,
-                    label: value.name,
-                    leadingIcon: Icon(value.icon),
-                  ),
-              ],
-              enabled: _controller.initialAttribute == null,
-              onSelected: (value) {
-                _controller.type.value = value;
-              },
-              validator: (value) {
-                if (value == null) {
-                  return "Please select a type";
-                }
-                return null;
-              },
-            ),
-            builder: (context, typeField) {
-              final unitDropdown = DropdownMenuFormField<UnitType>(
+            listenable: Listenable.merge([
+              _controller.type,
+              _controller.listType,
+            ]),
+            builder: (context, child) {
+              late final typeField = DropdownMenuFormField<AttributeType>(
+                initialSelection: _controller.type.value,
+                label: Text("Type"),
+                expandedInsets: EdgeInsets.zero,
+                requestFocusOnTap: false,
+                menuHeight: 300,
+                dropdownMenuEntries: [
+                  for (final value in AttributeType.values)
+                    DropdownMenuEntry(
+                      value: value,
+                      label: value.name,
+                      leadingIcon: Icon(value.icon),
+                    ),
+                ],
+                enabled: _controller.initialAttribute == null,
+                onSelected: (value) {
+                  _controller.type.value = value;
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Please select a type";
+                  }
+                  return null;
+                },
+              );
+              late final listTypeDropdown =
+                  DropdownMenuFormField<AttributeType>(
+                    initialSelection: _controller.listType.value,
+                    label: Text("List type"),
+                    expandedInsets: EdgeInsets.zero,
+                    requestFocusOnTap: false,
+                    menuHeight: 300,
+                    dropdownMenuEntries: [
+                      for (final value in AttributeType.values)
+                        DropdownMenuEntry(
+                          value: value,
+                          label: value.name,
+                          leadingIcon: Icon(value.icon),
+                        ),
+                    ],
+                    onSelected: (value) {
+                      _controller.listType.value = value;
+                    },
+                  );
+              late final unitDropdown = DropdownMenuFormField<UnitType>(
                 initialSelection: _controller.unitType.value,
                 label: Text("Unit"),
                 expandedInsets: EdgeInsets.zero,
@@ -114,8 +136,9 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               return Row(
                 spacing: 16,
                 children: [
-                  Expanded(child: typeField!),
-                  if (hasUnit) Expanded(child: unitDropdown),
+                  Expanded(child: typeField),
+                  if (isList) Expanded(child: listTypeDropdown),
+                  if (isNumber) Expanded(child: unitDropdown),
                 ],
               );
             },
@@ -142,7 +165,12 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
-  bool get hasUnit => _controller.type.value == AttributeType.number;
+  bool get isList => _controller.type.value == AttributeType.list;
+
+  bool get isNumber {
+    return _controller.type.value == AttributeType.number ||
+        isList && _controller.listType.value == AttributeType.number;
+  }
 
   Future<void> submit() async {
     if (_form.currentState!.validate()) {
@@ -151,7 +179,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         nameDe: _controller.nameDe.value!,
         nameEn: _controller.nameEn.value,
         type: _controller.type.value!,
-        unitType: hasUnit ? _controller.unitType.value : null,
+        listType: isList ? _controller.listType.value : null,
+        unitType: isNumber ? _controller.unitType.value : null,
         required: _controller.required.value ?? false,
       );
       widget.onSubmit(attribute);

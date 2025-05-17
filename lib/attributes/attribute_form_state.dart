@@ -10,6 +10,7 @@ class AttributeFormController implements Listenable {
       nameDe = ValueNotifier(initialAttribute?.nameDe),
       nameEn = ValueNotifier(initialAttribute?.nameEn),
       type = ValueNotifier(initialAttribute?.type),
+      listType = ValueNotifier(initialAttribute?.listType),
       unitType = ValueNotifier(initialAttribute?.unitType),
       required = ValueNotifier(initialAttribute?.required);
 
@@ -17,6 +18,7 @@ class AttributeFormController implements Listenable {
   final ValueNotifier<String?> nameDe;
   final ValueNotifier<String?> nameEn;
   final ValueNotifier<AttributeType?> type;
+  final ValueNotifier<AttributeType?> listType;
   final ValueNotifier<UnitType?> unitType;
   final ValueNotifier<bool?> required;
 
@@ -26,6 +28,7 @@ class AttributeFormController implements Listenable {
     return nameDe.value != initialAttribute?.nameDe ||
         nameEn.value != initialAttribute?.nameEn ||
         type.value != initialAttribute?.type ||
+        listType.value != initialAttribute?.listType ||
         unitType.value != initialAttribute?.unitType ||
         required.value != initialAttribute?.required;
   }
@@ -35,6 +38,7 @@ class AttributeFormController implements Listenable {
     nameDe,
     nameEn,
     type,
+    listType,
     unitType,
     required,
   ];
