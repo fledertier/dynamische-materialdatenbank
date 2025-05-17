@@ -17,12 +17,18 @@ class AttributeSearchBar extends StatelessWidget {
       builder: (context, child) {
         return SearchBar(
           controller: controller,
-          leading: Icon(Icons.search),
+          leading: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Icon(Icons.search),
+          ),
           hintText: 'Search attribute',
-          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
           trailing: [
             if (controller.text.isNotEmpty)
-              IconButton(icon: Icon(Icons.clear), onPressed: controller.clear),
+              IconButton(
+                icon: Icon(Icons.clear),
+                tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
+                onPressed: controller.clear,
+              ),
           ],
           onChanged: onChanged,
         );

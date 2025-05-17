@@ -11,6 +11,7 @@ import 'attribute_delete_dialog.dart';
 import 'attribute_dialog.dart';
 import 'attribute_provider.dart';
 import 'attribute_service.dart';
+import 'attribute_table.dart';
 
 class AttributeDetails extends ConsumerWidget {
   const AttributeDetails({super.key, required this.selectedAttributeId});
@@ -24,9 +25,6 @@ class AttributeDetails extends ConsumerWidget {
       builder: (context, child) {
         return Consumer(
           builder: (context, ref, child) {
-            final attribute = ref.watch(
-              attributeProvider(selectedAttributeId.value),
-            );
             if (selectedAttributeId.value == null) {
               return Center(
                 child: Text(
@@ -37,6 +35,11 @@ class AttributeDetails extends ConsumerWidget {
                 ),
               );
             }
+
+            final attribute = ref.watch(
+              attributeProvider(selectedAttributeId.value!),
+            );
+
             return Column(
               children: [
                 SizedBox(
@@ -88,8 +91,7 @@ class AttributeDetails extends ConsumerWidget {
                   ),
                 ),
                 Expanded(
-                  key: ValueKey(selectedAttributeId.value),
-                  child: Padding(padding: const EdgeInsets.all(24)),
+                  child: AttributeTable(attribute: selectedAttributeId.value!),
                 ),
               ],
             );
