@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../attributes/attribute.dart';
 import '../../attributes/attribute_type.dart';
 import '../../constants.dart';
-import '../../types.dart';
 import '../material_provider.dart';
 import 'attribute_search.dart';
 import 'cards.dart';
@@ -46,11 +45,12 @@ class _AttributeCardSearchState extends ConsumerState<AttributeCardSearch> {
       materialAttributeValueProvider(
         AttributeArgument(
           materialId: widget.materialId,
-          attributeId: Attributes.cards,
+          attributeId: Attributes.cardSections,
         ),
       ),
     );
-    return List<Json>.from(value).map(CardData.fromJson).toSet();
+    final cardSections = CardSections.fromJson(value);
+    return cardSections.allCards;
   }
 }
 

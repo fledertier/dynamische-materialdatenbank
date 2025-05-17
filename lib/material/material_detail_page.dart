@@ -4,14 +4,15 @@ import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:local_hero/local_hero.dart';
 
 import '../app/app_scaffold.dart';
 import '../app/navigation.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
-import '../types.dart';
-import '../widgets/drag_and_drop/reorderable_wrap.dart';
+import '../widgets/drag_and_drop/draggable_section.dart';
+import '../widgets/drag_and_drop/local_hero_overlay.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/cards.dart';
@@ -46,39 +47,53 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
 
     final edit = ref.watch(editModeProvider);
 
-    final cards =
-        List<Json>.from(
-          material[Attributes.cards] ?? [],
-        ).map(CardData.fromJson).toList();
+    final cardSections = CardSections.fromJson(
+      material[Attributes.cardSections] ?? {},
+    );
 
     return AppScaffold(
       header: Header(search: MaterialSearch(), actions: [EditModeButton()]),
       navigation: Navigation(page: Pages.materials),
-      body: SingleChildScrollView(
-        child:
-            asyncMaterial.isLoading
-                ? Center(child: CircularProgressIndicator())
-                : Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 32,
-                      children: [
-                        ReorderableWrap(
-                          cards: cards.take(3).toList(),
-                          materialId: material[Attributes.id],
+      body:
+          asyncMaterial.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: widthByColumns(5)),
+                  child: LocalHeroScope(
+                    duration: Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    createRectTween: (begin, end) {
+                      return RectTween(begin: begin, end: end);
+                    },
+                    child: LocalHeroOverlay(
+                      clip: Clip.none,
+                      child: ProviderScope(
+                        overrides: [
+                          sectionsProvider.overrideWith(
+                            (ref) => cardSections.primary,
+                          ),
+                        ],
+                        child: ListView.builder(
+                          itemCount: cardSections.primary.length,
+                          itemBuilder: (context, index) {
+                            return DraggableSection(
+                              sectionIndex: index,
+                              // materialId: material[Attributes.id],
+                              itemBuilder: (context, item) {
+                                return CardFactory.getOrCreate(
+                                  item,
+                                  widget.materialId,
+                                );
+                              },
+                            );
+                          },
                         ),
-                        ReorderableWrap(
-                          cards: cards.skip(3).toList(),
-                          materialId: material[Attributes.id],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-      ),
+              ),
       sidebar:
           asyncMaterial.isLoading
               ? null
