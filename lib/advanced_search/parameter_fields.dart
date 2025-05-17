@@ -20,17 +20,17 @@ class ConditionParameterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (type?.id) {
-      'text' || 'textarea' => TextField(
+      AttributeType.text || AttributeType.textarea => TextField(
         enabled: enabled,
         initialValue: value as String?,
         onChanged: (value) => onChanged?.call(value),
       ),
-      'number' => NumberField(
+      AttributeType.number => NumberField(
         enabled: enabled,
         initialValue: value as num?,
         onChanged: (value) => onChanged?.call(value),
       ),
-      'boolean' => BooleanField(
+      AttributeType.boolean => BooleanField(
         enabled: enabled,
         initialValue: value as bool? ?? true,
         onChanged: (value) => onChanged?.call(value),

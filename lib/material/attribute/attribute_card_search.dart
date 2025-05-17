@@ -87,5 +87,5 @@ Iterable<CustomCards> _findCardsByAttributeId(String attribute) {
 }
 
 Iterable<DefaultCards> _findCardsByAttributeType(AttributeType type) {
-  return DefaultCards.values.where((card) => card.type == type);
+  return DefaultCards.values.where((card) => card.type == type.id);
 }

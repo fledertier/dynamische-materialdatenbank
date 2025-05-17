@@ -1,4 +1,5 @@
-import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -17,63 +18,157 @@ enum Operator {
   String toJson() => name;
 }
 
+class TextAttributeType extends AttributeType {
+  TextAttributeType()
+    : super(
+        id: AttributeType.text,
+        operators: {
+          Operator.contains,
+          Operator.notContains,
+          Operator.equals,
+          Operator.notEquals,
+        },
+      );
+
+  factory TextAttributeType.fromJson(Json json) {
+    return TextAttributeType();
+  }
+}
+
+class TextareaAttributeType extends AttributeType {
+  TextareaAttributeType()
+    : super(
+        id: AttributeType.textarea,
+        operators: {
+          Operator.contains,
+          Operator.notContains,
+          Operator.equals,
+          Operator.notEquals,
+        },
+      );
+
+  factory TextareaAttributeType.fromJson(Json json) {
+    return TextareaAttributeType();
+  }
+}
+
+class NumberAttributeType extends AttributeType {
+  NumberAttributeType({required this.unitType})
+    : super(
+        id: AttributeType.number,
+        operators: {
+          Operator.greaterThan,
+          Operator.lessThan,
+          Operator.equals,
+          Operator.notEquals,
+        },
+      );
+
+  final UnitType? unitType;
+
+  factory NumberAttributeType.fromJson(Json json) {
+    return NumberAttributeType(
+      unitType: UnitType.maybeFromJson(json['unitType']),
+    );
+  }
+
+  @override
+  Json toJson() {
+    return {'id': id, 'unitType': unitType?.toJson()};
+  }
+}
+
+class BooleanAttributeType extends AttributeType {
+  BooleanAttributeType()
+    : super(id: AttributeType.boolean, operators: {Operator.equals});
+
+  factory BooleanAttributeType.fromJson(Json json) {
+    return BooleanAttributeType();
+  }
+}
+
+class ObjectAttributeType extends AttributeType {
+  ObjectAttributeType()
+    : super(
+        id: AttributeType.object,
+        operators: {Operator.equals, Operator.notEquals},
+      );
+
+  factory ObjectAttributeType.fromJson(Json json) {
+    return ObjectAttributeType();
+  }
+}
+
+class ListAttributeType extends AttributeType {
+  ListAttributeType({required this.type})
+    : super(
+        id: AttributeType.list,
+        operators: {
+          Operator.equals,
+          Operator.notEquals,
+          Operator.contains,
+          Operator.notContains,
+        },
+      );
+
+  final AttributeType type;
+
+  factory ListAttributeType.fromJson(Json json) {
+    return ListAttributeType(type: AttributeType.fromJson(json['type']));
+  }
+
+  @override
+  Json toJson() {
+    return {'id': id, 'type': type.toJson()};
+  }
+}
+
+class ProportionsAttributeType extends AttributeType {
+  ProportionsAttributeType()
+    : super(
+        id: AttributeType.proportions,
+        operators: {Operator.contains, Operator.notContains},
+      );
+
+  factory ProportionsAttributeType.fromJson(Json json) {
+    return ProportionsAttributeType();
+  }
+}
+
+class CountedTagsAttributeType extends AttributeType {
+  CountedTagsAttributeType()
+    : super(
+        id: AttributeType.countedTags,
+        operators: {Operator.contains, Operator.notContains},
+      );
+
+  factory CountedTagsAttributeType.fromJson(Json json) {
+    return CountedTagsAttributeType();
+  }
+}
+
+class CountriesAttributeType extends AttributeType {
+  CountriesAttributeType()
+    : super(
+        id: AttributeType.countries,
+        operators: {Operator.contains, Operator.notContains},
+      );
+
+  factory CountriesAttributeType.fromJson(Json json) {
+    return CountriesAttributeType();
+  }
+}
+
 class AttributeType {
-  static const text = AttributeType(
-    id: 'text',
-    operators: {
-      Operator.contains,
-      Operator.notContains,
-      Operator.equals,
-      Operator.notEquals,
-    },
-  );
-  static const textarea = AttributeType(
-    id: 'textarea',
-    operators: {
-      Operator.contains,
-      Operator.notContains,
-      Operator.equals,
-      Operator.notEquals,
-    },
-  );
-  static const number = AttributeType(
-    id: 'number',
-    operators: {
-      Operator.greaterThan,
-      Operator.lessThan,
-      Operator.equals,
-      Operator.notEquals,
-    },
-  );
-  static const boolean = AttributeType(
-    id: 'boolean',
-    operators: {Operator.equals},
-  );
-  static const object = AttributeType(
-    id: 'object',
-    operators: {Operator.equals, Operator.notEquals},
-  );
-  static const list = AttributeType(
-    id: 'list',
-    operators: {
-      Operator.equals,
-      Operator.notEquals,
-      Operator.contains,
-      Operator.notContains,
-    },
-  );
-  static const proportions = AttributeType(
-    id: 'proportions',
-    operators: {Operator.contains, Operator.notContains},
-  );
-  static const countedTags = AttributeType(
-    id: 'countedTags',
-    operators: {Operator.contains, Operator.notContains},
-  );
-  static const countries = AttributeType(
-    id: 'countries',
-    operators: {Operator.contains, Operator.notContains},
-  );
+  static const text = 'text';
+  static const textarea = 'textarea';
+  static const number = 'number';
+  static const boolean = 'boolean';
+  static const object = 'object';
+  static const list = 'list';
+  static const proportions = 'proportions';
+  static const countedTags = 'countedTags';
+  static const countries = 'countries';
 
   static final values = [
     text,
@@ -86,38 +181,61 @@ class AttributeType {
     countedTags,
     countries,
   ];
-  
+
+  const AttributeType({required this.id, required this.operators});
+
   final String id;
   final Set<Operator> operators;
 
   String get name => id;
 
-  const AttributeType({required this.id, required this.operators});
-
-  static AttributeType fromJson(dynamic json) {
-    return AttributeType.values.singleWhere((type) => type.id == json);
+  AttributeType? get listType {
+    if (this is ListAttributeType) {
+      return (this as ListAttributeType).type;
+    }
+    return null;
   }
 
-  static AttributeType? maybeFromJson(dynamic json) {
-    return AttributeType.values.singleWhereOrNull((type) => type.id == json);
+  UnitType? get numberUnitType {
+    if (this is NumberAttributeType) {
+      return (this as NumberAttributeType).unitType;
+    }
+    return null;
   }
 
-  String toJson() => id;
-}
+  Json toJson() => {'id': id};
 
-extension AttributeTypeExtension on AttributeType {
-  IconData get icon {
+  static AttributeType fromJson(Json json) {
+    final id = json['id'];
     return switch (id) {
-      'text' => Symbols.text_fields,
-      'textarea' => Symbols.article,
-      'number' => Symbols.numbers,
-      'boolean' => Symbols.check_box,
-      'proportions' => Symbols.pie_chart,
-      'countedTags' => Symbols.voting_chip,
-      'countries' => Symbols.public,
-      'object' => Symbols.category,
-      'list' => Symbols.menu,
-      _ => Symbols.change_history,
+      text => TextAttributeType.fromJson(json),
+      textarea => TextareaAttributeType.fromJson(json),
+      number => NumberAttributeType.fromJson(json),
+      boolean => BooleanAttributeType.fromJson(json),
+      object => ObjectAttributeType.fromJson(json),
+      list => ListAttributeType.fromJson(json),
+      proportions => ProportionsAttributeType.fromJson(json),
+      countedTags => CountedTagsAttributeType.fromJson(json),
+      countries => CountriesAttributeType.fromJson(json),
+      _ =>
+        throw UnimplementedError(
+          'AttributeType $id is missing fromJson method',
+        ),
     };
   }
+}
+
+IconData iconForAttributeType(String id) {
+  return switch (id) {
+    AttributeType.text => Symbols.text_fields,
+    AttributeType.textarea => Symbols.article,
+    AttributeType.number => Symbols.numbers,
+    AttributeType.boolean => Symbols.check_box,
+    AttributeType.proportions => Symbols.pie_chart,
+    AttributeType.countedTags => Symbols.voting_chip,
+    AttributeType.countries => Symbols.public,
+    AttributeType.object => Symbols.category,
+    AttributeType.list => Symbols.menu,
+    _ => Symbols.change_history,
+  };
 }

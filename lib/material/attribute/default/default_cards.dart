@@ -19,7 +19,7 @@ enum DefaultCards implements Cards {
 
   const DefaultCards({required this.type, required this.sizes});
 
-  final AttributeType type;
+  final String type;
   @override
   final Set<CardSize> sizes;
 }

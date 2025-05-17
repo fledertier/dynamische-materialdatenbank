@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_provider.dart';
-import '../attributes/attribute_type.dart';
 import '../query/condition_group.dart';
 import '../query/query_service.dart';
 
@@ -79,7 +78,7 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
 
     final futureQuery = queryService.generateQuery(
       attributes: attributes.values.toList(),
-      types: AttributeType.values,
+      types: attributes.values.map((attribute) => attribute.type).toList(),
       prompt: text.trim(),
     );
 

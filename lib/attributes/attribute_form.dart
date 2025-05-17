@@ -75,7 +75,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               _controller.listType,
             ]),
             builder: (context, child) {
-              late final typeField = DropdownMenuFormField<AttributeType>(
+              late final typeField = DropdownMenuFormField<String>(
                 initialSelection: _controller.type.value,
                 label: Text("Type"),
                 expandedInsets: EdgeInsets.zero,
@@ -85,8 +85,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   for (final value in AttributeType.values)
                     DropdownMenuEntry(
                       value: value,
-                      label: value.name,
-                      leadingIcon: Icon(value.icon),
+                      label: value,
+                      leadingIcon: Icon(iconForAttributeType(value)),
                     ),
                 ],
                 enabled: _controller.initialAttribute == null,
@@ -100,25 +100,24 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   return null;
                 },
               );
-              late final listTypeDropdown =
-                  DropdownMenuFormField<AttributeType>(
-                    initialSelection: _controller.listType.value,
-                    label: Text("List type"),
-                    expandedInsets: EdgeInsets.zero,
-                    requestFocusOnTap: false,
-                    menuHeight: 300,
-                    dropdownMenuEntries: [
-                      for (final value in AttributeType.values)
-                        DropdownMenuEntry(
-                          value: value,
-                          label: value.name,
-                          leadingIcon: Icon(value.icon),
-                        ),
-                    ],
-                    onSelected: (value) {
-                      _controller.listType.value = value;
-                    },
-                  );
+              late final listTypeDropdown = DropdownMenuFormField<String>(
+                initialSelection: _controller.listType.value,
+                label: Text("List type"),
+                expandedInsets: EdgeInsets.zero,
+                requestFocusOnTap: false,
+                menuHeight: 300,
+                dropdownMenuEntries: [
+                  for (final value in AttributeType.values)
+                    DropdownMenuEntry(
+                      value: value,
+                      label: value,
+                      leadingIcon: Icon(iconForAttributeType(value)),
+                    ),
+                ],
+                onSelected: (value) {
+                  _controller.listType.value = value;
+                },
+              );
               late final unitDropdown = DropdownMenuFormField<UnitType>(
                 initialSelection: _controller.unitType.value,
                 label: Text("Unit"),
@@ -178,9 +177,37 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         id: _controller.id.value ?? await _createId(),
         nameDe: _controller.nameDe.value!,
         nameEn: _controller.nameEn.value,
-        type: _controller.type.value!,
-        listType: isList ? _controller.listType.value : null,
-        unitType: isNumber ? _controller.unitType.value : null,
+        type: switch (_controller.type.value!) {
+          AttributeType.number => NumberAttributeType(
+            unitType: _controller.unitType.value,
+          ),
+          AttributeType.list => ListAttributeType(
+            type: switch (_controller.listType.value!) {
+              AttributeType.number => NumberAttributeType(
+                unitType: _controller.unitType.value,
+              ),
+              AttributeType.text => TextAttributeType(),
+              AttributeType.textarea => TextareaAttributeType(),
+              AttributeType.boolean => BooleanAttributeType(),
+              AttributeType.object => ObjectAttributeType(),
+              AttributeType.proportions => ProportionsAttributeType(),
+              AttributeType.countedTags => CountedTagsAttributeType(),
+              AttributeType.countries => CountriesAttributeType(),
+              _ =>
+                throw Exception(
+                  'Invalid list type ${_controller.listType.value}',
+                ),
+            },
+          ),
+          AttributeType.text => TextAttributeType(),
+          AttributeType.textarea => TextareaAttributeType(),
+          AttributeType.boolean => BooleanAttributeType(),
+          AttributeType.object => ObjectAttributeType(),
+          AttributeType.proportions => ProportionsAttributeType(),
+          AttributeType.countedTags => CountedTagsAttributeType(),
+          AttributeType.countries => CountriesAttributeType(),
+          _ => throw Exception('Invalid type ${_controller.type.value}'),
+        },
         required: _controller.required.value ?? false,
       );
       widget.onSubmit(attribute);

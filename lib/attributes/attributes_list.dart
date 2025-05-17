@@ -120,17 +120,19 @@ class AttributeListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final type = attribute.type;
     return Material(
       type: MaterialType.transparency,
       child: ListTile(
-        leading: Icon(attribute.type.icon),
+        leading: Icon(iconForAttributeType(type.id)),
         title: Text(attribute.name),
         subtitle: Text(
           [
-            attribute.type.name,
-            if (attribute.unitType != null) attribute.unitType!.name,
-            if (attribute.required) "required",
-          ].join(", "),
+            type.name,
+            if (type is ListAttributeType) type.listType?.name,
+            if (type is NumberAttributeType) type.unitType?.name,
+            if (attribute.required) 'required',
+          ].nonNulls.join(', '),
         ),
         selected: selected,
         textColor: ColorScheme.of(context).onSecondaryContainer,

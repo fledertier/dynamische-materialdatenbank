@@ -44,7 +44,7 @@ class QueryService {
       "types":
           types.map((type) {
             return {
-              "id": type.name,
+              "id": type.id,
               "operators":
                   type.operators.map((operator) => operator.name).toList(),
             };

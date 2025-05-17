@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
@@ -43,7 +44,8 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
       return LoadingText(null, style: textStyle, width: 40);
     }
 
-    final value = toDisplayUnit(widget.number, attribute.unitType);
+    final unitType = (attribute.type as NumberAttributeType).unitType;
+    final value = toDisplayUnit(widget.number, unitType);
     controller ??= TextEditingController(text: value.toStringAsFixed(1));
 
     return Wrap(
@@ -59,17 +61,17 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
               controller: controller,
               onChanged: (text) {
                 final value = double.tryParse(text) ?? 0.0;
-                widget.onChanged?.call(toBaseUnit(value, attribute.unitType));
+                widget.onChanged?.call(toBaseUnit(value, unitType));
               },
             ),
           ),
         ),
-        if (attribute.unitType != null)
+        if (unitType != null)
           Baseline(
             baseline: textStyle.fontSize!,
             baselineType: TextBaseline.alphabetic,
             child: UnitDropdown(
-              unitType: attribute.unitType!,
+              unitType: unitType,
               selectedUnit: widget.number.displayUnit,
               edit: edit,
               onChanged: widget.onUnitChanged,
