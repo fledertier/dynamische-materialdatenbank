@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -78,6 +79,16 @@ class NumberAttributeType extends AttributeType {
   Json toJson() {
     return {'id': id, 'unitType': unitType?.toJson()};
   }
+
+  @override
+  int get hashCode => Object.hash(id, unitType);
+
+  @override
+  bool operator ==(Object other) {
+    return other is NumberAttributeType &&
+        other.id == id &&
+        other.unitType == unitType;
+  }
 }
 
 class BooleanAttributeType extends AttributeType {
@@ -111,6 +122,16 @@ class ObjectAttributeType extends AttributeType {
       'attributes': attributes.map((attribute) => attribute.toJson()).toList(),
     };
   }
+
+  @override
+  int get hashCode => Object.hash(id, Object.hashAll(attributes));
+
+  @override
+  bool operator ==(Object other) {
+    return other is ObjectAttributeType &&
+        other.id == id &&
+        listEquals(other.attributes, attributes);
+  }
 }
 
 class ListAttributeType extends AttributeType {
@@ -134,6 +155,14 @@ class ListAttributeType extends AttributeType {
   @override
   Json toJson() {
     return {'id': id, 'type': type.toJson()};
+  }
+
+  @override
+  int get hashCode => Object.hash(id, type);
+
+  @override
+  bool operator ==(Object other) {
+    return other is ListAttributeType && other.id == id && other.type == type;
   }
 }
 
@@ -203,9 +232,7 @@ class AttributeType {
 
   String get name => id;
 
-  Json toJson() => {'id': id};
-
-  static AttributeType fromJson(Json json) {
+  factory AttributeType.fromJson(Json json) {
     final id = json['id'];
     return switch (id) {
       text => TextAttributeType.fromJson(json),
@@ -222,6 +249,16 @@ class AttributeType {
           'AttributeType $id is missing fromJson method',
         ),
     };
+  }
+
+  Json toJson() => {'id': id};
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is AttributeType && other.id == id;
   }
 }
 
