@@ -11,6 +11,7 @@ import '../app/navigation.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
+import '../widgets/drag_and_drop/add_section_button.dart';
 import '../widgets/drag_and_drop/draggable_section.dart';
 import '../widgets/drag_and_drop/local_hero_overlay.dart';
 import '../widgets/labeled.dart';
@@ -74,16 +75,25 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                             (ref) => cardSections.primary,
                           ),
                         ],
-                        child: ListView.builder(
-                          itemCount: cardSections.primary.length,
-                          itemBuilder: (context, index) {
-                            return DraggableSection(
-                              sectionIndex: index,
-                              // materialId: material[Attributes.id],
-                              itemBuilder: (context, item) {
-                                return CardFactory.getOrCreate(
-                                  item,
-                                  widget.materialId,
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final sections = ref.watch(sectionsProvider);
+
+                            return ListView.builder(
+                              itemCount: sections.length + (edit ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index == sections.length) {
+                                  return AddSectionButton();
+                                }
+                                return DraggableSection(
+                                  sectionIndex: index,
+                                  materialId: material[Attributes.id],
+                                  itemBuilder: (context, item) {
+                                    return CardFactory.getOrCreate(
+                                      item,
+                                      widget.materialId,
+                                    );
+                                  },
                                 );
                               },
                             );

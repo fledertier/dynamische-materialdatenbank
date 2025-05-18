@@ -21,7 +21,7 @@ class AddAttributeCardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton.outlined(
+    return IconButton.filledTonal(
       style: IconButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
         fixedSize: Size.square(widthByColumns(1)),

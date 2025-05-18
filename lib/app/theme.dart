@@ -46,6 +46,11 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
     menuTheme: MenuThemeData(
       style: MenuStyle(padding: WidgetStatePropertyAll(EdgeInsets.zero)),
     ),
+    inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+      hintStyle: TextStyle(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+      ),
+    ),
   );
 }
 

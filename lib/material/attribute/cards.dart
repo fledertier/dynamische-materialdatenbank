@@ -130,6 +130,18 @@ class CardSection {
       'cards': cards.map((card) => card.toJson()).toList(),
     };
   }
+
+  CardSection copyWith({
+    String? nameDe,
+    String? nameEn,
+    List<CardData>? cards,
+  }) {
+    return CardSection(
+      nameDe: nameDe ?? this.nameDe,
+      nameEn: nameEn ?? this.nameEn,
+      cards: cards ?? this.cards,
+    );
+  }
 }
 
 class CardSections {
