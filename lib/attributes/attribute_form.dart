@@ -108,11 +108,12 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 menuHeight: 300,
                 dropdownMenuEntries: [
                   for (final value in AttributeType.values)
-                    DropdownMenuEntry(
-                      value: value,
-                      label: value,
-                      leadingIcon: Icon(iconForAttributeType(value)),
-                    ),
+                    if (value != AttributeType.list)
+                      DropdownMenuEntry(
+                        value: value,
+                        label: value,
+                        leadingIcon: Icon(iconForAttributeType(value)),
+                      ),
                 ],
                 onSelected: (value) {
                   _controller.listType.value = value;

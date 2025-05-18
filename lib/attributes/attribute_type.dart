@@ -189,20 +189,6 @@ class AttributeType {
 
   String get name => id;
 
-  AttributeType? get listType {
-    if (this is ListAttributeType) {
-      return (this as ListAttributeType).type;
-    }
-    return null;
-  }
-
-  UnitType? get numberUnitType {
-    if (this is NumberAttributeType) {
-      return (this as NumberAttributeType).unitType;
-    }
-    return null;
-  }
-
   Json toJson() => {'id': id};
 
   static AttributeType fromJson(Json json) {

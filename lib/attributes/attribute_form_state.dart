@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/foundation.dart';
 
 import 'attribute.dart';
+import 'attribute_type.dart';
 
 class AttributeFormController implements Listenable {
   AttributeFormController([this.initialAttribute])
@@ -60,5 +61,21 @@ class AttributeFormController implements Listenable {
     for (final notifier in _notifiers) {
       notifier.dispose();
     }
+  }
+}
+
+extension on AttributeType {
+  AttributeType? get listType {
+    if (this is ListAttributeType) {
+      return (this as ListAttributeType).type;
+    }
+    return null;
+  }
+
+  UnitType? get numberUnitType {
+    if (this is NumberAttributeType) {
+      return (this as NumberAttributeType).unitType;
+    }
+    return null;
   }
 }

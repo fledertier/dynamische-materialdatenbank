@@ -129,7 +129,7 @@ class AttributeListTile extends StatelessWidget {
         subtitle: Text(
           [
             type.name,
-            if (type is ListAttributeType) type.listType?.name,
+            if (type is ListAttributeType) type.type.name,
             if (type is NumberAttributeType) type.unitType?.name,
             if (attribute.required) 'required',
           ].nonNulls.join(', '),
