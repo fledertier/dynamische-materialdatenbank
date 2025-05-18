@@ -81,6 +81,9 @@ class NumberAttributeType extends AttributeType {
   }
 
   @override
+  String toString() => '$name, $unitType';
+
+  @override
   int get hashCode => Object.hash(id, unitType);
 
   @override
@@ -124,6 +127,9 @@ class ObjectAttributeType extends AttributeType {
   }
 
   @override
+  String toString() => '$name, ${attributes.length} attributes';
+
+  @override
   int get hashCode => Object.hash(id, Object.hashAll(attributes));
 
   @override
@@ -156,6 +162,9 @@ class ListAttributeType extends AttributeType {
   Json toJson() {
     return {'id': id, 'type': type.toJson()};
   }
+
+  @override
+  String toString() => '$name, $type';
 
   @override
   int get hashCode => Object.hash(id, type);
@@ -252,6 +261,9 @@ class AttributeType {
   }
 
   Json toJson() => {'id': id};
+
+  @override
+  String toString() => name;
 
   @override
   int get hashCode => id.hashCode;

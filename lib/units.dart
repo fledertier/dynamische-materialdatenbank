@@ -229,6 +229,9 @@ class UnitType {
   }
 
   @override
+  String toString() => name;
+
+  @override
   int get hashCode => name.hashCode;
 
   @override
