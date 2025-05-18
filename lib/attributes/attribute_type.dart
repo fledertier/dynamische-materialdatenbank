@@ -81,7 +81,7 @@ class NumberAttributeType extends AttributeType {
   }
 
   @override
-  String toString() => '$name, $unitType';
+  String toString() => [name, unitType].nonNulls.join(', ');
 
   @override
   int get hashCode => Object.hash(id, unitType);
@@ -175,39 +175,15 @@ class ListAttributeType extends AttributeType {
   }
 }
 
-class ProportionsAttributeType extends AttributeType {
-  ProportionsAttributeType()
+class CountryAttributeType extends AttributeType {
+  CountryAttributeType()
     : super(
-        id: AttributeType.proportions,
-        operators: {Operator.contains, Operator.notContains},
+        id: AttributeType.country,
+        operators: {Operator.equals, Operator.notEquals},
       );
 
-  factory ProportionsAttributeType.fromJson(Json json) {
-    return ProportionsAttributeType();
-  }
-}
-
-class CountedTagsAttributeType extends AttributeType {
-  CountedTagsAttributeType()
-    : super(
-        id: AttributeType.countedTags,
-        operators: {Operator.contains, Operator.notContains},
-      );
-
-  factory CountedTagsAttributeType.fromJson(Json json) {
-    return CountedTagsAttributeType();
-  }
-}
-
-class CountriesAttributeType extends AttributeType {
-  CountriesAttributeType()
-    : super(
-        id: AttributeType.countries,
-        operators: {Operator.contains, Operator.notContains},
-      );
-
-  factory CountriesAttributeType.fromJson(Json json) {
-    return CountriesAttributeType();
+  factory CountryAttributeType.fromJson(Json json) {
+    return CountryAttributeType();
   }
 }
 
@@ -216,22 +192,18 @@ class AttributeType {
   static const textarea = 'textarea';
   static const number = 'number';
   static const boolean = 'boolean';
+  static const country = 'country';
   static const object = 'object';
   static const list = 'list';
-  static const proportions = 'proportions';
-  static const countedTags = 'countedTags';
-  static const countries = 'countries';
 
   static final values = [
     text,
     textarea,
     number,
     boolean,
+    country,
     object,
     list,
-    proportions,
-    countedTags,
-    countries,
   ];
 
   const AttributeType({required this.id, required this.operators});
@@ -248,11 +220,9 @@ class AttributeType {
       textarea => TextareaAttributeType.fromJson(json),
       number => NumberAttributeType.fromJson(json),
       boolean => BooleanAttributeType.fromJson(json),
+      country => CountryAttributeType.fromJson(json),
       object => ObjectAttributeType.fromJson(json),
       list => ListAttributeType.fromJson(json),
-      proportions => ProportionsAttributeType.fromJson(json),
-      countedTags => CountedTagsAttributeType.fromJson(json),
-      countries => CountriesAttributeType.fromJson(json),
       _ =>
         throw UnimplementedError(
           'AttributeType $id is missing fromJson method',
@@ -280,9 +250,7 @@ IconData iconForAttributeType(String id) {
     AttributeType.textarea => Symbols.article,
     AttributeType.number => Symbols.numbers,
     AttributeType.boolean => Symbols.check_box,
-    AttributeType.proportions => Symbols.pie_chart,
-    AttributeType.countedTags => Symbols.voting_chip,
-    AttributeType.countries => Symbols.public,
+    AttributeType.country => Symbols.language,
     AttributeType.object => Symbols.category,
     AttributeType.list => Symbols.menu,
     _ => Symbols.change_history,

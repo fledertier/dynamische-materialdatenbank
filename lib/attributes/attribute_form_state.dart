@@ -89,7 +89,11 @@ extension on AttributeType {
   }
 
   List<Attribute>? get objectAttributes {
-    if (this case ObjectAttributeType(:final attributes)) {
+    var attributeType = this;
+    if (this case ListAttributeType(:final type)) {
+      attributeType = type;
+    }
+    if (attributeType case ObjectAttributeType(:final attributes)) {
       return attributes;
     }
     return null;

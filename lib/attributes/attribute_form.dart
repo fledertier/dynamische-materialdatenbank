@@ -245,9 +245,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               AttributeType.object => ObjectAttributeType(
                 attributes: _controller.objectAttributes.value,
               ),
-              AttributeType.proportions => ProportionsAttributeType(),
-              AttributeType.countedTags => CountedTagsAttributeType(),
-              AttributeType.countries => CountriesAttributeType(),
+              AttributeType.country => CountryAttributeType(),
               _ =>
                 throw Exception(
                   'Invalid list type ${_controller.listType.value}',
@@ -260,9 +258,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
           AttributeType.object => ObjectAttributeType(
             attributes: _controller.objectAttributes.value,
           ),
-          AttributeType.proportions => ProportionsAttributeType(),
-          AttributeType.countedTags => CountedTagsAttributeType(),
-          AttributeType.countries => CountriesAttributeType(),
+          AttributeType.country => CountryAttributeType(),
           _ => throw Exception('Invalid type ${_controller.type.value}'),
         },
         required: _controller.required.value ?? false,
