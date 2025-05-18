@@ -6,7 +6,9 @@ import '../../utils/miscellaneous_utils.dart';
 import 'draggable_section.dart';
 
 class AddSectionButton extends ConsumerWidget {
-  const AddSectionButton({super.key});
+  const AddSectionButton({super.key, required this.sectionCategory});
+
+  final SectionCategory sectionCategory;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +20,7 @@ class AddSectionButton extends ConsumerWidget {
       icon: Icon(Icons.add),
       label: Text('Add Section'),
       onPressed: () {
-        ref.read(sectionsProvider.notifier).update((sections) {
+        ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
           final newSection = CardSection(cards: []);
           return [...sections, newSection];
         });

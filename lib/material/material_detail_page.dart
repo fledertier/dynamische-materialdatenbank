@@ -4,7 +4,6 @@ import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:local_hero/local_hero.dart';
 
 import '../app/app_scaffold.dart';
 import '../app/navigation.dart';
@@ -13,7 +12,6 @@ import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/drag_and_drop/add_section_button.dart';
 import '../widgets/drag_and_drop/draggable_section.dart';
-import '../widgets/drag_and_drop/local_hero_overlay.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/cards.dart';
@@ -52,73 +50,103 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
       material[Attributes.cardSections] ?? {},
     );
 
-    return AppScaffold(
-      header: Header(search: MaterialSearch(), actions: [EditModeButton()]),
-      navigation: Navigation(page: Pages.materials),
-      body:
-          asyncMaterial.isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                  child: LocalHeroScope(
-                    duration: Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    createRectTween: (begin, end) {
-                      return RectTween(begin: begin, end: end);
-                    },
-                    child: LocalHeroOverlay(
-                      clip: Clip.none,
-                      child: ProviderScope(
-                        overrides: [
-                          sectionsProvider.overrideWith(
-                            (ref) => cardSections.primary,
-                          ),
-                        ],
-                        child: Consumer(
-                          builder: (context, ref, child) {
-                            final sections = ref.watch(sectionsProvider);
+    return ProviderScope(
+      overrides: [
+        sectionsProvider(
+          SectionCategory.primary,
+        ).overrideWith((ref) => cardSections.primary),
+        sectionsProvider(
+          SectionCategory.secondary,
+        ).overrideWith((ref) => cardSections.secondary),
+      ],
+      child: AppScaffold(
+        header: Header(search: MaterialSearch(), actions: [EditModeButton()]),
+        navigation: Navigation(page: Pages.materials),
+        body:
+            asyncMaterial.isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: widthByColumns(5)),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        final sections = ref.watch(
+                          sectionsProvider(SectionCategory.primary),
+                        );
 
-                            return ListView.builder(
-                              itemCount: sections.length + (edit ? 1 : 0),
-                              itemBuilder: (context, index) {
-                                if (index == sections.length) {
-                                  return AddSectionButton();
-                                }
-                                return DraggableSection(
-                                  sectionIndex: index,
-                                  materialId: material[Attributes.id],
-                                  itemBuilder: (context, item) {
-                                    return CardFactory.getOrCreate(
-                                      item,
-                                      widget.materialId,
-                                    );
-                                  },
+                        return ListView.builder(
+                          itemCount: sections.length + (edit ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == sections.length) {
+                              return AddSectionButton(
+                                sectionCategory: SectionCategory.primary,
+                              );
+                            }
+                            return DraggableSection(
+                              sectionCategory: SectionCategory.primary,
+                              sectionIndex: index,
+                              materialId: material[Attributes.id],
+                              itemBuilder: (context, item) {
+                                return CardFactory.getOrCreate(
+                                  item,
+                                  widget.materialId,
                                 );
                               },
                             );
                           },
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ),
                 ),
-              ),
-      sidebar:
-          asyncMaterial.isLoading
-              ? null
-              : Sheet(
-                width: 300,
-                child: ListView(
-                  children: [
-                    for (final attribute in material.keys.sorted())
-                      Labeled(
-                        label: Text(attributes[attribute]?.name ?? attribute),
-                        child: Text(material[attribute].toString()),
+        sidebar:
+            asyncMaterial.isLoading
+                ? null
+                : Sheet(
+                  width: 300,
+                  child:
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final sections = ref.watch(
+                            sectionsProvider(SectionCategory.secondary),
+                          );
+
+                          return ListView.builder(
+                            itemCount: sections.length + (edit ? 1 : 0),
+                            itemBuilder: (context, index) {
+                              if (index == sections.length) {
+                                return AddSectionButton(
+                                  sectionCategory: SectionCategory.secondary,
+                                );
+                              }
+                              return DraggableSection(
+                                sectionCategory: SectionCategory.secondary,
+                                sectionIndex: index,
+                                materialId: material[Attributes.id],
+                                itemBuilder: (context, item) {
+                                  return CardFactory.getOrCreate(
+                                    item,
+                                    widget.materialId,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ) ??
+                      ListView(
+                        children: [
+                          for (final attribute in material.keys.sorted())
+                            Labeled(
+                              label: Text(
+                                attributes[attribute]?.name ?? attribute,
+                              ),
+                              child: Text(material[attribute].toString()),
+                            ),
+                        ],
                       ),
-                  ],
                 ),
-              ),
+      ),
     );
   }
 }

@@ -5,12 +5,20 @@ import '../../material/attribute/add_attribute_card.dart';
 import '../../material/attribute/cards.dart';
 import '../../material/edit_mode_button.dart';
 
-final sectionsProvider = StateProvider<List<CardSection>>(
-  (ref) => throw UnimplementedError(),
-);
+enum SectionCategory { primary, secondary }
+
+final sectionsProvider =
+    StateProvider.family<List<CardSection>, SectionCategory>(
+      (ref, arg) => throw "sectionsProvider($arg) not initialized",
+    );
 
 final draggingItemProvider = StateProvider<CardData?>((ref) => null);
+
 final fromSectionIndexProvider = StateProvider<int?>((ref) => null);
+
+final fromSectionCategoryProvider = StateProvider<SectionCategory?>(
+  (ref) => null,
+);
 
 class DraggableSection extends ConsumerWidget {
   const DraggableSection({
@@ -18,22 +26,25 @@ class DraggableSection extends ConsumerWidget {
     required this.materialId,
     required this.sectionIndex,
     required this.itemBuilder,
+    required this.sectionCategory,
   });
 
   final String materialId;
   final int sectionIndex;
   final Widget Function(BuildContext context, CardData item) itemBuilder;
+  final SectionCategory sectionCategory;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
 
-    final sections = ref.watch(sectionsProvider);
+    final sections = ref.watch(sectionsProvider(sectionCategory));
     final section = sections[sectionIndex];
     final items = section.cards;
     // final draggingItem = ref.watch(draggingItemProvider);
     final fromSectionIndex = ref.watch(fromSectionIndexProvider);
+    final fromSectionCategory = ref.watch(fromSectionCategoryProvider);
     final edit = ref.watch(editModeProvider);
 
     final nameField = Padding(
@@ -45,7 +56,9 @@ class DraggableSection extends ConsumerWidget {
         decoration: InputDecoration.collapsed(hintText: 'Section Name'),
         maxLines: null,
         onChanged: (value) {
-          ref.read(sectionsProvider.notifier).update((sections) {
+          ref.read(sectionsProvider(sectionCategory).notifier).update((
+            sections,
+          ) {
             sections[sectionIndex] = sections[sectionIndex].copyWith(
               nameDe: value,
             );
@@ -70,6 +83,8 @@ class DraggableSection extends ConsumerWidget {
         onDragStarted: () {
           ref.read(draggingItemProvider.notifier).state = item;
           ref.read(fromSectionIndexProvider.notifier).state = sectionIndex;
+          ref.read(fromSectionCategoryProvider.notifier).state =
+              sectionCategory;
         },
         onDragEnd: (_) {
           ref.invalidate(draggingItemProvider);
@@ -91,33 +106,49 @@ class DraggableSection extends ConsumerWidget {
         child: DragTarget<CardData>(
           onWillAcceptWithDetails: (details) => details.data != item,
           onAcceptWithDetails: (details) {
-            ref.read(sectionsProvider.notifier).update((sections) {
+            final insertIndex = sections[sectionIndex].cards.indexOf(item);
+
+            ref.read(sectionsProvider(fromSectionCategory!).notifier).update((
+              sections,
+            ) {
               final updated = [...sections];
-              final insertIndex = updated[sectionIndex].cards.indexOf(item);
               updated[fromSectionIndex!].cards.remove(details.data);
+              return updated;
+            });
+
+            ref.read(sectionsProvider(sectionCategory).notifier).update((
+              sections,
+            ) {
+              final updated = [...sections];
               updated[sectionIndex].cards.insert(insertIndex, details.data);
               return updated;
             });
+
             ref.invalidate(draggingItemProvider);
             ref.invalidate(fromSectionIndexProvider);
+            ref.invalidate(fromSectionCategoryProvider);
           },
           builder: (context, candidateData, rejectedData) {
-            final colorScheme = ColorScheme.of(context);
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    strokeAlign: BorderSide.strokeAlignOutside,
-                    color:
-                        candidateData.isNotEmpty
-                            ? colorScheme.outline
-                            : Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: child,
-              ),
+            if (candidateData.isEmpty) {
+              return Padding(padding: const EdgeInsets.all(8), child: child);
+            }
+
+            bool isBefore() {
+              if (fromSectionCategory != sectionCategory) {
+                return true;
+              }
+              if (fromSectionIndex != sectionIndex) {
+                return true;
+              }
+              final section = sections[sectionIndex];
+              final index = section.cards.indexOf(item);
+              final fromIndex = section.cards.indexOf(candidateData.first!);
+              return index < fromIndex;
+            }
+
+            return InsertIndicator(
+              isBefore: isBefore(),
+              child: Padding(padding: const EdgeInsets.all(8), child: child),
             );
           },
         ),
@@ -133,10 +164,11 @@ class DraggableSection extends ConsumerWidget {
           border: Border.all(
             color:
                 highlighted
-                    ? colorScheme.outline
+                    ? colorScheme.primary
                     : edit
                     ? colorScheme.outlineVariant
                     : Colors.transparent,
+            width: 2,
           ),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -150,16 +182,19 @@ class DraggableSection extends ConsumerWidget {
                   final item = items[itemIndex];
                   return edit ? draggable(item) : nonDraggable(item);
                 }),
-                if (edit)
+                if (edit && sectionCategory == SectionCategory.primary)
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: AddAttributeCardButton(
                       materialId: materialId,
                       onAdded: (card) {
-                        ref.read(sectionsProvider.notifier).update((sections) {
-                          sections[sectionIndex].cards.add(card);
-                          return sections;
-                        });
+                        ref
+                            .read(sectionsProvider(sectionCategory).notifier)
+                            .update((sections) {
+                              final updated = [...sections];
+                              updated[sectionIndex].cards.add(card);
+                              return updated;
+                            });
                       },
                     ),
                   ),
@@ -177,21 +212,67 @@ class DraggableSection extends ConsumerWidget {
     return DragTarget<CardData>(
       onWillAcceptWithDetails: (_) => true,
       onAcceptWithDetails: (details) {
-        if (fromSectionIndex == sectionIndex) return;
+        if (fromSectionCategory == sectionCategory &&
+            fromSectionIndex == sectionIndex)
+          return;
 
-        ref.read(sectionsProvider.notifier).update((sections) {
+        ref.read(sectionsProvider(fromSectionCategory!).notifier).update((
+          sections,
+        ) {
           final updated = [...sections];
           updated[fromSectionIndex!].cards.remove(details.data);
+          return updated;
+        });
+
+        ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
+          final updated = [...sections];
           updated[sectionIndex].cards.add(details.data);
           return updated;
         });
 
         ref.invalidate(draggingItemProvider);
         ref.invalidate(fromSectionIndexProvider);
+        ref.invalidate(fromSectionCategoryProvider);
       },
       builder: (context, candidateData, _) {
         return container(highlighted: candidateData.isNotEmpty);
       },
+    );
+  }
+}
+
+class InsertIndicator extends StatelessWidget {
+  const InsertIndicator({
+    super.key,
+    required this.isBefore,
+    required this.child,
+  });
+
+  final bool isBefore;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        Positioned(
+          top: 16,
+          bottom: 16,
+          left: isBefore ? 0 : null,
+          right: isBefore ? null : 0,
+          width: 4,
+          child: FractionallySizedBox(
+            heightFactor: 0.9,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: ColorScheme.of(context).primary,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
