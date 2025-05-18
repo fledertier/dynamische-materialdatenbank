@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../widgets/dropdown_menu_form_field.dart';
 import 'attribute.dart';
+import 'attribute_dialog.dart';
 import 'attribute_provider.dart';
 import 'attribute_service.dart';
 import 'attribute_type.dart';
+import 'attributes_list.dart';
 
 class AttributeForm extends ConsumerStatefulWidget {
   const AttributeForm({
@@ -41,10 +43,10 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
             children: [
               TextFormField(
                 initialValue: _controller.nameDe.value,
-                decoration: InputDecoration(labelText: "Name (De)"),
+                decoration: InputDecoration(labelText: 'Name (De)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter a name";
+                    return 'Please enter a name';
                   }
                   return null;
                 },
@@ -58,7 +60,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   return TextFormField(
                     initialValue: _controller.nameEn.value,
                     decoration: InputDecoration(
-                      labelText: "Name (En)",
+                      labelText: 'Name (En)',
                       hintText: _controller.nameDe.value,
                     ),
                     onChanged: (value) {
@@ -73,11 +75,12 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
             listenable: Listenable.merge([
               _controller.type,
               _controller.listType,
+              _controller.objectAttributes,
             ]),
             builder: (context, child) {
               late final typeField = DropdownMenuFormField<String>(
                 initialSelection: _controller.type.value,
-                label: Text("Type"),
+                label: Text('Type'),
                 expandedInsets: EdgeInsets.zero,
                 requestFocusOnTap: false,
                 menuHeight: 300,
@@ -95,14 +98,14 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Please select a type";
+                    return 'Please select a type';
                   }
                   return null;
                 },
               );
               late final listTypeDropdown = DropdownMenuFormField<String>(
                 initialSelection: _controller.listType.value,
-                label: Text("List type"),
+                label: Text('List type'),
                 expandedInsets: EdgeInsets.zero,
                 requestFocusOnTap: false,
                 menuHeight: 300,
@@ -121,7 +124,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               );
               late final unitDropdown = DropdownMenuFormField<UnitType>(
                 initialSelection: _controller.unitType.value,
-                label: Text("Unit"),
+                label: Text('Unit'),
                 expandedInsets: EdgeInsets.zero,
                 requestFocusOnTap: false,
                 menuHeight: 300,
@@ -133,12 +136,57 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   _controller.unitType.value = value;
                 },
               );
-              return Row(
-                spacing: 16,
+              late final objectAttributes = Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(child: typeField),
-                  if (isList) Expanded(child: listTypeDropdown),
-                  if (isNumber) Expanded(child: unitDropdown),
+                  SizedBox(height: 8),
+                  for (final attribute in _controller.objectAttributes.value)
+                    AttributeListTile(
+                      attribute,
+                      onTap: () async {
+                        final updatedAttribute = await showAttributeDialog(
+                          context,
+                          attribute,
+                        );
+                        if (updatedAttribute != null) {
+                          _controller.objectAttributes.value = [
+                            for (final attribute
+                                in _controller.objectAttributes.value)
+                              attribute.id == updatedAttribute.id
+                                  ? updatedAttribute
+                                  : attribute,
+                          ];
+                        }
+                      },
+                    ),
+                  SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    style: IconButton.styleFrom(),
+                    icon: Icon(Icons.add),
+                    label: Text('Add attribute'),
+                    onPressed: () async {
+                      final attribute = await showAttributeDialog(context);
+                      if (attribute != null) {
+                        _controller.objectAttributes.value = [
+                          ..._controller.objectAttributes.value,
+                          attribute,
+                        ];
+                      }
+                    },
+                  ),
+                ],
+              );
+              return Column(
+                children: [
+                  Row(
+                    spacing: 16,
+                    children: [
+                      Expanded(child: typeField),
+                      if (isList) Expanded(child: listTypeDropdown),
+                      if (isNumber) Expanded(child: unitDropdown),
+                    ],
+                  ),
+                  if (isObject) objectAttributes,
                 ],
               );
             },
@@ -157,7 +205,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   );
                 },
               ),
-              Text("Required"),
+              Text('Required'),
             ],
           ),
         ],
@@ -171,6 +219,10 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     return _controller.type.value == AttributeType.number ||
         isList && _controller.listType.value == AttributeType.number;
   }
+
+  bool get isObject =>
+      _controller.type.value == AttributeType.object ||
+      isList && _controller.listType.value == AttributeType.object;
 
   Future<void> submit() async {
     if (_form.currentState!.validate()) {
@@ -190,7 +242,9 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               AttributeType.text => TextAttributeType(),
               AttributeType.textarea => TextareaAttributeType(),
               AttributeType.boolean => BooleanAttributeType(),
-              AttributeType.object => ObjectAttributeType(),
+              AttributeType.object => ObjectAttributeType(
+                attributes: _controller.objectAttributes.value,
+              ),
               AttributeType.proportions => ProportionsAttributeType(),
               AttributeType.countedTags => CountedTagsAttributeType(),
               AttributeType.countries => CountriesAttributeType(),
@@ -203,7 +257,9 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
           AttributeType.text => TextAttributeType(),
           AttributeType.textarea => TextareaAttributeType(),
           AttributeType.boolean => BooleanAttributeType(),
-          AttributeType.object => ObjectAttributeType(),
+          AttributeType.object => ObjectAttributeType(
+            attributes: _controller.objectAttributes.value,
+          ),
           AttributeType.proportions => ProportionsAttributeType(),
           AttributeType.countedTags => CountedTagsAttributeType(),
           AttributeType.countries => CountriesAttributeType(),

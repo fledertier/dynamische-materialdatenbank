@@ -3,6 +3,8 @@ import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import 'attribute.dart';
+
 enum Operator {
   equals,
   notEquals,
@@ -88,14 +90,26 @@ class BooleanAttributeType extends AttributeType {
 }
 
 class ObjectAttributeType extends AttributeType {
-  ObjectAttributeType()
+  ObjectAttributeType({required this.attributes})
     : super(
         id: AttributeType.object,
         operators: {Operator.equals, Operator.notEquals},
       );
 
+  final List<Attribute> attributes;
+
   factory ObjectAttributeType.fromJson(Json json) {
-    return ObjectAttributeType();
+    final attributes =
+        List<Json>.from(json['attributes']).map(Attribute.fromJson).toList();
+    return ObjectAttributeType(attributes: attributes);
+  }
+
+  @override
+  Json toJson() {
+    return {
+      'id': id,
+      'attributes': attributes.map((attribute) => attribute.toJson()).toList(),
+    };
   }
 }
 

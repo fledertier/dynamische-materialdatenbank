@@ -12,6 +12,9 @@ class AttributeFormController implements Listenable {
       type = ValueNotifier(initialAttribute?.type.id),
       listType = ValueNotifier(initialAttribute?.type.listType?.id),
       unitType = ValueNotifier(initialAttribute?.type.numberUnitType),
+      objectAttributes = ValueNotifier(
+        initialAttribute?.type.objectAttributes ?? [],
+      ),
       required = ValueNotifier(initialAttribute?.required);
 
   final ValueNotifier<String?> id;
@@ -20,6 +23,7 @@ class AttributeFormController implements Listenable {
   final ValueNotifier<String?> type;
   final ValueNotifier<String?> listType;
   final ValueNotifier<UnitType?> unitType;
+  final ValueNotifier<List<Attribute>> objectAttributes;
   final ValueNotifier<bool?> required;
 
   final Attribute? initialAttribute;
@@ -30,6 +34,10 @@ class AttributeFormController implements Listenable {
         type.value != initialAttribute?.type.id ||
         listType.value != initialAttribute?.type.listType?.id ||
         unitType.value != initialAttribute?.type.numberUnitType ||
+        !listEquals(
+          objectAttributes.value,
+          initialAttribute?.type.objectAttributes ?? [],
+        ) ||
         required.value != initialAttribute?.required;
   }
 
@@ -40,6 +48,7 @@ class AttributeFormController implements Listenable {
     type,
     listType,
     unitType,
+    objectAttributes,
     required,
   ];
 
@@ -66,15 +75,22 @@ class AttributeFormController implements Listenable {
 
 extension on AttributeType {
   AttributeType? get listType {
-    if (this is ListAttributeType) {
-      return (this as ListAttributeType).type;
+    if (this case ListAttributeType(:final type)) {
+      return type;
     }
     return null;
   }
 
   UnitType? get numberUnitType {
-    if (this is NumberAttributeType) {
-      return (this as NumberAttributeType).unitType;
+    if (this case NumberAttributeType(:final unitType)) {
+      return unitType;
+    }
+    return null;
+  }
+
+  List<Attribute>? get objectAttributes {
+    if (this case ObjectAttributeType(:final attributes)) {
+      return attributes;
     }
     return null;
   }
