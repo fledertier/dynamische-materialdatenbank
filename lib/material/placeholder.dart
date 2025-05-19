@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:dynamische_materialdatenbank/types.dart';
+
 String randomName() {
   final random = Random();
   final index = random.nextInt(randomMaterialNames.length);
@@ -20,14 +22,15 @@ String randomDescription() {
   return '${selectedSentences.join('. ')}.';
 }
 
-String randomManufacturer() {
+Json randomManufacturer() {
   final random = Random();
-  return "Manufacturer ${random.nextInt(10)}";
+  return {"name": "Manufacturer ${random.nextInt(10)}"};
 }
 
-double randomWeight() {
+Json randomWeight() {
   final random = Random();
-  return double.parse((random.nextDouble() * 100).toStringAsFixed(2));
+  final weight = double.parse((random.nextDouble() * 100).toStringAsFixed(2));
+  return {"value": weight};
 }
 
 const randomMaterialNames = [

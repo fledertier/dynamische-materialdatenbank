@@ -231,34 +231,36 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         nameDe: _controller.nameDe.value!,
         nameEn: _controller.nameEn.value,
         type: switch (_controller.type.value!) {
+          AttributeType.text => TextAttributeType(),
+          AttributeType.textarea => TextareaAttributeType(),
           AttributeType.number => NumberAttributeType(
             unitType: _controller.unitType.value,
           ),
+          AttributeType.boolean => BooleanAttributeType(),
+          AttributeType.url => UrlAttributeType(),
+          AttributeType.country => CountryAttributeType(),
+          AttributeType.object => ObjectAttributeType(
+            attributes: _controller.objectAttributes.value,
+          ),
           AttributeType.list => ListAttributeType(
             type: switch (_controller.listType.value!) {
+              AttributeType.text => TextAttributeType(),
+              AttributeType.textarea => TextareaAttributeType(),
               AttributeType.number => NumberAttributeType(
                 unitType: _controller.unitType.value,
               ),
-              AttributeType.text => TextAttributeType(),
-              AttributeType.textarea => TextareaAttributeType(),
               AttributeType.boolean => BooleanAttributeType(),
+              AttributeType.url => UrlAttributeType(),
+              AttributeType.country => CountryAttributeType(),
               AttributeType.object => ObjectAttributeType(
                 attributes: _controller.objectAttributes.value,
               ),
-              AttributeType.country => CountryAttributeType(),
               _ =>
                 throw Exception(
                   'Invalid list type ${_controller.listType.value}',
                 ),
             },
           ),
-          AttributeType.text => TextAttributeType(),
-          AttributeType.textarea => TextareaAttributeType(),
-          AttributeType.boolean => BooleanAttributeType(),
-          AttributeType.object => ObjectAttributeType(
-            attributes: _controller.objectAttributes.value,
-          ),
-          AttributeType.country => CountryAttributeType(),
           _ => throw Exception('Invalid type ${_controller.type.value}'),
         },
         required: _controller.required.value ?? false,

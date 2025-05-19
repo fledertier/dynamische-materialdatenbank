@@ -103,6 +103,18 @@ class BooleanAttributeType extends AttributeType {
   }
 }
 
+class UrlAttributeType extends AttributeType {
+  UrlAttributeType()
+    : super(
+        id: AttributeType.url,
+        operators: {Operator.equals, Operator.notEquals},
+      );
+
+  factory UrlAttributeType.fromJson(Json json) {
+    return UrlAttributeType();
+  }
+}
+
 class ObjectAttributeType extends AttributeType {
   ObjectAttributeType({required this.attributes})
     : super(
@@ -192,6 +204,7 @@ class AttributeType {
   static const textarea = 'textarea';
   static const number = 'number';
   static const boolean = 'boolean';
+  static const url = 'url';
   static const country = 'country';
   static const object = 'object';
   static const list = 'list';
@@ -201,6 +214,7 @@ class AttributeType {
     textarea,
     number,
     boolean,
+    url,
     country,
     object,
     list,
@@ -220,6 +234,7 @@ class AttributeType {
       textarea => TextareaAttributeType.fromJson(json),
       number => NumberAttributeType.fromJson(json),
       boolean => BooleanAttributeType.fromJson(json),
+      url => UrlAttributeType.fromJson(json),
       country => CountryAttributeType.fromJson(json),
       object => ObjectAttributeType.fromJson(json),
       list => ListAttributeType.fromJson(json),
@@ -250,6 +265,7 @@ IconData iconForAttributeType(String id) {
     AttributeType.textarea => Symbols.article,
     AttributeType.number => Symbols.numbers,
     AttributeType.boolean => Symbols.check_box,
+    AttributeType.url => Symbols.link,
     AttributeType.country => Symbols.language,
     AttributeType.object => Symbols.category,
     AttributeType.list => Symbols.menu,
