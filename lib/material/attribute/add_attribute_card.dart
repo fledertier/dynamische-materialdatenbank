@@ -9,51 +9,62 @@ import '../../widgets/drag_and_drop/draggable_section.dart';
 import '../material_provider.dart';
 import 'cards.dart';
 
-class AddAttributeCardButton extends ConsumerWidget {
-  const AddAttributeCardButton({
+class AddAndRemoveAttributeCardButton extends ConsumerWidget {
+  const AddAndRemoveAttributeCardButton({
     super.key,
     required this.materialId,
-    required this.onAdded,
-    required this.onPressed,
+    required this.onAdd,
+    required this.onDelete,
   });
 
   final String materialId;
-  final void Function(CardData card) onAdded;
-  final VoidCallback onPressed;
+  final VoidCallback onAdd;
+  final void Function(CardData card) onDelete;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
     final ongoingDrag = ref.watch(draggingItemProvider) != null;
 
-    return Material(
-      borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
-      color:
-          ongoingDrag
-              ? colorScheme.errorContainer
-              : colorScheme.primaryContainer,
-      elevation: 8,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
-        onTap: onPressed,
-        child: AnimatedSize(
-          duration: Duration(milliseconds: 350),
-          curve: Curves.easeInOutCubic,
-          child: SizedBox(
-            width: ongoingDrag ? 300 : 100,
-            height: ongoingDrag ? 80 : 100,
-            child: Center(
-              child:
-                  ongoingDrag
-                      ? Icon(
-                        Symbols.delete,
-                        color: colorScheme.onErrorContainer,
-                      )
-                      : Icon(Icons.add, color: colorScheme.onPrimaryContainer),
+    return DragTarget<CardData>(
+      onWillAcceptWithDetails: (details) => ongoingDrag,
+      onAcceptWithDetails: (details) {
+        onDelete(details.data);
+      },
+      builder: (context, candidateData, rejectedData) {
+        return Material(
+          borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
+          color:
+              ongoingDrag
+                  ? colorScheme.errorContainer
+                  : colorScheme.primaryContainer,
+          elevation: 8,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
+            onTap: onAdd,
+            child: AnimatedSize(
+              duration: Duration(milliseconds: 350),
+              curve: Curves.easeInOutCubic,
+              child: SizedBox(
+                width: ongoingDrag ? 300 : 100,
+                height: ongoingDrag ? 80 : 100,
+                child: Center(
+                  child:
+                      ongoingDrag
+                          ? Icon(
+                            Symbols.delete,
+                            color: colorScheme.onErrorContainer,
+                          )
+                          : Icon(
+                            Icons.add,
+                            color: colorScheme.onPrimaryContainer,
+                          ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

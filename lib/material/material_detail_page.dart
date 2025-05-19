@@ -62,81 +62,61 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
           SectionCategory.secondary,
         ).overrideWith((ref) => cardSections.secondary),
       ],
-      child: Stack(
-        children: [
-          AppScaffold(
-            header: Header(
-              search: MaterialSearch(),
-              actions: [EditModeButton()],
-            ),
-            navigation: Navigation(page: Pages.materials),
-            floatingActionButton: AddAttributeCardButton(
-              materialId: widget.materialId,
-              onPressed: () {
-                setState(() {
-                  showDialog = true;
-                });
-              },
-              onAdded: (cards) {},
-            ),
-            body:
-                asyncMaterial.isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : Center(
-                      child: Consumer(
-                        builder: (context, ref, child) {
-                          final sections = ref.watch(
-                            sectionsProvider(SectionCategory.primary),
-                          );
-
-                          return ListView.builder(
-                            padding: EdgeInsets.only(bottom: 24),
-                            itemCount: sections.length + (edit ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index == sections.length) {
-                                return AddSectionButton(
-                                  sectionCategory: SectionCategory.primary,
-                                );
-                              }
-                              return DraggableSection(
-                                sectionCategory: SectionCategory.primary,
-                                sectionIndex: index,
-                                materialId: material[Attributes.id],
-                                itemBuilder: (context, item) {
-                                  return CardFactory.getOrCreate(
-                                    item,
-                                    widget.materialId,
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-            sidebar:
-                asyncMaterial.isLoading
-                    ? null
-                    : Sheet(
-                      width: 300,
-                      child:
-                          Consumer(
+      child: Consumer(
+        builder: (context, ref, child) {
+          return Stack(
+            children: [
+              AppScaffold(
+                header: Header(
+                  search: MaterialSearch(),
+                  actions: [EditModeButton()],
+                ),
+                navigation: Navigation(page: Pages.materials),
+                floatingActionButton: AddAndRemoveAttributeCardButton(
+                  materialId: widget.materialId,
+                  onAdd: () {
+                    setState(() {
+                      showDialog = true;
+                    });
+                  },
+                  onDelete: (card) {
+                    final fromSectionCategory = ref.read(
+                      fromSectionCategoryProvider,
+                    );
+                    final fromSectionIndex = ref.read(fromSectionIndexProvider);
+                    if (fromSectionCategory != null &&
+                        fromSectionIndex != null) {
+                      ref
+                          .read(sectionsProvider(fromSectionCategory).notifier)
+                          .update((sections) {
+                            final updated = [...sections];
+                            updated[fromSectionIndex].cards.remove(card);
+                            return updated;
+                          });
+                    }
+                  },
+                ),
+                body:
+                    asyncMaterial.isLoading
+                        ? Center(child: CircularProgressIndicator())
+                        : Center(
+                          child: Consumer(
                             builder: (context, ref, child) {
                               final sections = ref.watch(
-                                sectionsProvider(SectionCategory.secondary),
+                                sectionsProvider(SectionCategory.primary),
                               );
 
                               return ListView.builder(
+                                padding: EdgeInsets.only(bottom: 24),
                                 itemCount: sections.length + (edit ? 1 : 0),
                                 itemBuilder: (context, index) {
                                   if (index == sections.length) {
                                     return AddSectionButton(
-                                      sectionCategory:
-                                          SectionCategory.secondary,
+                                      sectionCategory: SectionCategory.primary,
                                     );
                                   }
                                   return DraggableSection(
-                                    sectionCategory: SectionCategory.secondary,
+                                    sectionCategory: SectionCategory.primary,
                                     sectionIndex: index,
                                     materialId: material[Attributes.id],
                                     itemBuilder: (context, item) {
@@ -149,35 +129,79 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                                 },
                               );
                             },
-                          ) ??
-                          ListView(
-                            children: [
-                              for (final attribute in material.keys.sorted())
-                                Labeled(
-                                  label: Text(
-                                    attributes[attribute]?.name ?? attribute,
-                                  ),
-                                  child: Text(material[attribute].toString()),
-                                ),
-                            ],
                           ),
-                    ),
-          ),
-          if (showDialog)
-            ColoredBox(
-              color: ColorScheme.of(context).scrim.withValues(alpha: 0.5),
-              child: Center(
-                child: AddAttributeCardDialog(
-                  materialId: widget.materialId,
-                  onClose: () {
-                    setState(() {
-                      showDialog = false;
-                    });
-                  },
-                ),
+                        ),
+                sidebar:
+                    asyncMaterial.isLoading
+                        ? null
+                        : Sheet(
+                          width: 300,
+                          child:
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  final sections = ref.watch(
+                                    sectionsProvider(SectionCategory.secondary),
+                                  );
+
+                                  return ListView.builder(
+                                    itemCount: sections.length + (edit ? 1 : 0),
+                                    itemBuilder: (context, index) {
+                                      if (index == sections.length) {
+                                        return AddSectionButton(
+                                          sectionCategory:
+                                              SectionCategory.secondary,
+                                        );
+                                      }
+                                      return DraggableSection(
+                                        sectionCategory:
+                                            SectionCategory.secondary,
+                                        sectionIndex: index,
+                                        materialId: material[Attributes.id],
+                                        itemBuilder: (context, item) {
+                                          return CardFactory.getOrCreate(
+                                            item,
+                                            widget.materialId,
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ) ??
+                              ListView(
+                                children: [
+                                  for (final attribute
+                                      in material.keys.sorted())
+                                    Labeled(
+                                      label: Text(
+                                        attributes[attribute]?.name ??
+                                            attribute,
+                                      ),
+                                      child: Text(
+                                        material[attribute].toString(),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                        ),
               ),
-            ),
-        ],
+              if (showDialog)
+                ColoredBox(
+                  color: ColorScheme.of(context).scrim.withValues(alpha: 0.5),
+                  child: Center(
+                    child: AddAttributeCardDialog(
+                      materialId: widget.materialId,
+                      onClose: () {
+                        setState(() {
+                          showDialog = false;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

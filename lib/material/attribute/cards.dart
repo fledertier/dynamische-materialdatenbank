@@ -80,7 +80,7 @@ class CardData {
     return CardData(
       card: card,
       attribute: card.attributes.first,
-      size: card.sizes.first,
+      size: card.sizes.last,
     );
   }
 

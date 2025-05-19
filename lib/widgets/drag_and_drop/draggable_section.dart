@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../attributes/attribute_provider.dart';
-import '../../material/attribute/add_attribute_card.dart';
 import '../../material/attribute/cards.dart';
 import '../../material/attribute/default/default_cards.dart';
 import '../../material/edit_mode_button.dart';
@@ -215,23 +214,6 @@ class DraggableSection extends ConsumerWidget {
                   final item = items[itemIndex];
                   return edit ? draggable(item) : nonDraggable(item);
                 }),
-                if (false && edit && sectionCategory == SectionCategory.primary)
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: AddAttributeCardButton(
-                      materialId: materialId,
-                      onPressed: () {},
-                      onAdded: (card) {
-                        ref
-                            .read(sectionsProvider(sectionCategory).notifier)
-                            .update((sections) {
-                              final updated = [...sections];
-                              updated[sectionIndex].cards.add(card);
-                              return updated;
-                            });
-                      },
-                    ),
-                  ),
               ],
             ),
           ],
