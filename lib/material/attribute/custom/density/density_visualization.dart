@@ -156,8 +156,11 @@ class DensityPainter extends CustomPainter {
       final position =
           Offset.lerp(positionOffset, gridPos, t * 0.9)! + depthOffset;
       final radius =
-          lerpDouble(lerpDouble(maxRadius, minRadius, z)!, maxRadius, t)!;
-      final alpha = lerpDouble(1, 0.5, z)!.clamp(0.0, 1.0);
+          isThreeDimensional
+              ? lerpDouble(lerpDouble(maxRadius, minRadius, z)!, maxRadius, t)!
+              : maxRadius;
+      final alpha =
+          isThreeDimensional ? lerpDouble(1, 0.5, z)!.clamp(0.0, 1.0) : 1.0;
 
       particles.add(
         Particle(

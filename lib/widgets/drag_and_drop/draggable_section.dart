@@ -135,13 +135,15 @@ class DraggableSection extends ConsumerWidget {
           onAcceptWithDetails: (details) {
             final insertIndex = sections[sectionIndex].cards.indexOf(item);
 
-            ref.read(sectionsProvider(fromSectionCategory!).notifier).update((
-              sections,
-            ) {
-              final updated = [...sections];
-              updated[fromSectionIndex!].cards.remove(details.data);
-              return updated;
-            });
+            if (fromSectionCategory != null && fromSectionIndex != null) {
+              ref.read(sectionsProvider(fromSectionCategory).notifier).update((
+                sections,
+              ) {
+                final updated = [...sections];
+                updated[fromSectionIndex].cards.remove(details.data);
+                return updated;
+              });
+            }
 
             ref.read(sectionsProvider(sectionCategory).notifier).update((
               sections,
@@ -218,6 +220,7 @@ class DraggableSection extends ConsumerWidget {
                     padding: const EdgeInsets.all(8),
                     child: AddAttributeCardButton(
                       materialId: materialId,
+                      onPressed: () {},
                       onAdded: (card) {
                         ref
                             .read(sectionsProvider(sectionCategory).notifier)
@@ -248,13 +251,15 @@ class DraggableSection extends ConsumerWidget {
           return;
         }
 
-        ref.read(sectionsProvider(fromSectionCategory!).notifier).update((
-          sections,
-        ) {
-          final updated = [...sections];
-          updated[fromSectionIndex!].cards.remove(details.data);
-          return updated;
-        });
+        if (fromSectionCategory != null && fromSectionIndex != null) {
+          ref.read(sectionsProvider(fromSectionCategory).notifier).update((
+            sections,
+          ) {
+            final updated = [...sections];
+            updated[fromSectionIndex].cards.remove(details.data);
+            return updated;
+          });
+        }
 
         ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
           final updated = [...sections];
