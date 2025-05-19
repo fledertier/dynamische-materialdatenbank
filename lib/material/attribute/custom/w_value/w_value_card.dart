@@ -31,6 +31,7 @@ class WValueCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: Attributes.wValue,
       size: CardSize.small,
+      columns: 1,
       spacing: 32,
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,

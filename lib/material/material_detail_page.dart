@@ -187,17 +187,15 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
               ),
               if (showDialog)
                 ColoredBox(
-                  color: ColorScheme.of(context).scrim.withValues(alpha: 0.5),
-                  child: Center(
-                    child: AddAttributeCardDialog(
-                      materialId: widget.materialId,
-                      sizes: {CardSize.large},
-                      onClose: () {
-                        setState(() {
-                          showDialog = false;
-                        });
-                      },
-                    ),
+                  color: ColorScheme.of(context).scrim.withValues(alpha: 0.6),
+                  child: AddAttributeCardDialog(
+                    materialId: widget.materialId,
+                    sizes: {CardSize.large},
+                    onClose: () {
+                      setState(() {
+                        showDialog = false;
+                      });
+                    },
                   ),
                 ),
             ],

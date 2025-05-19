@@ -32,6 +32,7 @@ class UValueCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: Attributes.uValue,
       size: CardSize.small,
+      columns: 1,
       child: RayVisualization(
         transmittedRays: transmittedRays,
         reflectedRays: 10 - transmittedRays,
