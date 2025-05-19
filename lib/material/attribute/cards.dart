@@ -68,6 +68,14 @@ class CardData {
   final String attribute;
   final CardSize size;
 
+  CardData copyWith({Cards? card, String? attribute, CardSize? size}) {
+    return CardData(
+      card: card ?? this.card,
+      attribute: attribute ?? this.attribute,
+      size: size ?? this.size,
+    );
+  }
+
   factory CardData.fromCustomCard(CustomCards card) {
     return CardData(
       card: card,

@@ -1,9 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../attributes/attribute_provider.dart';
 import '../../material/attribute/add_attribute_card.dart';
 import '../../material/attribute/cards.dart';
+import '../../material/attribute/default/default_cards.dart';
 import '../../material/edit_mode_button.dart';
+import '../../utils/miscellaneous_utils.dart';
 
 enum SectionCategory { primary, secondary }
 
@@ -34,6 +38,29 @@ class DraggableSection extends ConsumerWidget {
   final Widget Function(BuildContext context, CardData item) itemBuilder;
   final SectionCategory sectionCategory;
 
+  Widget itemBuilderProxy(BuildContext context, WidgetRef ref, CardData item) {
+    if (sectionCategory == SectionCategory.secondary) {
+      final hasSmall = item.card.sizes.contains(CardSize.small);
+      if (hasSmall) {
+        final smallItem = item.copyWith(size: CardSize.small);
+        return itemBuilder(context, smallItem);
+      } else {
+        final attribute = ref.read(attributeProvider(item.attribute));
+        final defaultSmallCard = DefaultCards.values.firstWhereOrNull(
+          (defaultCard) => defaultCard.type == attribute?.type.id,
+        );
+        if (attribute != null && defaultSmallCard != null) {
+          final defaultSmallItem = item.copyWith(
+            card: defaultSmallCard,
+            size: CardSize.small,
+          );
+          return itemBuilder(context, defaultSmallItem);
+        }
+      }
+    }
+    return itemBuilder(context, item);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
@@ -48,11 +75,11 @@ class DraggableSection extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
 
     final nameField = Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 16),
       child: TextFormField(
         initialValue: section.nameDe,
         enabled: edit,
-        style: textTheme.titleMedium?.copyWith(fontFamily: 'Lexend'),
+        style: textTheme.headlineMedium?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'Section Name'),
         maxLines: null,
         onChanged: (value) {
@@ -71,12 +98,12 @@ class DraggableSection extends ConsumerWidget {
     Widget nonDraggable(CardData item) {
       return Padding(
         padding: const EdgeInsets.all(8),
-        child: itemBuilder(context, item),
+        child: itemBuilderProxy(context, ref, item),
       );
     }
 
     Widget draggable(CardData item) {
-      final child = itemBuilder(context, item);
+      final child = itemBuilderProxy(context, ref, item);
       return Draggable<CardData>(
         data: item,
         maxSimultaneousDrags: 1,
@@ -158,17 +185,21 @@ class DraggableSection extends ConsumerWidget {
     Widget container({bool highlighted = false}) {
       final hasName = section.nameDe?.isNotEmpty ?? false;
       return Container(
+        constraints: BoxConstraints(maxWidth: widthByColumns(5)),
         margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(8),
+        padding:
+            sectionCategory == SectionCategory.primary
+                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
+                : EdgeInsets.zero,
         decoration: BoxDecoration(
           border: Border.all(
             color:
                 highlighted
                     ? colorScheme.primary
                     : edit
-                    ? colorScheme.outlineVariant
+                    ? colorScheme.outline.withValues(alpha: 0.5)
                     : Colors.transparent,
-            width: 2,
+            width: 1.5,
           ),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -182,7 +213,7 @@ class DraggableSection extends ConsumerWidget {
                   final item = items[itemIndex];
                   return edit ? draggable(item) : nonDraggable(item);
                 }),
-                if (edit && sectionCategory == SectionCategory.primary)
+                if (false && edit && sectionCategory == SectionCategory.primary)
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: AddAttributeCardButton(
@@ -213,8 +244,9 @@ class DraggableSection extends ConsumerWidget {
       onWillAcceptWithDetails: (_) => true,
       onAcceptWithDetails: (details) {
         if (fromSectionCategory == sectionCategory &&
-            fromSectionIndex == sectionIndex)
+            fromSectionIndex == sectionIndex) {
           return;
+        }
 
         ref.read(sectionsProvider(fromSectionCategory!).notifier).update((
           sections,

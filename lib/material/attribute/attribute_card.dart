@@ -30,7 +30,7 @@ class AttributeCard extends StatelessWidget {
     return Container(
       width: widthByColumns(columns),
       decoration: BoxDecoration(
-        color: ColorScheme.of(context).surfaceContainerLow,
+        color: ColorScheme.of(context).surfaceContainer,
         borderRadius: borderRadius,
       ),
       clipBehavior: clip,

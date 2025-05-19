@@ -3,13 +3,14 @@ import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../../constants.dart';
-import '../../utils/miscellaneous_utils.dart';
+import '../../widgets/drag_and_drop/draggable_section.dart';
 import '../material_provider.dart';
 import 'cards.dart';
 
-class AddAttributeCardButton extends StatelessWidget {
+class AddAttributeCardButton extends ConsumerWidget {
   const AddAttributeCardButton({
     super.key,
     required this.materialId,
@@ -20,19 +21,38 @@ class AddAttributeCardButton extends StatelessWidget {
   final void Function(CardData card) onAdded;
 
   @override
-  Widget build(BuildContext context) {
-    return IconButton.filledTonal(
-      style: IconButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-        fixedSize: Size.square(widthByColumns(1)),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = ColorScheme.of(context);
+    final ongoingDrag = ref.watch(draggingItemProvider) != null;
+
+    return Material(
+      borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
+      color:
+          ongoingDrag
+              ? colorScheme.errorContainer
+              : colorScheme.primaryContainer,
+      elevation: 8,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
+        onTap: () => showAddAttributeCardDialog(context),
+        child: AnimatedSize(
+          duration: Duration(milliseconds: 350),
+          curve: Curves.easeInOutCubic,
+          child: SizedBox(
+            width: ongoingDrag ? 300 : 100,
+            height: ongoingDrag ? 80 : 100,
+            child: Center(
+              child:
+                  ongoingDrag
+                      ? Icon(
+                        Symbols.delete,
+                        color: colorScheme.onErrorContainer,
+                      )
+                      : Icon(Icons.add, color: colorScheme.onPrimaryContainer),
+            ),
+          ),
+        ),
       ),
-      icon: Icon(Icons.add),
-      onPressed: () async {
-        final card = await showAddAttributeCardDialog(context);
-        if (card != null) {
-          onAdded(card);
-        }
-      },
     );
   }
 
@@ -71,6 +91,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
             SizedBox(height: 32),
             AttributeCardSearch(
               materialId: widget.materialId,
+              sizes: {CardSize.large},
               onSubmit: (cards) {
                 setState(() {
                   this.cards = cards;
@@ -88,19 +109,33 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                   runSpacing: 16,
                   children: [
                     for (final card in cards)
-                      Material(
-                        type: MaterialType.transparency,
-                        child: InkWell(
-                          onTap: () {
-                            context.pop(card);
-                          },
-                          child: AbsorbPointer(
-                            child: CardFactory.create(
-                              card,
-                              exampleMaterial[Attributes.id],
+                      Builder(
+                        builder: (context) {
+                          final child = Material(
+                            type: MaterialType.transparency,
+                            child: InkWell(
+                              onTap: () {
+                                context.pop(card);
+                              },
+                              child: AbsorbPointer(
+                                child: CardFactory.create(
+                                  card,
+                                  exampleMaterial[Attributes.id],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                          return Draggable(
+                            data: card,
+                            onDragStarted: () => context.pop(card),
+                            feedback: child,
+                            childWhenDragging: Opacity(
+                              opacity: 0,
+                              child: child,
+                            ),
+                            child: child,
+                          );
+                        },
                       ),
                   ],
                 ),

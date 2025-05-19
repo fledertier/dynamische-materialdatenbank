@@ -7,16 +7,20 @@ class AppScaffold extends StatelessWidget {
     required this.body,
     this.sidebar,
     this.navigation,
+    this.floatingActionButton,
   });
 
   final Widget header;
   final Widget body;
   final Widget? sidebar;
   final Widget? navigation;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Row(
         children: [
           if (navigation != null) navigation!,

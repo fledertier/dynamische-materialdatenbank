@@ -33,14 +33,9 @@ class Navigation extends StatelessWidget {
       },
       leading: Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 16),
-        child: FloatingActionButton(
-          heroTag: null,
-          elevation: 0,
-          hoverElevation: 0,
-          highlightElevation: 0,
-          focusElevation: 0,
-          onPressed: () {},
-          child: const Icon(Symbols.add),
+        child: SizedBox.square(
+          dimension: 48,
+          child: Center(child: Text("Logo")),
         ),
       ),
       destinations: [

@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
-import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../app/app_scaffold.dart';
 import '../app/navigation.dart';
@@ -14,6 +14,7 @@ import '../widgets/drag_and_drop/add_section_button.dart';
 import '../widgets/drag_and_drop/draggable_section.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
+import 'attribute/add_attribute_card.dart';
 import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
@@ -62,41 +63,43 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
       child: AppScaffold(
         header: Header(search: MaterialSearch(), actions: [EditModeButton()]),
         navigation: Navigation(page: Pages.materials),
+        floatingActionButton: AddAttributeCardButton(
+          materialId: widget.materialId,
+          onAdded: (cards) {},
+        ),
         body:
             asyncMaterial.isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: widthByColumns(5)),
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        final sections = ref.watch(
-                          sectionsProvider(SectionCategory.primary),
-                        );
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final sections = ref.watch(
+                        sectionsProvider(SectionCategory.primary),
+                      );
 
-                        return ListView.builder(
-                          itemCount: sections.length + (edit ? 1 : 0),
-                          itemBuilder: (context, index) {
-                            if (index == sections.length) {
-                              return AddSectionButton(
-                                sectionCategory: SectionCategory.primary,
-                              );
-                            }
-                            return DraggableSection(
+                      return ListView.builder(
+                        padding: EdgeInsets.only(bottom: 24),
+                        itemCount: sections.length + (edit ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == sections.length) {
+                            return AddSectionButton(
                               sectionCategory: SectionCategory.primary,
-                              sectionIndex: index,
-                              materialId: material[Attributes.id],
-                              itemBuilder: (context, item) {
-                                return CardFactory.getOrCreate(
-                                  item,
-                                  widget.materialId,
-                                );
-                              },
                             );
-                          },
-                        );
-                      },
-                    ),
+                          }
+                          return DraggableSection(
+                            sectionCategory: SectionCategory.primary,
+                            sectionIndex: index,
+                            materialId: material[Attributes.id],
+                            itemBuilder: (context, item) {
+                              return CardFactory.getOrCreate(
+                                item,
+                                widget.materialId,
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
         sidebar:
@@ -146,6 +149,23 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         ],
                       ),
                 ),
+      ),
+    );
+  }
+}
+
+class CardGarbage extends StatelessWidget {
+  const CardGarbage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 200,
+      child: FloatingActionButton.large(
+        foregroundColor: ColorScheme.of(context).onErrorContainer,
+        backgroundColor: ColorScheme.of(context).errorContainer,
+        onPressed: () {},
+        child: Icon(Symbols.delete),
       ),
     );
   }

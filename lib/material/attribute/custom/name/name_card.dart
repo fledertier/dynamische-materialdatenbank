@@ -55,7 +55,7 @@ class _NameCardState extends ConsumerState<NameCard> {
       label: AttributeLabel(attribute: Attributes.name),
       title: TextField(
         enabled: edit,
-        style: textTheme.headlineLarge?.copyWith(fontFamily: 'Lexend'),
+        style: textTheme.displaySmall?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: attribute?.name),
         maxLines: null,
         controller: controller,

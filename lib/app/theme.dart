@@ -48,7 +48,7 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
     ),
     inputDecorationTheme: theme.inputDecorationTheme.copyWith(
       hintStyle: TextStyle(
-        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
       ),
     ),
   );
@@ -65,5 +65,9 @@ extension ColorSchemeExtension on ColorScheme {
     return brightness == Brightness.light
         ? Color(0xff001e2c)
         : Color(0xffc2e8ff);
+  }
+
+  Color get surfaceCard {
+    return Color.lerp(surfaceContainerLow, surfaceContainer, 0.5)!;
   }
 }

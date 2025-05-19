@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../material/attribute/cards.dart';
-import '../../utils/miscellaneous_utils.dart';
 import 'draggable_section.dart';
 
 class AddSectionButton extends ConsumerWidget {
@@ -12,10 +11,10 @@ class AddSectionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FilledButton.tonalIcon(
-      style: FilledButton.styleFrom(
+    return OutlinedButton.icon(
+      style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-        fixedSize: Size(double.infinity, widthByColumns(1) * 0.5),
+        fixedSize: Size(double.infinity, 64),
       ),
       icon: Icon(Icons.add),
       label: Text('Add Section'),

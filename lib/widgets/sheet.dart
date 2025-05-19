@@ -11,7 +11,7 @@ class Sheet extends StatelessWidget {
     return SizedBox(
       width: width,
       child: Material(
-        color: ColorScheme.of(context).surfaceContainerLow,
+        color: ColorScheme.of(context).surfaceContainer,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: child,
