@@ -191,6 +191,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                   child: Center(
                     child: AddAttributeCardDialog(
                       materialId: widget.materialId,
+                      sizes: {CardSize.large},
                       onClose: () {
                         setState(() {
                           showDialog = false;

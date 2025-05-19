@@ -31,6 +31,7 @@ class NumberCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = TextTheme.of(context);
     final value = ref.watch(
       materialAttributeValueProvider(
         AttributeArgument(materialId: materialId, attributeId: attributeId),
@@ -44,6 +45,10 @@ class NumberCard extends ConsumerWidget {
         key: ValueKey(number.displayUnit),
         attributeId: attributeId,
         number: number,
+        textStyle: switch (size) {
+          CardSize.small => textTheme.titleLarge,
+          CardSize.large => textTheme.displayMedium,
+        },
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterialById(materialId, {
             attributeId: number.copyWith(value: value).toJson(),

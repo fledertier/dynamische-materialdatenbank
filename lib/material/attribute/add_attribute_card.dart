@@ -32,11 +32,14 @@ class AddAndRemoveAttributeCardButton extends ConsumerWidget {
         onDelete(details.data);
       },
       builder: (context, candidateData, rejectedData) {
+        final receivingDrag = candidateData.isNotEmpty;
         return Material(
           borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
           color:
               ongoingDrag
-                  ? colorScheme.errorContainer
+                  ? receivingDrag
+                      ? colorScheme.errorContainer
+                      : colorScheme.surfaceContainer
                   : colorScheme.primaryContainer,
           elevation: 8,
           child: InkWell(
@@ -53,7 +56,10 @@ class AddAndRemoveAttributeCardButton extends ConsumerWidget {
                       ongoingDrag
                           ? Icon(
                             Symbols.delete,
-                            color: colorScheme.onErrorContainer,
+                            color:
+                                ongoingDrag && receivingDrag
+                                    ? colorScheme.onErrorContainer
+                                    : colorScheme.onSurface,
                           )
                           : Icon(
                             Icons.add,
@@ -73,10 +79,12 @@ class AddAttributeCardDialog extends StatefulWidget {
   const AddAttributeCardDialog({
     super.key,
     required this.materialId,
+    this.sizes = const {CardSize.small, CardSize.large},
     required this.onClose,
   });
 
   final String materialId;
+  final Set<CardSize> sizes;
   final VoidCallback onClose;
 
   @override
@@ -99,7 +107,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
             SizedBox(height: 32),
             AttributeCardSearch(
               materialId: widget.materialId,
-              sizes: {CardSize.large},
+              sizes: widget.sizes,
               onSubmit: (cards) {
                 setState(() {
                   this.cards = cards;
@@ -122,7 +130,7 @@ class _AddAttributeDialogState extends State<AddAttributeCardDialog> {
                           builder: (context) {
                             final child = Material(
                               type: MaterialType.transparency,
-                              child: InkWell(
+                              child: GestureDetector(
                                 onTap: () {},
                                 child: AbsorbPointer(
                                   child: CardFactory.create(

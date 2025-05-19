@@ -17,12 +17,14 @@ class NumberAttributeField extends ConsumerStatefulWidget {
     required this.number,
     this.onChanged,
     this.onUnitChanged,
+    this.textStyle,
   });
 
   final String attributeId;
   final UnitNumber number;
   final ValueChanged<num>? onChanged;
   final ValueChanged<String>? onUnitChanged;
+  final TextStyle? textStyle;
 
   @override
   ConsumerState<NumberAttributeField> createState() =>
@@ -35,7 +37,9 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
-    final textStyle = textTheme.titleLarge!.copyWith(fontFamily: 'Lexend');
+    final textStyle = (widget.textStyle ?? textTheme.titleLarge!).copyWith(
+      fontFamily: 'Lexend',
+    );
 
     final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);

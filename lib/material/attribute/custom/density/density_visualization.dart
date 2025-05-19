@@ -28,7 +28,7 @@ class DensityVisualization extends StatelessWidget {
           alignment: Alignment.center,
           fit: StackFit.expand,
           children: [
-            if (isThreeDimensional)
+            if (false && isThreeDimensional)
               CustomPaint(
                 painter: DensityPainter(
                   density,
@@ -150,7 +150,7 @@ class DensityPainter extends CustomPainter {
         centerX + (random.nextDouble() - 0.5) * spread * centralFactor.dx,
         centerY + (random.nextDouble() - 0.5) * spread * centralFactor.dy,
       );
-      final zOffset = (random.nextDouble() - 0.5) * spread * 0.01;
+      final zOffset = (random.nextDouble() - 0.5) * spread * 0.005;
       final z = lerpDouble(zOffset, this.z, t)!;
       final depthOffset = Offset(16, 16) * pow(z.abs(), 0.6).toDouble();
       final position =
@@ -159,8 +159,6 @@ class DensityPainter extends CustomPainter {
           isThreeDimensional
               ? lerpDouble(lerpDouble(maxRadius, minRadius, z)!, maxRadius, t)!
               : maxRadius;
-      final alpha =
-          isThreeDimensional ? lerpDouble(1, 0.5, z)!.clamp(0.0, 1.0) : 1.0;
 
       particles.add(
         Particle(
@@ -168,7 +166,7 @@ class DensityPainter extends CustomPainter {
           y: position.dy,
           z: z,
           radius: radius,
-          alpha: alpha,
+          alpha: 1.0,
         ),
       );
     }

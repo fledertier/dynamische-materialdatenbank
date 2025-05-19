@@ -73,12 +73,23 @@ class DraggableSection extends ConsumerWidget {
     final fromSectionCategory = ref.watch(fromSectionCategoryProvider);
     final edit = ref.watch(editModeProvider);
 
+    final padding =
+        sectionCategory == SectionCategory.primary
+            ? const EdgeInsets.all(8)
+            : EdgeInsets.zero;
+
     final nameField = Padding(
-      padding: const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 16),
+      padding:
+          sectionCategory == SectionCategory.primary
+              ? const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 16)
+              : const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
       child: TextFormField(
         initialValue: section.nameDe,
         enabled: edit,
-        style: textTheme.headlineMedium?.copyWith(fontFamily: 'Lexend'),
+        style:
+            sectionCategory == SectionCategory.primary
+                ? textTheme.headlineMedium?.copyWith(fontFamily: 'Lexend')
+                : textTheme.titleMedium?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'Section Name'),
         maxLines: null,
         onChanged: (value) {
@@ -96,7 +107,7 @@ class DraggableSection extends ConsumerWidget {
 
     Widget nonDraggable(CardData item) {
       return Padding(
-        padding: const EdgeInsets.all(8),
+        padding: padding,
         child: itemBuilderProxy(context, ref, item),
       );
     }
@@ -117,7 +128,7 @@ class DraggableSection extends ConsumerWidget {
           ref.invalidate(fromSectionIndexProvider);
         },
         feedback: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: padding,
           child: Material(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(16),
@@ -125,9 +136,9 @@ class DraggableSection extends ConsumerWidget {
             child: child,
           ),
         ),
-        childWhenDragging: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Opacity(opacity: 0, child: child),
+        childWhenDragging: Opacity(
+          opacity: 0,
+          child: Padding(padding: padding, child: child),
         ),
         child: DragTarget<CardData>(
           onWillAcceptWithDetails: (details) => details.data != item,
@@ -158,7 +169,7 @@ class DraggableSection extends ConsumerWidget {
           },
           builder: (context, candidateData, rejectedData) {
             if (candidateData.isEmpty) {
-              return Padding(padding: const EdgeInsets.all(8), child: child);
+              return Padding(padding: padding, child: child);
             }
 
             bool isBefore() {
@@ -176,7 +187,7 @@ class DraggableSection extends ConsumerWidget {
 
             return InsertIndicator(
               isBefore: isBefore(),
-              child: Padding(padding: const EdgeInsets.all(8), child: child),
+              child: Padding(padding: padding, child: child),
             );
           },
         ),
@@ -186,7 +197,10 @@ class DraggableSection extends ConsumerWidget {
     Widget container({bool highlighted = false}) {
       final hasName = section.nameDe?.isNotEmpty ?? false;
       return Container(
-        constraints: BoxConstraints(maxWidth: widthByColumns(5)),
+        constraints: BoxConstraints(
+          maxWidth: widthByColumns(5),
+          minHeight: 100,
+        ),
         margin: const EdgeInsets.only(bottom: 16),
         padding:
             sectionCategory == SectionCategory.primary

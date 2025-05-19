@@ -33,7 +33,7 @@ class MaterialService {
                 ],
               ),
             ],
-            secondary: [],
+            secondary: [CardSection(cards: [])],
           ).toJson(),
       if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
