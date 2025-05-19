@@ -22,20 +22,20 @@ final filterQueryProvider = Provider((ref) {
       ])
         if (options[attribute] == true)
           Condition(
-            attribute: attribute,
+            attribute: [attribute],
             operator: Operator.equals,
             parameter: options[attribute],
           ),
       if (options[Attributes.manufacturer] is String)
         Condition(
-          attribute: Attributes.manufacturer,
+          attribute: [Attributes.manufacturer],
           operator: Operator.equals,
           parameter: options[Attributes.manufacturer],
         ),
 
       if (options[Attributes.weight] is double)
         Condition(
-          attribute: Attributes.weight,
+          attribute: [Attributes.weight],
           operator: Operator.lessThan,
           parameter: options[Attributes.weight],
         ),

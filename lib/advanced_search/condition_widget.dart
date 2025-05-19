@@ -27,7 +27,7 @@ class ConditionWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final attributesById = ref.watch(attributesProvider).value;
     final attributes = attributesById?.values.toList() ?? [];
-    final attribute = attributesById?[condition.attribute];
+    final attribute = attributesById?[condition.attribute?.firstOrNull];
     final operators = attribute?.type.operators ?? {};
 
     return Theme(
@@ -59,7 +59,8 @@ class ConditionWidget extends ConsumerWidget {
               ],
               onSelected: (attribute) {
                 update(() {
-                  condition.attribute = attribute?.id;
+                  condition.attribute =
+                      attribute != null ? [attribute.id] : null;
                   condition.operator = attribute?.type.operators.firstOrNull;
                   condition.parameter = null;
                 });

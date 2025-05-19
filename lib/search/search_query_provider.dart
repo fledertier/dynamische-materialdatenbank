@@ -17,12 +17,12 @@ final searchQueryProvider = Provider((ref) {
     type: ConditionGroupType.or,
     nodes: [
       Condition(
-        attribute: Attributes.name,
+        attribute: [Attributes.name],
         operator: Operator.contains,
         parameter: search,
       ),
       Condition(
-        attribute: Attributes.description,
+        attribute: [Attributes.description],
         operator: Operator.contains,
         parameter: search,
       ),

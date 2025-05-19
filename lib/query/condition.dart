@@ -8,25 +8,24 @@ import 'condition_node.dart';
 class Condition extends ConditionNode {
   Condition({this.attribute, this.operator, this.parameter});
 
-  String? attribute;
+  List<String>? attribute;
   Operator? operator;
   Object? parameter;
 
   @override
   bool get isValid {
-    return attribute != null && operator != null && parameter != null;
+    return attribute?.isNotEmpty == true &&
+        operator != null &&
+        parameter != null;
   }
 
   @override
-  Set<String> get attributes => {if (isValid) attribute!};
+  Set<String> get attributes => {if (isValid) attribute!.first};
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    final type = attributesById[attribute!]?.type;
-    final value = switch (type) {
-      NumberAttributeType() => material[attribute!]?['value'],
-      _ => material[attribute!],
-    };
+    final type = attributesById[attribute!.first]?.type;
+    final value = type?.getValue(material, attribute!);
     if (value == null) {
       return false;
     }

@@ -63,7 +63,7 @@ extension ConditionConverter on Condition {
     }
 
     final condition = Condition(
-      attribute: json['attribute'] as String?,
+      attribute: json['attribute'] != null ? [json['attribute']] : null,
       operator: Operator.values.maybeByName(json['operator']),
       parameter: json['parameter'],
     );

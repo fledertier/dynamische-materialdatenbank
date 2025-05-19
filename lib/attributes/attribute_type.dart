@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:flutter/foundation.dart';
@@ -69,6 +70,11 @@ class NumberAttributeType extends AttributeType {
 
   final UnitType? unitType;
 
+  @override
+  dynamic getValue(Json material, List<String> attribute) {
+    return material[attribute.first]?['value'];
+  }
+
   factory NumberAttributeType.fromJson(Json json) {
     return NumberAttributeType(
       unitType: UnitType.maybeFromJson(json['unitType']),
@@ -123,6 +129,14 @@ class ObjectAttributeType extends AttributeType {
       );
 
   final List<Attribute> attributes;
+
+  @override
+  dynamic getValue(Json material, List<String> attribute) {
+    return attributes
+        .firstWhereOrNull((attr) => attr.id == attribute.first)
+        ?.type
+        .getValue(material, attribute.sublist(1));
+  }
 
   factory ObjectAttributeType.fromJson(Json json) {
     final attributes =
@@ -226,6 +240,10 @@ abstract class AttributeType {
   final Set<Operator> operators;
 
   String get name => id;
+
+  dynamic getValue(Json material, List<String> attribute) {
+    return material[attribute.first];
+  }
 
   factory AttributeType.fromJson(Json json) {
     final id = json['id'];
