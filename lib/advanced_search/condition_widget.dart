@@ -25,12 +25,11 @@ class ConditionWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attributes =
-        ref.watch(attributesProvider).value?.values.toList() ?? [];
-    final attribute = attributes.firstWhereOrNull(
-      (attribute) => attribute.id == condition.attribute,
-    );
+    final attributesById = ref.watch(attributesProvider).value;
+    final attributes = attributesById?.values.toList() ?? [];
+    final attribute = attributesById?[condition.attribute];
     final operators = attribute?.type.operators ?? {};
+
     return Theme(
       data: Theme.of(context).copyWith(
         dropdownMenuTheme: DropdownMenuTheme.of(context).copyWith(
@@ -54,13 +53,10 @@ class ConditionWidget extends ConsumerWidget {
               width: 200,
               menuHeight: 500,
               initialSelection: attribute,
-              dropdownMenuEntries:
-                  attributes.map((attribute) {
-                    return DropdownMenuEntry(
-                      value: attribute,
-                      label: attribute.name,
-                    );
-                  }).toList(),
+              dropdownMenuEntries: [
+                for (final attribute in attributes)
+                  DropdownMenuEntry(value: attribute, label: attribute.name),
+              ],
               onSelected: (attribute) {
                 update(() {
                   condition.attribute = attribute?.id;

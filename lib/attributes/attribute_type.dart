@@ -199,7 +199,7 @@ class CountryAttributeType extends AttributeType {
   }
 }
 
-class AttributeType {
+abstract class AttributeType {
   static const text = 'text';
   static const textarea = 'textarea';
   static const number = 'number';

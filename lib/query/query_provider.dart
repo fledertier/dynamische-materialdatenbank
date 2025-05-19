@@ -22,7 +22,10 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
   final materialsById = await ref.watch(
     attributesValuesProvider(argument).future,
   );
-  return materialsById.values.where(query.matches).toList();
+  final attributesById = await ref.watch(attributesProvider.future);
+  return materialsById.values
+      .where((material) => query.matches(material, attributesById))
+      .toList();
 });
 
 final searchAndFilterQueryProvider = Provider((ref) {

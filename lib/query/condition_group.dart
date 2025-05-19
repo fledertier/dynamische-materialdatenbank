@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:flutter/foundation.dart';
 
 import '../types.dart';
@@ -30,21 +31,23 @@ class ConditionGroup extends ConditionNode {
   }
 
   @override
-  bool matches(Json material) {
+  bool matches(Json material, Map<String, Attribute> attributesById) {
     final validNodes = nodes.where((node) => node.isValid);
     return switch (type) {
       ConditionGroupType.and => validNodes.every(
-        (node) => node.matches(material),
+        (node) => node.matches(material, attributesById),
       ),
-      ConditionGroupType.or => validNodes.any((node) => node.matches(material)),
+      ConditionGroupType.or => validNodes.any(
+        (node) => node.matches(material, attributesById),
+      ),
     };
   }
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! ConditionGroup) return false;
-    return type == other.type && listEquals(nodes, other.nodes);
+    return other is ConditionGroup &&
+        type == other.type &&
+        listEquals(nodes, other.nodes);
   }
 
   @override

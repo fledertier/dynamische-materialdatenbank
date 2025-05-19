@@ -61,17 +61,13 @@ extension ConditionConverter on Condition {
     if (json == null) {
       return null;
     }
-    final attribute = json['attribute'] as String?;
-    final operator = Operator.values.maybeByName(json['operator']);
-    final parameter = json['parameter'];
 
-    if (attribute == null || operator == null || parameter == null) {
-      return null;
-    }
-    return Condition(
-      attribute: attribute,
-      operator: operator,
-      parameter: parameter,
+    final condition = Condition(
+      attribute: json['attribute'] as String?,
+      operator: Operator.values.maybeByName(json['operator']),
+      parameter: json['parameter'],
     );
+
+    return condition.isValid ? condition : null;
   }
 }

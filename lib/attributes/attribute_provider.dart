@@ -17,7 +17,7 @@ final attributeExtremaProvider = FutureProvider.family((
   String attribute,
 ) async {
   final values = await ref.watch(attributeValuesProvider(attribute).future);
-  final numbers = values.values.map((value) => value as double);
+  final numbers = values.values.map((value) => value['value'] as double);
   if (numbers.isEmpty) {
     return null;
   }
