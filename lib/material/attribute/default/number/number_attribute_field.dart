@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,7 +51,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
 
     final unitType = (attribute.type as NumberAttributeType).unitType;
     final value = toDisplayUnit(widget.number, unitType);
-    controller ??= TextEditingController(text: value.toStringAsFixed(1));
+    controller ??= TextEditingController(text: value.toStringAsFlexible());
 
     return Wrap(
       children: [

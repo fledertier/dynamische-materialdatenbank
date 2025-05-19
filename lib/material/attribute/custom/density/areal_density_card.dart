@@ -33,7 +33,7 @@ class ArealDensityCard extends ConsumerWidget {
     return NumberCard(
       materialId: materialId,
       attributeId: Attributes.arealDensity,
-      size: size,
+      size: CardSize.small,
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,
       child: AspectRatio(

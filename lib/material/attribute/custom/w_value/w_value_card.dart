@@ -30,7 +30,7 @@ class WValueCard extends ConsumerWidget {
     return NumberCard(
       materialId: materialId,
       attributeId: Attributes.wValue,
-      size: size,
+      size: CardSize.small,
       spacing: 32,
       clip: Clip.antiAlias,
       childPadding: EdgeInsets.zero,

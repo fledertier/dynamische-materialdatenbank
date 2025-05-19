@@ -19,6 +19,7 @@ class NumberCard extends ConsumerWidget {
     this.clip = Clip.none,
     this.childPadding = const EdgeInsets.all(16),
     this.child,
+    this.textStyle,
   });
 
   final String materialId;
@@ -28,6 +29,7 @@ class NumberCard extends ConsumerWidget {
   final Clip clip;
   final EdgeInsets childPadding;
   final Widget? child;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,10 +47,12 @@ class NumberCard extends ConsumerWidget {
         key: ValueKey(number.displayUnit),
         attributeId: attributeId,
         number: number,
-        textStyle: switch (size) {
-          CardSize.small => textTheme.titleLarge,
-          CardSize.large => textTheme.displayMedium,
-        },
+        textStyle:
+            textStyle ??
+            switch (size) {
+              CardSize.small => textTheme.titleLarge,
+              CardSize.large => textTheme.displayLarge,
+            },
         onChanged: (value) {
           ref.read(materialServiceProvider).updateMaterialById(materialId, {
             attributeId: number.copyWith(value: value).toJson(),
@@ -61,7 +65,7 @@ class NumberCard extends ConsumerWidget {
         },
       ),
       columns: switch (size) {
-        CardSize.small => 2,
+        CardSize.small => 1,
         CardSize.large => 1,
       },
       spacing: spacing,

@@ -48,3 +48,10 @@ extension RegExpMatchExtension on RegExpMatch {
 
   TextRange get range => TextRange(start: start, end: end);
 }
+
+extension NumberExtension on num {
+  String toStringAsFlexible([int maxDecimals = 6]) {
+    final string = toStringAsFixed(maxDecimals);
+    return string.replaceFirst(RegExp(r'\.?0+$'), '');
+  }
+}

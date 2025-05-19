@@ -31,7 +31,7 @@ class UValueCard extends ConsumerWidget {
     return NumberCard(
       materialId: materialId,
       attributeId: Attributes.uValue,
-      size: size,
+      size: CardSize.small,
       child: RayVisualization(
         transmittedRays: transmittedRays,
         reflectedRays: 10 - transmittedRays,
