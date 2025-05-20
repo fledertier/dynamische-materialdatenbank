@@ -2,17 +2,15 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math.dart' hide Colors;
 
-// todo: join dimensions for flawless z-order
 class DensityVisualization extends StatelessWidget {
   final double density;
-  final EdgeInsets padding;
   final bool isThreeDimensional;
 
   const DensityVisualization({
     super.key,
     required this.density,
-    this.padding = const EdgeInsets.all(16),
     this.isThreeDimensional = false,
   });
 
@@ -22,48 +20,26 @@ class DensityVisualization extends StatelessWidget {
 
     return ClipRect(
       clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: padding,
-        child: Stack(
-          alignment: Alignment.center,
-          fit: StackFit.expand,
-          children: [
-            if (false && isThreeDimensional)
-              CustomPaint(
-                painter: DensityPainter(
-                  density,
-                  foregroundColor: colorScheme.primary,
-                  backgroundColor: colorScheme.surfaceContainerLow,
-                  isThreeDimensional: isThreeDimensional,
-                  z: 0.5,
-                  seed: -5,
-                ),
-              ),
-            CustomPaint(
-              painter: DensityPainter(
-                density,
-                foregroundColor: colorScheme.primary,
-                backgroundColor: colorScheme.surfaceContainerLow,
-                isThreeDimensional: isThreeDimensional,
-                z: 0,
-                seed: 5,
-              ),
+      child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.expand,
+        children: [
+          CustomPaint(
+            painter: DensityPainter(
+              density,
+              foregroundColor: colorScheme.primary,
+              backgroundColor: colorScheme.surfaceContainerLow,
+              isThreeDimensional: isThreeDimensional,
+              seed: 3,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class DensityPainter extends CustomPainter {
-  static const double minSpread = 0;
-  static const double maxSpread = 400;
-
-  static const double minRadius = 10.0;
-  static const double maxRadius = 16.0;
-  static const highlightPosition = Alignment(-0.2, -0.2);
-
   static const int gridSize = 3;
 
   const DensityPainter(
@@ -72,7 +48,6 @@ class DensityPainter extends CustomPainter {
     required this.foregroundColor,
     required this.backgroundColor,
     this.isThreeDimensional = false,
-    this.z = 0,
     this.seed = 0,
   });
 
@@ -81,14 +56,13 @@ class DensityPainter extends CustomPainter {
   final Color foregroundColor;
   final Color backgroundColor;
   final bool isThreeDimensional;
-  final double z;
   final int seed;
 
   @override
   void paint(Canvas canvas, Size size) {
     final particles = createParticles(size);
 
-    int byDepth(Particle a, Particle b) => b.z.compareTo(a.z);
+    int byDepth(Particle a, Particle b) => b.position.z.compareTo(a.position.z);
     particles.sort(byDepth);
 
     for (final particle in particles) {
@@ -98,78 +72,56 @@ class DensityPainter extends CustomPainter {
 
   void drawParticle(Particle particle, Canvas canvas) {
     final paint = createPaint(particle);
-    canvas.drawCircle(Offset(particle.x, particle.y), particle.radius, paint);
+    canvas.drawCircle(particle.offset, particle.radius, paint);
   }
 
   Paint createPaint(Particle particle) {
-    if (!isThreeDimensional) {
-      final color = Color.lerp(foregroundColor, highlightColor, 0.4);
-      return Paint()
-        ..color = Color.lerp(backgroundColor, color, particle.alpha)!;
+    if (isThreeDimensional) {
+      final gradient = RadialGradient(
+        center: Alignment(-0.2, -0.2),
+        colors: [highlightColor, foregroundColor],
+      );
+      final shader = gradient.createShader(
+        Rect.fromCircle(center: particle.offset, radius: particle.radius),
+      );
+      return Paint()..shader = shader;
     }
-    final gradient = RadialGradient(
-      center: highlightPosition,
-      colors: [
-        Color.lerp(backgroundColor, highlightColor, particle.alpha)!,
-        Color.lerp(backgroundColor, foregroundColor, particle.alpha)!,
-      ],
-    );
-    final shader = gradient.createShader(
-      Rect.fromCircle(center: particle.position, radius: particle.radius),
-    );
-    return Paint()..shader = shader;
+    final color = Color.lerp(foregroundColor, highlightColor, 0.4)!;
+    return Paint()..color = color;
   }
 
   List<Particle> createParticles(Size size) {
     final particles = <Particle>[];
-
     final random = Random(seed);
-
-    final spread = lerpDouble(maxSpread, minSpread, density)!;
-
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-
-    final t = pow(density, 1.5).clamp(0.0, 1.0).toDouble();
 
     final count = gridSize * gridSize;
     final cellWidth = size.width / gridSize;
     final cellHeight = size.height / gridSize;
 
+    final scale = lerpDouble(1.5, 0.8, density)!;
+    final center = Vector3(size.width / 2, size.height / 2, 0);
+
     for (int i = 0; i < count; i++) {
       final gx = i % gridSize;
       final gy = i ~/ gridSize;
 
-      final gridPos = Offset((gx + 0.5) * cellWidth, (gy + 0.5) * cellHeight);
-      final center = this.z == 0 ? Alignment(0.2, 0.2) : Alignment(-0.2, -0.2);
-      final centralFactor = Offset(
-        gx - gridSize / 2 + center.x,
-        gy - gridSize / 2 + center.y,
-      );
-      final positionOffset = Offset(
-        centerX + (random.nextDouble() - 0.5) * spread * centralFactor.dx,
-        centerY + (random.nextDouble() - 0.5) * spread * centralFactor.dy,
-      );
-      final zOffset = (random.nextDouble() - 0.5) * spread * 0.005;
-      final z = lerpDouble(zOffset, this.z, t)!;
-      final depthOffset = Offset(16, 16) * pow(z.abs(), 0.6).toDouble();
-      final position =
-          Offset.lerp(positionOffset, gridPos, t * 0.9)! + depthOffset;
-      final radius =
-          isThreeDimensional
-              ? lerpDouble(lerpDouble(maxRadius, minRadius, z)!, maxRadius, t)!
-              : maxRadius;
+      final x = (gx + 0.5) * cellWidth - size.width / 2;
+      final y = (gy + 0.5) * cellHeight - size.height / 2;
+      final z = 1.0;
 
-      particles.add(
-        Particle(
-          x: position.dx,
-          y: position.dy,
-          z: z,
-          radius: radius,
-          alpha: 1.0,
-        ),
+      final offset = Vector3(x, y, z) * scale;
+
+      final jitter = Vector3(
+        (random.nextDouble() - 0.5) * 200,
+        (random.nextDouble() - 0.5) * 200,
+        (random.nextDouble() - 0.5) * 2,
       );
+
+      final position = center + offset + jitter * (1 - density);
+
+      particles.add(Particle(position));
     }
+
     return particles;
   }
 
@@ -179,15 +131,18 @@ class DensityPainter extends CustomPainter {
 }
 
 class Particle {
-  const Particle({
-    required this.x,
-    required this.y,
-    required this.z,
-    required this.radius,
-    required this.alpha,
-  });
+  static const double minRadius = 10.0;
+  static const double maxRadius = 20.0;
 
-  final double x, y, z, radius, alpha;
+  const Particle(this.position);
 
-  Offset get position => Offset(x, y);
+  final Vector3 position;
+
+  Offset get offset {
+    return Offset(position.x, position.y);
+  }
+
+  double get radius {
+    return lerpDouble(maxRadius, minRadius, position.z / 2)!;
+  }
 }
