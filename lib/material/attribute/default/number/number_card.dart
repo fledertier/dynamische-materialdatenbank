@@ -20,6 +20,7 @@ class NumberCard extends ConsumerWidget {
     this.childPadding = const EdgeInsets.all(16),
     this.child,
     this.textStyle,
+    this.columns,
   });
 
   final String materialId;
@@ -30,6 +31,7 @@ class NumberCard extends ConsumerWidget {
   final EdgeInsets childPadding;
   final Widget? child;
   final TextStyle? textStyle;
+  final int? columns;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,10 +66,12 @@ class NumberCard extends ConsumerWidget {
           });
         },
       ),
-      columns: switch (size) {
-        CardSize.small => 1,
-        CardSize.large => 1,
-      },
+      columns:
+          columns ??
+          switch (size) {
+            CardSize.small => 2,
+            CardSize.large => 1,
+          },
       spacing: spacing,
       clip: clip,
       childPadding: childPadding,

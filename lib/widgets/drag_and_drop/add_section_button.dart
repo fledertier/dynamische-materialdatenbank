@@ -13,8 +13,8 @@ class AddSectionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-        fixedSize: Size(double.infinity, 64),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        fixedSize: Size(double.infinity, 80),
       ),
       icon: Icon(Icons.add),
       label: Text('Add Section'),

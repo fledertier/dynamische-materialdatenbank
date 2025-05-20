@@ -3,7 +3,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/color/color_serv
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
 import '../app/app_scaffold.dart';
 import '../app/navigation.dart';
@@ -107,7 +106,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                               );
 
                               return ListView.builder(
-                                padding: EdgeInsets.only(bottom: 24),
+                                padding: EdgeInsets.only(bottom: 32),
                                 itemCount: sections.length + (edit ? 1 : 0),
                                 itemBuilder: (context, index) {
                                   if (index == sections.length) {
@@ -186,40 +185,18 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         ),
               ),
               if (showDialog)
-                ColoredBox(
-                  color: ColorScheme.of(context).scrim.withValues(alpha: 0.5),
-                  child: Center(
-                    child: AddAttributeCardDialog(
-                      materialId: widget.materialId,
-                      sizes: {CardSize.large},
-                      onClose: () {
-                        setState(() {
-                          showDialog = false;
-                        });
-                      },
-                    ),
-                  ),
+                AddAttributeCardDialog(
+                  materialId: widget.materialId,
+                  sizes: {CardSize.large},
+                  onClose: () {
+                    setState(() {
+                      showDialog = false;
+                    });
+                  },
                 ),
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class CardGarbage extends StatelessWidget {
-  const CardGarbage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: FloatingActionButton.large(
-        foregroundColor: ColorScheme.of(context).onErrorContainer,
-        backgroundColor: ColorScheme.of(context).errorContainer,
-        onPressed: () {},
-        child: Icon(Symbols.delete),
       ),
     );
   }

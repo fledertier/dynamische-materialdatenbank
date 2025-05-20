@@ -36,6 +36,7 @@ class LightAbsorptionCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: Attributes.lightAbsorption,
       size: CardSize.small,
+      columns: 1,
       child: RayVisualization(
         incidentRays: 10 - absorbedRays,
         absorbedRays: absorbedRays,

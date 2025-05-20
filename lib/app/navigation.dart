@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../constants.dart';
+import '../widgets/logo.dart';
 
 class Navigation extends StatelessWidget {
   static const pages = [Pages.materials, Pages.attributes];
@@ -32,11 +33,8 @@ class Navigation extends StatelessWidget {
         context.goNamed(pages[index]);
       },
       leading: Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 16),
-        child: SizedBox.square(
-          dimension: 48,
-          child: Center(child: Text("Logo")),
-        ),
+        padding: const EdgeInsets.only(top: 8, bottom: 16),
+        child: Logo(),
       ),
       destinations: [
         NavigationRailDestination(

@@ -36,6 +36,7 @@ class LightTransmissionCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: Attributes.lightTransmission,
       size: CardSize.small,
+      columns: 1,
       child: RayVisualization(
         incidentRays: 10 - transmittedRays,
         transmittedRays: transmittedRays,

@@ -36,6 +36,7 @@ class LightReflectionCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: Attributes.lightReflection,
       size: CardSize.small,
+      columns: 1,
       child: RayVisualization(
         incidentRays: 10 - reflectedRays,
         reflectedRays: reflectedRays,

@@ -67,7 +67,17 @@ extension ColorSchemeExtension on ColorScheme {
         : Color(0xffc2e8ff);
   }
 
-  Color get surfaceCard {
-    return Color.lerp(surfaceContainerLow, surfaceContainer, 0.5)!;
+  Color get errorFixedDim {
+    return switch (brightness) {
+      Brightness.light => error,
+      Brightness.dark => errorContainer,
+    };
+  }
+
+  Color get onErrorFixedDim {
+    return switch (brightness) {
+      Brightness.light => onError,
+      Brightness.dark => onErrorContainer,
+    };
   }
 }
