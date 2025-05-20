@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,8 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../attributes/attribute_provider.dart';
 import '../query/condition.dart';
 import 'condition_attribute_dropdown.dart';
-import 'parameter_fields.dart';
+import 'condition_operator_dropdown.dart';
+import 'condition_parameter_field.dart';
 
 class ConditionWidget extends ConsumerWidget {
   const ConditionWidget({
@@ -26,7 +26,6 @@ class ConditionWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final attribute = ref.watch(attributeProvider(condition.attribute));
-    final operators = attribute?.type.operators ?? {};
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -46,43 +45,28 @@ class ConditionWidget extends ConsumerWidget {
           children: [
             ConditionAttributeDropdown(
               enabled: enabled,
+              initialAttribute: attribute,
               onSelected: (attribute) {
                 update(() {
                   condition.attribute = attribute?.id;
-                  condition.operator = attribute?.type.operators.firstOrNull;
                   condition.parameter = null;
                 });
               },
             ),
-            DropdownMenuFormField(
-              key: ValueKey(condition.attribute),
-              hintText: "Operator",
-              initialSelection: condition.operator,
-              enabled: enabled && condition.attribute != null,
-              requestFocusOnTap: false,
-              dropdownMenuEntries:
-                  operators.map((operation) {
-                    return DropdownMenuEntry(
-                      value: operation,
-                      label: operation.name,
-                    );
-                  }).toList(),
+            ConditionOperatorDropdown(
+              enabled: enabled,
+              initialOperator: condition.operator,
+              attribute: attribute,
               onSelected: (operator) {
                 update(() {
                   condition.operator = operator;
                 });
               },
-              validator: (operator) {
-                if (condition.attribute != null && operator == null) {
-                  return "Please select an operator";
-                }
-                return null;
-              },
             ),
             ConditionParameterField(
               enabled: enabled,
-              type: attribute?.type,
               value: condition.parameter,
+              attribute: attribute,
               onChanged: (value) {
                 update(() {
                   condition.parameter = value;

@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:flutter/material.dart';
 
 import '../attributes/attribute_type.dart';
@@ -6,20 +7,21 @@ import '../widgets/dropdown_menu_form_field.dart';
 class ConditionParameterField extends StatelessWidget {
   const ConditionParameterField({
     super.key,
-    required this.type,
     required this.value,
+    required this.attribute,
     this.onChanged,
     this.enabled = true,
   });
 
-  final AttributeType? type;
+  final Attribute? attribute;
   final Object? value;
-  final void Function(Object? value)? onChanged;
+  final ValueChanged<Object?>? onChanged;
   final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return switch (type?.id) {
+    final type = attribute?.type.id;
+    return switch (type) {
       AttributeType.text || AttributeType.textarea => TextField(
         enabled: enabled,
         initialValue: value as String?,
