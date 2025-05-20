@@ -18,25 +18,28 @@ class DialogBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
-    return Shortcuts(
-      shortcuts: {
-        LogicalKeySet(LogicalKeyboardKey.escape): const DismissDialogIntent(),
-      },
-      child: Actions(
-        actions: {
-          DismissDialogIntent: CallbackAction<DismissDialogIntent>(
-            onInvoke: (intent) {
-              onDismiss?.call();
-              return null;
-            },
-          ),
+    return Material(
+      type: MaterialType.transparency,
+      child: Shortcuts(
+        shortcuts: {
+          LogicalKeySet(LogicalKeyboardKey.escape): const DismissDialogIntent(),
         },
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onDismiss,
-          child: ColoredBox(
-            color: colorScheme.scrim.withValues(alpha: 0.6),
-            child: Center(child: child),
+        child: Actions(
+          actions: {
+            DismissDialogIntent: CallbackAction<DismissDialogIntent>(
+              onInvoke: (intent) {
+                onDismiss?.call();
+                return null;
+              },
+            ),
+          },
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onDismiss,
+            child: ColoredBox(
+              color: colorScheme.scrim.withValues(alpha: 0.6),
+              child: Center(child: child),
+            ),
           ),
         ),
       ),
