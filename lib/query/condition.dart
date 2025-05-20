@@ -25,6 +25,7 @@ class Condition extends ConditionNode {
     final type = attributesById[attribute!]?.type;
     final value = switch (type) {
       NumberAttributeType() => material[attribute!]?['value'],
+      // todo
       _ => material[attribute!],
     };
     if (value == null) {

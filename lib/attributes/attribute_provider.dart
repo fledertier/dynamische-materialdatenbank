@@ -1,10 +1,13 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
 import 'attribute_service.dart';
+import 'attribute_type.dart';
 
 class Extrema {
   const Extrema({required this.min, required this.max});
@@ -67,6 +70,14 @@ final attributesProvider = StreamProvider((ref) {
   return ref.read(attributeServiceProvider).getAttributesStream();
 });
 
-final attributeProvider = Provider.family((ref, String? attribute) {
-  return ref.watch(attributesProvider).value?[attribute];
+final attributeProvider = Provider.family((ref, String? attributeId) {
+  final attributeIds = attributeId?.split('.');
+  var attribute =
+      ref.watch(attributesProvider).value?[attributeIds?.removeFirst()];
+  for (final id in attributeIds ?? []) {
+    attribute = (attribute as ObjectAttributeType).attributes.firstWhereOrNull(
+      (attribute) => attribute.id == id,
+    );
+  }
+  return attribute;
 });

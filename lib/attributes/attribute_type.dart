@@ -117,10 +117,7 @@ class UrlAttributeType extends AttributeType {
 
 class ObjectAttributeType extends AttributeType {
   ObjectAttributeType({required this.attributes})
-    : super(
-        id: AttributeType.object,
-        operators: {Operator.equals, Operator.notEquals},
-      );
+    : super(id: AttributeType.object, operators: {});
 
   final List<Attribute> attributes;
 
