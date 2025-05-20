@@ -156,7 +156,7 @@ class DraggableSection extends ConsumerWidget {
           },
           builder: (context, candidateData, rejectedData) {
             if (candidateData.isEmpty) {
-              return Padding(padding: padding, child: child);
+              return child;
             }
 
             bool isBefore() {
@@ -172,10 +172,7 @@ class DraggableSection extends ConsumerWidget {
               return index < fromIndex;
             }
 
-            return InsertIndicator(
-              isBefore: isBefore(),
-              child: Padding(padding: padding, child: child),
-            );
+            return InsertIndicator(isBefore: isBefore(), child: child);
           },
         ),
       );
