@@ -114,8 +114,9 @@ class DraggableSection extends ConsumerWidget {
 
     Widget draggable(CardData item) {
       final child = itemBuilderProxy(context, ref, item);
-      return Draggable<CardData>(
+      return LongPressDraggable<CardData>(
         data: item,
+        delay: Duration(milliseconds: 150),
         maxSimultaneousDrags: 1,
         onDragStarted: () {
           ref.read(draggingItemProvider.notifier).state = item;
