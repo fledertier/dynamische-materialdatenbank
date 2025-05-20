@@ -62,7 +62,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
             child: TextField(
               enabled: edit,
               style: textStyle,
-              decoration: InputDecoration.collapsed(hintText: '0.0'),
+              decoration: InputDecoration.collapsed(hintText: '0'),
               controller: controller,
               onChanged: (text) {
                 final value = double.tryParse(text) ?? 0.0;

@@ -33,7 +33,6 @@ class DensityCard extends ConsumerWidget {
       size: CardSize.small,
       columns: 1,
       clip: Clip.antiAlias,
-      childPadding: EdgeInsets.zero,
       child: AspectRatio(
         aspectRatio: 1,
         child: DensityVisualization(

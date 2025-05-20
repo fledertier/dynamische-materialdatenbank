@@ -36,7 +36,6 @@ class ArealDensityCard extends ConsumerWidget {
       size: CardSize.small,
       columns: 1,
       clip: Clip.antiAlias,
-      childPadding: EdgeInsets.zero,
       child: AspectRatio(
         aspectRatio: 1,
         child: DensityVisualization(density: (number.value / 1000).clamp(0, 1)),

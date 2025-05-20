@@ -79,8 +79,8 @@ final Map<String, dynamic> exampleMaterial = {
   Attributes.name: "Acoustic Wood Wool",
   Attributes.description:
       "BAUX Acoustic Wood Wool is a functional, natural material made from two of the world’s oldest building materials, wood and cement. The combination is simple and ingenious. Wood fiber offers excellent insulation, heat retention and sound absorption. Cement, a proven and popular building material, is the binder that provides strength, moisture resistance and fire protection. Therefore, BAUX acoustic products are versatile and durable in all climates.",
-  Attributes.density: {'value': 4},
-  Attributes.arealDensity: {'value': 4},
+  Attributes.density: {'value': 800},
+  Attributes.arealDensity: {'value': 800},
   Attributes.lightAbsorption: {'value': 56},
   Attributes.lightReflection: {'value': 37},
   Attributes.lightTransmission: {'value': 28},
