@@ -92,7 +92,6 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                       leadingIcon: Icon(iconForAttributeType(value)),
                     ),
                 ],
-                enabled: _controller.initialAttribute == null,
                 onSelected: (value) {
                   _controller.type.value = value;
                 },

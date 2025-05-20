@@ -45,10 +45,10 @@ class ConditionWidget extends ConsumerWidget {
           children: [
             ConditionAttributeDropdown(
               enabled: enabled,
-              initialAttribute: attribute,
+              initialAttribute: condition.attribute,
               onSelected: (attribute) {
                 update(() {
-                  condition.attribute = attribute?.id;
+                  condition.attribute = attribute;
                   condition.parameter = null;
                 });
               },

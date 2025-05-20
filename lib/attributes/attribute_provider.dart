@@ -75,9 +75,8 @@ final attributeProvider = Provider.family((ref, String? attributeId) {
   var attribute =
       ref.watch(attributesProvider).value?[attributeIds?.removeFirst()];
   for (final id in attributeIds ?? []) {
-    attribute = (attribute as ObjectAttributeType).attributes.firstWhereOrNull(
-      (attribute) => attribute.id == id,
-    );
+    attribute = (attribute?.type as ObjectAttributeType?)?.attributes
+        .firstWhereOrNull((attribute) => attribute.id == id);
   }
   return attribute;
 });
