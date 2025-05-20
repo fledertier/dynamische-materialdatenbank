@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/widgets/drag_and_drop/draggable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -68,7 +69,6 @@ class DraggableSection extends ConsumerWidget {
     final sections = ref.watch(sectionsProvider(sectionCategory));
     final section = sections[sectionIndex];
     final items = section.cards;
-    // final draggingItem = ref.watch(draggingItemProvider);
     final fromSectionIndex = ref.watch(fromSectionIndexProvider);
     final fromSectionCategory = ref.watch(fromSectionCategoryProvider);
     final edit = ref.watch(editModeProvider);
@@ -114,33 +114,19 @@ class DraggableSection extends ConsumerWidget {
 
     Widget draggable(CardData item) {
       final child = itemBuilderProxy(context, ref, item);
-      return LongPressDraggable<CardData>(
+      return DraggableCard(
         data: item,
-        delay: Duration(milliseconds: 250),
-        maxSimultaneousDrags: 1,
+        padding: padding,
         onDragStarted: () {
           ref.read(draggingItemProvider.notifier).state = item;
           ref.read(fromSectionIndexProvider.notifier).state = sectionIndex;
           ref.read(fromSectionCategoryProvider.notifier).state =
               sectionCategory;
         },
-        onDragEnd: (_) {
+        onDragEnd: () {
           ref.invalidate(draggingItemProvider);
           ref.invalidate(fromSectionIndexProvider);
         },
-        feedback: Padding(
-          padding: padding,
-          child: Material(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-            elevation: 8,
-            child: child,
-          ),
-        ),
-        childWhenDragging: Opacity(
-          opacity: 0,
-          child: Padding(padding: padding, child: child),
-        ),
         child: DragTarget<CardData>(
           onWillAcceptWithDetails: (details) => details.data != item,
           onAcceptWithDetails: (details) {

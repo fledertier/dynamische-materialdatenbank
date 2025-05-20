@@ -13,7 +13,8 @@ import '../widgets/drag_and_drop/add_section_button.dart';
 import '../widgets/drag_and_drop/draggable_section.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
-import 'attribute/add_attribute_card.dart';
+import 'attribute/attribute_card_button.dart';
+import 'attribute/attribute_card_dialog.dart';
 import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
@@ -71,7 +72,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                   actions: [EditModeButton()],
                 ),
                 navigation: Navigation(page: Pages.materials),
-                floatingActionButton: AddAndRemoveAttributeCardButton(
+                floatingActionButton: AttributeCardButton(
                   materialId: widget.materialId,
                   onAdd: () {
                     setState(() {
@@ -185,7 +186,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         ),
               ),
               if (showDialog)
-                AddAttributeCardDialog(
+                AttributeCardDialog(
                   materialId: widget.materialId,
                   sizes: {CardSize.large},
                   onClose: () {
