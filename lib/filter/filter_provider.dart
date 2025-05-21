@@ -26,11 +26,15 @@ final filterQueryProvider = Provider((ref) {
             operator: Operator.equals,
             parameter: options[attribute],
           ),
-      if (options[Attributes.manufacturer] is String)
+      if (options[Attributes.manufacturer] != null)
         Condition(
-          attribute: Attributes.manufacturer,
+          attribute: [
+            Attributes.manufacturer,
+            Attributes.manufacturerName,
+          ].join('.'),
           operator: Operator.equals,
-          parameter: options[Attributes.manufacturer],
+          parameter:
+              options[Attributes.manufacturer][Attributes.manufacturerName],
         ),
 
       if (options[Attributes.weight] is double)

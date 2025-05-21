@@ -1,22 +1,22 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_provider.dart';
 import 'filter_provider.dart';
 
-class DropdownMenuFilterOption extends ConsumerWidget {
-  const DropdownMenuFilterOption(this.attribute, {super.key});
-
-  final String attribute;
+class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
+  const ManufacturerDropdownMenuFilterOption({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final values = ref.watch(attributeValuesProvider(attribute)).value;
-    final suggestions = values?.values.toSet().sortedBy(
-      (value) => value.toString(),
+    final manufacturers =
+        ref.watch(attributeValuesProvider(Attributes.manufacturer)).value;
+    final suggestions = manufacturers?.values.toSet().sortedBy(
+      (manufacturer) => manufacturer[Attributes.manufacturerName] as String,
     );
     return DropdownMenu(
       inputDecorationTheme: InputDecorationTheme(
@@ -32,13 +32,13 @@ class DropdownMenuFilterOption extends ConsumerWidget {
         ...?suggestions?.map(
           (suggestion) => DropdownMenuEntry(
             value: suggestion,
-            label: suggestion.toString(),
+            label: suggestion[Attributes.manufacturerName],
           ),
         ),
       ],
-      initialSelection: options[attribute],
-      onSelected: (value) {
-        optionsNotifier.updateWith({attribute: value});
+      initialSelection: options[Attributes.manufacturer],
+      onSelected: (manufacturer) {
+        optionsNotifier.updateWith({Attributes.manufacturer: manufacturer});
       },
     );
   }

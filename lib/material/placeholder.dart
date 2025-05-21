@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
 String randomName() {
@@ -24,7 +25,7 @@ String randomDescription() {
 
 Json randomManufacturer() {
   final random = Random();
-  return {"name": "Manufacturer ${random.nextInt(10)}"};
+  return {Attributes.manufacturerName: "Manufacturer ${random.nextInt(10)}"};
 }
 
 Json randomWeight() {

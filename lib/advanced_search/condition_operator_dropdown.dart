@@ -33,6 +33,7 @@ class ConditionOperatorDropdown extends ConsumerWidget {
         for (final operator in operators)
           DropdownMenuEntry(value: operator, label: operator.name),
       ],
+      onSelected: onSelected,
       validator: (operator) {
         if (attribute != null && operator == null) {
           return "Please select an operator";

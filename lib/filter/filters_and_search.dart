@@ -83,7 +83,7 @@ class Filters extends ConsumerWidget {
           ),
           Labeled(
             label: LoadingText(attributes[Attributes.manufacturer]?.name),
-            child: DropdownMenuFilterOption(Attributes.manufacturer),
+            child: ManufacturerDropdownMenuFilterOption(),
           ),
           Labeled(
             label: LoadingText(attributes[Attributes.weight]?.name),

@@ -19,7 +19,7 @@ class Condition extends ConditionNode {
   }
 
   @override
-  Set<String> get attributes => {if (isValid) attribute!};
+  Set<String> get attributes => {if (isValid) attribute!.split('.').first};
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
