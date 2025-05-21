@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/widgets/drag_and_drop/draggable_card.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../attributes/attribute_provider.dart';
-import '../../material/attribute/cards.dart';
-import '../../material/attribute/default/default_cards.dart';
-import '../../material/edit_mode_button.dart';
 import '../../utils/miscellaneous_utils.dart';
+import '../attribute/cards.dart';
+import '../attribute/default/default_cards.dart';
+import '../edit_mode_button.dart';
 
 enum SectionCategory { primary, secondary }
 

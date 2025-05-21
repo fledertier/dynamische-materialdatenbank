@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../material/attribute/cards.dart';
+import '../attribute/cards.dart';
 import 'draggable_section.dart';
 
-class AddSectionButton extends ConsumerWidget {
-  const AddSectionButton({super.key, required this.sectionCategory});
+class SectionButton extends ConsumerWidget {
+  const SectionButton({super.key, required this.sectionCategory});
 
   final SectionCategory sectionCategory;
 

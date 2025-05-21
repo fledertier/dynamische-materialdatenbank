@@ -9,8 +9,6 @@ import '../app/navigation.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../header/header.dart';
-import '../widgets/drag_and_drop/add_section_button.dart';
-import '../widgets/drag_and_drop/draggable_section.dart';
 import '../widgets/labeled.dart';
 import '../widgets/sheet.dart';
 import 'attribute/attribute_card_button.dart';
@@ -18,6 +16,8 @@ import 'attribute/attribute_card_dialog.dart';
 import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
+import 'section/draggable_section.dart';
+import 'section/section_button.dart';
 
 class MaterialDetailPage extends ConsumerStatefulWidget {
   const MaterialDetailPage({super.key, required this.materialId});
@@ -111,7 +111,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                                 itemCount: sections.length + (edit ? 1 : 0),
                                 itemBuilder: (context, index) {
                                   if (index == sections.length) {
-                                    return AddSectionButton(
+                                    return SectionButton(
                                       sectionCategory: SectionCategory.primary,
                                     );
                                   }
@@ -147,7 +147,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                                     itemCount: sections.length + (edit ? 1 : 0),
                                     itemBuilder: (context, index) {
                                       if (index == sections.length) {
-                                        return AddSectionButton(
+                                        return SectionButton(
                                           sectionCategory:
                                               SectionCategory.secondary,
                                         );

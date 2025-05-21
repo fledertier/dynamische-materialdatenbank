@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../../widgets/drag_and_drop/draggable_section.dart';
+import '../section/draggable_section.dart';
 import 'cards.dart';
 
 class AttributeCardButton extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../material/attribute/cards.dart';
+import '../attribute/cards.dart';
 
 class DraggableCard extends StatelessWidget {
   const DraggableCard({

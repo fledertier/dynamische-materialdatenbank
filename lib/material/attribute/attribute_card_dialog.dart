@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 import '../../widgets/dialog_background.dart';
-import '../../widgets/drag_and_drop/draggable_card.dart';
 import '../material_provider.dart';
+import '../section/draggable_card.dart';
 import 'cards.dart';
 
 class AttributeCardDialog extends StatefulWidget {
