@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../material_provider.dart';
-import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
 import 'text_attribute_field.dart';
@@ -36,7 +35,7 @@ class TextCard extends ConsumerWidget {
         attributeId: attributeId,
         value: value,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
             attributeId: value,
           });
         },

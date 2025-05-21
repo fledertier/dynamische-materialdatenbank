@@ -2,7 +2,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.d
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/world_map.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
-import 'package:dynamische_materialdatenbank/material/material_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,7 +61,7 @@ class OriginCountryCard extends ConsumerWidget {
         textExtractor: (country) => country.name,
         initialTags: countries,
         onChanged: (countries) {
-          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
             Attributes.originCountry:
                 countries.map((country) => country.code).toList(),
           });

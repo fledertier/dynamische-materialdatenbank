@@ -5,7 +5,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.d
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
-import 'package:dynamische_materialdatenbank/material/material_service.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +71,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     setState(() {
       images.addAll(foundImages);
     });
-    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
+    ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       Attributes.images: images,
     });
   }
@@ -82,7 +81,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.removeAt(index);
       selectedIndex = min(selectedIndex, images.length - 1);
     });
-    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
+    ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       Attributes.images: images,
     });
   }
@@ -96,7 +95,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       images.insert(0, image);
       selectedIndex = 0;
     });
-    ref.read(materialServiceProvider).updateMaterialById(widget.materialId, {
+    ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       Attributes.image: url,
       Attributes.images: images,
     });

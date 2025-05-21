@@ -19,9 +19,8 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     return ref.read(materialServiceProvider).getMaterialStream(arg);
   }
 
-  // todo: use this instead of accessing the service directly
   void updateMaterial(Json material) {
-    ref.read(materialServiceProvider).updateMaterialById(arg, material);
+    ref.read(materialServiceProvider).updateMaterial(arg, material);
   }
 }
 

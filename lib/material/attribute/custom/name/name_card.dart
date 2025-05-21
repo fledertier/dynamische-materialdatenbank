@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../edit_mode_button.dart';
 import '../../../material_provider.dart';
-import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
 
@@ -60,8 +59,7 @@ class _NameCardState extends ConsumerState<NameCard> {
         maxLines: null,
         controller: controller,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterialById(
-            widget.materialId,
+          ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
             {Attributes.name: value},
           );
         },

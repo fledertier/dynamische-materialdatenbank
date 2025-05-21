@@ -14,8 +14,9 @@ final materialServiceProvider = Provider((ref) => MaterialService());
 
 class MaterialService {
   Future<void> createMaterial() async {
+    final materialId = generateId();
     final material = {
-      Attributes.id: generateId(),
+      Attributes.id: materialId,
       Attributes.name: randomName(),
       Attributes.description: randomDescription(),
       Attributes.cardSections:
@@ -42,10 +43,10 @@ class MaterialService {
       if (Random().nextBool()) Attributes.weight: randomWeight(),
     };
 
-    await updateMaterial(material, material);
+    await updateMaterial(materialId, material);
   }
 
-  Future<void> updateMaterialById(String id, Json data) async {
+  Future<void> updateMaterial(String id, Json data) async {
     await FirebaseFirestore.instance
         .collection(Collections.materials)
         .doc(id)
@@ -59,13 +60,7 @@ class MaterialService {
     }
   }
 
-  Future<void> updateMaterial(Json material, Json data) async {
-    assert(material[Attributes.id] is String, "Material must have an id");
-    final id = material[Attributes.id] as String;
-
-    await updateMaterialById(id, data);
-  }
-
+  // todo: should fetch the entire material first
   Future<void> deleteMaterial(Json material) async {
     final id = material[Attributes.id] as String;
 

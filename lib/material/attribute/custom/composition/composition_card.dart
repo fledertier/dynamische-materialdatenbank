@@ -5,7 +5,6 @@ import '../../../../constants.dart';
 import '../../../../types.dart';
 import '../../../edit_mode_button.dart';
 import '../../../material_provider.dart';
-import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../attribute_label.dart';
 import '../../cards.dart';
@@ -73,7 +72,7 @@ class CompositionCard extends ConsumerWidget {
         },
       );
       if (updatedComposition != null) {
-        ref.read(materialServiceProvider).updateMaterialById(materialId, {
+        ref.read(materialProvider(materialId).notifier).updateMaterial({
           Attributes.composition: updatedComposition.map(
             (composition) => composition.toJson(),
           ),

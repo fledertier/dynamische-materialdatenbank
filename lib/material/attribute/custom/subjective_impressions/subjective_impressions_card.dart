@@ -6,7 +6,6 @@ import '../../../../constants.dart';
 import '../../../../utils/miscellaneous_utils.dart';
 import '../../../edit_mode_button.dart';
 import '../../../material_provider.dart';
-import '../../../material_service.dart';
 import '../../attribute_card.dart';
 import '../../attribute_label.dart';
 import '../../cards.dart';
@@ -66,7 +65,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
             },
           );
       if (updatedSubjectiveImpressions != null) {
-        ref.read(materialServiceProvider).updateMaterialById(materialId, {
+        ref.read(materialProvider(materialId).notifier).updateMaterial({
           Attributes.subjectiveImpressions: updatedSubjectiveImpressions.map(
             (subjectiveImpression) => subjectiveImpression.toJson(),
           ),

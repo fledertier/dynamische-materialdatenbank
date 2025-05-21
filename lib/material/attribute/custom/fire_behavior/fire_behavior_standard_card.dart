@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants.dart';
 import '../../../material_provider.dart';
-import '../../../material_service.dart';
 import '../../cards.dart';
 import 'fire_behavior_standard.dart';
 import 'fire_behavior_standard_visualization.dart';
@@ -43,7 +42,7 @@ class FireBehaviorStandardCard extends ConsumerWidget {
         attributeId: Attributes.fireBehaviorStandard,
         value: value,
         onChanged: (value) {
-          ref.read(materialServiceProvider).updateMaterialById(materialId, {
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
             Attributes.fireBehaviorStandard: value,
           });
         },
