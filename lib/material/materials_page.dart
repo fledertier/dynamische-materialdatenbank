@@ -7,8 +7,9 @@ import '../app/navigation.dart';
 import '../constants.dart';
 import '../filter/filters_and_search.dart';
 import '../header/header.dart';
+import '../utils/miscellaneous_utils.dart';
 import 'material_grid.dart';
-import 'material_service.dart';
+import 'material_provider.dart';
 
 class MaterialsPage extends StatefulWidget {
   const MaterialsPage({super.key});
@@ -62,7 +63,7 @@ class AddMaterialButton extends ConsumerWidget {
     return FloatingActionButton.large(
       child: Icon(Icons.add),
       onPressed: () {
-        ref.read(materialServiceProvider).createMaterial();
+        ref.read(materialProvider(generateId()).notifier).createMaterial();
       },
     );
   }

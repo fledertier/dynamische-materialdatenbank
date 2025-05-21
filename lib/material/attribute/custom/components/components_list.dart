@@ -64,7 +64,7 @@ class ComponentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
-    final color = ref.watch(requestingMaterialColorProvider(component.name));
+    final color = ref.watch(materialColorProvider(component.name));
 
     return Material(
       type: MaterialType.transparency,

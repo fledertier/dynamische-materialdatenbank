@@ -9,7 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../constants.dart';
 import 'attribute/color/color_provider.dart';
-import 'material_service.dart';
+import 'material_provider.dart';
 
 class MaterialGrid extends StatelessWidget {
   const MaterialGrid({super.key});
@@ -71,7 +71,7 @@ class MaterialItem extends ConsumerWidget {
                 Positioned(
                   top: 4,
                   right: 4,
-                  child: MaterialContextMenu(material: item, visible: hovered),
+                  child: MaterialContextMenu(materialId: id, visible: hovered),
                 ),
                 Positioned(
                   bottom: 0,
@@ -113,11 +113,11 @@ class MaterialItem extends ConsumerWidget {
 class MaterialContextMenu extends ConsumerWidget {
   const MaterialContextMenu({
     super.key,
-    required this.material,
+    required this.materialId,
     this.visible = true,
   });
 
-  final Map<String, dynamic> material;
+  final String materialId;
   final bool visible;
 
   @override
@@ -136,7 +136,7 @@ class MaterialContextMenu extends ConsumerWidget {
       menuChildren: [
         MenuItemButton(
           onPressed: () {
-            ref.read(materialServiceProvider).deleteMaterial(material);
+            ref.read(materialProvider(materialId).notifier).deleteMaterial();
           },
           requestFocusOnHover: false,
           leadingIcon: Icon(Symbols.delete),

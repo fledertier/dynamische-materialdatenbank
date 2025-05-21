@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/color/color_service.dart';
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,15 +29,6 @@ class MaterialDetailPage extends ConsumerStatefulWidget {
 
 class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
   bool showDialog = false;
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(materialProvider(widget.materialId).future).then((material) {
-      final name = material[Attributes.name] as String;
-      ref.read(colorServiceProvider).createMaterialColor(name);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
