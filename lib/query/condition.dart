@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 import 'condition_node.dart';
@@ -22,12 +23,7 @@ class Condition extends ConditionNode {
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    final type = attributesById[attribute!]?.type;
-    final value = switch (type) {
-      NumberAttributeType() => material[attribute!]?['value'],
-      // todo
-      _ => material[attribute!],
-    };
+    final value = getAttributeValue(material, attributesById, attribute!);
     if (value == null) {
       return false;
     }

@@ -25,7 +25,3 @@ extension MapExtension<K, V> on Map<K, V> {
     return result;
   }
 }
-
-extension ListExtension<T> on List<T> {
-  T removeFirst() => removeAt(0);
-}
