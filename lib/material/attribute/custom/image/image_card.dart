@@ -48,9 +48,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   }
 
   Future<String> materialName() async {
-    final material = await ref.read(
-      materialStreamProvider(widget.materialId).future,
-    );
+    final material = await ref.read(materialProvider(widget.materialId).future);
     return material[Attributes.name];
   }
 

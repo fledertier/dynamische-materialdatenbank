@@ -34,7 +34,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(materialStreamProvider(widget.materialId).future).then((material) {
+    ref.read(materialProvider(widget.materialId).future).then((material) {
       final name = material[Attributes.name] as String;
       ref.read(colorServiceProvider).createMaterialColor(name);
     });
@@ -42,7 +42,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final asyncMaterial = ref.watch(materialStreamProvider(widget.materialId));
+    final asyncMaterial = ref.watch(materialProvider(widget.materialId));
     final material = asyncMaterial.value ?? {};
 
     final attributes = ref.watch(attributesProvider).value ?? {};
@@ -72,30 +72,41 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                   actions: [EditModeButton()],
                 ),
                 navigation: Navigation(page: Pages.materials),
-                floatingActionButton: AttributeCardButton(
-                  materialId: widget.materialId,
-                  onAdd: () {
-                    setState(() {
-                      showDialog = true;
-                    });
-                  },
-                  onDelete: (card) {
-                    final fromSectionCategory = ref.read(
-                      fromSectionCategoryProvider,
-                    );
-                    final fromSectionIndex = ref.read(fromSectionIndexProvider);
-                    if (fromSectionCategory != null &&
-                        fromSectionIndex != null) {
-                      ref
-                          .read(sectionsProvider(fromSectionCategory).notifier)
-                          .update((sections) {
-                            final updated = [...sections];
-                            updated[fromSectionIndex].cards.remove(card);
-                            return updated;
-                          });
-                    }
-                  },
-                ),
+                floatingActionButton:
+                    edit
+                        ? AttributeCardButton(
+                          materialId: widget.materialId,
+                          onAdd: () {
+                            setState(() {
+                              showDialog = true;
+                            });
+                          },
+                          onDelete: (card) {
+                            final fromSectionCategory = ref.read(
+                              fromSectionCategoryProvider,
+                            );
+                            final fromSectionIndex = ref.read(
+                              fromSectionIndexProvider,
+                            );
+                            if (fromSectionCategory != null &&
+                                fromSectionIndex != null) {
+                              ref
+                                  .read(
+                                    sectionsProvider(
+                                      fromSectionCategory,
+                                    ).notifier,
+                                  )
+                                  .update((sections) {
+                                    final updated = [...sections];
+                                    updated[fromSectionIndex].cards.remove(
+                                      card,
+                                    );
+                                    return updated;
+                                  });
+                            }
+                          },
+                        )
+                        : null,
                 body:
                     asyncMaterial.isLoading
                         ? Center(child: CircularProgressIndicator())

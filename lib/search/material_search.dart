@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
-import '../material/material_provider.dart';
+import '../material/materials_provider.dart';
 import '../widgets/highlighted_text.dart';
 import 'search.dart';
 import 'search_service.dart';
@@ -55,9 +55,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
           return [];
         }
         final attributes = AttributesArgument({Attributes.name});
-        final materials = await ref.read(
-          materialsStreamProvider(attributes).future,
-        );
+        final materials = await ref.read(materialsProvider(attributes).future);
         return ref
             .read(searchServiceProvider)
             .search(materials, attributes.attributes, query);

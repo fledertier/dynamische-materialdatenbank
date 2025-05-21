@@ -6,6 +6,7 @@ import '../advanced_search/advanced_search_provider.dart';
 import '../attributes/attribute_provider.dart';
 import '../constants.dart';
 import '../filter/filter_provider.dart';
+import '../material/materials_provider.dart';
 import '../search/search_query_provider.dart';
 
 final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
@@ -19,11 +20,9 @@ final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
     Attributes.image,
     ...query.attributes,
   });
-  final materialsById = await ref.watch(
-    attributesValuesProvider(argument).future,
-  );
+  final materials = await ref.watch(materialsProvider(argument).future);
   final attributesById = await ref.watch(attributesProvider.future);
-  return materialsById.values
+  return materials
       .where((material) => query.matches(material, attributesById))
       .toList();
 });

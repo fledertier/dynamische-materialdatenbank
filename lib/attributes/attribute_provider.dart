@@ -5,7 +5,6 @@ import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants.dart';
 import 'attribute_service.dart';
 import 'attribute_type.dart';
 
@@ -29,21 +28,6 @@ final attributeExtremaProvider = FutureProvider.family((
 
 final attributeValuesProvider = StreamProvider.family((ref, String attribute) {
   return ref.read(attributeServiceProvider).getAttributeStream(attribute);
-});
-
-final attributesValuesProvider = FutureProvider.family((
-  ref,
-  AttributesArgument argument,
-) async {
-  final materials = <String, Map<String, dynamic>>{};
-  for (final attribute in argument.attributes) {
-    final values = await ref.watch(attributeValuesProvider(attribute).future);
-    values.forEach((id, value) {
-      final material = materials.putIfAbsent(id, () => {Attributes.id: id});
-      material[attribute] = value;
-    });
-  }
-  return materials;
 });
 
 class AttributesArgument {

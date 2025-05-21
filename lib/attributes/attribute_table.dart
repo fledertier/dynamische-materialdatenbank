@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../material/materials_provider.dart';
 import 'attribute_provider.dart';
 
 class AttributeTable extends ConsumerWidget {
@@ -12,16 +13,14 @@ class AttributeTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncMaterials = ref.watch(
-      attributesValuesProvider(
-        AttributesArgument({Attributes.name, attribute}),
-      ),
+      materialsProvider(AttributesArgument({Attributes.name, attribute})),
     );
 
     if (asyncMaterials.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final materials = (asyncMaterials.value?.values ?? []).where(
+    final materials = (asyncMaterials.value ?? []).where(
       (material) => material[attribute] != null,
     );
 

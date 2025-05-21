@@ -39,7 +39,7 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
         keyboardType: TextInputType.multiline,
         onSubmitted: submit,
         decoration: InputDecoration(
-          hintText: 'Order beschreibe das Material...',
+          hintText: 'Oder beschreibe das Material...',
           filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
