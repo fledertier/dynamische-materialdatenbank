@@ -76,20 +76,28 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     }
   }
 
-  void deleteMaterial() {
-    state.whenData((material) {
-      FirebaseFirestore.instance
-          .collection(Collections.materials)
-          .doc(arg)
-          .delete();
+  void deleteMaterial() async {
+    final doc = FirebaseFirestore.instance
+        .collection(Collections.materials)
+        .doc(arg);
 
-      for (final attribute in material.keys) {
+    final material = (await doc.get()).data();
+
+    if (material == null) {
+      return;
+    }
+
+    await doc.delete();
+
+    await Future.wait([
+      for (final attribute in material.keys)
         FirebaseFirestore.instance
             .collection(Collections.attributes)
             .doc(attribute)
-            .update({arg: FieldValue.delete()});
-      }
-    });
+            .update({arg: FieldValue.delete()}),
+    ]);
+
+    ref.invalidateSelf();
   }
 }
 
