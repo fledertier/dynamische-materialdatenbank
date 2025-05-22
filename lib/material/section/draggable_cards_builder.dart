@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../constants.dart';
+import '../../types.dart';
 import '../attribute/cards.dart';
+import '../material_provider.dart';
 import 'draggable_card.dart';
 import 'draggable_section.dart';
 
 enum SectionCategory { primary, secondary }
 
 final sectionsProvider =
-StateProvider.family<List<CardSection>, SectionCategory>(
+    StateProvider.family<List<CardSection>, SectionCategory>(
       (ref, arg) => throw "sectionsProvider($arg) not initialized",
-);
+    );
 
 final draggingItemProvider = StateProvider<CardData?>((ref) => null);
 
 final fromSectionIndexProvider = StateProvider<int?>((ref) => null);
 
 final fromSectionCategoryProvider = StateProvider<SectionCategory?>(
-      (ref) => null,
+  (ref) => null,
 );
 
 class DraggableCardsBuilder extends ConsumerWidget {
@@ -35,10 +38,10 @@ class DraggableCardsBuilder extends ConsumerWidget {
   final int sectionIndex;
   final Widget Function(BuildContext context, CardData item) itemBuilder;
   final Widget Function(
-      BuildContext context,
-      Widget Function(int index) itemBuilder,
-      bool highlighted,
-      )
+    BuildContext context,
+    Widget Function(int index) itemBuilder,
+    bool highlighted,
+  )
   containerBuilder;
   final SectionCategory sectionCategory;
   final EdgeInsets padding;
@@ -58,15 +61,9 @@ class DraggableCardsBuilder extends ConsumerWidget {
         data: item,
         padding: padding,
         onDragStarted: () {
-          ref
-              .read(draggingItemProvider.notifier)
-              .state = item;
-          ref
-              .read(fromSectionIndexProvider.notifier)
-              .state = sectionIndex;
-          ref
-              .read(fromSectionCategoryProvider.notifier)
-              .state =
+          ref.read(draggingItemProvider.notifier).state = item;
+          ref.read(fromSectionIndexProvider.notifier).state = sectionIndex;
+          ref.read(fromSectionCategoryProvider.notifier).state =
               sectionCategory;
         },
         onDragEnd: () {
@@ -78,20 +75,32 @@ class DraggableCardsBuilder extends ConsumerWidget {
           onAcceptWithDetails: (details) {
             final insertIndex = sections[sectionIndex].cards.indexOf(item);
 
+            final sectionsJson = Json();
+
             if (fromSectionCategory != null && fromSectionIndex != null) {
               ref.read(sectionsProvider(fromSectionCategory).notifier).update((
-                  sections,) {
+                sections,
+              ) {
                 final updated = [...sections];
                 updated[fromSectionIndex].cards.remove(details.data);
+                sectionsJson[fromSectionCategory.name] =
+                    updated.map((section) => section.toJson()).toList();
                 return updated;
               });
             }
 
             ref.read(sectionsProvider(sectionCategory).notifier).update((
-                sections,) {
+              sections,
+            ) {
               final updated = [...sections];
               updated[sectionIndex].cards.insert(insertIndex, details.data);
+              sectionsJson[sectionCategory.name] =
+                  updated.map((section) => section.toJson()).toList();
               return updated;
+            });
+
+            ref.read(materialProvider(materialId).notifier).updateMaterial({
+              Attributes.cardSections: sectionsJson,
             });
 
             ref.invalidate(draggingItemProvider);
@@ -130,11 +139,16 @@ class DraggableCardsBuilder extends ConsumerWidget {
           return;
         }
 
+        final sectionsJson = Json();
+
         if (fromSectionCategory != null && fromSectionIndex != null) {
           ref.read(sectionsProvider(fromSectionCategory).notifier).update((
-              sections,) {
+            sections,
+          ) {
             final updated = [...sections];
             updated[fromSectionIndex].cards.remove(details.data);
+            sectionsJson[fromSectionCategory.name] =
+                updated.map((section) => section.toJson()).toList();
             return updated;
           });
         }
@@ -142,7 +156,13 @@ class DraggableCardsBuilder extends ConsumerWidget {
         ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
           final updated = [...sections];
           updated[sectionIndex].cards.add(details.data);
+          sectionsJson[sectionCategory.name] =
+              updated.map((section) => section.toJson()).toList();
           return updated;
+        });
+
+        ref.read(materialProvider(materialId).notifier).updateMaterial({
+          Attributes.cardSections: sectionsJson,
         });
 
         ref.invalidate(draggingItemProvider);

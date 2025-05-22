@@ -9,7 +9,7 @@ import '../materials_provider.dart';
 import '../section/draggable_card.dart';
 import 'cards.dart';
 
-class AttributeCardDialog extends StatefulWidget {
+class AttributeCardDialog extends ConsumerStatefulWidget {
   const AttributeCardDialog({
     super.key,
     required this.materialId,
@@ -22,10 +22,11 @@ class AttributeCardDialog extends StatefulWidget {
   final VoidCallback onClose;
 
   @override
-  State<AttributeCardDialog> createState() => _AttributeCardDialogState();
+  ConsumerState<AttributeCardDialog> createState() =>
+      _AttributeCardDialogState();
 }
 
-class _AttributeCardDialogState extends State<AttributeCardDialog> {
+class _AttributeCardDialogState extends ConsumerState<AttributeCardDialog> {
   List<CardData> cards = [];
 
   @override

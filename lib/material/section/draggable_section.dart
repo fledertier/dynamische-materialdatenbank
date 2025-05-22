@@ -37,6 +37,7 @@ class DraggableSection extends ConsumerWidget {
     final items = section.cards;
     final edit = ref.watch(editModeProvider);
 
+    // todo: update material after focus lost
     final nameField = Padding(
       padding: labelPadding,
       child: TextFormField(
@@ -64,10 +65,10 @@ class DraggableSection extends ConsumerWidget {
       return Padding(padding: itemMargin, child: child);
     }
 
-    Widget container(
-      Widget Function(int index) draggableBuilder,
-      bool highlighted,
-    ) {
+    Widget container({
+      Widget Function(int index)? draggableBuilder,
+      bool highlighted = false,
+    }) {
       final hasName = section.nameDe?.isNotEmpty ?? false;
       return Container(
         constraints: BoxConstraints(
@@ -98,7 +99,7 @@ class DraggableSection extends ConsumerWidget {
                   if (!edit) {
                     return nonDraggableBuilder(index);
                   }
-                  return draggableBuilder(index);
+                  return draggableBuilder!(index);
                 }),
               ],
             ),
@@ -108,7 +109,7 @@ class DraggableSection extends ConsumerWidget {
     }
 
     if (!edit) {
-      return container((index) => Placeholder(), false);
+      return container(highlighted: false);
     }
 
     return DraggableCardsBuilder(
@@ -120,7 +121,10 @@ class DraggableSection extends ConsumerWidget {
         return itemBuilder(context, item);
       },
       containerBuilder: (context, itemBuilder, highlighted) {
-        return container(itemBuilder, highlighted);
+        return container(
+          draggableBuilder: itemBuilder,
+          highlighted: highlighted,
+        );
       },
     );
   }

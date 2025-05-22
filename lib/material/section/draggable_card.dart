@@ -10,6 +10,7 @@ class DraggableCard extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.onDragStarted,
     this.onDragEnd,
+    this.onDragCompleted,
     required this.child,
   });
 
@@ -18,6 +19,7 @@ class DraggableCard extends StatelessWidget {
   final BorderRadius borderRadius;
   final VoidCallback? onDragStarted;
   final VoidCallback? onDragEnd;
+  final VoidCallback? onDragCompleted;
   final Widget child;
 
   @override
@@ -28,6 +30,7 @@ class DraggableCard extends StatelessWidget {
       maxSimultaneousDrags: 1,
       onDragStarted: onDragStarted,
       onDragEnd: (details) => onDragEnd?.call(),
+      onDragCompleted: onDragCompleted,
       feedback: Padding(
         padding: padding,
         child: Material(
