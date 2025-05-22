@@ -1,10 +1,10 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../attributes/attribute_provider.dart';
-import '../query/condition.dart';
 import 'condition_attribute_dropdown.dart';
 import 'condition_operator_dropdown.dart';
 import 'condition_parameter_field.dart';
@@ -25,8 +25,6 @@ class ConditionWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(condition.attribute));
-
     return Theme(
       data: Theme.of(context).copyWith(
         dropdownMenuTheme: DropdownMenuTheme.of(context).copyWith(
@@ -58,7 +56,7 @@ class ConditionWidget extends ConsumerWidget {
             ConditionOperatorDropdown(
               enabled: enabled,
               initialOperator: condition.operator,
-              attribute: attribute,
+              attributeId: condition.attribute,
               onSelected: (operator) {
                 update(() {
                   condition.operator = operator;
@@ -68,7 +66,7 @@ class ConditionWidget extends ConsumerWidget {
             ConditionParameterField(
               enabled: enabled,
               value: condition.parameter,
-              attribute: attribute,
+              attributeId: condition.attribute,
               onChanged: (value) {
                 update(() {
                   condition.parameter = value;

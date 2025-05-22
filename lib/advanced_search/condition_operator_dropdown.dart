@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
@@ -9,25 +9,27 @@ class ConditionOperatorDropdown extends ConsumerWidget {
     super.key,
     this.enabled = true,
     this.initialOperator,
-    this.attribute,
+    this.attributeId,
     this.onSelected,
   });
 
   final bool enabled;
   final Operator? initialOperator;
-  final Attribute? attribute;
+  final String? attributeId;
   final ValueChanged<Operator?>? onSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final attribute = ref.watch(attributeProvider(attributeId));
     final operators = attribute?.type.operators ?? {};
 
+    final selectedOperator = initialOperator ?? operators.firstOrNull;
+
     return DropdownMenuFormField(
-      key: ValueKey(attribute),
+      key: ValueKey(selectedOperator),
       hintText: "Operator",
-      initialSelection:
-          initialOperator ?? attribute?.type.operators.firstOrNull,
-      enabled: enabled && attribute != null,
+      initialSelection: selectedOperator,
+      enabled: enabled && operators.isNotEmpty,
       requestFocusOnTap: false,
       dropdownMenuEntries: [
         for (final operator in operators)

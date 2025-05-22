@@ -1,26 +1,28 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../attributes/attribute_type.dart';
-import '../widgets/dropdown_menu_form_field.dart';
-
-class ConditionParameterField extends StatelessWidget {
+class ConditionParameterField extends ConsumerWidget {
   const ConditionParameterField({
     super.key,
     required this.value,
-    required this.attribute,
+    required this.attributeId,
     this.onChanged,
     this.enabled = true,
   });
 
-  final Attribute? attribute;
+  final String? attributeId;
   final Object? value;
   final ValueChanged<Object?>? onChanged;
   final bool enabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final attribute = ref.watch(attributeProvider(attributeId));
     final type = attribute?.type.id;
+
     return switch (type) {
       AttributeType.text || AttributeType.textarea => TextField(
         enabled: enabled,

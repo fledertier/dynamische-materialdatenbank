@@ -39,7 +39,7 @@ class ConditionAttributeDropdown extends ConsumerWidget {
           enableFilter: true,
           width: 200,
           menuHeight: 500,
-          initialSelection: null,
+          initialSelection: attribute,
           dropdownMenuEntries: [
             for (final attribute in attributeEntries ?? attributes)
               DropdownMenuEntry(value: attribute, label: attribute.name),
