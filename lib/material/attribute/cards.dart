@@ -1,7 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../attributes/attribute.dart';
+import '../../attributes/attribute_provider.dart';
 import '../../types.dart';
 import 'default/default_cards.dart';
 
@@ -29,7 +33,7 @@ abstract class Cards implements Enum {
     if (card == null) {
       throw Exception('Unknown card name: $name');
     }
-    // ignore: unnecessary_cast
+    // ignore: unnecessary_cast because the linter is stupid
     return card as Cards;
   }
 }
@@ -37,9 +41,23 @@ abstract class Cards implements Enum {
 abstract class CardFactory {
   static Map<String, Map<CardData, Widget>> cache = {};
 
-  static Widget getOrCreate(CardData data, String materialId) {
+  static Widget getOrCreate(
+    CardData data,
+    String materialId, [
+    CardSize? size,
+  ]) {
     final cacheForMaterial = cache.putIfAbsent(materialId, () => {});
-    return cacheForMaterial.putIfAbsent(data, () => create(data, materialId));
+    return Consumer(
+      builder: (context, ref, child) {
+        final attribute = ref.read(attributeProvider(data.attribute));
+        final resized = resize(data, attribute, size);
+
+        return cacheForMaterial.putIfAbsent(
+          resized,
+          () => create(resized, materialId),
+        );
+      },
+    );
   }
 
   static Widget create(CardData data, String materialId) {
@@ -54,6 +72,26 @@ abstract class CardFactory {
       ),
       _ => throw Exception('Unknown cards type: ${card.runtimeType}'),
     };
+  }
+
+  static CardData resize(CardData data, Attribute? attribute, CardSize? size) {
+    if (size == null) return data;
+
+    final hasSize = data.card.sizes.contains(size);
+    if (hasSize) {
+      return data.copyWith(size: size);
+    }
+
+    if (attribute == null) {
+      return data;
+    }
+    final defaultCard = DefaultCards.values.firstWhereOrNull(
+      (defaultCard) => defaultCard.type == attribute.type.id,
+    );
+    if (defaultCard == null) {
+      return data;
+    }
+    return data.copyWith(card: defaultCard, size: size);
   }
 }
 

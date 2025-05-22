@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../section/draggable_section.dart';
+import '../section/draggable_cards_builder.dart';
 import 'cards.dart';
 
 class AttributeCardButton extends ConsumerWidget {
@@ -33,11 +33,11 @@ class AttributeCardButton extends ConsumerWidget {
         return Material(
           borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
           color:
-              ongoingDrag
-                  ? receivingDrag
-                      ? colorScheme.errorFixedDim
-                      : colorScheme.surfaceContainerHighest
-                  : colorScheme.primaryContainer,
+          ongoingDrag
+              ? receivingDrag
+              ? colorScheme.errorFixedDim
+              : colorScheme.surfaceContainerHighest
+              : colorScheme.primaryContainer,
           elevation: 8,
           child: InkWell(
             borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
@@ -50,18 +50,18 @@ class AttributeCardButton extends ConsumerWidget {
                 height: ongoingDrag ? 80 : 100,
                 child: Center(
                   child:
-                      ongoingDrag
-                          ? Icon(
-                            Symbols.delete,
-                            color:
-                                ongoingDrag && receivingDrag
-                                    ? colorScheme.onErrorFixedDim
-                                    : colorScheme.onSurface,
-                          )
-                          : Icon(
-                            Icons.add,
-                            color: colorScheme.onPrimaryContainer,
-                          ),
+                  ongoingDrag
+                      ? Icon(
+                    Symbols.delete,
+                    color:
+                    ongoingDrag && receivingDrag
+                        ? colorScheme.onErrorFixedDim
+                        : colorScheme.onSurface,
+                  )
+                      : Icon(
+                    Icons.add,
+                    color: colorScheme.onPrimaryContainer,
+                  ),
                 ),
               ),
             ),

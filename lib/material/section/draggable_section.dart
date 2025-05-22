@@ -1,65 +1,24 @@
-import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/material/section/draggable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../attributes/attribute_provider.dart';
 import '../../utils/miscellaneous_utils.dart';
 import '../attribute/cards.dart';
-import '../attribute/default/default_cards.dart';
 import '../edit_mode_button.dart';
-
-enum SectionCategory { primary, secondary }
-
-final sectionsProvider =
-    StateProvider.family<List<CardSection>, SectionCategory>(
-      (ref, arg) => throw "sectionsProvider($arg) not initialized",
-    );
-
-final draggingItemProvider = StateProvider<CardData?>((ref) => null);
-
-final fromSectionIndexProvider = StateProvider<int?>((ref) => null);
-
-final fromSectionCategoryProvider = StateProvider<SectionCategory?>(
-  (ref) => null,
-);
+import 'draggable_cards_builder.dart';
 
 class DraggableSection extends ConsumerWidget {
   const DraggableSection({
     super.key,
     required this.materialId,
     required this.sectionIndex,
-    required this.itemBuilder,
     required this.sectionCategory,
+    required this.itemBuilder,
   });
 
   final String materialId;
   final int sectionIndex;
-  final Widget Function(BuildContext context, CardData item) itemBuilder;
   final SectionCategory sectionCategory;
-
-  Widget itemBuilderProxy(BuildContext context, WidgetRef ref, CardData item) {
-    if (sectionCategory == SectionCategory.secondary) {
-      final hasSmall = item.card.sizes.contains(CardSize.small);
-      if (hasSmall) {
-        final smallItem = item.copyWith(size: CardSize.small);
-        return itemBuilder(context, smallItem);
-      } else {
-        final attribute = ref.read(attributeProvider(item.attribute));
-        final defaultSmallCard = DefaultCards.values.firstWhereOrNull(
-          (defaultCard) => defaultCard.type == attribute?.type.id,
-        );
-        if (attribute != null && defaultSmallCard != null) {
-          final defaultSmallItem = item.copyWith(
-            card: defaultSmallCard,
-            size: CardSize.small,
-          );
-          return itemBuilder(context, defaultSmallItem);
-        }
-      }
-    }
-    return itemBuilder(context, item);
-  }
+  final Widget Function(BuildContext context, CardData item) itemBuilder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -106,79 +65,10 @@ class DraggableSection extends ConsumerWidget {
     );
 
     Widget nonDraggable(CardData item) {
-      return Padding(
-        padding: padding,
-        child: itemBuilderProxy(context, ref, item),
-      );
+      return Padding(padding: padding, child: itemBuilder(context, item));
     }
 
-    Widget draggable(CardData item) {
-      final child = itemBuilderProxy(context, ref, item);
-      return DraggableCard(
-        data: item,
-        padding: padding,
-        onDragStarted: () {
-          ref.read(draggingItemProvider.notifier).state = item;
-          ref.read(fromSectionIndexProvider.notifier).state = sectionIndex;
-          ref.read(fromSectionCategoryProvider.notifier).state =
-              sectionCategory;
-        },
-        onDragEnd: () {
-          ref.invalidate(draggingItemProvider);
-          ref.invalidate(fromSectionIndexProvider);
-        },
-        child: DragTarget<CardData>(
-          onWillAcceptWithDetails: (details) => details.data != item,
-          onAcceptWithDetails: (details) {
-            final insertIndex = sections[sectionIndex].cards.indexOf(item);
-
-            if (fromSectionCategory != null && fromSectionIndex != null) {
-              ref.read(sectionsProvider(fromSectionCategory).notifier).update((
-                sections,
-              ) {
-                final updated = [...sections];
-                updated[fromSectionIndex].cards.remove(details.data);
-                return updated;
-              });
-            }
-
-            ref.read(sectionsProvider(sectionCategory).notifier).update((
-              sections,
-            ) {
-              final updated = [...sections];
-              updated[sectionIndex].cards.insert(insertIndex, details.data);
-              return updated;
-            });
-
-            ref.invalidate(draggingItemProvider);
-            ref.invalidate(fromSectionIndexProvider);
-            ref.invalidate(fromSectionCategoryProvider);
-          },
-          builder: (context, candidateData, rejectedData) {
-            if (candidateData.isEmpty) {
-              return child;
-            }
-
-            bool isBefore() {
-              if (fromSectionCategory != sectionCategory) {
-                return true;
-              }
-              if (fromSectionIndex != sectionIndex) {
-                return true;
-              }
-              final section = sections[sectionIndex];
-              final index = section.cards.indexOf(item);
-              final fromIndex = section.cards.indexOf(candidateData.first!);
-              return index < fromIndex;
-            }
-
-            return InsertIndicator(isBefore: isBefore(), child: child);
-          },
-        ),
-      );
-    }
-
-    Widget container({bool highlighted = false}) {
+    Widget container(Widget Function(int index) itemBuilder, bool highlighted) {
       final hasName = section.nameDe?.isNotEmpty ?? false;
       return Container(
         constraints: BoxConstraints(
@@ -209,8 +99,10 @@ class DraggableSection extends ConsumerWidget {
             Wrap(
               children: [
                 ...List.generate(items.length, (itemIndex) {
-                  final item = items[itemIndex];
-                  return edit ? draggable(item) : nonDraggable(item);
+                  if (!edit) {
+                    return nonDraggable(items[itemIndex]);
+                  }
+                  return itemBuilder(itemIndex);
                 }),
               ],
             ),
@@ -220,39 +112,19 @@ class DraggableSection extends ConsumerWidget {
     }
 
     if (!edit) {
-      return container();
+      return container((index) => Placeholder(), false);
     }
 
-    return DragTarget<CardData>(
-      onWillAcceptWithDetails: (_) => true,
-      onAcceptWithDetails: (details) {
-        if (fromSectionCategory == sectionCategory &&
-            fromSectionIndex == sectionIndex) {
-          return;
-        }
-
-        if (fromSectionCategory != null && fromSectionIndex != null) {
-          ref.read(sectionsProvider(fromSectionCategory).notifier).update((
-            sections,
-          ) {
-            final updated = [...sections];
-            updated[fromSectionIndex].cards.remove(details.data);
-            return updated;
-          });
-        }
-
-        ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
-          final updated = [...sections];
-          updated[sectionIndex].cards.add(details.data);
-          return updated;
-        });
-
-        ref.invalidate(draggingItemProvider);
-        ref.invalidate(fromSectionIndexProvider);
-        ref.invalidate(fromSectionCategoryProvider);
+    return DraggableCardsBuilder(
+      materialId: materialId,
+      sectionIndex: sectionIndex,
+      sectionCategory: sectionCategory,
+      padding: padding,
+      itemBuilder: (context, item) {
+        return itemBuilder(context, item);
       },
-      builder: (context, candidateData, _) {
-        return container(highlighted: candidateData.isNotEmpty);
+      containerBuilder: (context, itemBuilder, highlighted) {
+        return container(itemBuilder, highlighted);
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_cards_builder.dart';
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +36,10 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
     final asyncMaterial = ref.watch(materialProvider(widget.materialId));
     final material = asyncMaterial.value ?? {};
 
-    final attributes = ref.watch(attributesProvider).value ?? {};
+    final asyncAttributes = ref.watch(attributesProvider);
+    final attributes = asyncAttributes.value ?? {};
+
+    final isLoading = asyncMaterial.isLoading || asyncAttributes.isLoading;
 
     final edit = ref.watch(editModeProvider);
 
@@ -98,7 +102,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                         )
                         : null,
                 body:
-                    asyncMaterial.isLoading
+                    isLoading
                         ? Center(child: CircularProgressIndicator())
                         : Center(
                           child: Consumer(
@@ -162,6 +166,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                                           return CardFactory.getOrCreate(
                                             item,
                                             widget.materialId,
+                                            CardSize.small,
                                           );
                                         },
                                       );
