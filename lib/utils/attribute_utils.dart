@@ -33,8 +33,9 @@ dynamic getAttributeValue(
     );
     value = value?[id];
   }
-  if (attribute?.type is NumberAttributeType) {
-    value = value?['value'];
-  }
-  return value;
+  return switch (attribute?.type) {
+    TextAttributeType() => value?['valueDe'],
+    NumberAttributeType() => value?['value'],
+    _ => value,
+  };
 }

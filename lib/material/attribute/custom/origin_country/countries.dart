@@ -1,3 +1,4 @@
+// todo: move into lib/material/attribute/default/country
 class Country {
   final String name;
   final String code;
@@ -17,8 +18,6 @@ class Country {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is Country && other.code == code;
   }
 

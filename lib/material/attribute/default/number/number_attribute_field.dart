@@ -66,6 +66,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
               controller: controller,
               onChanged: (text) {
                 final value = double.tryParse(text) ?? 0.0;
+                // todo: pass unit number instead
                 widget.onChanged?.call(toBaseUnit(value, unitType));
               },
             ),

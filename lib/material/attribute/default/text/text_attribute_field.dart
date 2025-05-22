@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,14 +9,14 @@ class TextAttributeField extends ConsumerStatefulWidget {
   const TextAttributeField({
     super.key,
     required this.attributeId,
-    this.value,
+    this.text,
     this.onChanged,
     this.textStyle,
   });
 
   final String attributeId;
-  final String? value;
-  final ValueChanged<String>? onChanged;
+  final TranslatableText? text;
+  final ValueChanged<TranslatableText>? onChanged;
   final TextStyle? textStyle;
 
   @override
@@ -25,11 +26,12 @@ class TextAttributeField extends ConsumerStatefulWidget {
 
 class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
   late final TextEditingController controller;
+  late var text = widget.text ?? TranslatableText(valueDe: '');
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController(text: widget.value);
+    controller = TextEditingController(text: widget.text?.value);
   }
 
   @override
@@ -57,7 +59,10 @@ class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
       decoration: InputDecoration.collapsed(hintText: attribute?.name),
       maxLines: multiline ? null : 1,
       controller: controller,
-      onChanged: widget.onChanged,
+      onChanged: (value) {
+        text = text.copyWith(valueDe: value);
+        widget.onChanged?.call(text);
+      },
     );
 
     if (multiline) {

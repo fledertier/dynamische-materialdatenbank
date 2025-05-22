@@ -106,7 +106,7 @@ final materialAttributeValueProvider = Provider.family((
   AttributeArgument arg,
 ) {
   final material = ref.watch(materialProvider(arg.materialId)).value;
-  return material?[arg.attributeId];
+  return material?[arg.attributeId]; // todo: try to use getAttributeValue here
 });
 
 class AttributeArgument {

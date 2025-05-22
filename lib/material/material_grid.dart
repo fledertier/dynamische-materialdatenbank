@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
@@ -9,6 +10,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../constants.dart';
 import 'attribute/color/color_provider.dart';
+import 'attribute/default/text/translatable_text.dart';
 import 'material_provider.dart';
 
 class MaterialGrid extends StatelessWidget {
@@ -38,11 +40,11 @@ class MaterialGrid extends StatelessWidget {
 class MaterialItem extends ConsumerWidget {
   const MaterialItem({super.key, required this.item});
 
-  final Map<String, dynamic> item;
+  final Json item;
 
   String get id => item[Attributes.id];
 
-  String get name => item[Attributes.name];
+  String get name => TranslatableText.fromJson(item[Attributes.name]).value;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

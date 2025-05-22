@@ -40,7 +40,7 @@ class FireBehaviorStandardCard extends ConsumerWidget {
       label: AttributeLabel(attribute: Attributes.fireBehaviorStandard),
       title: TextAttributeField(
         attributeId: Attributes.fireBehaviorStandard,
-        value: value,
+        text: value,
         onChanged: (value) {
           ref.read(materialProvider(materialId).notifier).updateMaterial({
             Attributes.fireBehaviorStandard: value,

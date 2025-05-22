@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,11 +50,16 @@ class AttributeTable extends ConsumerWidget {
           for (final material in materials)
             TableRow(
               children: [
-                for (final attribute in [Attributes.name, attribute])
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(material[attribute].toString()),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    TranslatableText.fromJson(material[Attributes.name]).value,
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(material[attribute].toString()),
+                ),
               ],
             ),
         ],

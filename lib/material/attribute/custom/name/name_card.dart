@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,7 @@ import '../../../material_provider.dart';
 import '../../attribute_card.dart';
 import '../../cards.dart';
 
+// todo: use text card
 class NameCard extends ConsumerStatefulWidget {
   const NameCard({super.key, required this.materialId, required this.size});
 
@@ -33,7 +35,8 @@ class _NameCardState extends ConsumerState<NameCard> {
         ),
       ),
     );
-    controller = TextEditingController(text: value);
+    final text = value != null ? TranslatableText.fromJson(value) : null;
+    controller = TextEditingController(text: text?.value);
   }
 
   @override
@@ -60,7 +63,7 @@ class _NameCardState extends ConsumerState<NameCard> {
         controller: controller,
         onChanged: (value) {
           ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
-            {Attributes.name: value},
+            {Attributes.name: TranslatableText(valueDe: value).toJson()},
           );
         },
       ),
