@@ -1,12 +1,15 @@
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../constants.dart';
 import '../../utils/miscellaneous_utils.dart';
 import '../attribute/cards.dart';
 import '../edit_mode_button.dart';
 import 'draggable_cards_builder.dart';
 
-class DraggableSection extends ConsumerWidget {
+class DraggableSection extends ConsumerStatefulWidget {
   const DraggableSection({
     super.key,
     required this.materialId,
@@ -29,40 +32,59 @@ class DraggableSection extends ConsumerWidget {
   final EdgeInsets padding;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DraggableSection> createState() => _DraggableSectionState();
+}
+
+class _DraggableSectionState extends ConsumerState<DraggableSection> {
+  final nameDebouncer = Debouncer();
+
+  @override
+  Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
 
-    final sections = ref.watch(sectionsProvider(sectionCategory));
-    final section = sections[sectionIndex];
+    final sections = ref.watch(sectionsProvider(widget.sectionCategory));
+    final section = sections[widget.sectionIndex];
     final items = section.cards;
     final edit = ref.watch(editModeProvider);
 
-    // todo: update material after focus lost
     final nameField = Padding(
-      padding: labelPadding,
+      padding: widget.labelPadding,
       child: TextFormField(
         initialValue: section.nameDe,
         enabled: edit,
-        style: textStyle,
+        style: widget.textStyle,
         decoration: InputDecoration.collapsed(hintText: 'Section Name'),
         maxLines: null,
         onChanged: (value) {
-          ref.read(sectionsProvider(sectionCategory).notifier).update((
+          ref.read(sectionsProvider(widget.sectionCategory).notifier).update((
             sections,
           ) {
-            sections[sectionIndex] = sections[sectionIndex].copyWith(
-              nameDe: value,
-            );
+            sections[widget.sectionIndex] = sections[widget.sectionIndex]
+                .copyWith(nameDe: value);
             return sections;
           });
+
+          nameDebouncer.debounce(
+            duration: Duration(milliseconds: 1000),
+            onDebounce: () {
+              ref
+                  .watch(materialProvider(widget.materialId).notifier)
+                  .updateMaterial({
+                    Attributes.cardSections: {
+                      widget.sectionCategory.name:
+                          sections.map((section) => section.toJson()).toList(),
+                    },
+                  });
+            },
+          );
         },
       ),
     );
 
     Widget nonDraggableBuilder(int index) {
       final item = items[index];
-      final child = itemBuilder(context, item);
-      return Padding(padding: itemMargin, child: child);
+      final child = widget.itemBuilder(context, item);
+      return Padding(padding: widget.itemMargin, child: child);
     }
 
     Widget container({
@@ -76,7 +98,7 @@ class DraggableSection extends ConsumerWidget {
           minHeight: 100,
         ),
         margin: const EdgeInsets.only(bottom: 16),
-        padding: padding,
+        padding: widget.padding,
         decoration: BoxDecoration(
           border: Border.all(
             color:
@@ -113,12 +135,12 @@ class DraggableSection extends ConsumerWidget {
     }
 
     return DraggableCardsBuilder(
-      materialId: materialId,
-      sectionIndex: sectionIndex,
-      sectionCategory: sectionCategory,
-      padding: itemMargin,
+      materialId: widget.materialId,
+      sectionIndex: widget.sectionIndex,
+      sectionCategory: widget.sectionCategory,
+      padding: widget.itemMargin,
       itemBuilder: (context, item) {
-        return itemBuilder(context, item);
+        return widget.itemBuilder(context, item);
       },
       containerBuilder: (context, itemBuilder, highlighted) {
         return container(
