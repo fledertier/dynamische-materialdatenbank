@@ -190,22 +190,48 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               );
             },
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListenableBuilder(
-                listenable: _controller.required,
-                builder: (context, child) {
-                  return Checkbox(
-                    value: _controller.required.value ?? false,
-                    onChanged: (value) {
-                      _controller.required.value = value;
+          ListenableBuilder(
+            listenable: _controller.type,
+            builder: (context, child) {
+              final requiredCheckbox = Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListenableBuilder(
+                    listenable: _controller.required,
+                    builder: (context, child) {
+                      return Checkbox(
+                        value: _controller.required.value ?? false,
+                        onChanged: (value) {
+                          _controller.required.value = value;
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-              Text('Required'),
-            ],
+                  ),
+                  Text('Required'),
+                ],
+              );
+              final multilineCheckbox = Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListenableBuilder(
+                    listenable: _controller.multiline,
+                    builder: (context, child) {
+                      return Checkbox(
+                        value: _controller.multiline.value ?? false,
+                        onChanged: (value) {
+                          _controller.multiline.value = value;
+                        },
+                      );
+                    },
+                  ),
+                  Text('Multiline'),
+                ],
+              );
+              return Column(
+                spacing: 16,
+                children: [if (isText) multilineCheckbox, requiredCheckbox],
+              );
+            },
           ),
         ],
       ),
@@ -213,6 +239,10 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
   }
 
   bool get isList => _controller.type.value == AttributeType.list;
+
+  bool get isText =>
+      _controller.type.value == AttributeType.text ||
+      isList && _controller.listType.value == AttributeType.text;
 
   bool get isNumber {
     return _controller.type.value == AttributeType.number ||
@@ -230,8 +260,9 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         nameDe: _controller.nameDe.value!,
         nameEn: _controller.nameEn.value,
         type: switch (_controller.type.value!) {
-          AttributeType.text => TextAttributeType(),
-          AttributeType.textarea => TextareaAttributeType(),
+          AttributeType.text => TextAttributeType(
+            multiline: _controller.multiline.value ?? false,
+          ),
           AttributeType.number => NumberAttributeType(
             unitType: _controller.unitType.value,
           ),
@@ -243,8 +274,9 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
           ),
           AttributeType.list => ListAttributeType(
             type: switch (_controller.listType.value!) {
-              AttributeType.text => TextAttributeType(),
-              AttributeType.textarea => TextareaAttributeType(),
+              AttributeType.text => TextAttributeType(
+                multiline: _controller.multiline.value ?? false,
+              ),
               AttributeType.number => NumberAttributeType(
                 unitType: _controller.unitType.value,
               ),

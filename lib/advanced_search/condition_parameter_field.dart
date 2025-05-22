@@ -24,7 +24,7 @@ class ConditionParameterField extends ConsumerWidget {
     final type = attribute?.type.id;
 
     return switch (type) {
-      AttributeType.text || AttributeType.textarea => TextField(
+      AttributeType.text => TextField(
         enabled: enabled,
         initialValue: value as String?,
         onChanged: (value) => onChanged?.call(value),

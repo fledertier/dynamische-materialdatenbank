@@ -22,7 +22,7 @@ enum Operator {
 }
 
 class TextAttributeType extends AttributeType {
-  TextAttributeType()
+  TextAttributeType({required this.multiline})
     : super(
         id: AttributeType.text,
         operators: {
@@ -33,25 +33,28 @@ class TextAttributeType extends AttributeType {
         },
       );
 
+  final bool multiline;
+
   factory TextAttributeType.fromJson(Json json) {
-    return TextAttributeType();
+    return TextAttributeType(multiline: json['multiline']);
   }
-}
 
-class TextareaAttributeType extends AttributeType {
-  TextareaAttributeType()
-    : super(
-        id: AttributeType.textarea,
-        operators: {
-          Operator.contains,
-          Operator.notContains,
-          Operator.equals,
-          Operator.notEquals,
-        },
-      );
+  @override
+  Json toJson() {
+    return {'id': id, 'multiline': multiline};
+  }
 
-  factory TextareaAttributeType.fromJson(Json json) {
-    return TextareaAttributeType();
+  @override
+  String toString() => [name, if (multiline) 'multiline'].join(', ');
+
+  @override
+  int get hashCode => Object.hash(id, multiline);
+
+  @override
+  bool operator ==(Object other) {
+    return other is TextAttributeType &&
+        other.id == id &&
+        other.multiline == multiline;
   }
 }
 
@@ -198,7 +201,6 @@ class CountryAttributeType extends AttributeType {
 
 abstract class AttributeType {
   static const text = 'text';
-  static const textarea = 'textarea';
   static const number = 'number';
   static const boolean = 'boolean';
   static const url = 'url';
@@ -206,16 +208,7 @@ abstract class AttributeType {
   static const object = 'object';
   static const list = 'list';
 
-  static final values = [
-    text,
-    textarea,
-    number,
-    boolean,
-    url,
-    country,
-    object,
-    list,
-  ];
+  static final values = [text, number, boolean, url, country, object, list];
 
   const AttributeType({required this.id, required this.operators});
 
@@ -228,7 +221,6 @@ abstract class AttributeType {
     final id = json['id'];
     return switch (id) {
       text => TextAttributeType.fromJson(json),
-      textarea => TextareaAttributeType.fromJson(json),
       number => NumberAttributeType.fromJson(json),
       boolean => BooleanAttributeType.fromJson(json),
       url => UrlAttributeType.fromJson(json),
@@ -259,7 +251,6 @@ abstract class AttributeType {
 IconData iconForAttributeType(String id) {
   return switch (id) {
     AttributeType.text => Symbols.text_fields,
-    AttributeType.textarea => Symbols.article,
     AttributeType.number => Symbols.numbers,
     AttributeType.boolean => Symbols.check_box,
     AttributeType.url => Symbols.link,

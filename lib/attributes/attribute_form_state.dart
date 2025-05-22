@@ -15,6 +15,7 @@ class AttributeFormController implements Listenable {
       objectAttributes = ValueNotifier(
         initialAttribute?.type.objectAttributes ?? [],
       ),
+      multiline = ValueNotifier(initialAttribute?.type.textMultiline),
       required = ValueNotifier(initialAttribute?.required);
 
   final ValueNotifier<String?> id;
@@ -24,6 +25,7 @@ class AttributeFormController implements Listenable {
   final ValueNotifier<String?> listType;
   final ValueNotifier<UnitType?> unitType;
   final ValueNotifier<List<Attribute>> objectAttributes;
+  final ValueNotifier<bool?> multiline;
   final ValueNotifier<bool?> required;
 
   final Attribute? initialAttribute;
@@ -38,6 +40,7 @@ class AttributeFormController implements Listenable {
           objectAttributes.value,
           initialAttribute?.type.objectAttributes ?? [],
         ) ||
+        multiline.value != initialAttribute?.type.textMultiline ||
         required.value != initialAttribute?.required;
   }
 
@@ -49,6 +52,7 @@ class AttributeFormController implements Listenable {
     listType,
     unitType,
     objectAttributes,
+    multiline,
     required,
   ];
 
@@ -74,6 +78,13 @@ class AttributeFormController implements Listenable {
 }
 
 extension on AttributeType {
+  bool? get textMultiline {
+    if (this case TextAttributeType(:final multiline)) {
+      return multiline;
+    }
+    return null;
+  }
+
   AttributeType? get listType {
     if (this case ListAttributeType(:final type)) {
       return type;

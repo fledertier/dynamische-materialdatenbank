@@ -1,8 +1,7 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/textarea/textarea_card.dart';
 import 'package:flutter/material.dart';
-
-import '../../default/textarea/textarea_card.dart';
 
 class DescriptionCard extends StatelessWidget {
   const DescriptionCard({
