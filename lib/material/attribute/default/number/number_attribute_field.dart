@@ -17,14 +17,12 @@ class NumberAttributeField extends ConsumerStatefulWidget {
     required this.attributeId,
     required this.number,
     this.onChanged,
-    this.onUnitChanged,
     this.textStyle,
   });
 
   final String attributeId;
   final UnitNumber number;
-  final ValueChanged<num>? onChanged;
-  final ValueChanged<String>? onUnitChanged;
+  final ValueChanged<UnitNumber>? onChanged;
   final TextStyle? textStyle;
 
   @override
@@ -34,6 +32,7 @@ class NumberAttributeField extends ConsumerStatefulWidget {
 
 class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
   TextEditingController? controller;
+  late var number = widget.number;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
     }
 
     final unitType = (attribute.type as NumberAttributeType).unitType;
-    final value = toDisplayUnit(widget.number, unitType);
+    final value = toDisplayUnit(number, unitType);
     controller ??= TextEditingController(text: value.toStringAsFlexible());
 
     return Wrap(
@@ -66,8 +65,8 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
               controller: controller,
               onChanged: (text) {
                 final value = double.tryParse(text) ?? 0.0;
-                // todo: pass unit number instead
-                widget.onChanged?.call(toBaseUnit(value, unitType));
+                number = number.copyWith(value: toBaseUnit(value, unitType));
+                widget.onChanged?.call(number);
               },
             ),
           ),
@@ -78,9 +77,12 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
             baselineType: TextBaseline.alphabetic,
             child: UnitDropdown(
               unitType: unitType,
-              selectedUnit: widget.number.displayUnit,
+              selectedUnit: number.displayUnit,
               edit: edit,
-              onChanged: widget.onUnitChanged,
+              onChanged: (unit) {
+                number = number.copyWith(displayUnit: unit);
+                widget.onChanged?.call(number);
+              },
             ),
           ),
       ],
@@ -91,7 +93,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
     if (unitType == null) {
       return value;
     }
-    return unitType.convert(value, fromUnit: widget.number.displayUnit);
+    return unitType.convert(value, fromUnit: number.displayUnit);
   }
 
   num toDisplayUnit(UnitNumber number, UnitType? unitType) {

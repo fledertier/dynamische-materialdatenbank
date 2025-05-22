@@ -1,16 +1,16 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../constants.dart';
-import '../../../material_provider.dart';
-import '../../cards.dart';
 import 'fire_behavior_standard.dart';
 import 'fire_behavior_standard_visualization.dart';
 
-class FireBehaviorStandardCard extends ConsumerWidget {
+class FireBehaviorStandardCard extends ConsumerStatefulWidget {
   const FireBehaviorStandardCard({
     super.key,
     required this.materialId,
@@ -21,12 +21,22 @@ class FireBehaviorStandardCard extends ConsumerWidget {
   final CardSize size;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FireBehaviorStandardCard> createState() =>
+      _FireBehaviorStandardCardState();
+}
+
+class _FireBehaviorStandardCardState
+    extends ConsumerState<FireBehaviorStandardCard> {
+  late TextEditingController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final edit = ref.watch(editModeProvider);
     final value =
         ref.watch(
           materialAttributeValueProvider(
             AttributeArgument(
-              materialId: materialId,
+              materialId: widget.materialId,
               attributeId: Attributes.fireBehaviorStandard,
             ),
           ),
@@ -38,16 +48,24 @@ class FireBehaviorStandardCard extends ConsumerWidget {
     return AttributeCard(
       columns: 3,
       label: AttributeLabel(attribute: Attributes.fireBehaviorStandard),
-      title: TextAttributeField(
-        attributeId: Attributes.fireBehaviorStandard,
-        text: value,
+      title: TextField(
+        enabled: edit,
+        style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),
+        decoration: InputDecoration.collapsed(hintText: 'z.B. B-s2,d1'),
+        controller: controller ??= TextEditingController(text: value),
         onChanged: (value) {
-          ref.read(materialProvider(materialId).notifier).updateMaterial({
-            Attributes.fireBehaviorStandard: value,
-          });
+          ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
+            {Attributes.fireBehaviorStandard: value},
+          );
         },
       ),
       child: FireBehaviorStandardVisualization(fireBehavior),
     );
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 }

@@ -15,12 +15,14 @@ class TextCard extends ConsumerWidget {
     required this.attributeId,
     required this.size,
     this.textStyle,
+    this.columns = 2,
   });
 
   final String materialId;
   final String attributeId;
   final CardSize size;
   final TextStyle? textStyle;
+  final int columns;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +34,7 @@ class TextCard extends ConsumerWidget {
     final text = value != null ? TranslatableText.fromJson(value) : null;
 
     return AttributeCard(
-      columns: 2,
+      columns: columns,
       label: AttributeLabel(attribute: attributeId),
       title: TextAttributeField(
         attributeId: attributeId,

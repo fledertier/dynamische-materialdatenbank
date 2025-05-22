@@ -54,14 +54,9 @@ class NumberCard extends ConsumerWidget {
               CardSize.small => textTheme.titleLarge,
               CardSize.large => textTheme.displayLarge,
             },
-        onChanged: (value) {
+        onChanged: (number) {
           ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: number.copyWith(value: value).toJson(),
-          });
-        },
-        onUnitChanged: (unit) {
-          ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: number.copyWith(displayUnit: unit).toJson(),
+            attributeId: number.toJson(),
           });
         },
       ),

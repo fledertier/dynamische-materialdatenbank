@@ -5,7 +5,7 @@ import 'package:countries_world_map/data/maps/world_map.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'countries.dart';
+import '../../default/country/country.dart';
 import 'focusable_interactive_viewer.dart';
 
 class WorldMap extends StatefulWidget {

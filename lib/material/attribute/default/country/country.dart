@@ -1,4 +1,3 @@
-// todo: move into lib/material/attribute/default/country
 class Country {
   final String name;
   final String code;
