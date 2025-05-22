@@ -13,42 +13,36 @@ class DraggableSection extends ConsumerWidget {
     required this.sectionIndex,
     required this.sectionCategory,
     required this.itemBuilder,
+    this.textStyle,
+    this.itemMargin = EdgeInsets.zero,
+    this.labelPadding = EdgeInsets.zero,
+    this.padding = EdgeInsets.zero,
   });
 
   final String materialId;
   final int sectionIndex;
   final SectionCategory sectionCategory;
   final Widget Function(BuildContext context, CardData item) itemBuilder;
+  final TextStyle? textStyle;
+  final EdgeInsets itemMargin;
+  final EdgeInsets labelPadding;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
-    final textTheme = TextTheme.of(context);
 
     final sections = ref.watch(sectionsProvider(sectionCategory));
     final section = sections[sectionIndex];
     final items = section.cards;
-    final fromSectionIndex = ref.watch(fromSectionIndexProvider);
-    final fromSectionCategory = ref.watch(fromSectionCategoryProvider);
     final edit = ref.watch(editModeProvider);
 
-    final padding =
-        sectionCategory == SectionCategory.primary
-            ? const EdgeInsets.all(8)
-            : EdgeInsets.zero;
-
     final nameField = Padding(
-      padding:
-          sectionCategory == SectionCategory.primary
-              ? const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 16)
-              : const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+      padding: labelPadding,
       child: TextFormField(
         initialValue: section.nameDe,
         enabled: edit,
-        style:
-            sectionCategory == SectionCategory.primary
-                ? textTheme.headlineMedium?.copyWith(fontFamily: 'Lexend')
-                : textTheme.titleMedium?.copyWith(fontFamily: 'Lexend'),
+        style: textStyle,
         decoration: InputDecoration.collapsed(hintText: 'Section Name'),
         maxLines: null,
         onChanged: (value) {
@@ -64,11 +58,16 @@ class DraggableSection extends ConsumerWidget {
       ),
     );
 
-    Widget nonDraggable(CardData item) {
-      return Padding(padding: padding, child: itemBuilder(context, item));
+    Widget nonDraggableBuilder(int index) {
+      final item = items[index];
+      final child = itemBuilder(context, item);
+      return Padding(padding: itemMargin, child: child);
     }
 
-    Widget container(Widget Function(int index) itemBuilder, bool highlighted) {
+    Widget container(
+      Widget Function(int index) draggableBuilder,
+      bool highlighted,
+    ) {
       final hasName = section.nameDe?.isNotEmpty ?? false;
       return Container(
         constraints: BoxConstraints(
@@ -76,10 +75,7 @@ class DraggableSection extends ConsumerWidget {
           minHeight: 100,
         ),
         margin: const EdgeInsets.only(bottom: 16),
-        padding:
-            sectionCategory == SectionCategory.primary
-                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
-                : EdgeInsets.zero,
+        padding: padding,
         decoration: BoxDecoration(
           border: Border.all(
             color:
@@ -98,11 +94,11 @@ class DraggableSection extends ConsumerWidget {
             if (hasName || edit) nameField,
             Wrap(
               children: [
-                ...List.generate(items.length, (itemIndex) {
+                ...List.generate(items.length, (index) {
                   if (!edit) {
-                    return nonDraggable(items[itemIndex]);
+                    return nonDraggableBuilder(index);
                   }
-                  return itemBuilder(itemIndex);
+                  return draggableBuilder(index);
                 }),
               ],
             ),
@@ -119,7 +115,7 @@ class DraggableSection extends ConsumerWidget {
       materialId: materialId,
       sectionIndex: sectionIndex,
       sectionCategory: sectionCategory,
-      padding: padding,
+      padding: itemMargin,
       itemBuilder: (context, item) {
         return itemBuilder(context, item);
       },
