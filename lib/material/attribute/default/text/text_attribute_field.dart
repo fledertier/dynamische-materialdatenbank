@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +10,13 @@ class TextAttributeField extends ConsumerStatefulWidget {
     required this.attributeId,
     this.value,
     this.onChanged,
+    this.textStyle,
   });
 
   final String attributeId;
   final String? value;
   final ValueChanged<String>? onChanged;
+  final TextStyle? textStyle;
 
   @override
   ConsumerState<TextAttributeField> createState() =>
@@ -37,19 +40,30 @@ class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = TextTheme.of(context);
-
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final multiline =
+        (attribute?.type as TextAttributeType?)?.multiline ?? false;
 
-    return IntrinsicWidth(
-      child: TextField(
-        enabled: edit,
-        style: textTheme.titleLarge?.copyWith(fontFamily: 'Lexend'),
-        decoration: InputDecoration.collapsed(hintText: attribute?.name),
-        controller: controller,
-        onChanged: widget.onChanged,
+    final textTheme = TextTheme.of(context);
+    final defaultTextStyle =
+        multiline ? textTheme.bodySmall : textTheme.titleLarge;
+
+    final textField = TextField(
+      enabled: edit,
+      style: (widget.textStyle ?? defaultTextStyle)?.copyWith(
+        fontFamily: 'Lexend',
       ),
+      decoration: InputDecoration.collapsed(hintText: attribute?.name),
+      maxLines: multiline ? null : 1,
+      controller: controller,
+      onChanged: widget.onChanged,
     );
+
+    if (multiline) {
+      return textField;
+    } else {
+      return IntrinsicWidth(child: textField);
+    }
   }
 }
