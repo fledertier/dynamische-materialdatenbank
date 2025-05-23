@@ -1,11 +1,14 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_form_state.dart';
+import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
-import '../widgets/dropdown_menu_form_field.dart';
 import 'attribute.dart';
 import 'attribute_dialog.dart';
+import 'attribute_form_state.dart';
 import 'attribute_provider.dart';
 import 'attribute_service.dart';
 import 'attribute_type.dart';
@@ -28,6 +31,9 @@ class AttributeForm extends ConsumerStatefulWidget {
 class AttributeFormState extends ConsumerState<AttributeForm> {
   final _form = GlobalKey<FormState>();
   late final _controller = widget.controller ?? AttributeFormController();
+  late final _initialController = AttributeFormController(
+    _controller.initialAttribute,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +123,12 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                         leadingIcon: Icon(iconForAttributeType(value)),
                       ),
                 ],
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a list type';
+                  }
+                  return null;
+                },
                 onSelected: (value) {
                   _controller.listType.value = value;
                 },
@@ -142,35 +154,23 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   for (final attribute in _controller.objectAttributes.value)
                     AttributeListTile(
                       attribute,
-                      onTap: () async {
-                        final updatedAttribute = await showAttributeDialog(
-                          context,
-                          attribute,
-                        );
-                        if (updatedAttribute != null) {
-                          _controller.objectAttributes.value = [
-                            for (final attribute
-                                in _controller.objectAttributes.value)
-                              attribute.id == updatedAttribute.id
-                                  ? updatedAttribute
-                                  : attribute,
-                          ];
-                        }
+                      onTap: () {
+                        editAttribute(attribute);
                       },
+                      trailing: IconButton(
+                        icon: Icon(Symbols.remove_circle),
+                        onPressed: () {
+                          deleteAttribute(attribute);
+                        },
+                      ),
                     ),
                   SizedBox(height: 8),
                   OutlinedButton.icon(
                     style: IconButton.styleFrom(),
                     icon: Icon(Icons.add),
                     label: Text('Add attribute'),
-                    onPressed: () async {
-                      final attribute = await showAttributeDialog(context);
-                      if (attribute != null) {
-                        _controller.objectAttributes.value = [
-                          ..._controller.objectAttributes.value,
-                          attribute,
-                        ];
-                      }
+                    onPressed: () {
+                      addAttribute();
                     },
                   ),
                 ],
@@ -178,20 +178,26 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               return Column(
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 16,
                     children: [
                       Expanded(child: typeField),
-                      if (isList) Expanded(child: listTypeDropdown),
-                      if (isNumber) Expanded(child: unitDropdown),
+                      if (hasType(AttributeType.list))
+                        Expanded(child: listTypeDropdown),
+                      if (hasType(AttributeType.number))
+                        Expanded(child: unitDropdown),
                     ],
                   ),
-                  if (isObject) objectAttributes,
+                  if (hasType(AttributeType.object)) objectAttributes,
                 ],
               );
             },
           ),
           ListenableBuilder(
-            listenable: _controller.type,
+            listenable: Listenable.merge([
+              _controller.type,
+              _controller.listType,
+            ]),
             builder: (context, child) {
               final requiredCheckbox = Row(
                 mainAxisSize: MainAxisSize.min,
@@ -229,7 +235,10 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
               );
               return Column(
                 spacing: 16,
-                children: [if (isText) multilineCheckbox, requiredCheckbox],
+                children: [
+                  if (hasType(AttributeType.text)) multilineCheckbox,
+                  requiredCheckbox,
+                ],
               );
             },
           ),
@@ -238,66 +247,96 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
-  bool get isList => _controller.type.value == AttributeType.list;
-
-  bool get isText =>
-      _controller.type.value == AttributeType.text ||
-      isList && _controller.listType.value == AttributeType.text;
-
-  bool get isNumber {
-    return _controller.type.value == AttributeType.number ||
-        isList && _controller.listType.value == AttributeType.number;
+  Future<void> addAttribute() async {
+    final attribute = await showAttributeDialog(context);
+    if (attribute != null) {
+      _controller.objectAttributes.value = [
+        ..._controller.objectAttributes.value,
+        attribute,
+      ];
+    }
   }
 
-  bool get isObject =>
-      _controller.type.value == AttributeType.object ||
-      isList && _controller.listType.value == AttributeType.object;
+  Future<void> editAttribute(Attribute attribute) async {
+    final updatedAttribute = await showAttributeDialog(context, attribute);
+    if (updatedAttribute != null) {
+      _controller.objectAttributes.value = [
+        for (final objectAttribute in _controller.objectAttributes.value)
+          objectAttribute.id == updatedAttribute.id
+              ? updatedAttribute
+              : objectAttribute,
+      ];
+    }
+  }
+
+  void deleteAttribute(Attribute attribute) {
+    _controller.objectAttributes.value = [
+      for (final objectAttribute in _controller.objectAttributes.value)
+        if (objectAttribute.id != attribute.id) objectAttribute,
+    ];
+  }
+
+  bool hasType(String type) {
+    return _controller.type.value == type ||
+        _controller.type.value == AttributeType.list &&
+            _controller.listType.value == type;
+  }
+
+  bool get hasChanges {
+    return _controller != _initialController;
+  }
 
   Future<void> submit() async {
-    if (_form.currentState!.validate()) {
+    final attributesToDelete = _initialController.objectAttributes.value.where(
+      (attribute) => _controller.objectAttributes.value.none(
+        (objectAttribute) => objectAttribute.id == attribute.id,
+      ),
+    );
+    final deletionConfirmed = _confirmAttributeDeletion(attributesToDelete);
+
+    if (_form.currentState!.validate() && await deletionConfirmed) {
       final attribute = Attribute(
         id: _controller.id.value ?? await _createId(),
         nameDe: _controller.nameDe.value!,
         nameEn: _controller.nameEn.value,
-        type: switch (_controller.type.value!) {
-          AttributeType.text => TextAttributeType(
-            multiline: _controller.multiline.value ?? false,
-          ),
-          AttributeType.number => NumberAttributeType(
-            unitType: _controller.unitType.value,
-          ),
-          AttributeType.boolean => BooleanAttributeType(),
-          AttributeType.url => UrlAttributeType(),
-          AttributeType.country => CountryAttributeType(),
-          AttributeType.object => ObjectAttributeType(
-            attributes: _controller.objectAttributes.value,
-          ),
-          AttributeType.list => ListAttributeType(
-            type: switch (_controller.listType.value!) {
-              AttributeType.text => TextAttributeType(
-                multiline: _controller.multiline.value ?? false,
-              ),
-              AttributeType.number => NumberAttributeType(
-                unitType: _controller.unitType.value,
-              ),
-              AttributeType.boolean => BooleanAttributeType(),
-              AttributeType.url => UrlAttributeType(),
-              AttributeType.country => CountryAttributeType(),
-              AttributeType.object => ObjectAttributeType(
-                attributes: _controller.objectAttributes.value,
-              ),
-              _ =>
-                throw Exception(
-                  'Invalid list type ${_controller.listType.value}',
-                ),
-            },
-          ),
-          _ => throw Exception('Invalid type ${_controller.type.value}'),
-        },
+        type: _createAttributeType(_controller.type.value!),
         required: _controller.required.value ?? false,
       );
       widget.onSubmit(attribute);
+      for (final attribute in attributesToDelete) {
+        // todo: delete attribute
+      }
     }
+  }
+
+  Future<bool> _confirmAttributeDeletion(Iterable<Attribute> attributes) async {
+    final delete = await Future.wait(
+      attributes.map(
+        (attribute) => showAttributeDeleteDialog(context, attribute),
+      ),
+    );
+    return delete.every((delete) => delete);
+  }
+
+  AttributeType _createAttributeType(String type) {
+    return switch (type) {
+      AttributeType.text => TextAttributeType(
+        multiline: _controller.multiline.value ?? false,
+      ),
+      AttributeType.number => NumberAttributeType(
+        unitType: _controller.unitType.value,
+      ),
+      AttributeType.boolean => BooleanAttributeType(),
+      AttributeType.url => UrlAttributeType(),
+      AttributeType.country => CountryAttributeType(),
+      AttributeType.object => ObjectAttributeType(
+        attributes: _controller.objectAttributes.value,
+      ),
+      AttributeType.list => ListAttributeType(
+        type: _createAttributeType(_controller.listType.value!),
+      ),
+      _ => throw Exception('Invalid type ${_controller.type.value}'),
+    };
   }
 
   Future<String> _createId() async {

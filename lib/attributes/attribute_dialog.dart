@@ -15,8 +15,10 @@ class AttributeDialog extends StatefulWidget {
 }
 
 class _AttributeDialogState extends State<AttributeDialog> {
-  final form = GlobalKey<AttributeFormState>();
+  final formKey = GlobalKey<AttributeFormState>();
   late final controller = AttributeFormController(widget.initialAttribute);
+
+  AttributeFormState get form => formKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _AttributeDialogState extends State<AttributeDialog> {
         child: SizedBox(
           width: 400,
           child: AttributeForm(
-            key: form,
+            key: formKey,
             controller: controller,
             onSubmit: (attribute) {
               context.pop(attribute);
@@ -47,17 +49,13 @@ class _AttributeDialogState extends State<AttributeDialog> {
           listenable: controller,
           builder: (context, child) {
             return TextButton(
-              onPressed: controller.hasChanges ? submitForm : null,
+              onPressed: form.hasChanges ? form.submit : null,
               child: Text(widget.initialAttribute != null ? "Save" : "Create"),
             );
           },
         ),
       ],
     );
-  }
-
-  void submitForm() {
-    form.currentState!.submit();
   }
 
   @override

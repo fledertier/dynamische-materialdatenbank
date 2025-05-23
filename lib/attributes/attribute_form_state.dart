@@ -30,20 +30,6 @@ class AttributeFormController implements Listenable {
 
   final Attribute? initialAttribute;
 
-  bool get hasChanges {
-    return nameDe.value != initialAttribute?.nameDe ||
-        nameEn.value != initialAttribute?.nameEn ||
-        type.value != initialAttribute?.type.id ||
-        listType.value != initialAttribute?.type.listType?.id ||
-        unitType.value != initialAttribute?.type.numberUnitType ||
-        !listEquals(
-          objectAttributes.value,
-          initialAttribute?.type.objectAttributes ?? [],
-        ) ||
-        multiline.value != initialAttribute?.type.textMultiline ||
-        required.value != initialAttribute?.required;
-  }
-
   List<ValueNotifier> get _notifiers => [
     id,
     nameDe,
@@ -75,38 +61,57 @@ class AttributeFormController implements Listenable {
       notifier.dispose();
     }
   }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      id.value,
+      nameDe.value,
+      nameEn.value,
+      type.value,
+      listType.value,
+      unitType.value,
+      Object.hashAll(objectAttributes.value),
+      multiline.value,
+      required.value,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AttributeFormController) return false;
+
+    return id.value == other.id.value &&
+        nameDe.value == other.nameDe.value &&
+        nameEn.value == other.nameEn.value &&
+        type.value == other.type.value &&
+        listType.value == other.listType.value &&
+        unitType.value == other.unitType.value &&
+        listEquals(objectAttributes.value, other.objectAttributes.value) &&
+        multiline.value == other.multiline.value &&
+        required.value == other.required.value;
+  }
 }
 
 extension on AttributeType {
   bool? get textMultiline {
-    if (this case TextAttributeType(:final multiline)) {
-      return multiline;
-    }
-    return null;
-  }
-
-  AttributeType? get listType {
-    if (this case ListAttributeType(:final type)) {
-      return type;
-    }
-    return null;
+    final type = listType ?? this;
+    return type is TextAttributeType ? type.multiline : null;
   }
 
   UnitType? get numberUnitType {
-    if (this case NumberAttributeType(:final unitType)) {
-      return unitType;
-    }
-    return null;
+    final type = listType ?? this;
+    return type is NumberAttributeType ? type.unitType : null;
   }
 
   List<Attribute>? get objectAttributes {
-    var attributeType = this;
-    if (this case ListAttributeType(:final type)) {
-      attributeType = type;
-    }
-    if (attributeType case ObjectAttributeType(:final attributes)) {
-      return attributes;
-    }
-    return null;
+    final type = listType ?? this;
+    return type is ObjectAttributeType ? type.attributes : null;
+  }
+
+  AttributeType? get listType {
+    final type = this;
+    return type is ListAttributeType ? type.type : null;
   }
 }

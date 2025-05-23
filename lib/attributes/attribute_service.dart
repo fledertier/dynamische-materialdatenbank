@@ -1,19 +1,19 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants.dart';
 import 'attribute.dart';
 
 final attributeServiceProvider = Provider((ref) => AttributeService());
 
 class AttributeService {
-  Stream<Map<String, dynamic>> getAttributeStream(String attribute) {
+  Stream<Map<String, dynamic>> getAttributeStream(String attributeId) {
     return FirebaseFirestore.instance
         .collection(Collections.attributes)
-        .doc(attribute)
+        .doc(attributeId)
         .snapshots()
         .map((snapshot) {
           return snapshot.exists ? snapshot.data() ?? {} : {};
@@ -21,36 +21,47 @@ class AttributeService {
   }
 
   Future<List<Map<String, dynamic>>> getMaterialsWithAttribute(
-    String attribute,
+    String attributeId,
   ) async {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.materials)
-            .where(attribute, isNull: false)
+            .where(attributeId, isNull: false)
             .get();
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  Future<void> deleteAttribute(String attribute) async {
-    final materials = await getMaterialsWithAttribute(attribute);
+  Future<void> deleteAttribute(String attributeId) async {
+    final topLevelAttributeId = attributeId.split('.').first;
+    final subAttributeId = attributeId.split('.').sublist(1).join('.');
 
+    final materials = await getMaterialsWithAttribute(attributeId);
     for (final material in materials) {
-      final id = material[Attributes.id];
+      final materialId = material[Attributes.id];
       FirebaseFirestore.instance
           .collection(Collections.materials)
-          .doc(id)
-          .update({attribute: FieldValue.delete()});
+          .doc(materialId)
+          .update({attributeId: FieldValue.delete()});
     }
 
-    FirebaseFirestore.instance
+    final isTopLevel = attributeId == topLevelAttributeId;
+    final attributeDoc = FirebaseFirestore.instance
         .collection(Collections.attributes)
-        .doc(attribute)
-        .delete();
+        .doc(topLevelAttributeId);
+    if (isTopLevel) {
+      attributeDoc.delete();
+    } else {
+      final valuesByMaterialId = (await attributeDoc.get()).data() ?? {};
+      attributeDoc.update({
+        for (final materialId in valuesByMaterialId.keys)
+          '$materialId.$subAttributeId': FieldValue.delete(),
+      });
+    }
 
     FirebaseFirestore.instance
         .collection(Collections.metadata)
         .doc(Docs.attributes)
-        .set({attribute: FieldValue.delete()}, SetOptions(merge: true));
+        .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {

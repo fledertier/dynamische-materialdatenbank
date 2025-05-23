@@ -7,8 +7,8 @@ abstract class Pages {
 
 abstract class Collections {
   static const materials = "materials";
-  static const attributes = "attributes";
-  static const metadata = "metadata";
+  static const attributes = "values";
+  static const metadata = "attributes";
   static const colors = "colors";
 }
 

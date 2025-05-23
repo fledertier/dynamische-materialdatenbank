@@ -58,7 +58,33 @@ class AttributeDetails extends ConsumerWidget {
                             editAttribute(context, ref, attribute);
                           },
                         ),
-                        AttributeOverflowMenu(attribute: attribute),
+                        DirectionalMenuAnchor(
+                          directionality: TextDirection.rtl,
+                          builder: (context, controller, child) {
+                            return IconButton(
+                              onPressed: controller.toggle,
+                              icon: Icon(Icons.more_vert),
+                            );
+                          },
+                          menuChildren: [
+                            MenuItemButton(
+                              leadingIcon: Icon(Symbols.content_copy),
+                              requestFocusOnHover: false,
+                              onPressed: () {
+                                copyAttributeId(context, attribute);
+                              },
+                              child: Text('Copy id'),
+                            ),
+                            MenuItemButton(
+                              leadingIcon: Icon(Symbols.delete),
+                              requestFocusOnHover: false,
+                              onPressed: () {
+                                deleteAttribute(context, ref, attribute);
+                              },
+                              child: Text('Delete'),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -88,51 +114,6 @@ class AttributeDetails extends ConsumerWidget {
         context,
       ).showSnackBar(SnackBar(content: Text('Attribute saved')));
     }
-  }
-}
-
-class AttributeOverflowMenu extends ConsumerWidget {
-  const AttributeOverflowMenu({
-    super.key,
-    required this.attribute,
-    this.visible = true,
-  });
-
-  final Attribute attribute;
-  final bool visible;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return DirectionalMenuAnchor(
-      directionality: TextDirection.rtl,
-      builder: (context, controller, child) {
-        return Visibility.maintain(
-          visible: visible || controller.isOpen,
-          child: IconButton(
-            onPressed: controller.toggle,
-            icon: Icon(Icons.more_vert),
-          ),
-        );
-      },
-      menuChildren: [
-        MenuItemButton(
-          leadingIcon: Icon(Symbols.content_copy),
-          requestFocusOnHover: false,
-          onPressed: () {
-            copyAttributeId(context, attribute);
-          },
-          child: Text('Copy id'),
-        ),
-        MenuItemButton(
-          leadingIcon: Icon(Symbols.delete),
-          requestFocusOnHover: false,
-          onPressed: () {
-            deleteAttribute(context, ref, attribute);
-          },
-          child: Text('Delete'),
-        ),
-      ],
-    );
   }
 
   Future<void> deleteAttribute(

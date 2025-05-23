@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'attribute.dart';
-import 'attribute_details.dart';
 import 'attribute_dialog.dart';
 import 'attribute_provider.dart';
 import 'attribute_search_bar.dart';
@@ -114,11 +113,13 @@ class AttributeListTile extends ConsumerWidget {
     super.key,
     this.selected = false,
     required this.onTap,
+    this.trailing,
   });
 
   final Attribute attribute;
   final bool selected;
   final void Function()? onTap;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,10 +133,7 @@ class AttributeListTile extends ConsumerWidget {
             subtitle: Text(
               [attribute.type, if (attribute.required) 'required'].join(', '),
             ),
-            trailing: AttributeOverflowMenu(
-              attribute: attribute,
-              visible: hover,
-            ),
+            trailing: hover ? trailing : null,
             selected: selected,
             textColor: ColorScheme.of(context).onSecondaryContainer,
             selectedTileColor: ColorScheme.of(context).secondaryContainer,
