@@ -16,7 +16,7 @@ class AttributesExportButton extends ConsumerWidget {
       onPressed: () async {
         final attributes =
             (await FirebaseFirestore.instance
-                    .collection(Collections.metadata)
+                    .collection(Collections.attributes)
                     .doc(Docs.attributes)
                     .get())
                 .data();

@@ -12,7 +12,7 @@ final attributeServiceProvider = Provider((ref) => AttributeService());
 class AttributeService {
   Stream<Map<String, dynamic>> getAttributeStream(String attributeId) {
     return FirebaseFirestore.instance
-        .collection(Collections.attributes)
+        .collection(Collections.values)
         .doc(attributeId)
         .snapshots()
         .map((snapshot) {
@@ -46,7 +46,7 @@ class AttributeService {
 
     final isTopLevel = attributeId == topLevelAttributeId;
     final attributeDoc = FirebaseFirestore.instance
-        .collection(Collections.attributes)
+        .collection(Collections.values)
         .doc(topLevelAttributeId);
     if (isTopLevel) {
       attributeDoc.delete();
@@ -59,14 +59,14 @@ class AttributeService {
     }
 
     FirebaseFirestore.instance
-        .collection(Collections.metadata)
+        .collection(Collections.attributes)
         .doc(Docs.attributes)
         .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {
     return FirebaseFirestore.instance
-        .collection(Collections.metadata)
+        .collection(Collections.attributes)
         .doc(Docs.attributes)
         .snapshots()
         .map((snapshot) {
@@ -78,7 +78,7 @@ class AttributeService {
   Future<void> updateAttribute(Attribute attribute) async {
     final id = attribute.id;
     await FirebaseFirestore.instance
-        .collection(Collections.metadata)
+        .collection(Collections.attributes)
         .doc(Docs.attributes)
         .set({id: attribute.toJson()}, SetOptions(merge: true));
   }

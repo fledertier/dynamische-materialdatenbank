@@ -13,7 +13,7 @@ class AttributesImportButton extends ConsumerWidget {
       label: Text('Import'),
       onPressed: () async {
         FirebaseFirestore.instance
-            .collection(Collections.metadata)
+            .collection(Collections.attributes)
             .doc(Docs.attributes)
             .set(_attributes);
       },

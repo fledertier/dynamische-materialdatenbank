@@ -70,7 +70,7 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
 
     for (final attribute in material.keys) {
       await FirebaseFirestore.instance
-          .collection(Collections.attributes)
+          .collection(Collections.values)
           .doc(attribute)
           .set({arg: material[attribute]}, SetOptions(merge: true));
     }
@@ -92,7 +92,7 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     await Future.wait([
       for (final attribute in material.keys)
         FirebaseFirestore.instance
-            .collection(Collections.attributes)
+            .collection(Collections.values)
             .doc(attribute)
             .update({arg: FieldValue.delete()}),
     ]);
