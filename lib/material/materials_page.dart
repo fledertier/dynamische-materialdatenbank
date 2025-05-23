@@ -25,7 +25,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       header: Header(
-        search: MaterialSearch(
+        center: MaterialSearch(
           onFilter: () {
             setState(() {
               showFilters = !showFilters;

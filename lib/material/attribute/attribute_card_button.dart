@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../constants.dart';
+import '../material_provider.dart';
 import '../section/draggable_cards_builder.dart';
 import 'cards.dart';
 
@@ -10,13 +12,31 @@ class AttributeCardButton extends ConsumerWidget {
   const AttributeCardButton({
     super.key,
     required this.materialId,
-    required this.onAdd,
-    required this.onDelete,
+    required this.onPressed,
   });
 
   final String materialId;
-  final VoidCallback onAdd;
-  final void Function(CardData card) onDelete;
+  final VoidCallback onPressed;
+
+  void deleteCard(WidgetRef ref, CardData card) {
+    final fromSectionCategory = ref.read(fromSectionCategoryProvider);
+    final fromSectionIndex = ref.read(fromSectionIndexProvider);
+    if (fromSectionCategory != null && fromSectionIndex != null) {
+      ref.read(sectionsProvider(fromSectionCategory).notifier).update((
+        sections,
+      ) {
+        final updated = [...sections];
+        updated[fromSectionIndex].cards.remove(card);
+        ref.read(materialProvider(materialId).notifier).updateMaterial({
+          Attributes.cardSections: {
+            fromSectionCategory.name:
+                updated.map((section) => section.toJson()).toList(),
+          },
+        });
+        return updated;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,22 +46,22 @@ class AttributeCardButton extends ConsumerWidget {
     return DragTarget<CardData>(
       onWillAcceptWithDetails: (details) => ongoingDrag,
       onAcceptWithDetails: (details) {
-        onDelete(details.data);
+        deleteCard(ref, details.data);
       },
       builder: (context, candidateData, rejectedData) {
         final receivingDrag = candidateData.isNotEmpty;
         return Material(
           borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
           color:
-          ongoingDrag
-              ? receivingDrag
-              ? colorScheme.errorFixedDim
-              : colorScheme.surfaceContainerHighest
-              : colorScheme.primaryContainer,
+              ongoingDrag
+                  ? receivingDrag
+                      ? colorScheme.errorFixedDim
+                      : colorScheme.surfaceContainerHighest
+                  : colorScheme.primaryContainer,
           elevation: 8,
           child: InkWell(
             borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
-            onTap: onAdd,
+            onTap: onPressed,
             child: AnimatedSize(
               duration: Duration(milliseconds: 350),
               curve: Curves.easeInOutCubic,
@@ -50,18 +70,18 @@ class AttributeCardButton extends ConsumerWidget {
                 height: ongoingDrag ? 80 : 100,
                 child: Center(
                   child:
-                  ongoingDrag
-                      ? Icon(
-                    Symbols.delete,
-                    color:
-                    ongoingDrag && receivingDrag
-                        ? colorScheme.onErrorFixedDim
-                        : colorScheme.onSurface,
-                  )
-                      : Icon(
-                    Icons.add,
-                    color: colorScheme.onPrimaryContainer,
-                  ),
+                      ongoingDrag
+                          ? Icon(
+                            Symbols.delete,
+                            color:
+                                ongoingDrag && receivingDrag
+                                    ? colorScheme.onErrorFixedDim
+                                    : colorScheme.onSurface,
+                          )
+                          : Icon(
+                            Icons.add,
+                            color: colorScheme.onPrimaryContainer,
+                          ),
                 ),
               ),
             ),

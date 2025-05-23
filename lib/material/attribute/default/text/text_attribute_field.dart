@@ -5,45 +5,27 @@ import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TextAttributeField extends ConsumerStatefulWidget {
+import '../../../../localization/language_button.dart';
+
+class TextAttributeField extends ConsumerWidget {
   const TextAttributeField({
     super.key,
     required this.attributeId,
-    this.text,
+    required this.text,
     this.onChanged,
     this.textStyle,
   });
 
   final String attributeId;
-  final TranslatableText? text;
+  final TranslatableText text;
   final ValueChanged<TranslatableText>? onChanged;
   final TextStyle? textStyle;
 
   @override
-  ConsumerState<TextAttributeField> createState() =>
-      _NumberAttributeFieldState();
-}
-
-class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
-  late final TextEditingController controller;
-  late var text = widget.text ?? TranslatableText(valueDe: '');
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController(text: widget.text?.value);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final language = ref.watch(languageProvider);
+    final attribute = ref.watch(attributeProvider(attributeId));
     final multiline =
         (attribute?.type as TextAttributeType?)?.multiline ?? false;
 
@@ -51,17 +33,21 @@ class _NumberAttributeFieldState extends ConsumerState<TextAttributeField> {
     final defaultTextStyle =
         multiline ? textTheme.bodySmall : textTheme.titleLarge;
 
-    final textField = TextField(
+    final otherLanguageText =
+        language == Language.en ? text.valueDe : text.valueEn;
+
+    final textField = TextFormField(
+      key: ValueKey(language),
+      initialValue: text.resolve(language),
       enabled: edit,
-      style: (widget.textStyle ?? defaultTextStyle)?.copyWith(
-        fontFamily: 'Lexend',
+      style: (textStyle ?? defaultTextStyle)?.copyWith(fontFamily: 'Lexend'),
+      decoration: InputDecoration.collapsed(
+        hintText: otherLanguageText ?? attribute?.name,
       ),
-      decoration: InputDecoration.collapsed(hintText: attribute?.name),
       maxLines: multiline ? null : 1,
-      controller: controller,
       onChanged: (value) {
-        text = text.copyWith(valueDe: value);
-        widget.onChanged?.call(text);
+        final newText = text.copyWithLanguage(language, value);
+        onChanged?.call(newText);
       },
     );
 

@@ -6,9 +6,10 @@ import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../debouncer.dart';
 import 'text_attribute_field.dart';
 
-class TextCard extends ConsumerWidget {
+class TextCard extends ConsumerStatefulWidget {
   const TextCard({
     super.key,
     required this.materialId,
@@ -25,26 +26,38 @@ class TextCard extends ConsumerWidget {
   final int columns;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TextCard> createState() => _TextCardState();
+}
+
+class _TextCardState extends ConsumerState<TextCard> {
+  final debounce = Debouncer(delay: const Duration(milliseconds: 1000));
+
+  @override
+  Widget build(BuildContext context) {
     final value = ref.watch(
       materialAttributeValueProvider(
-        AttributeArgument(materialId: materialId, attributeId: attributeId),
+        AttributeArgument(
+          materialId: widget.materialId,
+          attributeId: widget.attributeId,
+        ),
       ),
     );
-    final text = value != null ? TranslatableText.fromJson(value) : null;
+    final text = TranslatableText.fromJson(value ?? {});
 
     return AttributeCard(
-      columns: columns,
-      label: AttributeLabel(attribute: attributeId),
+      columns: widget.columns,
+      label: AttributeLabel(attribute: widget.attributeId),
       title: TextAttributeField(
-        attributeId: attributeId,
+        attributeId: widget.attributeId,
         text: text,
         onChanged: (text) {
-          ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: text.toJson(),
+          debounce(() {
+            ref
+                .read(materialProvider(widget.materialId).notifier)
+                .updateMaterial({widget.attributeId: text.toJson()});
           });
         },
-        textStyle: textStyle,
+        textStyle: widget.textStyle,
       ),
     );
   }

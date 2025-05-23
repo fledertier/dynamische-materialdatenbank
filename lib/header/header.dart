@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'user_avatar.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key, this.search, this.actions});
+  const Header({super.key, this.center, this.actions});
 
-  final Widget? search;
+  final Widget? center;
   final List<Widget>? actions;
 
   @override
@@ -16,7 +16,7 @@ class Header extends StatelessWidget {
       spacing: 12,
       children: [
         canPop ? BackButton() : SizedBox.square(dimension: 40),
-        Expanded(child: Center(child: search ?? SizedBox())),
+        Expanded(child: Center(child: center ?? SizedBox())),
         ...?actions,
         ThemeModeButton(),
         UserAvatar(),
