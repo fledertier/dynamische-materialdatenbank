@@ -6,6 +6,8 @@ import '../constants.dart';
 import '../header/header.dart';
 import '../widgets/sheet.dart';
 import 'attribute_details.dart';
+import 'attributes_export_button.dart';
+import 'attributes_import_button.dart';
 import 'attributes_list.dart';
 
 class AttributesPage extends StatefulWidget {
@@ -21,7 +23,9 @@ class _AttributesPageState extends State<AttributesPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      header: Header(),
+      header: Header(
+        actions: [AttributesImportButton(), AttributesExportButton()],
+      ),
       navigation: Navigation(page: Pages.attributes),
       body: Row(
         spacing: 24,
