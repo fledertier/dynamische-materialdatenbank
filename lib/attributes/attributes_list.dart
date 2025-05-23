@@ -1,14 +1,16 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'attribute.dart';
+import 'attribute_details.dart';
+import 'attribute_dialog.dart';
 import 'attribute_provider.dart';
 import 'attribute_search_bar.dart';
 import 'attribute_service.dart';
+import 'attribute_type.dart';
 
 class AttributesList extends ConsumerStatefulWidget {
   const AttributesList({super.key, required this.selectedAttributeId});
@@ -106,7 +108,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
   }
 }
 
-class AttributeListTile extends StatelessWidget {
+class AttributeListTile extends ConsumerWidget {
   const AttributeListTile(
     this.attribute, {
     super.key,
@@ -119,21 +121,31 @@ class AttributeListTile extends StatelessWidget {
   final void Function()? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: ListTile(
-        leading: Icon(iconForAttributeType(attribute.type.id)),
-        title: Text(attribute.name),
-        subtitle: Text(
-          [attribute.type, if (attribute.required) 'required'].join(', '),
-        ),
-        selected: selected,
-        textColor: ColorScheme.of(context).onSecondaryContainer,
-        selectedTileColor: ColorScheme.of(context).secondaryContainer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        onTap: onTap,
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return HoverBuilder(
+      builder: (context, hover, child) {
+        return Material(
+          type: MaterialType.transparency,
+          child: ListTile(
+            leading: Icon(iconForAttributeType(attribute.type.id)),
+            title: Text(attribute.name),
+            subtitle: Text(
+              [attribute.type, if (attribute.required) 'required'].join(', '),
+            ),
+            trailing: AttributeOverflowMenu(
+              attribute: attribute,
+              visible: hover,
+            ),
+            selected: selected,
+            textColor: ColorScheme.of(context).onSecondaryContainer,
+            selectedTileColor: ColorScheme.of(context).secondaryContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            onTap: onTap,
+          ),
+        );
+      },
     );
   }
 }

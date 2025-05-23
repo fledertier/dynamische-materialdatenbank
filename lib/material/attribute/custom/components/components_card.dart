@@ -23,24 +23,9 @@ class ComponentsCard extends ConsumerWidget {
   final String materialId;
   final CardSize size;
 
-  int get columns {
-    return switch (size) {
-      CardSize.large => 4,
-      CardSize.small => 2,
-    };
-  }
-
-  Axis get axis {
-    return switch (size) {
-      CardSize.large => Axis.horizontal,
-      CardSize.small => Axis.vertical,
-    };
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-
     final exampleValue = [
       {
         'id': '1234',
@@ -102,7 +87,10 @@ class ComponentsCard extends ConsumerWidget {
     }
 
     return AttributeCard(
-      columns: columns,
+      columns: switch (size) {
+        CardSize.large => 4,
+        CardSize.small => 2,
+      },
       label: AttributeLabel(attribute: Attributes.components),
       childPadding: EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -113,13 +101,16 @@ class ComponentsCard extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: ProportionsWidget(
               height: 40,
-              axis: axis,
+              axis: switch (size) {
+                CardSize.large => Axis.horizontal,
+                CardSize.small => Axis.vertical,
+              },
               edit: edit,
               proportions: components,
               update: updateComponents,
             ),
           ),
-          if (axis == Axis.horizontal)
+          if (size == CardSize.large)
             ComponentsList(
               edit: edit,
               components: components,

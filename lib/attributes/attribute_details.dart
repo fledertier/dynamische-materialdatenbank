@@ -25,7 +25,10 @@ class AttributeDetails extends ConsumerWidget {
       builder: (context, child) {
         return Consumer(
           builder: (context, ref, child) {
-            if (selectedAttributeId.value == null) {
+            final attribute = ref.watch(
+              attributeProvider(selectedAttributeId.value),
+            );
+            if (attribute == null) {
               return Center(
                 child: Text(
                   'Select an attribute to edit',
@@ -36,10 +39,6 @@ class AttributeDetails extends ConsumerWidget {
               );
             }
 
-            final attribute = ref.watch(
-              attributeProvider(selectedAttributeId.value!),
-            );
-
             return Column(
               children: [
                 SizedBox(
@@ -49,43 +48,17 @@ class AttributeDetails extends ConsumerWidget {
                     child: Row(
                       children: [
                         LoadingText(
-                          attribute?.name,
+                          attribute.name,
                           style: TextTheme.of(context).headlineSmall,
                         ),
                         Spacer(),
                         IconButton(
                           icon: Icon(Symbols.edit),
                           onPressed: () {
-                            editAttribute(context, ref, attribute!);
+                            editAttribute(context, ref, attribute);
                           },
                         ),
-                        DirectionalMenuAnchor(
-                          directionality: TextDirection.rtl,
-                          builder: (context, controller, child) {
-                            return IconButton(
-                              onPressed: controller.toggle,
-                              icon: Icon(Icons.more_vert),
-                            );
-                          },
-                          menuChildren: [
-                            MenuItemButton(
-                              leadingIcon: Icon(Symbols.content_copy),
-                              requestFocusOnHover: false,
-                              onPressed: () {
-                                copyAttributeId(context, attribute!);
-                              },
-                              child: Text('Copy id'),
-                            ),
-                            MenuItemButton(
-                              leadingIcon: Icon(Symbols.delete),
-                              requestFocusOnHover: false,
-                              onPressed: () {
-                                deleteAttribute(context, ref, attribute!);
-                              },
-                              child: Text('Delete'),
-                            ),
-                          ],
-                        ),
+                        AttributeOverflowMenu(attribute: attribute),
                       ],
                     ),
                   ),
@@ -116,6 +89,51 @@ class AttributeDetails extends ConsumerWidget {
       ).showSnackBar(SnackBar(content: Text('Attribute saved')));
     }
   }
+}
+
+class AttributeOverflowMenu extends ConsumerWidget {
+  const AttributeOverflowMenu({
+    super.key,
+    required this.attribute,
+    this.visible = true,
+  });
+
+  final Attribute attribute;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DirectionalMenuAnchor(
+      directionality: TextDirection.rtl,
+      builder: (context, controller, child) {
+        return Visibility.maintain(
+          visible: visible || controller.isOpen,
+          child: IconButton(
+            onPressed: controller.toggle,
+            icon: Icon(Icons.more_vert),
+          ),
+        );
+      },
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: Icon(Symbols.content_copy),
+          requestFocusOnHover: false,
+          onPressed: () {
+            copyAttributeId(context, attribute);
+          },
+          child: Text('Copy id'),
+        ),
+        MenuItemButton(
+          leadingIcon: Icon(Symbols.delete),
+          requestFocusOnHover: false,
+          onPressed: () {
+            deleteAttribute(context, ref, attribute);
+          },
+          child: Text('Delete'),
+        ),
+      ],
+    );
+  }
 
   Future<void> deleteAttribute(
     BuildContext context,
@@ -128,7 +146,6 @@ class AttributeDetails extends ConsumerWidget {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Attribute deleted')));
-      selectedAttributeId.value = null;
     }
   }
 
