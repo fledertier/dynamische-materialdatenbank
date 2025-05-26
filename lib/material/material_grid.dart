@@ -129,12 +129,13 @@ class MaterialContextMenu extends ConsumerWidget {
       builder: (context, controller, child) {
         return IconButton(
           onPressed: controller.toggle,
-          icon: Icon(
-            controller.isOpen || visible ? Icons.more_vert : null,
-            color: Colors.white,
+          icon: Visibility.maintain(
+            visible: visible || controller.isOpen,
+            child: Icon(Icons.more_vert, color: Colors.white),
           ),
         );
       },
+      style: MenuStyle(padding: WidgetStatePropertyAll(EdgeInsets.zero)),
       menuChildren: [
         MenuItemButton(
           onPressed: () {
