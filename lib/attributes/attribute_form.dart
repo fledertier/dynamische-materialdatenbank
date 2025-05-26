@@ -101,13 +101,10 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     ),
                 ],
                 onSelected: (value) {
-                  _controller.type.value = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a type';
+                  if (value == AttributeType.list) {
+                    _controller.listType.value = _controller.type.value;
                   }
-                  return null;
+                  _controller.type.value = value;
                 },
               );
               late final listTypeDropdown = DropdownMenuFormField<String>(
@@ -125,12 +122,6 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                         leadingIcon: Icon(iconForAttributeType(value)),
                       ),
                 ],
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a list type';
-                  }
-                  return null;
-                },
                 onSelected: (value) {
                   _controller.listType.value = value;
                 },
