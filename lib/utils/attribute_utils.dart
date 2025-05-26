@@ -18,13 +18,13 @@ Attribute? getAttribute(
   return attribute;
 }
 
-dynamic getAttributeValue(
+dynamic getJsonAttributeValue(
   Json material,
-  Map<String, Attribute> attributesById,
+  Map<String, Attribute>? attributesById,
   String attributeId,
 ) {
   final ids = attributeId.split('.');
-  var attribute = attributesById[ids.firstOrNull];
+  var attribute = attributesById?[ids.firstOrNull];
   var value = material[ids.firstOrNull];
   for (final id in ids.skip(1)) {
     final type = attribute?.type as ObjectAttributeType?;
@@ -33,9 +33,5 @@ dynamic getAttributeValue(
     );
     value = value?[id];
   }
-  return switch (attribute?.type) {
-    TextAttributeType() => value?['valueDe'],
-    NumberAttributeType() => value?['value'],
-    _ => value,
-  };
+  return value;
 }

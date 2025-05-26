@@ -40,12 +40,17 @@ class NumberCard extends ConsumerWidget {
 
     final attribute = ref.watch(attributeProvider(attributeId));
 
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(materialId: materialId, attributeId: attributeId),
-      ),
-    );
-    final number = UnitNumber.fromJson(value);
+    final number =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributeId: attributeId,
+                ),
+              ),
+            )
+            as UnitNumber? ??
+        UnitNumber(value: 0);
 
     return AttributeCard(
       label: AttributeLabel(attribute: attributeId),

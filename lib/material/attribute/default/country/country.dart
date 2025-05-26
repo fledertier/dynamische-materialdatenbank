@@ -4,6 +4,10 @@ class Country {
 
   const Country({required this.name, required this.code});
 
+  factory Country.fromJson(dynamic json) {
+    return Country.fromCode(json as String);
+  }
+
   factory Country.fromCode(String code) {
     return Countries.values.singleWhere((country) {
       return country.code == code.toUpperCase();

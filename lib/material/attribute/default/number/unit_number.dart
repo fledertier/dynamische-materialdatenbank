@@ -6,10 +6,7 @@ class UnitNumber {
   final num value;
   final String? displayUnit;
 
-  factory UnitNumber.fromJson(Json? json) {
-    if (json == null) {
-      return UnitNumber(value: 0);
-    }
+  factory UnitNumber.fromJson(Json json) {
     return UnitNumber(value: json['value'], displayUnit: json['displayUnit']);
   }
 

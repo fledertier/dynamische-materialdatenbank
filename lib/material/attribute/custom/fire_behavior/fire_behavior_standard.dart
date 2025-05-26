@@ -26,8 +26,8 @@ class FireBehaviorStandard {
     return pattern.hasMatch(value);
   }
 
-  static FireBehaviorStandard parse(String value) {
-    final match = pattern.firstMatch(value)!;
+  static FireBehaviorStandard parse(String classification) {
+    final match = pattern.firstMatch(classification)!;
 
     final reactionToFire = ReactionToFire.values.byName(
       match.namedGroup('reactionToFire')!.toUpperCase(),

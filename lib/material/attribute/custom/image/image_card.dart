@@ -36,7 +36,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   void initState() {
     super.initState();
     final value = ref.watch(
-      materialAttributeValueProvider(
+      jsonValueProvider(
         AttributeArgument(
           materialId: widget.materialId,
           attributeId: Attributes.images,

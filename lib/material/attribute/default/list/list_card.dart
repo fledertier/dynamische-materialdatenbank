@@ -54,7 +54,7 @@ class _ListCardState extends ConsumerState<ListCard> {
 
     final list =
         ref.watch(
-              materialAttributeValueProvider(
+              valueProvider(
                 AttributeArgument(
                   materialId: widget.materialId,
                   attributeId: widget.attributeId,
@@ -85,7 +85,7 @@ class _ListCardState extends ConsumerState<ListCard> {
         //   onChanged: (value) {},
         // ),
         case AttributeType.number:
-          final number = UnitNumber.fromJson(value);
+          final number = value as UnitNumber;
           return NumberAttributeField(
             key: ValueKey(number.displayUnit),
             number: number,
@@ -95,8 +95,9 @@ class _ListCardState extends ConsumerState<ListCard> {
             },
           );
         case AttributeType.country:
+          final country = value as Country;
           return CountryAttributeField(
-            country: value != null ? Country.fromCode(value) : null,
+            country: country,
             enabled: edit,
             onChanged: (value) {},
           );
@@ -160,7 +161,7 @@ class _ListCardState extends ConsumerState<ListCard> {
   void updateItem(int index, dynamic value) {
     final list =
         ref.read(
-              materialAttributeValueProvider(
+              valueProvider(
                 AttributeArgument(
                   materialId: widget.materialId,
                   attributeId: widget.attributeId,

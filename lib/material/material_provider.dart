@@ -1,14 +1,20 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/material/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../attributes/attribute_provider.dart';
+import '../attributes/attribute_type.dart';
 import '../constants.dart';
 import '../types.dart';
+import '../utils/attribute_utils.dart';
 import 'attribute/cards.dart';
 import 'attribute/custom/custom_cards.dart';
+import 'attribute/default/country/country.dart';
+import 'attribute/default/text/translatable_text.dart';
 
 final materialProvider =
     StreamNotifierProvider.family<MaterialNotifier, Json, String>(
@@ -101,14 +107,75 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
   }
 }
 
-final materialAttributeValueProvider = Provider.family((
-  ref,
-  AttributeArgument arg,
-) {
-  // todo: make this work for nested attributes
+final jsonValueProvider = Provider.family((ref, AttributeArgument arg) {
   final material = ref.watch(materialProvider(arg.materialId)).value;
-  return material?[arg.attributeId];
+  if (material == null) {
+    return null;
+  }
+
+  final attributes = ref.watch(attributesProvider).value;
+  return getJsonAttributeValue(material, attributes, arg.attributeId);
 });
+
+final valueProvider = Provider.family((ref, AttributeArgument arg) {
+  final json = ref.watch(jsonValueProvider(arg));
+  if (json == null) {
+    return null;
+  }
+
+  final attribute = ref.watch(attributeProvider(arg.attributeId));
+  final type = attribute?.type;
+  if (type == null) {
+    return null;
+  }
+
+  return _convert(json, type);
+});
+
+Object? _convert(json, AttributeType type) {
+  return switch (type) {
+    TextAttributeType() => TranslatableText.fromJson(json),
+    NumberAttributeType() => UnitNumber.fromJson(json),
+    BooleanAttributeType() => json as bool,
+    CountryAttributeType() => Country.fromJson(json),
+    UrlAttributeType() => Uri.tryParse(json as String),
+    ListAttributeType() => _convertList(json, type),
+    ObjectAttributeType() => _convertObject(json, type),
+    _ =>
+      throw UnimplementedError(
+        "Converter for attribute type '$type' is not implemented",
+      ),
+  };
+}
+
+List<dynamic> _convertList(json, ListAttributeType type) {
+  return switch (type.type) {
+    TextAttributeType() => List<Json>.from(json).map(TranslatableText.fromJson),
+    NumberAttributeType() => List<Json>.from(json).map(UnitNumber.fromJson),
+    BooleanAttributeType() => List<bool>.from(json),
+    CountryAttributeType() => List<Json>.from(json).map(Country.fromJson),
+    UrlAttributeType() =>
+      List<String>.from(json).map((url) => Uri.tryParse(url)).nonNulls,
+    _ =>
+      throw UnimplementedError(
+        "Converter for list attribute type '${type.type}' is not implemented",
+      ),
+  }.toList();
+}
+
+Map<String, dynamic> _convertObject(json, ObjectAttributeType type) {
+  final attributes = type.attributes;
+  final converted = <String, dynamic>{};
+
+  for (final attribute in attributes) {
+    final value = json[attribute.id];
+    if (value != null) {
+      converted[attribute.id] = _convert(value, attribute.type);
+    }
+  }
+
+  return converted;
+}
 
 class AttributeArgument {
   const AttributeArgument({

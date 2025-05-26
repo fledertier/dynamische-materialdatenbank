@@ -16,16 +16,18 @@ class UValueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(
-          materialId: materialId,
-          attributeId: Attributes.uValue,
-        ),
-      ),
-    );
+    final number =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributeId: Attributes.uValue,
+                ),
+              ),
+            )
+            as UnitNumber? ??
+        UnitNumber(value: 0);
 
-    final number = UnitNumber.fromJson(value);
     final transmittedRays = (number.value / 6 * 10).clamp(0, 10).round();
 
     return NumberCard(

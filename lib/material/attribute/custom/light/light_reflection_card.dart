@@ -20,16 +20,18 @@ class LightReflectionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(
-          materialId: materialId,
-          attributeId: Attributes.lightReflection,
-        ),
-      ),
-    );
+    final number =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributeId: Attributes.lightReflection,
+                ),
+              ),
+            )
+            as UnitNumber? ??
+        UnitNumber(value: 0);
 
-    final number = UnitNumber.fromJson(value);
     final reflectedRays = (number.value / 10).round();
 
     return NumberCard(

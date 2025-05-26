@@ -49,7 +49,7 @@ class CompositionCard extends ConsumerWidget {
 
     final value =
         ref.watch(
-          materialAttributeValueProvider(
+          jsonValueProvider(
             AttributeArgument(
               materialId: materialId,
               attributeId: Attributes.composition,

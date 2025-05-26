@@ -22,16 +22,17 @@ class OriginCountryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(
-          materialId: materialId,
-          attributeId: Attributes.originCountry,
-        ),
-      ),
-    );
-
-    final countries = parseCountries(value ?? ['se']);
+    final countries =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributeId: Attributes.originCountry,
+                ),
+              ),
+            )
+            as List<Country>? ??
+        [Country.fromCode('se')];
 
     return AttributeCard(
       columns: 2,
@@ -50,9 +51,5 @@ class OriginCountryCard extends ConsumerWidget {
               )
               : null,
     );
-  }
-
-  List<Country> parseCountries(dynamic value) {
-    return List<String>.from(value).map(Country.fromCode).toList();
   }
 }

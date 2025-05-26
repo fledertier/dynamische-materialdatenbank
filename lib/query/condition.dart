@@ -4,6 +4,8 @@ import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
+import '../material/attribute/default/number/unit_number.dart';
+import '../material/attribute/default/text/translatable_text.dart';
 import 'condition_node.dart';
 
 class Condition extends ConditionNode {
@@ -23,7 +25,12 @@ class Condition extends ConditionNode {
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    final value = getAttributeValue(material, attributesById, attribute!);
+    var value = getJsonAttributeValue(material, attributesById, attribute!);
+    value = switch (value) {
+      TranslatableText() => value.valueDe,
+      UnitNumber() => value.value,
+      _ => value,
+    };
     if (value == null) {
       return false;
     }

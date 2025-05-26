@@ -16,16 +16,17 @@ class WValueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(
-          materialId: materialId,
-          attributeId: Attributes.wValue,
-        ),
-      ),
-    );
-
-    final number = UnitNumber.fromJson(value);
+    final number =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributeId: Attributes.wValue,
+                ),
+              ),
+            )
+            as UnitNumber? ??
+        UnitNumber(value: 0);
 
     return NumberCard(
       materialId: materialId,

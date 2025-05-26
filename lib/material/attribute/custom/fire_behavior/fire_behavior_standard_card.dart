@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,18 +33,19 @@ class _FireBehaviorStandardCardState
   @override
   Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final value =
+    final translatableText =
         ref.watch(
-          materialAttributeValueProvider(
-            AttributeArgument(
-              materialId: widget.materialId,
-              attributeId: Attributes.fireBehaviorStandard,
-            ),
-          ),
-        ) ??
-        'B-s2,d1';
+              valueProvider(
+                AttributeArgument(
+                  materialId: widget.materialId,
+                  attributeId: Attributes.fireBehaviorStandard,
+                ),
+              ),
+            )
+            as TranslatableText?;
 
-    final fireBehavior = FireBehaviorStandard.parse(value);
+    final classification = translatableText?.valueDe ?? 'B-s2,d1';
+    final fireBehavior = FireBehaviorStandard.parse(classification);
 
     return AttributeCard(
       columns: 3,
@@ -52,7 +54,7 @@ class _FireBehaviorStandardCardState
         enabled: edit,
         style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'z.B. B-s2,d1'),
-        controller: controller ??= TextEditingController(text: value),
+        controller: controller ??= TextEditingController(text: classification),
         onChanged: (value) {
           ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
             {Attributes.fireBehaviorStandard: value},

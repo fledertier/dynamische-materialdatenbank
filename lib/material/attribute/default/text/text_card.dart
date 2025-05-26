@@ -34,15 +34,17 @@ class _TextCardState extends ConsumerState<TextCard> {
 
   @override
   Widget build(BuildContext context) {
-    final value = ref.watch(
-      materialAttributeValueProvider(
-        AttributeArgument(
-          materialId: widget.materialId,
-          attributeId: widget.attributeId,
-        ),
-      ),
-    );
-    final text = TranslatableText.fromJson(value ?? {});
+    final text =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: widget.materialId,
+                  attributeId: widget.attributeId,
+                ),
+              ),
+            )
+            as TranslatableText? ??
+        TranslatableText();
 
     return AttributeCard(
       columns: widget.columns,
