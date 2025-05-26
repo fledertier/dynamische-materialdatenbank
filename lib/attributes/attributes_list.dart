@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'attribute.dart';
 import 'attribute_dialog.dart';
@@ -96,14 +97,17 @@ class _AttributesListState extends ConsumerState<AttributesList> {
   }
 
   Future<void> createAttribute() async {
-    final attribute = await showAttributeDialog(context);
-    if (attribute != null) {
-      await ref.read(attributeServiceProvider).updateAttribute(attribute);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Attribute created")));
-      widget.selectedAttributeId.value = attribute.id;
-    }
+    showAttributeDialog(
+      context: context,
+      onSave: (attribute) async {
+        context.pop();
+        await ref.read(attributeServiceProvider).updateAttribute(attribute);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Attribute created")));
+        widget.selectedAttributeId.value = attribute.id;
+      },
+    );
   }
 }
 

@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'attribute.dart';
+import 'attribute_delete_dialog.dart';
 import 'attribute_dialog.dart';
 import 'attribute_form_state.dart';
 import 'attribute_provider.dart';
@@ -18,11 +18,11 @@ class AttributeForm extends ConsumerStatefulWidget {
   const AttributeForm({
     super.key,
     required this.controller,
-    required this.onSubmit,
+    required this.onSave,
   });
 
-  final AttributeFormController? controller;
-  final void Function(Attribute attribute) onSubmit;
+  final AttributeFormController controller;
+  final void Function(Attribute attribute) onSave;
 
   @override
   ConsumerState<AttributeForm> createState() => AttributeFormState();
@@ -30,9 +30,9 @@ class AttributeForm extends ConsumerStatefulWidget {
 
 class AttributeFormState extends ConsumerState<AttributeForm> {
   final _form = GlobalKey<FormState>();
-  late final _controller = widget.controller ?? AttributeFormController();
+  late final _controller = widget.controller;
   late final _initialController = AttributeFormController(
-    _controller.initialAttribute,
+    widget.controller.initialAttribute,
   );
 
   @override
@@ -41,6 +41,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
       key: _form,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         spacing: 24,
         children: [
           Wrap(
@@ -148,6 +149,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 },
               );
               late final objectAttributes = Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 8),
@@ -176,6 +178,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 ],
               );
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,6 +237,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 ],
               );
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 spacing: 16,
                 children: [
                   if (hasType(AttributeType.text)) multilineCheckbox,
@@ -248,24 +252,52 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
   }
 
   Future<void> addAttribute() async {
-    final attribute = await showAttributeDialog(context);
+    final attribute = await showNestedAttributeDialog(
+      context: context,
+      onSave: (attribute) async {
+        _addAttribute(attribute);
+        await save();
+      },
+    );
     if (attribute != null) {
-      _controller.objectAttributes.value = [
-        ..._controller.objectAttributes.value,
-        attribute,
-      ];
+      _addAttribute(attribute);
     }
   }
 
+  void _addAttribute(Attribute objectAttribute) {
+    _controller.objectAttributes.value = [
+      ..._controller.objectAttributes.value,
+      objectAttribute,
+    ];
+  }
+
   Future<void> editAttribute(Attribute attribute) async {
-    final updatedAttribute = await showAttributeDialog(context, attribute);
+    final updatedAttribute = await showNestedAttributeDialog(
+      context: context,
+      initialAttribute: attribute,
+      onSave: (updatedAttribute) async {
+        _editAttribute(updatedAttribute);
+        await save();
+      },
+    );
     if (updatedAttribute != null) {
-      _controller.objectAttributes.value = [
-        for (final objectAttribute in _controller.objectAttributes.value)
-          objectAttribute.id == updatedAttribute.id
-              ? updatedAttribute
-              : objectAttribute,
-      ];
+      _editAttribute(updatedAttribute);
+    }
+  }
+
+  void _editAttribute(Attribute updatedAttribute) {
+    _controller.objectAttributes.value = [
+      for (final objectAttribute in _controller.objectAttributes.value)
+        objectAttribute.id == updatedAttribute.id
+            ? updatedAttribute
+            : objectAttribute,
+    ];
+  }
+
+  Future<void> save() async {
+    final attribute = await submit();
+    if (attribute != null) {
+      widget.onSave(attribute);
     }
   }
 
@@ -286,7 +318,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     return _controller != _initialController;
   }
 
-  Future<void> submit() async {
+  Future<Attribute?> submit() async {
     final attributesToDelete = _initialController.objectAttributes.value.where(
       (attribute) => _controller.objectAttributes.value.none(
         (objectAttribute) => objectAttribute.id == attribute.id,
@@ -302,11 +334,14 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         type: _createAttributeType(_controller.type.value!),
         required: _controller.required.value ?? false,
       );
-      widget.onSubmit(attribute);
+
       for (final attribute in attributesToDelete) {
         // todo: delete attribute
       }
+
+      return attribute;
     }
+    return null;
   }
 
   Future<bool> _confirmAttributeDeletion(Iterable<Attribute> attributes) async {
@@ -349,9 +384,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
 
   @override
   void dispose() {
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
+    _initialController.dispose();
     super.dispose();
   }
 }

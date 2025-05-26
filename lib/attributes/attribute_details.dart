@@ -4,6 +4,7 @@ import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'attribute.dart';
@@ -105,15 +106,19 @@ class AttributeDetails extends ConsumerWidget {
     WidgetRef ref,
     Attribute attribute,
   ) async {
-    final updatedAttribute = await showAttributeDialog(context, attribute);
-    if (updatedAttribute != null) {
-      await ref
-          .read(attributeServiceProvider)
-          .updateAttribute(updatedAttribute);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Attribute saved')));
-    }
+    showAttributeDialog(
+      context: context,
+      initialAttribute: attribute,
+      onSave: (updatedAttribute) async {
+        context.pop();
+        await ref
+            .read(attributeServiceProvider)
+            .updateAttribute(updatedAttribute);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+      },
+    );
   }
 
   Future<void> deleteAttribute(

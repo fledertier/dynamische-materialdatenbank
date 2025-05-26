@@ -6,9 +6,14 @@ import 'attribute_form.dart';
 import 'attribute_form_state.dart';
 
 class AttributeDialog extends StatefulWidget {
-  const AttributeDialog({super.key, required this.initialAttribute});
+  const AttributeDialog({
+    super.key,
+    required this.initialAttribute,
+    required this.onSave,
+  });
 
   final Attribute? initialAttribute;
+  final void Function(Attribute attribute) onSave;
 
   @override
   State<AttributeDialog> createState() => _AttributeDialogState();
@@ -22,9 +27,31 @@ class _AttributeDialogState extends State<AttributeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final canPop = Navigator.of(context).canPop();
     return AlertDialog(
-      title: Text(
-        widget.initialAttribute != null ? "Edit Attribute" : "Create Attribute",
+      titlePadding: EdgeInsets.only(left: canPop ? 12 : 24, top: 24, right: 24),
+      title: SizedBox(
+        height: 40,
+        child: Row(
+          spacing: 8,
+          children: [
+            if (canPop)
+              BackButton(
+                color: ColorScheme.of(context).onSurface,
+                onPressed: () async {
+                  final attribute = await form.submit();
+                  if (attribute != null) {
+                    Navigator.of(context).pop(attribute);
+                  }
+                },
+              ),
+            Text(
+              widget.initialAttribute != null
+                  ? "Edit Attribute"
+                  : "Create Attribute",
+            ),
+          ],
+        ),
       ),
       content: SingleChildScrollView(
         child: SizedBox(
@@ -32,9 +59,7 @@ class _AttributeDialogState extends State<AttributeDialog> {
           child: AttributeForm(
             key: formKey,
             controller: controller,
-            onSubmit: (attribute) {
-              context.pop(attribute);
-            },
+            onSave: widget.onSave,
           ),
         ),
       ),
@@ -49,13 +74,20 @@ class _AttributeDialogState extends State<AttributeDialog> {
           listenable: controller,
           builder: (context, child) {
             return TextButton(
-              onPressed: form.hasChanges ? form.submit : null,
+              onPressed: submit,
               child: Text(widget.initialAttribute != null ? "Save" : "Create"),
             );
           },
         ),
       ],
     );
+  }
+
+  submit() async {
+    final attribute = await form.submit();
+    if (attribute != null) {
+      widget.onSave(attribute);
+    }
   }
 
   @override
@@ -65,14 +97,49 @@ class _AttributeDialogState extends State<AttributeDialog> {
   }
 }
 
-Future<Attribute?> showAttributeDialog(
-  BuildContext context, [
+Future<Attribute?> showAttributeDialog({
+  required BuildContext context,
   Attribute? initialAttribute,
-]) {
+  required void Function(Attribute attribute) onSave,
+}) {
   return showDialog<Attribute>(
     context: context,
     builder: (context) {
-      return AttributeDialog(initialAttribute: initialAttribute);
+      return Navigator(
+        onGenerateInitialRoutes: (navigator, initialRoute) {
+          return [
+            PageRouteBuilder<Attribute>(
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return AttributeDialog(
+                  initialAttribute: initialAttribute,
+                  onSave: onSave,
+                );
+              },
+            ),
+          ];
+        },
+      );
     },
+  );
+}
+
+Future<Attribute?> showNestedAttributeDialog({
+  required BuildContext context,
+  Attribute? initialAttribute,
+  required void Function(Attribute attribute) onSave,
+}) {
+  return Navigator.of(context).push(
+    PageRouteBuilder(
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return AttributeDialog(
+          initialAttribute: initialAttribute,
+          onSave: onSave,
+        );
+      },
+    ),
   );
 }
