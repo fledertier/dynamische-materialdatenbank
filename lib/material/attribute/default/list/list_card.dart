@@ -73,7 +73,7 @@ class _ListCardState extends ConsumerState<ListCard> {
       return Placeholder();
     }
 
-    final itemType = type.type;
+    final itemType = type.attribute.type;
 
     Widget buildItem(int index) {
       final value = list.elementAtOrNull(index);

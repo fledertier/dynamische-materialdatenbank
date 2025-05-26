@@ -149,7 +149,7 @@ Object? _convert(json, AttributeType type) {
 }
 
 List<dynamic> _convertList(json, ListAttributeType type) {
-  return switch (type.type) {
+  return switch (type.attribute.type) {
     TextAttributeType() => List<Json>.from(json).map(TranslatableText.fromJson),
     NumberAttributeType() => List<Json>.from(json).map(UnitNumber.fromJson),
     BooleanAttributeType() => List<bool>.from(json),
@@ -158,7 +158,7 @@ List<dynamic> _convertList(json, ListAttributeType type) {
       List<String>.from(json).map((url) => Uri.tryParse(url)).nonNulls,
     _ =>
       throw UnimplementedError(
-        "Converter for list attribute type '${type.type}' is not implemented",
+        "Converter for list attribute type '${type.attribute.type}' is not implemented",
       ),
   }.toList();
 }

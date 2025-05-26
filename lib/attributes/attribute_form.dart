@@ -82,7 +82,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
           ListenableBuilder(
             listenable: Listenable.merge([
               _controller.type,
-              _controller.listType,
+              _controller.listAttribute,
               _controller.objectAttributes,
             ]),
             builder: (context, child) {
@@ -101,29 +101,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     ),
                 ],
                 onSelected: (value) {
-                  if (value == AttributeType.list) {
-                    _controller.listType.value = _controller.type.value;
-                  }
                   _controller.type.value = value;
-                },
-              );
-              late final listTypeDropdown = DropdownMenuFormField<String>(
-                initialSelection: _controller.listType.value,
-                label: Text('List type'),
-                expandedInsets: EdgeInsets.zero,
-                requestFocusOnTap: false,
-                menuHeight: 300,
-                dropdownMenuEntries: [
-                  for (final value in AttributeType.values)
-                    if (value != AttributeType.list)
-                      DropdownMenuEntry(
-                        value: value,
-                        label: value,
-                        leadingIcon: Icon(iconForAttributeType(value)),
-                      ),
-                ],
-                onSelected: (value) {
-                  _controller.listType.value = value;
                 },
               );
               late final unitDropdown = DropdownMenuFormField<UnitType>(
@@ -149,12 +127,12 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     AttributeListTile(
                       attribute,
                       onTap: () {
-                        editAttribute(attribute);
+                        editAttribute(attribute, _editObjectAttribute);
                       },
                       trailing: IconButton(
                         icon: Icon(Symbols.remove_circle),
                         onPressed: () {
-                          deleteAttribute(attribute);
+                          deleteObjectAttribute(attribute);
                         },
                       ),
                     ),
@@ -164,9 +142,44 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     icon: Icon(Icons.add),
                     label: Text('Add attribute'),
                     onPressed: () {
-                      addAttribute();
+                      addAttribute(_addObjectAttribute);
                     },
                   ),
+                ],
+              );
+              late final listAttribute = Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 8),
+                  if (_controller.listAttribute.value != null)
+                    AttributeListTile(
+                      _controller.listAttribute.value!,
+                      onTap: () {
+                        editAttribute(
+                          _controller.listAttribute.value!,
+                          (attribute) =>
+                              _controller.listAttribute.value = attribute,
+                        );
+                      },
+                      trailing: IconButton(
+                        icon: Icon(Symbols.remove_circle),
+                        onPressed: () {
+                          _controller.listAttribute.value = null;
+                        },
+                      ),
+                    )
+                  else
+                    OutlinedButton.icon(
+                      style: IconButton.styleFrom(),
+                      icon: Icon(Icons.add),
+                      label: Text('Select attribute'),
+                      onPressed: () {
+                        addAttribute((attribute) {
+                          _controller.listAttribute.value = attribute;
+                        });
+                      },
+                    ),
                 ],
               );
               return Column(
@@ -177,22 +190,18 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     spacing: 16,
                     children: [
                       Expanded(child: typeField),
-                      if (hasType(AttributeType.list))
-                        Expanded(child: listTypeDropdown),
-                      if (hasType(AttributeType.number))
+                      if (isType(AttributeType.number))
                         Expanded(child: unitDropdown),
                     ],
                   ),
-                  if (hasType(AttributeType.object)) objectAttributes,
+                  if (isType(AttributeType.object)) objectAttributes,
+                  if (isType(AttributeType.list)) listAttribute,
                 ],
               );
             },
           ),
           ListenableBuilder(
-            listenable: Listenable.merge([
-              _controller.type,
-              _controller.listType,
-            ]),
+            listenable: _controller.type,
             builder: (context, child) {
               final requiredCheckbox = Row(
                 mainAxisSize: MainAxisSize.min,
@@ -232,7 +241,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 mainAxisSize: MainAxisSize.min,
                 spacing: 16,
                 children: [
-                  if (hasType(AttributeType.text)) multilineCheckbox,
+                  if (isType(AttributeType.text)) multilineCheckbox,
                   requiredCheckbox,
                 ],
               );
@@ -243,41 +252,44 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
-  Future<void> addAttribute() async {
+  Future<void> addAttribute(void Function(Attribute) add) async {
     final attribute = await showNestedAttributeDialog(
       context: context,
       onSave: (attribute) async {
-        _addAttribute(attribute);
+        add(attribute);
         await save();
       },
     );
     if (attribute != null) {
-      _addAttribute(attribute);
+      add(attribute);
     }
   }
 
-  void _addAttribute(Attribute objectAttribute) {
+  void _addObjectAttribute(Attribute objectAttribute) {
     _controller.objectAttributes.value = [
       ..._controller.objectAttributes.value,
       objectAttribute,
     ];
   }
 
-  Future<void> editAttribute(Attribute attribute) async {
+  Future<void> editAttribute(
+    Attribute attribute,
+    void Function(Attribute) edit,
+  ) async {
     final updatedAttribute = await showNestedAttributeDialog(
       context: context,
       initialAttribute: attribute,
       onSave: (updatedAttribute) async {
-        _editAttribute(updatedAttribute);
+        edit(updatedAttribute);
         await save();
       },
     );
     if (updatedAttribute != null) {
-      _editAttribute(updatedAttribute);
+      edit(updatedAttribute);
     }
   }
 
-  void _editAttribute(Attribute updatedAttribute) {
+  void _editObjectAttribute(Attribute updatedAttribute) {
     _controller.objectAttributes.value = [
       for (final objectAttribute in _controller.objectAttributes.value)
         objectAttribute.id == updatedAttribute.id
@@ -293,18 +305,14 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     }
   }
 
-  void deleteAttribute(Attribute attribute) {
+  void deleteObjectAttribute(Attribute attribute) {
     _controller.objectAttributes.value = [
       for (final objectAttribute in _controller.objectAttributes.value)
         if (objectAttribute.id != attribute.id) objectAttribute,
     ];
   }
 
-  bool hasType(String type) {
-    return _controller.type.value == type ||
-        _controller.type.value == AttributeType.list &&
-            _controller.listType.value == type;
-  }
+  bool isType(String type) => _controller.type.value == type;
 
   bool get hasChanges {
     return _controller != _initialController;
@@ -360,7 +368,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         attributes: _controller.objectAttributes.value,
       ),
       AttributeType.list => ListAttributeType(
-        type: _createAttributeType(_controller.listType.value!),
+        attribute: _controller.listAttribute.value!,
       ),
       _ => throw Exception('Invalid type ${_controller.type.value}'),
     };

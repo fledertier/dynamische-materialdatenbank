@@ -10,7 +10,7 @@ class AttributeFormController implements Listenable {
       nameDe = ValueNotifier(initialAttribute?.nameDe),
       nameEn = ValueNotifier(initialAttribute?.nameEn),
       type = ValueNotifier(initialAttribute?.type.id ?? AttributeType.text),
-      listType = ValueNotifier(initialAttribute?.type.listType?.id),
+      listAttribute = ValueNotifier(initialAttribute?.type.listAttribute),
       unitType = ValueNotifier(initialAttribute?.type.numberUnitType),
       objectAttributes = ValueNotifier(
         initialAttribute?.type.objectAttributes ?? [],
@@ -22,7 +22,7 @@ class AttributeFormController implements Listenable {
   final ValueNotifier<String?> nameDe;
   final ValueNotifier<String?> nameEn;
   final ValueNotifier<String?> type;
-  final ValueNotifier<String?> listType;
+  final ValueNotifier<Attribute?> listAttribute;
   final ValueNotifier<UnitType?> unitType;
   final ValueNotifier<List<Attribute>> objectAttributes;
   final ValueNotifier<bool?> multiline;
@@ -35,7 +35,7 @@ class AttributeFormController implements Listenable {
     nameDe,
     nameEn,
     type,
-    listType,
+    listAttribute,
     unitType,
     objectAttributes,
     multiline,
@@ -69,7 +69,7 @@ class AttributeFormController implements Listenable {
       nameDe.value,
       nameEn.value,
       type.value,
-      listType.value,
+      listAttribute.value,
       unitType.value,
       Object.hashAll(objectAttributes.value),
       multiline.value,
@@ -86,7 +86,7 @@ class AttributeFormController implements Listenable {
         nameDe.value == other.nameDe.value &&
         nameEn.value == other.nameEn.value &&
         type.value == other.type.value &&
-        listType.value == other.listType.value &&
+        listAttribute.value == other.listAttribute.value &&
         unitType.value == other.unitType.value &&
         listEquals(objectAttributes.value, other.objectAttributes.value) &&
         multiline.value == other.multiline.value &&
@@ -96,22 +96,22 @@ class AttributeFormController implements Listenable {
 
 extension on AttributeType {
   bool? get textMultiline {
-    final type = listType ?? this;
+    final type = this;
     return type is TextAttributeType ? type.multiline : null;
   }
 
   UnitType? get numberUnitType {
-    final type = listType ?? this;
+    final type = this;
     return type is NumberAttributeType ? type.unitType : null;
   }
 
   List<Attribute>? get objectAttributes {
-    final type = listType ?? this;
+    final type = this;
     return type is ObjectAttributeType ? type.attributes : null;
   }
 
-  AttributeType? get listType {
+  Attribute? get listAttribute {
     final type = this;
-    return type is ListAttributeType ? type.type : null;
+    return type is ListAttributeType ? type.attribute : null;
   }
 }

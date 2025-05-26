@@ -153,7 +153,7 @@ class ObjectAttributeType extends AttributeType {
 }
 
 class ListAttributeType extends AttributeType {
-  ListAttributeType({required this.type})
+  ListAttributeType({required this.attribute})
     : super(
         id: AttributeType.list,
         operators: {
@@ -164,26 +164,28 @@ class ListAttributeType extends AttributeType {
         },
       );
 
-  final AttributeType type;
+  final Attribute attribute;
 
   factory ListAttributeType.fromJson(Json json) {
-    return ListAttributeType(type: AttributeType.fromJson(json['type']));
+    return ListAttributeType(attribute: Attribute.fromJson(json['attribute']));
   }
 
   @override
   Json toJson() {
-    return {'id': id, 'type': type.toJson()};
+    return {'id': id, 'attribute': attribute.toJson()};
   }
 
   @override
-  String toString() => '$name, $type';
+  String toString() => '$name, ${attribute.type}';
 
   @override
-  int get hashCode => Object.hash(id, type);
+  int get hashCode => Object.hash(id, attribute);
 
   @override
   bool operator ==(Object other) {
-    return other is ListAttributeType && other.id == id && other.type == type;
+    return other is ListAttributeType &&
+        other.id == id &&
+        other.attribute == attribute;
   }
 }
 
