@@ -17,7 +17,7 @@ class SectionButton extends ConsumerWidget {
         fixedSize: Size(double.infinity, 80),
       ),
       icon: Icon(Icons.add),
-      label: Text('Add Section'),
+      label: Text('Section'),
       onPressed: () {
         ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
           final newSection = CardSection(cards: []);

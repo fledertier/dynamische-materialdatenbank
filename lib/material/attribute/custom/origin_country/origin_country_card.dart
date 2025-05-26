@@ -2,8 +2,8 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/origin_country_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/country/country_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +36,7 @@ class OriginCountryCard extends ConsumerWidget {
     return AttributeCard(
       columns: 2,
       label: AttributeLabel(attribute: Attributes.originCountry),
-      title: CountryAttributeField(
+      title: OriginCountryAttributeField(
         countries: countries,
         materialId: materialId,
       ),

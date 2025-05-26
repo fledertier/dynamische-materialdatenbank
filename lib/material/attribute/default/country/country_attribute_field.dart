@@ -1,60 +1,84 @@
-import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
-import 'package:dynamische_materialdatenbank/material/material_provider.dart';
-import 'package:dynamische_materialdatenbank/widgets/tags_field/selectable_tag.dart';
-import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_field.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../widgets/enum_field.dart';
 import 'country.dart';
 
-class CountryAttributeField extends ConsumerWidget {
+class CountryAttributeField extends StatelessWidget {
   const CountryAttributeField({
     super.key,
-    required this.countries,
-    required this.materialId,
+    this.country,
+    required this.onChanged,
+    this.required = false,
+    this.enabled = true,
   });
 
-  final List<Country> countries;
-  final String materialId;
+  final Country? country;
+  final void Function(Country? value) onChanged;
+  final bool required;
+  final bool enabled;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final edit = ref.watch(editModeProvider);
-
-    if (!edit) {
-      return Text(
-        countries.map((country) => country.name).join(', '),
-        style: TextTheme.of(context).titleLarge,
-      );
-    }
-
-    return TagsField<Country>(
+  Widget build(BuildContext context) {
+    return EnumField<Country>(
+      enabled: enabled,
       decoration: InputDecoration(
-        hintText: 'Countries',
+        hintText: 'Country',
         border: const OutlineInputBorder(borderSide: BorderSide.none),
         contentPadding: EdgeInsets.zero,
       ),
       suggestions: Countries.values,
-      suggestValueBuilder: (context, country) {
-        return ListTile(title: Text(country.name));
-      },
-      tagBuilder: (Country country, bool isSelected) {
-        return SelectableTag(
-          label: Text(country.name),
-          backgroundColor: ColorScheme.of(context).surfaceContainer,
-          selected: isSelected,
+      findSuggestions: findSuggestions,
+      suggestionBuilder: (context, country) {
+        return ListTile(
+          title: Text(country.name),
+          trailing: Text(country.code),
         );
       },
-      hideSuggestionsOnSelect: true,
       textExtractor: (country) => country.name,
-      initialTags: countries,
-      onChanged: (countries) {
-        ref.read(materialProvider(materialId).notifier).updateMaterial({
-          Attributes.originCountry:
-              countries.map((country) => country.code).toList(),
-        });
+      onChanged: (country) {
+        onChanged(country);
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          if (required) {
+            return "Please select a country";
+          }
+          return null;
+        }
+        if (!isCountry(value)) {
+          return "Please select a valid country";
+        }
+        return null;
       },
     );
+  }
+
+  bool isCountry(String name) {
+    return Countries.values.any(
+      (country) => country.name.toLowerCase() == name.toLowerCase(),
+    );
+  }
+
+  List<Country> findSuggestions(String text) {
+    final search = text.toLowerCase();
+
+    final matchingName = Countries.values.firstWhereOrNull(
+      (country) => country.name.toLowerCase() == search,
+    );
+    if (matchingName != null) {
+      return [];
+    }
+
+    final matchingCode = Countries.values.firstWhereOrNull(
+      (country) => country.code.toLowerCase() == search,
+    );
+
+    final matches =
+        Countries.values
+            .where((country) => country.name.toLowerCase().contains(search))
+            .toList();
+
+    return {if (matchingCode != null) matchingCode, ...matches}.toList();
   }
 }

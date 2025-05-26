@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:flutter/widgets.dart';
 
+import 'list/list_card.dart';
 import 'number/number_card.dart';
 import 'text/text_card.dart';
 
@@ -10,7 +11,8 @@ enum DefaultCards implements Cards {
   numberCard(
     type: AttributeType.number,
     sizes: {CardSize.small, CardSize.large},
-  );
+  ),
+  listCard(type: AttributeType.list, sizes: {CardSize.small, CardSize.large});
 
   const DefaultCards({required this.type, required this.sizes});
 
@@ -33,6 +35,11 @@ abstract class DefaultCardFactory {
         size: size,
       ),
       DefaultCards.numberCard => NumberCard(
+        materialId: materialId,
+        attributeId: attributeId,
+        size: size,
+      ),
+      DefaultCards.listCard => ListCard(
         materialId: materialId,
         attributeId: attributeId,
         size: size,

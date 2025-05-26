@@ -1,27 +1,26 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
-import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../../widgets/loading_text.dart';
 import 'unit_number.dart';
 
 class NumberAttributeField extends ConsumerStatefulWidget {
   const NumberAttributeField({
     super.key,
-    required this.attributeId,
     required this.number,
+    this.type,
     this.onChanged,
     this.textStyle,
   });
 
-  final String attributeId;
   final UnitNumber number;
+  final AttributeType? type;
   final ValueChanged<UnitNumber>? onChanged;
   final TextStyle? textStyle;
 
@@ -34,6 +33,8 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
   TextEditingController? controller;
   late var number = widget.number;
 
+  NumberAttributeType get numberType => widget.type as NumberAttributeType;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
@@ -41,14 +42,13 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
       fontFamily: 'Lexend',
     );
 
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);
 
-    if (attribute == null) {
+    if (widget.type == null) {
       return LoadingText(null, style: textStyle, width: 40);
     }
 
-    final unitType = (attribute.type as NumberAttributeType).unitType;
+    final unitType = numberType.unitType;
     final value = toDisplayUnit(number, unitType);
     controller ??= TextEditingController(text: value.toStringAsFlexible());
 
