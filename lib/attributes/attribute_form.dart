@@ -151,8 +151,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 8),
-                  if (_controller.listAttribute.value != null)
+                  if (_controller.listAttribute.value != null) ...[
+                    SizedBox(height: 8),
                     AttributeListTile(
                       _controller.listAttribute.value!,
                       onTap: () {
@@ -168,18 +168,19 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                           _controller.listAttribute.value = null;
                         },
                       ),
-                    )
-                  else
-                    OutlinedButton.icon(
+                    ),
+                  ] else ...[
+                    SizedBox(height: 16),
+                    OutlinedButton(
                       style: IconButton.styleFrom(),
-                      icon: Icon(Icons.add),
-                      label: Text('Select attribute'),
+                      child: Text('Select attribute'),
                       onPressed: () {
                         addAttribute((attribute) {
                           _controller.listAttribute.value = attribute;
                         });
                       },
                     ),
+                  ],
                 ],
               );
               return Column(
@@ -368,7 +369,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         attributes: _controller.objectAttributes.value,
       ),
       AttributeType.list => ListAttributeType(
-        attribute: _controller.listAttribute.value!,
+        attribute: _controller.listAttribute.value,
       ),
       _ => throw Exception('Invalid type ${_controller.type.value}'),
     };

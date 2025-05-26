@@ -50,8 +50,6 @@ class _ListCardState extends ConsumerState<ListCard> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
-
     final list =
         ref.watch(
               valueProvider(
@@ -69,11 +67,11 @@ class _ListCardState extends ConsumerState<ListCard> {
 
     final type = attribute?.type as ListAttributeType?;
 
-    if (type == null) {
+    if (type?.attribute?.type == null) {
       return Placeholder();
     }
 
-    final itemType = type.attribute.type;
+    final itemType = type!.attribute!.type;
 
     Widget buildItem(int index) {
       final value = list.elementAtOrNull(index);

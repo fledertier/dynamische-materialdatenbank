@@ -164,19 +164,22 @@ class ListAttributeType extends AttributeType {
         },
       );
 
-  final Attribute attribute;
+  final Attribute? attribute;
 
   factory ListAttributeType.fromJson(Json json) {
-    return ListAttributeType(attribute: Attribute.fromJson(json['attribute']));
+    final attribute = json['attribute'];
+    return ListAttributeType(
+      attribute: attribute != null ? Attribute.fromJson(attribute) : null,
+    );
   }
 
   @override
   Json toJson() {
-    return {'id': id, 'attribute': attribute.toJson()};
+    return {'id': id, 'attribute': attribute?.toJson()};
   }
 
   @override
-  String toString() => '$name, ${attribute.type}';
+  String toString() => [name, attribute?.type].nonNulls.join(', ');
 
   @override
   int get hashCode => Object.hash(id, attribute);
