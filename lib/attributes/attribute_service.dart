@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
@@ -81,31 +79,6 @@ class AttributeService {
         .collection(Collections.attributes)
         .doc(Docs.attributes)
         .set({id: attribute.toJson()}, SetOptions(merge: true));
-  }
-
-  String nearestAvailableAttributeId(
-    String name,
-    Map<String, Attribute> attributes,
-  ) {
-    final suffix = RegExp(r"(?:-(\d+))?");
-    final pattern = RegExp(RegExp.escape(name) + suffix.pattern);
-
-    final similarIds =
-        attributes.keys.where((id) => pattern.hasMatch(id)).toList();
-
-    final usedNumbers =
-        similarIds.map((id) {
-          final match = pattern.firstMatch(id);
-          if (match != null && match.group(0) == id) {
-            final digits = match.group(1);
-            final number = digits != null ? int.parse(digits) : 0;
-            return number;
-          }
-          return 0;
-        }).toSet();
-
-    final nextNumber = usedNumbers.isEmpty ? 0 : usedNumbers.reduce(max) + 1;
-    return nextNumber > 0 ? "$name-$nextNumber" : name;
   }
 }
 

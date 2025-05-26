@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,8 +10,6 @@ import 'attribute.dart';
 import 'attribute_delete_dialog.dart';
 import 'attribute_dialog.dart';
 import 'attribute_form_state.dart';
-import 'attribute_provider.dart';
-import 'attribute_service.dart';
 import 'attribute_type.dart';
 import 'attributes_list.dart';
 
@@ -48,17 +47,19 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
             spacing: 16,
             runSpacing: 24,
             children: [
-              TextFormField(
-                initialValue: _controller.nameDe.value,
-                decoration: InputDecoration(labelText: 'Name (De)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _controller.nameDe.value = value;
+              ListenableBuilder(
+                listenable: _controller.nameEn,
+                builder: (context, child) {
+                  return TextFormField(
+                    initialValue: _controller.nameDe.value,
+                    decoration: InputDecoration(
+                      labelText: 'Name (De)',
+                      hintText: _controller.nameEn.value,
+                    ),
+                    onChanged: (value) {
+                      _controller.nameDe.value = value;
+                    },
+                  );
                 },
               ),
               ListenableBuilder(
@@ -328,8 +329,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
 
     if (_form.currentState!.validate() && await deletionConfirmed) {
       final attribute = Attribute(
-        id: _controller.id.value ?? await _createId(),
-        nameDe: _controller.nameDe.value!,
+        id: _controller.id.value ?? generateId(),
+        nameDe: _controller.nameDe.value,
         nameEn: _controller.nameEn.value,
         type: _createAttributeType(_controller.type.value!),
         required: _controller.required.value ?? false,
@@ -372,14 +373,6 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
       ),
       _ => throw Exception('Invalid type ${_controller.type.value}'),
     };
-  }
-
-  Future<String> _createId() async {
-    final name = _controller.nameEn.value ?? _controller.nameDe.value!;
-    final attributes = await ref.read(attributesProvider.future);
-    return ref
-        .read(attributeServiceProvider)
-        .nearestAvailableAttributeId(name.toLowerCase(), attributes);
   }
 
   @override

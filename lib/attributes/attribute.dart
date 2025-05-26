@@ -11,12 +11,12 @@ class Attribute {
   });
 
   final String id;
-  final String nameDe;
+  final String? nameDe;
   final String? nameEn;
   final AttributeType type;
   final bool required;
 
-  String get name => nameDe;
+  String get name => nameDe ?? nameEn ?? 'Unnamed';
 
   factory Attribute.fromJson(Json json) {
     return Attribute(
