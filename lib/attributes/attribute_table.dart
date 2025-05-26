@@ -43,7 +43,12 @@ class AttributeTable extends ConsumerWidget {
               for (final header in ['Material', 'Value'])
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(header, style: TextTheme.of(context).labelMedium),
+                  child: Text(
+                    header,
+                    style: TextTheme.of(context).labelMedium?.copyWith(
+                      color: ColorScheme.of(context).onSurfaceVariant,
+                    ),
+                  ),
                 ),
             ],
           ),

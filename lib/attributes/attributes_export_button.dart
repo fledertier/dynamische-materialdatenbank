@@ -10,7 +10,7 @@ class AttributesExportButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FilledButton.tonalIcon(
+    return TextButton.icon(
       icon: const Icon(Icons.download_outlined),
       label: Text('Export'),
       onPressed: () async {

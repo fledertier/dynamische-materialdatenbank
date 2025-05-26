@@ -8,7 +8,7 @@ class AttributesImportButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FilledButton.tonalIcon(
+    return TextButton.icon(
       icon: const Icon(Icons.upload_outlined),
       label: Text('Import'),
       onPressed: () async {

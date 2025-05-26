@@ -47,14 +47,16 @@ class AttributeDetails extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Row(
+                      spacing: 8,
                       children: [
                         LoadingText(
                           attribute.name,
                           style: TextTheme.of(context).headlineSmall,
                         ),
                         Spacer(),
-                        IconButton(
+                        OutlinedButton.icon(
                           icon: Icon(Symbols.edit),
+                          label: Text('Edit'),
                           onPressed: () {
                             editAttribute(context, ref, attribute);
                           },
