@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dynamische_materialdatenbank/query/query_converters.dart';
+import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute.dart';
@@ -38,9 +39,15 @@ class QueryService {
     ).httpsCallable(Functions.chat).call({
       "prompt": prompt,
       "attributes":
-          attributes.map((attribute) {
-            return {"id": attribute.id, "type": attribute.type.name};
-          }).toList(),
+          attributes
+              .map(
+                (attribute) => attribute.toJson().removeKeys({
+                  "required",
+                  "multiline",
+                  "nameEn",
+                }),
+              )
+              .toList(),
       "types":
           types.map((type) {
             return {

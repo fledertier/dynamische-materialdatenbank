@@ -25,3 +25,29 @@ extension MapExtension<K, V> on Map<K, V> {
     return result;
   }
 }
+
+extension JsonExtension on Map<String, dynamic> {
+  Map<String, dynamic> removeKeys(Set<String> keys, [bool recursive = true]) {
+    final result = Map<String, dynamic>.from(this);
+    result.removeWhere((key, value) => keys.contains(key));
+
+    if (!recursive) return result;
+
+    return result.map((key, value) {
+      if (value is Map<String, dynamic>) {
+        return MapEntry(key, value.removeKeys(keys, recursive));
+      } else if (value is List) {
+        return MapEntry(
+          key,
+          value.map((item) {
+            if (item is Map<String, dynamic>) {
+              return item.removeKeys(keys, recursive);
+            }
+            return item;
+          }).toList(),
+        );
+      }
+      return MapEntry(key, value);
+    });
+  }
+}
