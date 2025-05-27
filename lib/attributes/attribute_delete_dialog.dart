@@ -2,32 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'attribute.dart';
 import 'attribute_provider.dart';
 
 class AttributeDeleteDialog extends ConsumerWidget {
-  const AttributeDeleteDialog({super.key, required this.attribute});
+  const AttributeDeleteDialog({super.key, required this.attributes});
 
-  final Attribute attribute;
+  final Set<String> attributes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final snapshot = ref.watch(valuesProvider(attribute.id));
+    final snapshot = ref.watch(
+      attributesUsedCountProvider(AttributesArgument(attributes)),
+    );
 
     if (snapshot.isLoading || !snapshot.hasValue) {
       return Center(child: CircularProgressIndicator(color: Colors.white));
     }
 
-    final materialCount = snapshot.requireValue.length;
+    final materialCount = snapshot.requireValue;
 
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 400),
         child: AlertDialog(
           icon: Icon(Icons.delete_outlined),
-          title: const Text('Delete attribute?'),
+          title: Text(
+            attributes.length > 1 ? 'Delete attributes?' : 'Delete attribute?',
+          ),
           content: Text(
-            'Deleting this attribute will also remove it from $materialCount materials. This action cannot be undone.',
+            attributes.length > 1
+                ? 'Deleting these attributes will also remove them from $materialCount materials. This action cannot be undone.'
+                : 'Deleting this attribute will also remove it from $materialCount materials. This action cannot be undone.',
           ),
           actions: [
             TextButton(
@@ -49,14 +54,17 @@ class AttributeDeleteDialog extends ConsumerWidget {
   }
 }
 
-Future<bool> showAttributeDeleteDialog(
+Future<bool> confirmAttributeDeletion(
   BuildContext context,
-  Attribute attribute,
+  Set<String> attributes,
 ) async {
+  if (attributes.isEmpty) {
+    return true;
+  }
   final delete = await showDialog<bool>(
     context: context,
     builder: (context) {
-      return AttributeDeleteDialog(attribute: attribute);
+      return AttributeDeleteDialog(attributes: attributes);
     },
   );
   return delete ?? false;

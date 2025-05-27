@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
@@ -112,15 +114,61 @@ class AttributeDetails extends ConsumerWidget {
       context: context,
       initialAttribute: attribute,
       onSave: (updatedAttribute) async {
-        context.pop();
-        await ref
-            .read(attributeServiceProvider)
-            .updateAttribute(updatedAttribute);
-        ScaffoldMessenger.of(
+        final removedAttributes = getRemovedAttributes(
+          updatedAttribute,
+          attribute,
+        );
+        final delete = await confirmAttributeDeletion(
           context,
-        ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+          removedAttributes,
+        );
+        if (delete) {
+          context.pop();
+          await ref
+              .read(attributeServiceProvider)
+              .updateAttribute(updatedAttribute);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+        }
       },
     );
+  }
+
+  Set<String> getRemovedAttributes(
+    Attribute updatedAttribute,
+    Attribute attribute,
+  ) {
+    return _collectRemovedAttributes(updatedAttribute, attribute, attribute.id);
+  }
+
+  Set<String> _collectRemovedAttributes(
+    Attribute attribute,
+    Attribute initialAttribute,
+    String parentAttributeId,
+  ) {
+    final removedAttributes = <String>{};
+    for (final initialObjectAttribute in initialAttribute.objectAttributes) {
+      final objectAttribute = attribute.objectAttributes.firstWhereOrNull(
+        (objectAttribute) => objectAttribute.id == initialObjectAttribute.id,
+      );
+      final attributeId = [
+        parentAttributeId,
+        initialObjectAttribute.id,
+      ].join('.');
+      if (objectAttribute == null) {
+        removedAttributes.add(attributeId);
+      } else {
+        removedAttributes.addAll(
+          _collectRemovedAttributes(
+            objectAttribute,
+            initialObjectAttribute,
+            attributeId,
+          ),
+        );
+      }
+    }
+    return removedAttributes;
   }
 
   Future<void> deleteAttribute(
@@ -128,7 +176,7 @@ class AttributeDetails extends ConsumerWidget {
     WidgetRef ref,
     Attribute attribute,
   ) async {
-    final delete = await showAttributeDeleteDialog(context, attribute);
+    final delete = await confirmAttributeDeletion(context, {attribute.id});
     if (delete) {
       await ref.read(attributeServiceProvider).deleteAttribute(attribute.id);
       ScaffoldMessenger.of(
@@ -142,5 +190,14 @@ class AttributeDetails extends ConsumerWidget {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Id copied to clipboard')));
+  }
+}
+
+extension on Attribute {
+  List<Attribute> get objectAttributes {
+    if (type case ObjectAttributeType(:final attributes)) {
+      return attributes;
+    }
+    return [];
   }
 }

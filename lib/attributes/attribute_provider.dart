@@ -56,3 +56,14 @@ final attributeProvider = Provider.family((ref, String? attributeId) {
   final attributesById = ref.watch(attributesProvider).value;
   return getAttribute(attributesById, attributeId);
 });
+
+final attributesUsedCountProvider = FutureProvider.family((
+  ref,
+  AttributesArgument argument,
+) async {
+  final valuesByIds = await Future.wait([
+    for (final attribute in argument.attributes)
+      ref.watch(valuesProvider(attribute).future),
+  ]);
+  return valuesByIds.expand((valuesById) => valuesById.keys).toSet().length;
+});

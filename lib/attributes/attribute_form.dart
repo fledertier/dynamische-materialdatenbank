@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'attribute.dart';
-import 'attribute_delete_dialog.dart';
 import 'attribute_dialog.dart';
 import 'attribute_form_state.dart';
 import 'attribute_type.dart';
@@ -130,7 +128,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                         editAttribute(attribute, _editObjectAttribute);
                       },
                       trailing: IconButton(
-                        icon: Icon(Symbols.remove_circle),
+                        icon: Icon(Symbols.remove),
                         onPressed: () {
                           deleteObjectAttribute(attribute);
                         },
@@ -320,38 +318,16 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
   }
 
   Future<Attribute?> submit() async {
-    final attributesToDelete = _initialController.objectAttributes.value.where(
-      (attribute) => _controller.objectAttributes.value.none(
-        (objectAttribute) => objectAttribute.id == attribute.id,
-      ),
-    );
-    final deletionConfirmed = _confirmAttributeDeletion(attributesToDelete);
-
-    if (_form.currentState!.validate() && await deletionConfirmed) {
-      final attribute = Attribute(
-        id: _controller.id.value ?? generateId(),
-        nameDe: _controller.nameDe.value,
-        nameEn: _controller.nameEn.value,
-        type: _createAttributeType(_controller.type.value!),
-        required: _controller.required.value ?? false,
-      );
-
-      for (final attribute in attributesToDelete) {
-        // todo: delete attribute
-      }
-
-      return attribute;
+    if (!_form.currentState!.validate()) {
+      return null;
     }
-    return null;
-  }
-
-  Future<bool> _confirmAttributeDeletion(Iterable<Attribute> attributes) async {
-    final delete = await Future.wait(
-      attributes.map(
-        (attribute) => showAttributeDeleteDialog(context, attribute),
-      ),
+    return Attribute(
+      id: _controller.id.value ?? generateId(),
+      nameDe: _controller.nameDe.value,
+      nameEn: _controller.nameEn.value,
+      type: _createAttributeType(_controller.type.value!),
+      required: _controller.required.value ?? false,
     );
-    return delete.every((delete) => delete);
   }
 
   AttributeType _createAttributeType(String type) {

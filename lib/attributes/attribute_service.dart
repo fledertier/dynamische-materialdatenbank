@@ -29,9 +29,12 @@ class AttributeService {
   }
 
   Future<void> deleteAttribute(String attributeId) async {
-    final topLevelAttributeId = attributeId.split('.').first;
-    final subAttributeId = attributeId.split('.').sublist(1).join('.');
+    await _deleteMaterialsWithAttribute(attributeId);
+    await _deleteValuesWithAttribute(attributeId);
+    await _deleteAttribute(attributeId);
+  }
 
+  Future<void> _deleteMaterialsWithAttribute(String attributeId) async {
     final materials = await getMaterialsWithAttribute(attributeId);
     for (final material in materials) {
       final materialId = material[Attributes.id];
@@ -40,12 +43,17 @@ class AttributeService {
           .doc(materialId)
           .update({attributeId: FieldValue.delete()});
     }
+  }
 
-    final isTopLevel = attributeId == topLevelAttributeId;
+  Future<void> _deleteValuesWithAttribute(String attributeId) async {
+    final topLevelAttributeId = attributeId.split('.').first;
+    final subAttributeId = attributeId.split('.').sublist(1).join('.');
+
     final attributeDoc = FirebaseFirestore.instance
         .collection(Collections.values)
         .doc(topLevelAttributeId);
-    if (isTopLevel) {
+
+    if (attributeId == topLevelAttributeId) {
       attributeDoc.delete();
     } else {
       final valuesByMaterialId = (await attributeDoc.get()).data() ?? {};
@@ -54,8 +62,16 @@ class AttributeService {
           '$materialId.$subAttributeId': FieldValue.delete(),
       });
     }
+  }
 
-    FirebaseFirestore.instance
+  Future<void> _deleteAttribute(String attributeId) async {
+    final topLevelAttributeId = attributeId.split('.').first;
+
+    if (attributeId != topLevelAttributeId) {
+      return; // attribute is removed in the attribute dialog
+    }
+
+    return FirebaseFirestore.instance
         .collection(Collections.attributes)
         .doc(Docs.attributes)
         .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
