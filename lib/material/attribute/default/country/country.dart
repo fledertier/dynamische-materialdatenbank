@@ -14,6 +14,10 @@ class Country {
     });
   }
 
+  dynamic toJson() {
+    return code;
+  }
+
   @override
   String toString() {
     return 'Country(name: $name, code: $code)';

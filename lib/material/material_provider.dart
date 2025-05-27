@@ -153,7 +153,9 @@ List<dynamic> _convertList(json, ListAttributeType type) {
     TextAttributeType() => List<Json>.from(json).map(TranslatableText.fromJson),
     NumberAttributeType() => List<Json>.from(json).map(UnitNumber.fromJson),
     BooleanAttributeType() => List<bool>.from(json),
-    CountryAttributeType() => List<Json>.from(json).map(Country.fromJson),
+    CountryAttributeType() => List.from(
+      json,
+    ).map((country) => country != null ? Country.fromJson(country) : null),
     UrlAttributeType() =>
       List<String>.from(json).map((url) => Uri.tryParse(url)).nonNulls,
     _ =>

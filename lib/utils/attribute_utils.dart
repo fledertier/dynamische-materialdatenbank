@@ -10,10 +10,16 @@ Attribute? getAttribute(
   final ids = attributeId?.split('.') ?? [];
   var attribute = attributesById?[ids.firstOrNull];
   for (final id in ids.skip(1)) {
-    final type = attribute?.type as ObjectAttributeType?;
-    attribute = type?.attributes.firstWhereOrNull(
-      (attribute) => attribute.id == id,
-    );
+    final type = attribute?.type;
+    if (type == null) {
+      return null;
+    } else if (type is ObjectAttributeType) {
+      attribute = type.attributes.firstWhereOrNull(
+        (attribute) => attribute.id == id,
+      );
+    } else if (type is ListAttributeType) {
+      attribute = type.attribute;
+    }
   }
   return attribute;
 }
@@ -34,4 +40,14 @@ dynamic getJsonAttributeValue(
     value = value?[id];
   }
   return value;
+}
+
+extension AttributeIdExtension on String {
+  String topLevel() {
+    return split(".").firstOrNull ?? this;
+  }
+
+  String add(String id) {
+    return [this, id].join(".");
+  }
 }

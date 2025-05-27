@@ -14,7 +14,7 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
     final manufacturers =
-        ref.watch(attributeValuesProvider(Attributes.manufacturer)).value;
+        ref.watch(valuesProvider(Attributes.manufacturer)).value;
     final suggestions = manufacturers?.values.toSet().sortedBy(
       (manufacturer) => manufacturer[Attributes.manufacturerName] as String,
     );

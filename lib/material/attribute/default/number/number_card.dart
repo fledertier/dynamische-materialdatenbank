@@ -4,8 +4,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../attributes/attribute_provider.dart';
-import '../../../../attributes/attribute_type.dart';
 import '../../../material_provider.dart';
 import 'number_attribute_field.dart';
 import 'unit_number.dart';
@@ -38,8 +36,6 @@ class NumberCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
 
-    final attribute = ref.watch(attributeProvider(attributeId));
-
     final number =
         ref.watch(
               valueProvider(
@@ -56,8 +52,8 @@ class NumberCard extends ConsumerWidget {
       label: AttributeLabel(attribute: attributeId),
       title: NumberAttributeField(
         key: ValueKey(number.displayUnit),
+        attributeId: attributeId,
         number: number,
-        type: attribute?.type as NumberAttributeType?,
         textStyle:
             textStyle ??
             switch (size) {

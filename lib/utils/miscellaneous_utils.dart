@@ -56,3 +56,9 @@ void downloadBlob(web.Blob blob, String filename) {
     ..click();
   web.URL.revokeObjectURL(url);
 }
+
+extension BoolExtension on bool {
+  int toInt() {
+    return this ? 1 : 0;
+  }
+}

@@ -12,11 +12,11 @@ class Extrema {
   final double min, max;
 }
 
-final attributeExtremaProvider = FutureProvider.family((
+final valuesExtremaProvider = FutureProvider.family((
   ref,
   String attribute,
 ) async {
-  final values = await ref.watch(attributeValuesProvider(attribute).future);
+  final values = await ref.watch(valuesProvider(attribute).future);
   final numbers = values.values.map((value) => value['value'] as double);
   if (numbers.isEmpty) {
     return null;
@@ -24,7 +24,7 @@ final attributeExtremaProvider = FutureProvider.family((
   return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
 });
 
-final attributeValuesProvider = StreamProvider.family((ref, String attribute) {
+final valuesProvider = StreamProvider.family((ref, String attribute) {
   return ref.read(attributeServiceProvider).getAttributeStream(attribute);
 });
 

@@ -14,7 +14,7 @@ class SliderFilterOption extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final extrema = ref.watch(attributeExtremaProvider(attribute)).value;
+    final extrema = ref.watch(valuesExtremaProvider(attribute)).value;
     final minWeight = extrema?.min ?? 0;
     final maxWeight = extrema?.max ?? 1;
     final weight = options[attribute]?.clamp(minWeight, maxWeight) ?? maxWeight;

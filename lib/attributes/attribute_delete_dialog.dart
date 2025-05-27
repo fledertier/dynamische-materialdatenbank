@@ -12,7 +12,7 @@ class AttributeDeleteDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final snapshot = ref.watch(attributeValuesProvider(attribute.id));
+    final snapshot = ref.watch(valuesProvider(attribute.id));
 
     if (snapshot.isLoading || !snapshot.hasValue) {
       return Center(child: CircularProgressIndicator(color: Colors.white));

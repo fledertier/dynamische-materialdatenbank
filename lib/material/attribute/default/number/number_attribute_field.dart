@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/units.dart';
@@ -13,14 +14,14 @@ import 'unit_number.dart';
 class NumberAttributeField extends ConsumerStatefulWidget {
   const NumberAttributeField({
     super.key,
+    required this.attributeId,
     required this.number,
-    this.type,
     this.onChanged,
     this.textStyle,
   });
 
+  final String attributeId;
   final UnitNumber number;
-  final AttributeType? type;
   final ValueChanged<UnitNumber>? onChanged;
   final TextStyle? textStyle;
 
@@ -33,8 +34,6 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
   TextEditingController? controller;
   late var number = widget.number;
 
-  NumberAttributeType get numberType => widget.type as NumberAttributeType;
-
   @override
   Widget build(BuildContext context) {
     final textTheme = TextTheme.of(context);
@@ -42,12 +41,14 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
       fontFamily: 'Lexend',
     );
 
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
     final edit = ref.watch(editModeProvider);
 
-    if (widget.type == null) {
+    if (attribute == null) {
       return LoadingText(null, style: textStyle, width: 40);
     }
 
+    final numberType = attribute.type as NumberAttributeType;
     final unitType = numberType.unitType;
     final value = toDisplayUnit(number, unitType);
     controller ??= TextEditingController(text: value.toStringAsFlexible());
