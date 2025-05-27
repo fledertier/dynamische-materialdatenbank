@@ -1,3 +1,5 @@
+import 'package:dynamische_materialdatenbank/types.dart';
+
 extension MapExtension<K, V> on Map<K, V> {
   Map<T, V> mapKeys<T>(T Function(K key) convert) {
     return map((key, value) => MapEntry(convert(key), value));
@@ -26,21 +28,21 @@ extension MapExtension<K, V> on Map<K, V> {
   }
 }
 
-extension JsonExtension on Map<String, dynamic> {
-  Map<String, dynamic> removeKeys(Set<String> keys, [bool recursive = true]) {
-    final result = Map<String, dynamic>.from(this);
+extension JsonExtension on Json {
+  Json removeKeys(Set<String> keys, [bool recursive = true]) {
+    final result = Json.from(this);
     result.removeWhere((key, value) => keys.contains(key));
 
     if (!recursive) return result;
 
     return result.map((key, value) {
-      if (value is Map<String, dynamic>) {
+      if (value is Json) {
         return MapEntry(key, value.removeKeys(keys, recursive));
       } else if (value is List) {
         return MapEntry(
           key,
           value.map((item) {
-            if (item is Map<String, dynamic>) {
+            if (item is Json) {
               return item.removeKeys(keys, recursive);
             }
             return item;

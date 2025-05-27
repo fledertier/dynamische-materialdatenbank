@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../attributes/attribute_type.dart';
@@ -49,11 +50,11 @@ final filterQueryProvider = Provider((ref) {
 
 final filterOptionsProvider = NotifierProvider(FilterOptionsNotifier.new);
 
-class FilterOptionsNotifier extends Notifier<Map<String, dynamic>> {
+class FilterOptionsNotifier extends Notifier<Json> {
   @override
-  Map<String, dynamic> build() => {};
+  Json build() => {};
 
-  void updateWith(Map<String, dynamic> options) {
+  void updateWith(Json options) {
     state = {...state, ...options}..removeWhere((key, value) => value == null);
   }
 

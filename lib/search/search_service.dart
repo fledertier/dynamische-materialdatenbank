@@ -1,10 +1,11 @@
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchServiceProvider = Provider((ref) => SearchService());
 
 class SearchService {
-  List<Map<String, dynamic>> search(
-    List<Map<String, dynamic>> materials,
+  List<Json> search(
+    List<Json> materials,
     Iterable<String> attributes,
     String query,
   ) {

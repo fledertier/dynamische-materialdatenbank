@@ -1,12 +1,10 @@
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final filterServiceProvider = Provider((ref) => FilterService());
 
 class FilterService {
-  List<Map<String, dynamic>> filter(
-    List<Map<String, dynamic>> materials,
-    Map<String, dynamic> options,
-  ) {
+  List<Json> filter(List<Json> materials, Json options) {
     if (options.isEmpty) {
       return materials;
     }

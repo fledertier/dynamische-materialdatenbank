@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +9,7 @@ import 'attribute.dart';
 final attributeServiceProvider = Provider((ref) => AttributeService());
 
 class AttributeService {
-  Stream<Map<String, dynamic>> getAttributeStream(String attributeId) {
+  Stream<Json> getAttributeStream(String attributeId) {
     return FirebaseFirestore.instance
         .collection(Collections.values)
         .doc(attributeId)
@@ -18,9 +19,7 @@ class AttributeService {
         });
   }
 
-  Future<List<Map<String, dynamic>>> getMaterialsWithAttribute(
-    String attributeId,
-  ) async {
+  Future<List<Json>> getMaterialsWithAttribute(String attributeId) async {
     final snapshot =
         await FirebaseFirestore.instance
             .collection(Collections.materials)

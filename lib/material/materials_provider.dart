@@ -36,7 +36,7 @@ final materialsByIdProvider = FutureProvider.family((
   ref,
   AttributesArgument argument,
 ) async {
-  final materials = <String, Map<String, dynamic>>{};
+  final materials = <String, Json>{};
   for (final attribute in argument.attributes) {
     final values = await ref.watch(attributeValuesProvider(attribute).future);
     values.forEach((id, value) {
