@@ -11,13 +11,14 @@ import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../debouncer.dart';
 import '../../../../widgets/hover_builder.dart';
 import '../country/country.dart';
 import '../country/country_attribute_field.dart';
 import '../text/text_attribute_field.dart';
+import '../url/url_attribute_field.dart';
 
 class ListCard extends ConsumerStatefulWidget {
   const ListCard({
@@ -40,7 +41,7 @@ class ListCard extends ConsumerStatefulWidget {
 }
 
 class _ListCardState extends ConsumerState<ListCard> {
-  final debounce = Debouncer(delay: const Duration(milliseconds: 1000));
+  final debouncers = <int, Debouncer>{};
 
   int columns(AttributeType type) {
     return widget.columns ?? 2;
@@ -85,8 +86,8 @@ class _ListCardState extends ConsumerState<ListCard> {
           return TextAttributeField(
             attributeId: itemAttributeId,
             text: value as TranslatableText? ?? TranslatableText(),
-            onChanged: (value) {
-              updateItem(index, value.toJson());
+            onChanged: (text) {
+              updateItem(index, text.toJson());
             },
           );
         case AttributeType.number:
@@ -95,17 +96,25 @@ class _ListCardState extends ConsumerState<ListCard> {
             key: ValueKey(number.displayUnit),
             attributeId: itemAttributeId,
             number: number,
-            onChanged: (value) {
-              updateItem(index, value.toJson());
+            onChanged: (number) {
+              updateItem(index, number.toJson());
+            },
+          );
+        case AttributeType.url:
+          return UrlAttributeField(
+            attributeId: itemAttributeId,
+            url: value as Uri?,
+            onChanged: (url) {
+              updateItem(index, url?.toJson());
             },
           );
         case AttributeType.country:
           final country = value as Country?;
           return CountryAttributeField(
-            country: country ?? Country.fromCode("de"),
-            enabled: edit,
-            onChanged: (value) {
-              updateItem(index, value?.toJson());
+            attributeId: itemAttributeId,
+            country: country,
+            onChanged: (country) {
+              updateItem(index, country?.toJson());
             },
           );
         default:
@@ -134,7 +143,7 @@ class _ListCardState extends ConsumerState<ListCard> {
                       itemAttributeType.name,
                 ),
                 onPressed: () {
-                  addItem(list, itemAttributeType);
+                  addItem(list.length, itemAttributeType);
                 },
               );
             }
@@ -148,12 +157,14 @@ class _ListCardState extends ConsumerState<ListCard> {
                     Opacity(
                       opacity: edit && hovered ? 1.0 : 0.0,
                       child: IconButton(
-                        onPressed: () {},
                         visualDensity: VisualDensity(
                           horizontal: VisualDensity.minimumDensity,
                           vertical: VisualDensity.minimumDensity,
                         ),
                         icon: Icon(Icons.remove),
+                        onPressed: () {
+                          removeItem(index);
+                        },
                       ),
                     ),
                   ],
@@ -169,7 +180,7 @@ class _ListCardState extends ConsumerState<ListCard> {
     );
   }
 
-  void addItem(List<dynamic> list, AttributeType itemType) {
+  void addItem(int index, AttributeType itemType) {
     final value = switch (itemType.id) {
       AttributeType.text => TranslatableText().toJson(),
       AttributeType.number => UnitNumber(value: 0).toJson(),
@@ -178,21 +189,26 @@ class _ListCardState extends ConsumerState<ListCard> {
       AttributeType.country => null,
       _ => null,
     };
-    updateItem(list.length, value);
+    _updateItem(index, value);
   }
 
   void updateItem(int index, dynamic value) {
-    final list =
-        ref.read(
-              jsonValueProvider(
-                AttributeArgument(
-                  materialId: widget.materialId,
-                  attributeId: widget.attributeId,
-                ),
-              ),
-            )
-            as List? ??
-        [];
+    final debouncer = debouncers.putIfAbsent(index, Debouncer.new);
+    debouncer.debounce(
+      duration: const Duration(milliseconds: 1000),
+      type: BehaviorType.trailingEdge,
+      onDebounce: () {
+        _updateItem(index, value);
+      },
+    );
+  }
+
+  void _updateItem(int index, dynamic value) {
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributeId: widget.attributeId,
+    );
+    final list = ref.read(jsonValueProvider(argument)) as List? ?? [];
 
     if (index < list.length) {
       list[index] = value;
@@ -203,5 +219,20 @@ class _ListCardState extends ConsumerState<ListCard> {
     ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       widget.attributeId: list,
     });
+  }
+
+  void removeItem(int index) {
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributeId: widget.attributeId,
+    );
+    final list = ref.read(jsonValueProvider(argument)) as List? ?? [];
+
+    if (index < list.length) {
+      list.removeAt(index);
+      ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
+        widget.attributeId: list,
+      });
+    }
   }
 }

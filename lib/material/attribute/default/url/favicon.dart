@@ -11,11 +11,17 @@ class Favicon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sz = (size * dpr).round();
-    return WebImage(
-      src: 'http://www.google.com/s2/favicons?domain=$url&sz=$sz',
-      objectFit: BoxFit.contain,
-      width: size,
-      height: size,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: ColorScheme.of(context).surfaceContainerHighest,
+      ),
+      child: WebImage(
+        src: 'http://www.google.com/s2/favicons?domain=$url&sz=$sz',
+        objectFit: BoxFit.contain,
+        width: size,
+        height: size,
+      ),
     );
   }
 }

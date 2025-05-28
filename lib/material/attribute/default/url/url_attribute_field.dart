@@ -3,9 +3,10 @@ import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../debouncer.dart';
 import 'favicon.dart';
 
-class UrlAttributeField extends ConsumerWidget {
+class UrlAttributeField extends ConsumerStatefulWidget {
   const UrlAttributeField({
     super.key,
     required this.attributeId,
@@ -20,20 +21,29 @@ class UrlAttributeField extends ConsumerWidget {
   final TextStyle? textStyle;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UrlAttributeField> createState() => _UrlAttributeFieldState();
+}
+
+class _UrlAttributeFieldState extends ConsumerState<UrlAttributeField> {
+  final debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
+
+  @override
+  Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId));
 
     final textTheme = TextTheme.of(context);
     final defaultUrlStyle = textTheme.bodySmall ?? textTheme.titleLarge;
 
     final textField = TextFormField(
-      initialValue: url?.toString(),
+      initialValue: widget.url?.toString(),
       enabled: edit,
-      style: (textStyle ?? defaultUrlStyle)?.copyWith(fontFamily: 'Lexend'),
+      style: (widget.textStyle ?? defaultUrlStyle)?.copyWith(
+        fontFamily: 'Lexend',
+      ),
       decoration: InputDecoration.collapsed(hintText: attribute?.name ?? 'Url'),
       onChanged: (value) {
-        onChanged?.call(Uri.tryParse(value));
+        widget.onChanged?.call(Uri.tryParse(value));
       },
     );
 
@@ -41,7 +51,7 @@ class UrlAttributeField extends ConsumerWidget {
       spacing: 8,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (url != null) Favicon(url.toString()),
+        if (widget.url != null) Favicon(widget.url.toString()),
         IntrinsicWidth(child: textField),
       ],
     );

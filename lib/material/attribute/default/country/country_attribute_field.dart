@@ -1,31 +1,35 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../attributes/attribute_provider.dart';
 import '../../../../widgets/enum_field.dart';
+import '../../../edit_mode_button.dart';
 import 'country.dart';
 
-class CountryAttributeField extends StatelessWidget {
+class CountryAttributeField extends ConsumerWidget {
   const CountryAttributeField({
     super.key,
+    required this.attributeId,
     this.country,
     required this.onChanged,
-    this.required = false,
-    this.enabled = true,
   });
 
+  final String attributeId;
   final Country? country;
   final void Function(Country? value) onChanged;
-  final bool required;
-  final bool enabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final attribute = ref.watch(attributeProvider(attributeId));
+    final edit = ref.watch(editModeProvider);
+
     return EnumField<Country>(
-      enabled: enabled,
-      decoration: InputDecoration(
-        hintText: 'Country',
-        border: const OutlineInputBorder(borderSide: BorderSide.none),
-        contentPadding: EdgeInsets.zero,
+      initialValue: country,
+      enabled: edit,
+      style: TextTheme.of(context).titleLarge!.copyWith(fontFamily: 'Lexend'),
+      decoration: InputDecoration.collapsed(
+        hintText: attribute?.name ?? "Country",
       ),
       suggestions: Countries.values,
       findSuggestions: findSuggestions,
@@ -41,7 +45,7 @@ class CountryAttributeField extends StatelessWidget {
       },
       validator: (value) {
         if (value == null || value.isEmpty) {
-          if (required) {
+          if (attribute?.required ?? false) {
             return "Please select a country";
           }
           return null;

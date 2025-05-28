@@ -14,6 +14,7 @@ class EnumField<T> extends StatefulWidget {
     this.suggestionBuilder,
     this.findSuggestions,
     required this.textExtractor,
+    this.style,
     this.decoration,
     this.validator,
   });
@@ -26,6 +27,7 @@ class EnumField<T> extends StatefulWidget {
   final Widget Function(BuildContext context, T suggestion)? suggestionBuilder;
   final List<T> Function(String search)? findSuggestions;
   final String Function(T value) textExtractor;
+  final TextStyle? style;
   final InputDecoration? decoration;
   final String? Function(String?)? validator;
 
@@ -37,6 +39,31 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
   final controller = TextEditingController();
   final suggestionsController = SuggestionsController<T>();
   final focusNode = FocusNode();
+  late final ValueNotifier<T?> notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      controller.text = widget.textExtractor(widget.initialValue!);
+    }
+    notifier = ValueNotifier<T?>(widget.initialValue);
+    notifier.addListener(onChanged);
+  }
+
+  @override
+  void dispose() {
+    notifier.removeListener(onChanged);
+    notifier.dispose();
+    controller.dispose();
+    suggestionsController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  void onChanged() {
+    widget.onChanged(notifier.value);
+  }
 
   Widget defaultSuggestionBuilder(BuildContext context, T suggestion) {
     return ListTile(title: Text(widget.textExtractor(suggestion)));
@@ -68,6 +95,7 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
             text: text,
             selection: TextSelection.collapsed(offset: text.length),
           );
+          notifier.value = suggestion;
         },
         suggestionsCallback: widget.findSuggestions ?? defaultFindSuggestions,
         listBuilder: (context, children) {
@@ -83,11 +111,15 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
           return TextFormField(
             focusNode: focusNode,
             controller: controller,
+            style: widget.style,
             decoration: widget.decoration,
             strutStyle: StrutStyle(),
             textInputAction: TextInputAction.done,
             validator: widget.validator,
             autovalidateMode: AutovalidateMode.onUnfocus,
+            onChanged: (value) {
+              notifier.value = _findExact(widget.suggestions, value);
+            },
           );
         },
       ),
@@ -103,8 +135,8 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
     return [for (final tag in matchingTags) tag];
   }
 
-  List<T> _findMatching(List<T> tags, String search) {
-    final matchingTags = tags.where(
+  List<T> _findMatching(List<T> values, String search) {
+    final matchingTags = values.where(
       (tag) => widget
           .textExtractor(tag)
           .toLowerCase()
@@ -113,8 +145,8 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
     return matchingTags.toList();
   }
 
-  T? _findExact(List<T> tags, String search) {
-    return tags.firstWhereOrNull(
+  T? _findExact(List<T> values, String search) {
+    return values.firstWhereOrNull(
       (tag) => widget.textExtractor(tag).toLowerCase() == search.toLowerCase(),
     );
   }
