@@ -25,13 +25,20 @@ class BooleanAttributeField extends ConsumerWidget {
       fontFamily: 'Lexend',
     );
 
-    final text = boolean ? "Ja" : "Nein";
+    final text = Text(boolean ? "Ja" : "Nein", style: effectiveTextStyle);
 
-    final textField = TextButton(
-      onPressed: edit ? () => onChanged?.call(!boolean) : null,
-      child: Text(text, style: effectiveTextStyle),
+    late final segmentedButton = SegmentedButton(
+      selected: {boolean},
+      segments: [
+        ButtonSegment(value: true, label: Text("Ja")),
+        ButtonSegment(value: false, label: Text("Nein")),
+      ],
+      onSelectionChanged: (selection) {
+        onChanged?.call(selection.first);
+      },
+      showSelectedIcon: false, // there was not enough space
     );
 
-    return textField;
+    return edit ? segmentedButton : text;
   }
 }
