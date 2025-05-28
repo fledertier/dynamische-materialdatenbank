@@ -62,3 +62,14 @@ extension BoolExtension on bool {
     return this ? 1 : 0;
   }
 }
+
+extension UriExtension on Uri {
+  String toJson() {
+    return toString();
+  }
+
+  static Uri? fromJson(String? json) {
+    if (json == null || json.isEmpty) return null;
+    return Uri.tryParse(json);
+  }
+}
