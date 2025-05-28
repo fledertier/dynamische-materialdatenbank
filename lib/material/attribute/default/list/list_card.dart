@@ -104,7 +104,9 @@ class _ListCardState extends ConsumerState<ListCard> {
           return CountryAttributeField(
             country: country ?? Country.fromCode("de"),
             enabled: edit,
-            onChanged: (value) {},
+            onChanged: (value) {
+              updateItem(index, value?.toJson());
+            },
           );
         default:
           debugPrint(

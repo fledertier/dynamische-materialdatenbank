@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:flutter/widgets.dart';
 
+import 'boolean/boolean_card.dart';
 import 'list/list_card.dart';
 import 'number/number_card.dart';
 import 'text/text_card.dart';
@@ -10,6 +11,10 @@ enum DefaultCards implements Cards {
   textCard(type: AttributeType.text, sizes: {CardSize.small, CardSize.large}),
   numberCard(
     type: AttributeType.number,
+    sizes: {CardSize.small, CardSize.large},
+  ),
+  booleanCard(
+    type: AttributeType.boolean,
     sizes: {CardSize.small, CardSize.large},
   ),
   listCard(type: AttributeType.list, sizes: {CardSize.small, CardSize.large});
@@ -35,6 +40,11 @@ abstract class DefaultCardFactory {
         size: size,
       ),
       DefaultCards.numberCard => NumberCard(
+        materialId: materialId,
+        attributeId: attributeId,
+        size: size,
+      ),
+      DefaultCards.booleanCard => BooleanCard(
         materialId: materialId,
         attributeId: attributeId,
         size: size,
