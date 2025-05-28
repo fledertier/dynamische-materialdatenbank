@@ -148,21 +148,21 @@ class AttributeDetails extends ConsumerWidget {
     String parentAttributeId,
   ) {
     final removedAttributes = <String>{};
-    for (final initialObjectAttribute in initialAttribute.objectAttributes) {
-      final objectAttribute = attribute.objectAttributes.firstWhereOrNull(
-        (objectAttribute) => objectAttribute.id == initialObjectAttribute.id,
+    for (final initialChildAttribute in initialAttribute.childAttributes) {
+      final childAttribute = attribute.childAttributes.firstWhereOrNull(
+        (childAttribute) => childAttribute.id == initialChildAttribute.id,
       );
       final attributeId = [
         parentAttributeId,
-        initialObjectAttribute.id,
+        initialChildAttribute.id,
       ].join('.');
-      if (objectAttribute == null) {
+      if (childAttribute == null) {
         removedAttributes.add(attributeId);
       } else {
         removedAttributes.addAll(
           _collectRemovedAttributes(
-            objectAttribute,
-            initialObjectAttribute,
+            childAttribute,
+            initialChildAttribute,
             attributeId,
           ),
         );
@@ -194,9 +194,11 @@ class AttributeDetails extends ConsumerWidget {
 }
 
 extension on Attribute {
-  List<Attribute> get objectAttributes {
+  List<Attribute> get childAttributes {
     if (type case ObjectAttributeType(:final attributes)) {
       return attributes;
+    } else if (type case ListAttributeType(:final attribute)) {
+      return [if (attribute != null) attribute];
     }
     return [];
   }

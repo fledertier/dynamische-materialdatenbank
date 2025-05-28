@@ -29,12 +29,12 @@ class AttributeService {
   }
 
   Future<void> deleteAttribute(String attributeId) async {
-    await _deleteMaterialsWithAttribute(attributeId);
+    await _deleteAttributeInMaterials(attributeId);
     await _deleteValuesWithAttribute(attributeId);
     await _deleteAttribute(attributeId);
   }
 
-  Future<void> _deleteMaterialsWithAttribute(String attributeId) async {
+  Future<void> _deleteAttributeInMaterials(String attributeId) async {
     final materials = await getMaterialsWithAttribute(attributeId);
     for (final material in materials) {
       final materialId = material[Attributes.id];
