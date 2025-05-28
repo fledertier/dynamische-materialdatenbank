@@ -60,7 +60,7 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                   center: Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 8,
-                    children: [LanguageButton(), EditModeButton()],
+                    children: [EditModeButton(), LanguageButton()],
                   ),
                 ),
                 navigation: Navigation(page: Pages.materials),

@@ -23,6 +23,8 @@ class LanguageButton extends ConsumerWidget {
           ref.read(languageProvider.notifier).state = newSelection.first;
         }
       },
+      showSelectedIcon: false,
+      style: SegmentedButton.styleFrom(visualDensity: VisualDensity.compact),
     );
   }
 }

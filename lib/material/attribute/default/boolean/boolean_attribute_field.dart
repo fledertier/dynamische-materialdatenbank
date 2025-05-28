@@ -36,7 +36,8 @@ class BooleanAttributeField extends ConsumerWidget {
       onSelectionChanged: (selection) {
         onChanged?.call(selection.first);
       },
-      showSelectedIcon: false, // there was not enough space
+      showSelectedIcon: false,
+      style: SegmentedButton.styleFrom(visualDensity: VisualDensity.compact),
     );
 
     return edit ? segmentedButton : text;
