@@ -25,7 +25,7 @@ final valuesExtremaProvider = FutureProvider.family((
 });
 
 final valuesProvider = StreamProvider.family((ref, String attribute) {
-  return ref.read(attributeServiceProvider).getAttributeStream(attribute);
+  return ref.read(attributeServiceProvider).getAttributeValuesStream(attribute);
 });
 
 class AttributesArgument {

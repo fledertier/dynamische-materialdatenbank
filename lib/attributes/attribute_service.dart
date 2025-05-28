@@ -6,11 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'attribute.dart';
 
-final attributeServiceProvider = Provider((ref) => AttributeService());
+final attributeServiceProvider = Provider(
+  (ref) => AttributeService(FirebaseFirestore.instance),
+);
 
 class AttributeService {
-  Stream<Json> getAttributeStream(String attributeId) {
-    return FirebaseFirestore.instance
+  const AttributeService(this.firestore);
+
+  final FirebaseFirestore firestore;
+
+  Stream<Json> getAttributeValuesStream(String attributeId) {
+    return firestore
         .collection(Collections.values)
         .doc(attributeId)
         .snapshots()
@@ -21,7 +27,7 @@ class AttributeService {
 
   Future<List<Json>> getMaterialsWithAttribute(String attributeId) async {
     final snapshot =
-        await FirebaseFirestore.instance
+        await firestore
             .collection(Collections.materials)
             .where(attributeId, isNull: false)
             .get();
@@ -38,10 +44,9 @@ class AttributeService {
     final materials = await getMaterialsWithAttribute(attributeId);
     for (final material in materials) {
       final materialId = material[Attributes.id];
-      FirebaseFirestore.instance
-          .collection(Collections.materials)
-          .doc(materialId)
-          .update({attributeId: FieldValue.delete()});
+      firestore.collection(Collections.materials).doc(materialId).update({
+        attributeId: FieldValue.delete(),
+      });
     }
   }
 
@@ -49,7 +54,7 @@ class AttributeService {
     final topLevelAttributeId = attributeId.split('.').first;
     final subAttributeId = attributeId.split('.').sublist(1).join('.');
 
-    final attributeDoc = FirebaseFirestore.instance
+    final attributeDoc = firestore
         .collection(Collections.values)
         .doc(topLevelAttributeId);
 
@@ -71,14 +76,14 @@ class AttributeService {
       return; // attribute is removed in the attribute dialog
     }
 
-    return FirebaseFirestore.instance
+    return firestore
         .collection(Collections.attributes)
         .doc(Docs.attributes)
         .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {
-    return FirebaseFirestore.instance
+    return firestore
         .collection(Collections.attributes)
         .doc(Docs.attributes)
         .snapshots()
@@ -90,10 +95,10 @@ class AttributeService {
 
   Future<void> updateAttribute(Attribute attribute) async {
     final id = attribute.id;
-    await FirebaseFirestore.instance
-        .collection(Collections.attributes)
-        .doc(Docs.attributes)
-        .set({id: attribute.toJson()}, SetOptions(merge: true));
+    await firestore.collection(Collections.attributes).doc(Docs.attributes).set(
+      {id: attribute.toJson()},
+      SetOptions(merge: true),
+    );
   }
 }
 

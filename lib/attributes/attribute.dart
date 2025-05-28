@@ -4,10 +4,10 @@ import 'attribute_type.dart';
 class Attribute {
   const Attribute({
     required this.id,
-    required this.nameDe,
-    required this.nameEn,
+    this.nameDe,
+    this.nameEn,
     required this.type,
-    required this.required,
+    this.required = false,
   });
 
   final String id;
@@ -36,6 +36,11 @@ class Attribute {
       'type': type.toJson(),
       'required': required,
     };
+  }
+
+  @override
+  String toString() {
+    return 'Attribute(id: $id, nameDe: $nameDe, nameEn: $nameEn, type: $type, required: $required)';
   }
 
   @override
