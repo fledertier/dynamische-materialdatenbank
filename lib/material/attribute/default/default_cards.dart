@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'boolean/boolean_card.dart';
 import 'list/list_card.dart';
 import 'number/number_card.dart';
+import 'object/object_card.dart';
 import 'text/text_card.dart';
 
 enum DefaultCards implements Cards {
@@ -19,7 +20,11 @@ enum DefaultCards implements Cards {
     sizes: {CardSize.small, CardSize.large},
   ),
   urlCard(type: AttributeType.url, sizes: {CardSize.small, CardSize.large}),
-  listCard(type: AttributeType.list, sizes: {CardSize.small, CardSize.large});
+  listCard(type: AttributeType.list, sizes: {CardSize.small, CardSize.large}),
+  objectCard(
+    type: AttributeType.object,
+    sizes: {CardSize.small, CardSize.large},
+  );
 
   const DefaultCards({required this.type, required this.sizes});
 
@@ -57,6 +62,11 @@ abstract class DefaultCardFactory {
         size: size,
       ),
       DefaultCards.listCard => ListCard(
+        materialId: materialId,
+        attributeId: attributeId,
+        size: size,
+      ),
+      DefaultCards.objectCard => ObjectCard(
         materialId: materialId,
         attributeId: attributeId,
         size: size,

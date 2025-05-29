@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
 Json randomName() {
@@ -27,7 +28,11 @@ Json randomDescription() {
 
 Json randomManufacturer() {
   final random = Random();
-  return {Attributes.manufacturerName: 'Manufacturer ${random.nextInt(10)}'};
+  return {
+    Attributes.manufacturerName: TranslatableText(
+      valueDe: 'Manufacturer ${random.nextInt(10)}',
+    ),
+  };
 }
 
 Json randomWeight() {

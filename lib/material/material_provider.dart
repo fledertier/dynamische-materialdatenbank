@@ -120,7 +120,7 @@ final valueProvider = Provider.family((ref, AttributeArgument arg) {
   return _convert(json, type);
 });
 
-Object? _convert(json, AttributeType type) {
+dynamic _convert(json, AttributeType type) {
   return switch (type) {
     TextAttributeType() => TranslatableText.fromJson(json),
     NumberAttributeType() => UnitNumber.fromJson(json),

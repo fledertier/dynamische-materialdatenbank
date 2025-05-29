@@ -1,0 +1,46 @@
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../material_provider.dart';
+import 'object_attribute_field.dart';
+
+class ObjectCard extends ConsumerWidget {
+  const ObjectCard({
+    super.key,
+    required this.materialId,
+    required this.attributeId,
+    required this.size,
+    this.columns = 2,
+  });
+
+  final String materialId;
+  final String attributeId;
+  final CardSize size;
+  final int columns;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributeId: attributeId,
+    );
+    final object = ref.watch(valueProvider(argument));
+
+    return AttributeCard(
+      label: AttributeLabel(attribute: attributeId),
+      title: ObjectAttributeField(
+        attributeId: attributeId,
+        object: object,
+        onChanged: (object) {
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
+            attributeId: object, // todo: needs to json
+          });
+        },
+      ),
+      columns: columns,
+    );
+  }
+}
