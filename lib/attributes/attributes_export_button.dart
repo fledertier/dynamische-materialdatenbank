@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../constants.dart';
 
 class AttributesExportButton extends ConsumerWidget {
   const AttributesExportButton({super.key});
@@ -15,7 +14,8 @@ class AttributesExportButton extends ConsumerWidget {
       label: Text('Export'),
       onPressed: () async {
         final attributes =
-            (await FirebaseFirestore.instance
+            (await ref
+                    .read(firestoreProvider)
                     .collection(Collections.attributes)
                     .doc(Docs.attributes)
                     .get())

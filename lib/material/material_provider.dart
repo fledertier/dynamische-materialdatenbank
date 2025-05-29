@@ -5,6 +5,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +29,8 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     if (arg == exampleMaterial[Attributes.id]) {
       return Stream.value(exampleMaterial);
     }
-    return FirebaseFirestore.instance
+    return ref
+        .read(firestoreProvider)
         .collection(Collections.materials)
         .doc(arg)
         .snapshots()
@@ -70,13 +72,15 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
   }
 
   void updateMaterial(Json material) async {
-    await FirebaseFirestore.instance
+    await ref
+        .read(firestoreProvider)
         .collection(Collections.materials)
         .doc(arg)
         .set({Attributes.id: arg, ...material}, SetOptions(merge: true));
 
     for (final attribute in material.keys) {
-      await FirebaseFirestore.instance
+      await ref
+          .read(firestoreProvider)
           .collection(Collections.values)
           .doc(attribute)
           .set({arg: material[attribute]}, SetOptions(merge: true));
@@ -84,7 +88,8 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
   }
 
   void deleteMaterial() async {
-    final doc = FirebaseFirestore.instance
+    final doc = ref
+        .read(firestoreProvider)
         .collection(Collections.materials)
         .doc(arg);
 
@@ -98,7 +103,8 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
 
     await Future.wait([
       for (final attribute in material.keys)
-        FirebaseFirestore.instance
+        ref
+            .read(firestoreProvider)
             .collection(Collections.values)
             .doc(attribute)
             .update({arg: FieldValue.delete()}),

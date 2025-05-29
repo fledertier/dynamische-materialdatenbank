@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +12,8 @@ class AttributesImportButton extends ConsumerWidget {
       icon: const Icon(Icons.upload_outlined),
       label: Text('Import'),
       onPressed: () async {
-        FirebaseFirestore.instance
+        ref
+            .read(firestoreProvider)
             .collection(Collections.attributes)
             .doc(Docs.attributes)
             .set(_attributes);

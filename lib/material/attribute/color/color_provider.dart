@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +42,8 @@ class MaterialColorNotifier extends FamilyNotifier<Color?, String> {
   }
 
   void updateColor(Color color) {
-    FirebaseFirestore.instance
+    ref
+        .read(firestoreProvider)
         .collection(Collections.colors)
         .doc(Docs.materials)
         .set({arg: color.toHex()}, SetOptions(merge: true));
@@ -49,7 +51,8 @@ class MaterialColorNotifier extends FamilyNotifier<Color?, String> {
 }
 
 final materialColorsStreamProvider = StreamProvider((ref) {
-  return FirebaseFirestore.instance
+  return ref
+      .read(firestoreProvider)
       .collection(Collections.colors)
       .doc(Docs.materials)
       .snapshots()
