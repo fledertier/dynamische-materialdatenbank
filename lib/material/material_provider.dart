@@ -10,8 +10,6 @@ import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'attribute/cards.dart';
-import 'attribute/custom/custom_cards.dart';
 import 'attribute/default/country/country.dart';
 import 'attribute/default/number/unit_number.dart';
 import 'attribute/default/text/translatable_text.dart';
@@ -44,23 +42,6 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
       Attributes.id: arg,
       Attributes.name: randomName(),
       Attributes.description: randomDescription(),
-      Attributes.cardSections:
-          CardSections(
-            primary: [
-              CardSection(
-                cards: [
-                  CardData.fromCustomCard(CustomCards.nameCard),
-                  CardData.fromCustomCard(CustomCards.descriptionCard),
-                ],
-              ),
-              CardSection(
-                cards: [
-                  CardData.fromCustomCard(CustomCards.lightAbsorptionCard),
-                ],
-              ),
-            ],
-            secondary: [CardSection(cards: [])],
-          ).toJson(),
       if (Random().nextBool()) Attributes.recyclable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
@@ -71,7 +52,7 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     updateMaterial(material);
   }
 
-  void updateMaterial(Json material) async {
+  Future<void> updateMaterial(Json material) async {
     await ref
         .read(firestoreProvider)
         .collection(Collections.materials)
@@ -87,7 +68,7 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
     }
   }
 
-  void deleteMaterial() async {
+  Future<void> deleteMaterial() async {
     final doc = ref
         .read(firestoreProvider)
         .collection(Collections.materials)

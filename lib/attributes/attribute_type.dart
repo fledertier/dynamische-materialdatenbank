@@ -22,7 +22,7 @@ enum Operator {
 }
 
 class TextAttributeType extends AttributeType {
-  TextAttributeType({required this.multiline})
+  TextAttributeType({this.multiline = false})
     : super(
         id: AttributeType.text,
         operators: {
@@ -59,7 +59,7 @@ class TextAttributeType extends AttributeType {
 }
 
 class NumberAttributeType extends AttributeType {
-  NumberAttributeType({required this.unitType})
+  NumberAttributeType({this.unitType})
     : super(
         id: AttributeType.number,
         operators: {

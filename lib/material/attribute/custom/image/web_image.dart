@@ -2,7 +2,7 @@ import 'dart:ui_web';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:web/helpers.dart' hide Text;
+import 'package:web/web.dart.' hide Text;
 
 class WebImage extends StatelessWidget {
   final String src;
