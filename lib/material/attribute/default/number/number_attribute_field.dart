@@ -41,7 +41,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
       fontFamily: 'Lexend',
     );
 
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
     final edit = ref.watch(editModeProvider);
 
     if (attribute == null) {

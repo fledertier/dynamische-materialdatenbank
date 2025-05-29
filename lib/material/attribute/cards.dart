@@ -49,7 +49,7 @@ abstract class CardFactory {
     final cacheForMaterial = cache.putIfAbsent(materialId, () => {});
     return Consumer(
       builder: (context, ref, child) {
-        final attribute = ref.read(attributeProvider(data.attribute));
+        final attribute = ref.watch(attributeProvider(data.attribute)).value;
         final resized = resize(data, attribute, size);
 
         return cacheForMaterial.putIfAbsent(

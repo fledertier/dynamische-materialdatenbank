@@ -18,6 +18,22 @@ class Attribute {
 
   String get name => nameDe ?? nameEn ?? 'Unnamed';
 
+  Attribute copyWith({
+    String? id,
+    String? nameDe,
+    String? nameEn,
+    AttributeType? type,
+    bool? required,
+  }) {
+    return Attribute(
+      id: id ?? this.id,
+      nameDe: nameDe ?? this.nameDe,
+      nameEn: nameEn ?? this.nameEn,
+      type: type ?? this.type,
+      required: required ?? this.required,
+    );
+  }
+
   factory Attribute.fromJson(Json json) {
     return Attribute(
       id: json['id'],

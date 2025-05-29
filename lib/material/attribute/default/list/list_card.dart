@@ -49,7 +49,7 @@ class _ListCardState extends ConsumerState<ListCard> {
     final list = ref.watch(valueProvider(argument)) as List? ?? [];
 
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
 
     if (attribute == null) {
       return SizedBox();
@@ -67,7 +67,7 @@ class _ListCardState extends ConsumerState<ListCard> {
 
     return AttributeCard(
       columns: widget.columns,
-      label: AttributeLabel(attribute: widget.attributeId),
+      label: AttributeLabel(attributeId: widget.attributeId),
       title: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 250),
         child: ListView.separated(

@@ -82,7 +82,7 @@ class CompositionCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: columns,
-      label: AttributeLabel(attribute: Attributes.composition),
+      label: AttributeLabel(attributeId: Attributes.composition),
       child: ProportionsWidget(
         height: 48,
         axis: axis,

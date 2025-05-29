@@ -48,7 +48,7 @@ class _TextCardState extends ConsumerState<TextCard> {
 
     return AttributeCard(
       columns: widget.columns,
-      label: AttributeLabel(attribute: widget.attributeId),
+      label: AttributeLabel(attributeId: widget.attributeId),
       title: TextAttributeField(
         attributeId: widget.attributeId,
         text: text,

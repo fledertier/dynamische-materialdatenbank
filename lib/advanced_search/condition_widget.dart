@@ -44,8 +44,8 @@ class ConditionWidget extends ConsumerWidget {
             ConditionAttributeDropdown(
               enabled: enabled,
               initialAttribute: condition.attribute,
-              onSelected: (attributeId) {
-                final attribute = ref.read(attributeProvider(attributeId));
+              onSelected: (attributeId) async {
+                final attribute = await ref.read(attributeProvider(attributeId).future);
                 update(() {
                   condition.attribute = attributeId;
                   condition.operator = attribute?.type.operators.firstOrNull;

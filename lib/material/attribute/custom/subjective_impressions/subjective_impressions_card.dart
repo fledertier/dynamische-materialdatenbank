@@ -75,7 +75,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: 2,
-      label: AttributeLabel(attribute: Attributes.subjectiveImpressions),
+      label: AttributeLabel(attributeId: Attributes.subjectiveImpressions),
       clip: Clip.antiAlias,
       childPadding:
           size == CardSize.small ? EdgeInsets.all(16) : EdgeInsets.zero,

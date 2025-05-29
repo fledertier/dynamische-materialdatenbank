@@ -21,7 +21,7 @@ class CountryAttributeField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(attributeId));
+    final attribute = ref.watch(attributeProvider(attributeId)).value;
     final edit = ref.watch(editModeProvider);
 
     return EnumField<Country>(

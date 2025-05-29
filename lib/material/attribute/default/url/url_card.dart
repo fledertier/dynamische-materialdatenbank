@@ -42,7 +42,7 @@ class _UrlCardState extends ConsumerState<UrlCard> {
 
     return AttributeCard(
       columns: widget.columns,
-      label: AttributeLabel(attribute: widget.attributeId),
+      label: AttributeLabel(attributeId: widget.attributeId),
       title: UrlAttributeField(
         attributeId: widget.attributeId,
         url: url,

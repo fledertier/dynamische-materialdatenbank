@@ -49,7 +49,7 @@ class NumberCard extends ConsumerWidget {
         UnitNumber(value: 0);
 
     return AttributeCard(
-      label: AttributeLabel(attribute: attributeId),
+      label: AttributeLabel(attributeId: attributeId),
       title: NumberAttributeField(
         key: ValueKey(number.displayUnit),
         attributeId: attributeId,

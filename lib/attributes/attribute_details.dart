@@ -13,8 +13,8 @@ import 'attribute.dart';
 import 'attribute_delete_dialog.dart';
 import 'attribute_dialog.dart';
 import 'attribute_provider.dart';
-import 'attributes_provider.dart';
 import 'attribute_table.dart';
+import 'attributes_provider.dart';
 
 class AttributeDetails extends ConsumerWidget {
   const AttributeDetails({super.key, required this.selectedAttributeId});
@@ -28,17 +28,14 @@ class AttributeDetails extends ConsumerWidget {
       builder: (context, child) {
         return Consumer(
           builder: (context, ref, child) {
-            final attribute = ref.watch(
-              attributeProvider(selectedAttributeId.value),
-            );
+            final attribute =
+                ref.watch(attributeProvider(selectedAttributeId.value)).value;
             if (attribute == null) {
               return Center(
                 child: Text(
                   'Select an attribute to edit',
                   style: TextStyle(
-                    color: ColorScheme
-                        .of(context)
-                        .onSurfaceVariant,
+                    color: ColorScheme.of(context).onSurfaceVariant,
                   ),
                 ),
               );
@@ -55,9 +52,7 @@ class AttributeDetails extends ConsumerWidget {
                       children: [
                         LoadingText(
                           attribute.name,
-                          style: TextTheme
-                              .of(context)
-                              .headlineSmall,
+                          style: TextTheme.of(context).headlineSmall,
                         ),
                         Spacer(),
                         OutlinedButton.icon(
@@ -109,9 +104,11 @@ class AttributeDetails extends ConsumerWidget {
     );
   }
 
-  Future<void> editAttribute(BuildContext context,
-      WidgetRef ref,
-      Attribute attribute,) async {
+  Future<void> editAttribute(
+    BuildContext context,
+    WidgetRef ref,
+    Attribute attribute,
+  ) async {
     showAttributeDialog(
       context: context,
       initialAttribute: attribute,
@@ -137,18 +134,22 @@ class AttributeDetails extends ConsumerWidget {
     );
   }
 
-  Set<String> getRemovedAttributes(Attribute updatedAttribute,
-      Attribute attribute,) {
+  Set<String> getRemovedAttributes(
+    Attribute updatedAttribute,
+    Attribute attribute,
+  ) {
     return _collectRemovedAttributes(updatedAttribute, attribute, attribute.id);
   }
 
-  Set<String> _collectRemovedAttributes(Attribute attribute,
-      Attribute initialAttribute,
-      String parentAttributeId,) {
+  Set<String> _collectRemovedAttributes(
+    Attribute attribute,
+    Attribute initialAttribute,
+    String parentAttributeId,
+  ) {
     final removedAttributes = <String>{};
     for (final initialChildAttribute in initialAttribute.childAttributes) {
       final childAttribute = attribute.childAttributes.firstWhereOrNull(
-            (childAttribute) => childAttribute.id == initialChildAttribute.id,
+        (childAttribute) => childAttribute.id == initialChildAttribute.id,
       );
       final attributeId = [
         parentAttributeId,
@@ -169,9 +170,11 @@ class AttributeDetails extends ConsumerWidget {
     return removedAttributes;
   }
 
-  Future<void> deleteAttribute(BuildContext context,
-      WidgetRef ref,
-      Attribute attribute,) async {
+  Future<void> deleteAttribute(
+    BuildContext context,
+    WidgetRef ref,
+    Attribute attribute,
+  ) async {
     final delete = await confirmAttributeDeletion(context, {attribute.id});
     if (delete) {
       await ref.read(attributesProvider.notifier).deleteAttribute(attribute.id);

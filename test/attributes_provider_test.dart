@@ -23,27 +23,50 @@ void main() {
     container.dispose();
   });
 
-  group('Attribute deletion', () {
-    test('create and delete attribute', () async {
-      final dings = Attribute(
-        id: 'dings',
-        type: ObjectAttributeType(
-          attributes: [Attribute(id: 'blub', type: BooleanAttributeType())],
-        ),
-      );
-
+  group('attribute creation', () {
+    test('create attribute', () async {
+      final dings = Attribute(id: 'dings', type: NumberAttributeType());
       await container.read(attributesProvider.notifier).updateAttribute(dings);
       await expectLater(
         container.read(attributesProvider.future),
         completion(containsPair(dings.id, dings)),
       );
+    });
+  });
 
+  group('attribute deletion', () {
+    test('delete attribute', () async {
+      final dings = Attribute(id: 'dings', type: NumberAttributeType());
+      await container.read(attributesProvider.notifier).updateAttribute(dings);
       await container
           .read(attributesProvider.notifier)
           .deleteAttribute(dings.id);
       await expectLater(
         container.read(attributesProvider.future),
         completion(isEmpty),
+      );
+    });
+
+    test('delete nested attribute', () async {
+      final dings = Attribute(
+        id: 'dings',
+        type: ObjectAttributeType(
+          attributes: [Attribute(id: 'blub', type: BooleanAttributeType())],
+        ),
+      );
+      await container.read(attributesProvider.notifier).updateAttribute(dings);
+
+      await container
+          .read(attributesProvider.notifier)
+          .deleteAttribute('dings.blub');
+
+      final dingsWithoutBlub = Attribute(
+        id: 'dings',
+        type: ObjectAttributeType(attributes: []),
+      );
+      await expectLater(
+        container.read(attributesProvider.future),
+        completion(containsPair(dings.id, dingsWithoutBlub)),
       );
     });
 

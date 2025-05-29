@@ -43,11 +43,9 @@ dynamic getJsonAttributeValue(
 }
 
 extension AttributeIdExtension on String {
-  String topLevel() {
-    return split(".").firstOrNull ?? this;
-  }
+  String get topLevel => split('.').first;
 
   String add(String id) {
-    return [this, id].join(".");
+    return [this, id].join('.');
   }
 }

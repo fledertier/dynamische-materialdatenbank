@@ -111,7 +111,7 @@ final valueProvider = Provider.family((ref, AttributeArgument arg) {
     return null;
   }
 
-  final attribute = ref.watch(attributeProvider(arg.attributeId));
+  final attribute = ref.watch(attributeProvider(arg.attributeId)).value;
   final type = attribute?.type;
   if (type == null) {
     return null;

@@ -36,7 +36,7 @@ class OriginCountryCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: 2,
-      label: AttributeLabel(attribute: Attributes.originCountry),
+      label: AttributeLabel(attributeId: Attributes.originCountry),
       title: OriginCountryAttributeField(
         countries: countries,
         materialId: materialId,

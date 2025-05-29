@@ -91,7 +91,7 @@ class ComponentsCard extends ConsumerWidget {
         CardSize.large => 4,
         CardSize.small => 2,
       },
-      label: AttributeLabel(attribute: Attributes.components),
+      label: AttributeLabel(attributeId: Attributes.components),
       childPadding: EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

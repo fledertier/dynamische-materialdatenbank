@@ -30,7 +30,7 @@ class _UrlAttributeFieldState extends ConsumerState<UrlAttributeField> {
   @override
   Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
 
     final textTheme = TextTheme.of(context);
     final defaultUrlStyle = textTheme.bodySmall ?? textTheme.titleLarge;

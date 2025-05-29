@@ -49,7 +49,7 @@ class _FireBehaviorStandardCardState
 
     return AttributeCard(
       columns: 3,
-      label: AttributeLabel(attribute: Attributes.fireBehaviorStandard),
+      label: AttributeLabel(attributeId: Attributes.fireBehaviorStandard),
       title: TextField(
         enabled: edit,
         style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),

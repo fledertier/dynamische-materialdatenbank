@@ -6,6 +6,8 @@ import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'attribute.dart';
+import 'attribute_provider.dart';
+import 'attribute_type.dart';
 
 final attributesProvider =
     StreamNotifierProvider<AttributesNotifier, Map<String, Attribute>>(
@@ -36,7 +38,7 @@ class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
     final materials = await _getMaterialsWithAttribute(attributeId);
     for (final material in materials) {
       final materialId = material[Attributes.id];
-      ref
+      await ref
           .read(firestoreProvider)
           .collection(Collections.materials)
           .doc(materialId)
@@ -54,28 +56,40 @@ class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
         .doc(topLevelAttributeId);
 
     if (attributeId == topLevelAttributeId) {
-      attributeDoc.delete();
+      await attributeDoc.delete();
     } else {
       final valuesByMaterialId = (await attributeDoc.get()).data() ?? {};
-      attributeDoc.update({
+      await attributeDoc.set({
         for (final materialId in valuesByMaterialId.keys)
           '$materialId.$subAttributeId': FieldValue.delete(),
-      });
+      }, SetOptions(merge: true));
     }
   }
 
   Future<void> _deleteAttribute(String attributeId) async {
-    final topLevelAttributeId = attributeId.split('.').first;
+    final topLevelId = attributeId.split('.').first;
 
-    if (attributeId != topLevelAttributeId) {
-      return; // attribute is removed in the attribute dialog
+    if (attributeId == topLevelId) {
+      return ref
+          .read(firestoreProvider)
+          .collection(Collections.attributes)
+          .doc(Docs.attributes)
+          .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
     }
 
-    return ref
-        .read(firestoreProvider)
-        .collection(Collections.attributes)
-        .doc(Docs.attributes)
-        .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
+    final childId = attributeId.split('.').last;
+    final parentId = (attributeId.split('.')..removeLast()).join('.');
+
+    final parent = await ref.read(attributeProvider(parentId).future);
+    if (parent?.type case ObjectAttributeType(:final attributes)) {
+      final updatedParent = parent!.copyWith(
+        type: ObjectAttributeType(
+          attributes:
+              attributes.where((attribute) => attribute.id != childId).toList(),
+        ),
+      );
+      await updateAttribute(updatedParent);
+    }
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {

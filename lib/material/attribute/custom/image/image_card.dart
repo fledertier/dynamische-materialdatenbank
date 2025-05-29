@@ -112,7 +112,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     final selectedImage = images.elementAtOrNull(selectedIndex);
 
     return AttributeCard(
-      label: AttributeLabel(attribute: Attributes.images),
+      label: AttributeLabel(attributeId: Attributes.images),
       columns: 3,
       childPadding: EdgeInsets.all(padding),
       child: AspectRatio(

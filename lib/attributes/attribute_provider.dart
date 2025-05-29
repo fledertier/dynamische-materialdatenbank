@@ -44,9 +44,6 @@ class AttributesArgument {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
     return other is AttributesArgument &&
         setEquals(other.attributes, attributes);
   }
@@ -57,8 +54,8 @@ class AttributesArgument {
   }
 }
 
-final attributeProvider = Provider.family((ref, String? attributeId) {
-  final attributesById = ref.watch(attributesProvider).value;
+final attributeProvider = FutureProvider.family((ref, String? attributeId) async {
+  final attributesById = await ref.watch(attributesProvider.future);
   return getAttribute(attributesById, attributeId);
 });
 

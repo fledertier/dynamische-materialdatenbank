@@ -1,6 +1,6 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
-import 'package:dynamische_materialdatenbank/utils/download_utils.dart';
+import 'package:dynamische_materialdatenbank/utils/web_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

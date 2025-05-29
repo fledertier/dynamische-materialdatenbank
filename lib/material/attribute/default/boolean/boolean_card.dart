@@ -33,7 +33,7 @@ class BooleanCard extends ConsumerWidget {
 
     return AttributeCard(
       columns: columns,
-      label: AttributeLabel(attribute: attributeId),
+      label: AttributeLabel(attributeId: attributeId),
       title: BooleanAttributeField(
         attributeId: attributeId,
         boolean: boolean,

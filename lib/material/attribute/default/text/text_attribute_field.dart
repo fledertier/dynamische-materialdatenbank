@@ -25,7 +25,7 @@ class TextAttributeField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
     final language = ref.watch(languageProvider);
-    final attribute = ref.watch(attributeProvider(attributeId));
+    final attribute = ref.watch(attributeProvider(attributeId)).value;
     final multiline =
         (attribute?.type as TextAttributeType?)?.multiline ?? false;
 

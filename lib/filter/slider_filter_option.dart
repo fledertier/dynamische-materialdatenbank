@@ -19,7 +19,8 @@ class SliderFilterOption extends ConsumerWidget {
     final maxWeight = extrema?.max ?? 1;
     final weight = options[attribute]?.clamp(minWeight, maxWeight) ?? maxWeight;
     final attributeType =
-        ref.watch(attributeProvider(attribute))?.type as NumberAttributeType?;
+        ref.watch(attributeProvider(attribute)).value?.type
+            as NumberAttributeType?;
     final unitType = attributeType?.unitType;
 
     return Slider(
