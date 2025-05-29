@@ -3,22 +3,19 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../widgets/hover_builder.dart';
-import '../country/country.dart';
-import '../country/country_attribute_field.dart';
-import '../text/text_attribute_field.dart';
-import '../url/url_attribute_field.dart';
+import '../attribute_field.dart';
 
 class ListCard extends ConsumerStatefulWidget {
   const ListCard({
@@ -27,14 +24,14 @@ class ListCard extends ConsumerStatefulWidget {
     required this.attributeId,
     required this.size,
     this.textStyle,
-    this.columns,
+    this.columns = 2,
   });
 
   final String materialId;
   final String attributeId;
   final CardSize size;
   final TextStyle? textStyle;
-  final int? columns;
+  final int columns;
 
   @override
   ConsumerState<ListCard> createState() => _ListCardState();
@@ -43,23 +40,13 @@ class ListCard extends ConsumerStatefulWidget {
 class _ListCardState extends ConsumerState<ListCard> {
   final debouncers = <int, Debouncer>{};
 
-  int columns(AttributeType type) {
-    return widget.columns ?? 2;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final list =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: widget.materialId,
-                  attributeId: widget.attributeId,
-                ),
-              ),
-            )
-            as List? ??
-        [];
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributeId: widget.attributeId,
+    );
+    final list = ref.watch(valueProvider(argument)) as List? ?? [];
 
     final edit = ref.watch(editModeProvider);
     final attribute = ref.watch(attributeProvider(widget.attributeId));
@@ -78,55 +65,8 @@ class _ListCardState extends ConsumerState<ListCard> {
     final itemAttributeId = attribute.id.add(itemAttribute.id);
     final itemAttributeType = itemAttribute.type;
 
-    Widget buildItem(int index) {
-      final value = list.elementAtOrNull(index);
-
-      switch (itemAttributeType.id) {
-        case AttributeType.text:
-          return TextAttributeField(
-            attributeId: itemAttributeId,
-            text: value as TranslatableText? ?? TranslatableText(),
-            onChanged: (text) {
-              updateItem(index, text.toJson());
-            },
-          );
-        case AttributeType.number:
-          final number = value as UnitNumber? ?? UnitNumber(value: 0);
-          return NumberAttributeField(
-            key: ValueKey(number.displayUnit),
-            attributeId: itemAttributeId,
-            number: number,
-            onChanged: (number) {
-              updateItem(index, number.toJson());
-            },
-          );
-        case AttributeType.url:
-          return UrlAttributeField(
-            attributeId: itemAttributeId,
-            url: value as Uri?,
-            onChanged: (url) {
-              updateItem(index, url?.toJson());
-            },
-          );
-        case AttributeType.country:
-          final country = value as Country?;
-          return CountryAttributeField(
-            attributeId: itemAttributeId,
-            country: country,
-            onChanged: (country) {
-              updateItem(index, country?.toJson());
-            },
-          );
-        default:
-          debugPrint(
-            'ListCard: Unsupported item type ${itemAttributeType.id} for attribute ${widget.attributeId}',
-          );
-          return Text(value.toString());
-      }
-    }
-
     return AttributeCard(
-      columns: columns(itemAttributeType),
+      columns: widget.columns,
       label: AttributeLabel(attribute: widget.attributeId),
       title: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 250),
@@ -140,7 +80,7 @@ class _ListCardState extends ConsumerState<ListCard> {
                 label: Text(
                   itemAttribute.nameDe ??
                       itemAttribute.nameEn ??
-                      itemAttributeType.name,
+                      itemAttributeType.name.toTitleCase(),
                 ),
                 onPressed: () {
                   addItem(list.length, itemAttributeType);
@@ -148,7 +88,13 @@ class _ListCardState extends ConsumerState<ListCard> {
               );
             }
             return HoverBuilder(
-              child: buildItem(index),
+              child: AttributeField(
+                attributeId: itemAttributeId,
+                value: list.elementAtOrNull(index),
+                onJson: (value) {
+                  updateItem(index, value);
+                },
+              ),
               builder: (context, hovered, child) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
