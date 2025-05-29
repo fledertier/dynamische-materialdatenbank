@@ -1,10 +1,11 @@
 import 'dart:math';
 
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'attribute_service.dart';
+import 'attributes_provider.dart';
 
 class Extrema {
   const Extrema({required this.min, required this.max});
@@ -24,8 +25,15 @@ final valuesExtremaProvider = FutureProvider.family((
   return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
 });
 
-final valuesProvider = StreamProvider.family((ref, String attribute) {
-  return ref.read(attributeServiceProvider).getAttributeValuesStream(attribute);
+final valuesProvider = StreamProvider.family((ref, String attributeId) {
+  return ref
+      .read(firestoreProvider)
+      .collection(Collections.values)
+      .doc(attributeId)
+      .snapshots()
+      .map((snapshot) {
+        return snapshot.exists ? snapshot.data() ?? {} : {};
+      });
 });
 
 class AttributesArgument {
@@ -47,10 +55,6 @@ class AttributesArgument {
     return Object.hashAllUnordered(attributes);
   }
 }
-
-final attributesProvider = StreamProvider((ref) {
-  return ref.read(attributeServiceProvider).getAttributesStream();
-});
 
 final attributeProvider = Provider.family((ref, String? attributeId) {
   final attributesById = ref.watch(attributesProvider).value;

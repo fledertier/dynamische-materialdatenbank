@@ -1,19 +1,19 @@
+import 'package:dynamische_materialdatenbank/app/app_scaffold.dart';
+import 'package:dynamische_materialdatenbank/app/navigation.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/header/header.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
-import 'package:dynamische_materialdatenbank/material/section/draggable_cards_builder.dart';
+import 'package:dynamische_materialdatenbank/widgets/sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../app/app_scaffold.dart';
-import '../app/navigation.dart';
-import '../attributes/attribute_provider.dart';
-import '../constants.dart';
-import '../header/header.dart';
-import '../widgets/sheet.dart';
 import 'attribute/attribute_card_button.dart';
 import 'attribute/attribute_card_dialog.dart';
 import 'attribute/cards.dart';
 import 'edit_mode_button.dart';
 import 'material_provider.dart';
+import 'section/draggable_cards_builder.dart';
 import 'section/draggable_section.dart';
 import 'section/section_button.dart';
 

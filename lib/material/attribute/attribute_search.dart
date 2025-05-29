@@ -1,12 +1,11 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/search/search.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
+import 'package:dynamische_materialdatenbank/widgets/highlighted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../attributes/attribute.dart';
-import '../../search/search.dart';
-import '../../widgets/highlighted_text.dart';
 
 class AttributeSearch extends ConsumerStatefulWidget {
   const AttributeSearch({

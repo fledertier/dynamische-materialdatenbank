@@ -1,20 +1,21 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
-import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
-import 'package:dynamische_materialdatenbank/material/placeholder.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../attributes/attribute_provider.dart';
-import '../attributes/attribute_type.dart';
-import '../constants.dart';
-import '../types.dart';
-import '../utils/attribute_utils.dart';
 import 'attribute/cards.dart';
 import 'attribute/custom/custom_cards.dart';
 import 'attribute/default/country/country.dart';
+import 'attribute/default/number/unit_number.dart';
 import 'attribute/default/text/translatable_text.dart';
+import 'materials_provider.dart';
+import 'placeholder.dart';
 
 final materialProvider =
     StreamNotifierProvider.family<MaterialNotifier, Json, String>(

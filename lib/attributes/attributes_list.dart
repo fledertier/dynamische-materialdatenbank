@@ -7,9 +7,8 @@ import 'package:go_router/go_router.dart';
 
 import 'attribute.dart';
 import 'attribute_dialog.dart';
-import 'attribute_provider.dart';
 import 'attribute_search_bar.dart';
-import 'attribute_service.dart';
+import 'attributes_provider.dart';
 import 'attribute_type.dart';
 
 class AttributesList extends ConsumerStatefulWidget {
@@ -39,7 +38,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
 
     final attributesById = snapshot.value ?? {};
     final attributes = attributesById.values.sortedBy(
-      (attribute) => attribute.name,
+          (attribute) => attribute.name,
     );
 
     return Stack(
@@ -59,7 +58,8 @@ class _AttributesListState extends ConsumerState<AttributesList> {
                 builder: (context, child) {
                   final search = searchController.text;
                   final filterdAttributes = attributes.where(
-                    (attribute) => attribute.name.containsIgnoreCase(search),
+                        (attribute) =>
+                        attribute.name.containsIgnoreCase(search),
                   );
 
                   return ListView.builder(
@@ -70,7 +70,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
                       return AttributeListTile(
                         attribute,
                         selected:
-                            widget.selectedAttributeId.value == attribute.id,
+                        widget.selectedAttributeId.value == attribute.id,
                         onTap: () {
                           widget.selectedAttributeId.value = attribute.id;
                         },
@@ -101,7 +101,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
       context: context,
       onSave: (attribute) async {
         context.pop();
-        await ref.read(attributeServiceProvider).updateAttribute(attribute);
+        await ref.read(attributesProvider.notifier).updateAttribute(attribute);
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Attribute created")));
@@ -112,8 +112,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
 }
 
 class AttributeListTile extends ConsumerWidget {
-  const AttributeListTile(
-    this.attribute, {
+  const AttributeListTile(this.attribute, {
     super.key,
     this.selected = false,
     required this.onTap,
@@ -139,8 +138,12 @@ class AttributeListTile extends ConsumerWidget {
             ),
             trailing: hover ? trailing : null,
             selected: selected,
-            textColor: ColorScheme.of(context).onSecondaryContainer,
-            selectedTileColor: ColorScheme.of(context).secondaryContainer,
+            textColor: ColorScheme
+                .of(context)
+                .onSecondaryContainer,
+            selectedTileColor: ColorScheme
+                .of(context)
+                .secondaryContainer,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

@@ -1,13 +1,14 @@
-import 'package:dynamische_materialdatenbank/query/condition_group.dart';
-import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/filter/filter_provider.dart';
+import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/search/search_query_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../advanced_search/advanced_search_provider.dart';
-import '../attributes/attribute_provider.dart';
-import '../constants.dart';
-import '../filter/filter_provider.dart';
-import '../material/materials_provider.dart';
-import '../search/search_query_provider.dart';
+import 'condition_group.dart';
+import 'query_source_provider.dart';
 
 final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
   final source = ref.watch(querySourceProvider);

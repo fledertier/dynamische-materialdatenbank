@@ -1,11 +1,11 @@
 import 'dart:ui_web';
 
 import 'package:async/async.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../attributes/attribute_provider.dart';
 import '../query/condition_group.dart';
 import '../query/query_service.dart';
 

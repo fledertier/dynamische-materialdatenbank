@@ -1,18 +1,18 @@
-import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/advanced_search.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
+import 'package:dynamische_materialdatenbank/widgets/labeled.dart';
+import 'package:dynamische_materialdatenbank/widgets/labeled_list.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
+import 'package:dynamische_materialdatenbank/widgets/side_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../advanced_search/advanced_search.dart';
-import '../attributes/attribute_provider.dart';
-import '../constants.dart';
-import '../query/query_source_provider.dart';
-import '../widgets/labeled.dart';
-import '../widgets/labeled_list.dart';
-import '../widgets/side_sheet.dart';
 import 'checkbox_filter_option.dart';
 import 'dropdown_menu_filter_option.dart';
 import 'filter_provider.dart';
+import 'slider_filter_option.dart';
 
 class FiltersAndSearch extends ConsumerWidget {
   const FiltersAndSearch({super.key, this.onClose});
@@ -27,9 +27,9 @@ class FiltersAndSearch extends ConsumerWidget {
       alignment: Alignment.topLeft,
       curve: Curves.easeOutCubic,
       child:
-          querySource == QuerySource.searchAndFilter
-              ? Filters(onClose: onClose)
-              : AdvancedSearch(onClose: onClose),
+      querySource == QuerySource.searchAndFilter
+          ? Filters(onClose: onClose)
+          : AdvancedSearch(onClose: onClose),
     );
   }
 }
@@ -41,7 +41,9 @@ class Filters extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attributes = ref.watch(attributesProvider).value ?? {};
+    final attributes = ref
+        .watch(attributesProvider)
+        .value ?? {};
 
     return SideSheet(
       title: Text('Filters'),
@@ -64,7 +66,9 @@ class Filters extends ConsumerWidget {
           icon: Icon(Icons.auto_awesome),
           label: Text('Advanced search'),
           onPressed: () {
-            ref.read(querySourceProvider.notifier).state =
+            ref
+                .read(querySourceProvider.notifier)
+                .state =
                 QuerySource.advancedSearch;
           },
         ),

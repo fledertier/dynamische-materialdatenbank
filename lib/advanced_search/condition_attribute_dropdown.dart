@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +25,11 @@ class ConditionAttributeDropdown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attributesById = ref.watch(attributesProvider).value ?? {};
+    final attributesById = ref
+        .watch(attributesProvider)
+        .value ?? {};
     final attributes = attributesById.values.sortedBy(
-      (attribute) => attribute.name,
+          (attribute) => attribute.name,
     );
     final attributeId = extractId(initialAttribute, depth);
     final attribute = ref.watch(attributeProvider(attributeId));
