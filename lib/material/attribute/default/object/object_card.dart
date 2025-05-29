@@ -1,10 +1,10 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../material_provider.dart';
 import 'object_attribute_field.dart';
 
 class ObjectCard extends ConsumerWidget {
@@ -30,7 +30,7 @@ class ObjectCard extends ConsumerWidget {
     final object = ref.watch(valueProvider(argument));
 
     return AttributeCard(
-      label: AttributeLabel(attribute: attributeId),
+      label: AttributeLabel(attributeId: attributeId),
       title: ObjectAttributeField(
         attributeId: attributeId,
         object: object,

@@ -1,11 +1,10 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../attributes/attribute_provider.dart';
-import '../../../../attributes/attribute_type.dart';
-import '../../../../types.dart';
 
 class ObjectAttributeForm extends ConsumerStatefulWidget {
   const ObjectAttributeForm({
@@ -31,7 +30,7 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
 
     if (attribute == null) {
       return const SizedBox();

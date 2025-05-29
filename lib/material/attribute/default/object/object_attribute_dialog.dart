@@ -1,9 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../attributes/attribute_provider.dart';
-import '../../../../types.dart';
 import 'object_attribute_form.dart';
 
 class ObjectAttributeDialog extends ConsumerStatefulWidget {
@@ -32,7 +32,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final attribute = ref.watch(attributeProvider(widget.attributeId));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
     final name = attribute?.name ?? "Object";
     final canPop = Navigator.of(context).canPop();
 

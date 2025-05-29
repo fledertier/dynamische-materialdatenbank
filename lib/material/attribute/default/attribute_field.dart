@@ -1,17 +1,17 @@
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/url/url_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../attributes/attribute_provider.dart';
-import '../../../attributes/attribute_type.dart';
 import 'country/country.dart';
 import 'country/country_attribute_field.dart';
 import 'number/number_attribute_field.dart';
 import 'number/unit_number.dart';
+import 'text/text_attribute_field.dart';
+import 'text/translatable_text.dart';
+import 'url/url_attribute_field.dart';
 
 class AttributeField extends ConsumerWidget {
   const AttributeField({
@@ -29,7 +29,7 @@ class AttributeField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(attributeId));
+    final attribute = ref.watch(attributeProvider(attributeId)).value;
 
     if (attribute == null) {
       return const SizedBox();
