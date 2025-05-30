@@ -36,8 +36,8 @@ class TextAttributeField extends ConsumerWidget {
     final otherLanguageText =
         language == Language.en ? text.valueDe : text.valueEn;
 
-    final textField = TextFormField(
-      key: ValueKey(language),
+    return TextFormField(
+      key: ValueKey(text.resolve(language)),
       initialValue: text.resolve(language),
       enabled: edit,
       style: (textStyle ?? defaultTextStyle)?.copyWith(fontFamily: 'Lexend'),
@@ -50,11 +50,5 @@ class TextAttributeField extends ConsumerWidget {
         onChanged?.call(newText);
       },
     );
-
-    if (multiline) {
-      return textField;
-    } else {
-      return IntrinsicWidth(child: textField);
-    }
   }
 }
