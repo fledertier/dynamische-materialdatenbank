@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
@@ -8,7 +9,7 @@ Json randomName() {
   final random = Random();
   final index = random.nextInt(randomMaterialNames.length);
   final name = randomMaterialNames[index];
-  return {'valueDe': name};
+  return TranslatableText(valueDe: name).toJson();
 }
 
 Json randomDescription() {
@@ -16,29 +17,31 @@ Json randomDescription() {
   final sentences = randomSentencesAboutMaterials.split('. ');
   final selectedSentences = <String>[];
 
+  final randomIndex = random.nextInt(sentences.length - 3);
   for (int i = 0; i < 3; i++) {
-    final index = random.nextInt(sentences.length);
+    final index = randomIndex + i;
     selectedSentences.add(sentences[index]);
     sentences.removeAt(index);
   }
 
   final description = '${selectedSentences.join('. ')}.';
-  return {'valueDe': description};
+  return TranslatableText(valueDe: description).toJson();
 }
 
 Json randomManufacturer() {
   final random = Random();
   return {
-    Attributes.manufacturerName: TranslatableText(
-      valueDe: 'Manufacturer ${random.nextInt(10)}',
-    ),
+    Attributes.manufacturerName:
+        TranslatableText(
+          valueDe: 'Manufacturer ${random.nextInt(10)}',
+        ).toJson(),
   };
 }
 
 Json randomWeight() {
   final random = Random();
   final weight = double.parse((random.nextDouble() * 100).toStringAsFixed(2));
-  return {'value': weight};
+  return UnitNumber(value: weight, displayUnit: 'kg').toJson();
 }
 
 const randomMaterialNames = [

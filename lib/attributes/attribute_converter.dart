@@ -6,6 +6,9 @@ import '../material/attribute/default/number/unit_number.dart';
 import '../material/attribute/default/text/translatable_text.dart';
 
 dynamic fromJson(dynamic json, AttributeType type) {
+  if (json == null) {
+    return null;
+  }
   return switch (type) {
     TextAttributeType() => TranslatableText.fromJson(json),
     NumberAttributeType() => UnitNumber.fromJson(json),

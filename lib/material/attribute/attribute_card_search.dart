@@ -49,13 +49,17 @@ class _AttributeCardSearchState extends ConsumerState<AttributeCardSearch> {
         ),
       ),
     );
-    final cardSections = CardSections.fromJson(value);
-    return cardSections.allCards;
+    if (value == null) {
+      return {};
+    }
+    return CardSections.fromJson(value).allCards;
   }
 }
 
-Set<CardData> findCardsForAttributes(List<Attribute> attributes,
-    Set<CardSize> sizes,) {
+Set<CardData> findCardsForAttributes(
+  List<Attribute> attributes,
+  Set<CardSize> sizes,
+) {
   return attributes
       .expand((attribute) => findCardsForAttribute(attribute, sizes))
       .toSet();
@@ -64,11 +68,10 @@ Set<CardData> findCardsForAttributes(List<Attribute> attributes,
 Set<CardData> findCardsForAttribute(Attribute attribute, Set<CardSize> sizes) {
   return _findCardsForAttribute(attribute)
       .expand(
-        (card) =>
-        card.sizes.intersection(sizes).map((size) {
+        (card) => card.sizes.intersection(sizes).map((size) {
           return CardData(card: card, attribute: attribute.id, size: size);
         }),
-  )
+      )
       .toSet();
 }
 
@@ -81,7 +84,7 @@ Iterable<Cards> _findCardsForAttribute(Attribute attribute) {
 
 Iterable<CustomCards> _findCardsByAttributeId(String attribute) {
   return CustomCards.values.where(
-        (card) => card.attributes.contains(attribute),
+    (card) => card.attributes.contains(attribute),
   );
 }
 
