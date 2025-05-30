@@ -43,6 +43,9 @@ Json objectFromJson(Json json, ObjectAttributeType type) {
 }
 
 dynamic toJson(dynamic value, AttributeType type) {
+  if (value == null) {
+    return null;
+  }
   return switch (type) {
     TextAttributeType() => (value as TranslatableText).toJson(),
     NumberAttributeType() => (value as UnitNumber).toJson(),
