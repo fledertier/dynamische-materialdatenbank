@@ -101,6 +101,13 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 onSelected: (value) {
                   _controller.type.value = value;
                 },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a type';
+                  }
+                  return null;
+                },
               );
               late final unitDropdown = DropdownMenuFormField<UnitType>(
                 initialSelection: _controller.unitType.value,
@@ -176,7 +183,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                               });
                             },
                             trailing: IconButton(
-                              icon: Icon(Symbols.remove_circle),
+                              icon: Icon(Symbols.remove),
                               onPressed: () {
                                 _controller.listAttribute.value = null;
                                 field.didChange(null);

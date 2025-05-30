@@ -9,7 +9,7 @@ class AttributeFormController implements Listenable {
     : id = ValueNotifier(initialAttribute?.id),
       nameDe = ValueNotifier(initialAttribute?.nameDe),
       nameEn = ValueNotifier(initialAttribute?.nameEn),
-      type = ValueNotifier(initialAttribute?.type.id ?? AttributeType.text),
+      type = ValueNotifier(initialAttribute?.type.id),
       listAttribute = ValueNotifier(initialAttribute?.type.listAttribute),
       unitType = ValueNotifier(initialAttribute?.type.numberUnitType),
       objectAttributes = ValueNotifier(
