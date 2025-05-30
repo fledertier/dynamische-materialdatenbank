@@ -25,10 +25,7 @@ dynamic fromJson(dynamic json, AttributeType type) {
 }
 
 List listFromJson(List json, ListAttributeType type) {
-  final itemType = type.attribute?.type;
-  if (itemType == null) {
-    return [];
-  }
+  final itemType = type.attribute.type;
   return json.map((json) => fromJson(json, itemType)).toList();
 }
 
@@ -62,10 +59,7 @@ dynamic toJson(dynamic value, AttributeType type) {
 }
 
 List listToJson(List list, ListAttributeType type) {
-  final itemType = type.attribute?.type;
-  if (itemType == null) {
-    return [];
-  }
+  final itemType = type.attribute.type;
   return list.map((value) => toJson(value, itemType)).toList();
 }
 

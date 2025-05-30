@@ -1,13 +1,14 @@
-import 'package:dynamische_materialdatenbank/search/search_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/widgets/highlighted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../attributes/attribute_provider.dart';
-import '../constants.dart';
-import '../material/materials_provider.dart';
-import '../widgets/highlighted_text.dart';
 import 'search.dart';
+import 'search_provider.dart';
 import 'search_service.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {
@@ -61,7 +62,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
             .search(materials, attributes.attributes, query);
       },
       buildSuggestion: (material, query) {
-        final name = material[Attributes.name] as String;
+        final name = TranslatableText.fromJson(material[Attributes.name]).value;
         return ListTile(
           title: HighlightedText(name, highlighted: query),
           onTap: () {

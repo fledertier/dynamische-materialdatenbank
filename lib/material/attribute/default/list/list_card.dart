@@ -59,10 +59,6 @@ class _ListCardState extends ConsumerState<ListCard> {
     final type = attribute.type as ListAttributeType;
     final itemAttribute = type.attribute;
 
-    if (itemAttribute == null) {
-      return SizedBox();
-    }
-
     final itemAttributeId = attribute.id.add(itemAttribute.id);
     final itemAttributeType = itemAttribute.type;
 

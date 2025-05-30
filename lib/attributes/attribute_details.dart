@@ -197,7 +197,7 @@ extension on Attribute {
     if (type case ObjectAttributeType(:final attributes)) {
       return attributes;
     } else if (type case ListAttributeType(:final attribute)) {
-      return [if (attribute != null) attribute];
+      return [attribute];
     }
     return [];
   }

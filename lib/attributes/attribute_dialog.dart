@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'attribute.dart';
 import 'attribute_form.dart';
-import 'attribute_form_state.dart';
+import 'attribute_form_controller.dart';
 
 class AttributeDialog extends StatefulWidget {
   const AttributeDialog({

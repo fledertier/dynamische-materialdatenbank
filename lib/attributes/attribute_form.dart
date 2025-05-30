@@ -7,7 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import 'attribute.dart';
 import 'attribute_dialog.dart';
-import 'attribute_form_state.dart';
+import 'attribute_form_controller.dart';
 import 'attribute_type.dart';
 import 'attributes_list.dart';
 
@@ -130,7 +130,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                       trailing: IconButton(
                         icon: Icon(Symbols.remove),
                         onPressed: () {
-                          deleteObjectAttribute(attribute);
+                          _deleteObjectAttribute(attribute);
                         },
                       ),
                     ),
@@ -145,41 +145,70 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   ),
                 ],
               );
-              late final listAttribute = Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (_controller.listAttribute.value != null) ...[
-                    SizedBox(height: 8),
-                    AttributeListTile(
-                      _controller.listAttribute.value!,
-                      onTap: () {
-                        editAttribute(
-                          _controller.listAttribute.value!,
-                          (attribute) =>
-                              _controller.listAttribute.value = attribute,
-                        );
-                      },
-                      trailing: IconButton(
-                        icon: Icon(Symbols.remove_circle),
-                        onPressed: () {
-                          _controller.listAttribute.value = null;
-                        },
-                      ),
+              late final listAttribute = FormField(
+                initialValue: _controller.listAttribute.value,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select an attribute';
+                  }
+                  return null;
+                },
+                builder: (field) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      errorText: field.errorText,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(bottom: 8),
                     ),
-                  ] else ...[
-                    SizedBox(height: 16),
-                    OutlinedButton(
-                      style: IconButton.styleFrom(),
-                      child: Text('Select attribute'),
-                      onPressed: () {
-                        addAttribute((attribute) {
-                          _controller.listAttribute.value = attribute;
-                        });
-                      },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (field.value != null) ...[
+                          SizedBox(height: 8),
+                          AttributeListTile(
+                            field.value!,
+                            onTap: () {
+                              editAttribute(field.value!, (attribute) {
+                                _controller.listAttribute.value = attribute;
+                                field.didChange(attribute);
+                              });
+                            },
+                            trailing: IconButton(
+                              icon: Icon(Symbols.remove_circle),
+                              onPressed: () {
+                                _controller.listAttribute.value = null;
+                                field.didChange(null);
+                              },
+                            ),
+                          ),
+                        ] else ...[
+                          SizedBox(height: 16),
+                          OutlinedButton(
+                            style:
+                                field.hasError
+                                    ? OutlinedButton.styleFrom(
+                                      foregroundColor:
+                                          ColorScheme.of(context).error,
+                                      side: BorderSide(
+                                        color: ColorScheme.of(context).error,
+                                      ),
+                                    )
+                                    : null,
+                            child: Text('Select attribute'),
+                            onPressed: () {
+                              addAttribute((attribute) {
+                                _controller.listAttribute.value = attribute;
+                                field.didChange(attribute);
+                              });
+                            },
+                          ),
+                        ],
+                      ],
                     ),
-                  ],
-                ],
+                  );
+                },
               );
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -251,6 +280,8 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     );
   }
 
+  bool isType(String type) => _controller.type.value == type;
+
   Future<void> addAttribute(void Function(Attribute) add) async {
     final attribute = await showNestedAttributeDialog(
       context: context,
@@ -262,13 +293,6 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     if (attribute != null) {
       add(attribute);
     }
-  }
-
-  void _addObjectAttribute(Attribute objectAttribute) {
-    _controller.objectAttributes.value = [
-      ..._controller.objectAttributes.value,
-      objectAttribute,
-    ];
   }
 
   Future<void> editAttribute(
@@ -288,6 +312,13 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     }
   }
 
+  void _addObjectAttribute(Attribute objectAttribute) {
+    _controller.objectAttributes.value = [
+      ..._controller.objectAttributes.value,
+      objectAttribute,
+    ];
+  }
+
   void _editObjectAttribute(Attribute updatedAttribute) {
     _controller.objectAttributes.value = [
       for (final objectAttribute in _controller.objectAttributes.value)
@@ -297,24 +328,22 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
     ];
   }
 
-  Future<void> save() async {
-    final attribute = await submit();
-    if (attribute != null) {
-      widget.onSave(attribute);
-    }
-  }
-
-  void deleteObjectAttribute(Attribute attribute) {
+  void _deleteObjectAttribute(Attribute attribute) {
     _controller.objectAttributes.value = [
       for (final objectAttribute in _controller.objectAttributes.value)
         if (objectAttribute.id != attribute.id) objectAttribute,
     ];
   }
 
-  bool isType(String type) => _controller.type.value == type;
-
   bool get hasChanges {
     return _controller != _initialController;
+  }
+
+  Future<void> save() async {
+    final attribute = await submit();
+    if (attribute != null) {
+      widget.onSave(attribute);
+    }
   }
 
   Future<Attribute?> submit() async {
@@ -345,7 +374,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         attributes: _controller.objectAttributes.value,
       ),
       AttributeType.list => ListAttributeType(
-        attribute: _controller.listAttribute.value,
+        attribute: _controller.listAttribute.value!,
       ),
       _ => throw Exception('Invalid type ${_controller.type.value}'),
     };

@@ -8,6 +8,7 @@ import '../filter/filter_service.dart';
 import '../search/search_service.dart';
 import '../types.dart';
 
+// todo: delete this
 final filteredMaterialsProvider = FutureProvider((ref) async {
   final query = ref.watch(searchProvider);
   final filterOptions = ref.watch(filterOptionsProvider);

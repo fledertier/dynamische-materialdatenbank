@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchServiceProvider = Provider((ref) => SearchService());
 
+// todo: use advanced search instead
 class SearchService {
   List<Json> search(
     List<Json> materials,
