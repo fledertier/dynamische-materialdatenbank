@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../attributes/attribute_converter.dart';
 import '../../../../widgets/hover_builder.dart';
 import '../attribute_field.dart';
 
@@ -91,8 +92,9 @@ class _ListCardState extends ConsumerState<ListCard> {
               child: AttributeField(
                 attributeId: itemAttributeId,
                 value: list.elementAtOrNull(index),
-                onJson: (value) {
-                  updateItem(index, value);
+                onChanged: (value) {
+                  final json = toJson(value, itemAttributeType);
+                  updateItem(index, json);
                 },
               ),
               builder: (context, hovered, child) {

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
@@ -10,9 +9,7 @@ import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'attribute/default/country/country.dart';
-import 'attribute/default/number/unit_number.dart';
-import 'attribute/default/text/translatable_text.dart';
+import '../attributes/attribute_converter.dart';
 import 'materials_provider.dart';
 import 'placeholder.dart';
 
@@ -117,55 +114,8 @@ final valueProvider = Provider.family((ref, AttributeArgument arg) {
     return null;
   }
 
-  return _convert(json, type);
+  return fromJson(json, type);
 });
-
-dynamic _convert(json, AttributeType type) {
-  return switch (type) {
-    TextAttributeType() => TranslatableText.fromJson(json),
-    NumberAttributeType() => UnitNumber.fromJson(json),
-    BooleanAttributeType() => json as bool,
-    CountryAttributeType() => Country.fromJson(json),
-    UrlAttributeType() => Uri.tryParse(json as String),
-    ListAttributeType() => _convertList(json, type),
-    ObjectAttributeType() => _convertObject(json, type),
-    _ =>
-      throw UnimplementedError(
-        "Converter for attribute type '$type' is not implemented",
-      ),
-  };
-}
-
-List<dynamic> _convertList(json, ListAttributeType type) {
-  return switch (type.attribute?.type) {
-    TextAttributeType() => List<Json>.from(json).map(TranslatableText.fromJson),
-    NumberAttributeType() => List<Json>.from(json).map(UnitNumber.fromJson),
-    BooleanAttributeType() => List<bool>.from(json),
-    CountryAttributeType() => List.from(
-      json,
-    ).map((country) => country != null ? Country.fromJson(country) : null),
-    UrlAttributeType() =>
-      List<String>.from(json).map((url) => Uri.tryParse(url)).nonNulls,
-    _ =>
-      throw UnimplementedError(
-        "Converter for list attribute type '${type.attribute?.type}' is not implemented",
-      ),
-  }.toList();
-}
-
-Map<String, dynamic> _convertObject(json, ObjectAttributeType type) {
-  final attributes = type.attributes;
-  final converted = <String, dynamic>{};
-
-  for (final attribute in attributes) {
-    final value = json[attribute.id];
-    if (value != null) {
-      converted[attribute.id] = _convert(value, attribute.type);
-    }
-  }
-
-  return converted;
-}
 
 class AttributeArgument {
   const AttributeArgument({

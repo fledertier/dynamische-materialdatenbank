@@ -62,6 +62,11 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
                     AttributeField(
                       attributeId: widget.attributeId.add(attribute.id),
                       value: _controller.value?[attribute.id],
+                      onChanged: (value) {
+                        debugPrint(
+                          '${widget.attributeId.add(attribute.id)} changed to $value',
+                        );
+                      },
                     ),
                   ],
                 ),

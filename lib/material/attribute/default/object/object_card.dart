@@ -34,9 +34,9 @@ class ObjectCard extends ConsumerWidget {
       title: ObjectAttributeField(
         attributeId: attributeId,
         object: object,
-        onChanged: (object) {
+        onChanged: (json) {
           ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: object, // todo: needs to json
+            attributeId: json,
           });
         },
       ),

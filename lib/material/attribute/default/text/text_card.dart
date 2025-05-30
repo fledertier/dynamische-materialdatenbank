@@ -34,16 +34,12 @@ class _TextCardState extends ConsumerState<TextCard> {
 
   @override
   Widget build(BuildContext context) {
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributeId: widget.attributeId,
+    );
     final text =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: widget.materialId,
-                  attributeId: widget.attributeId,
-                ),
-              ),
-            )
-            as TranslatableText? ??
+        ref.watch(valueProvider(argument)) as TranslatableText? ??
         TranslatableText();
 
     return AttributeCard(

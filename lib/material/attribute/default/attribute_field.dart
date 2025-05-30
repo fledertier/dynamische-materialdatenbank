@@ -1,6 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
-import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,14 +17,12 @@ class AttributeField extends ConsumerWidget {
     super.key,
     required this.attributeId,
     required this.value,
-    this.onValue,
-    this.onJson,
+    this.onChanged,
   });
 
   final String attributeId;
   final dynamic value;
-  final ValueChanged<dynamic>? onValue;
-  final ValueChanged<dynamic>? onJson;
+  final ValueChanged<dynamic>? onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,16 +32,12 @@ class AttributeField extends ConsumerWidget {
       return const SizedBox();
     }
 
-    // todo: add list
     switch (attribute.type.id) {
       case AttributeType.text:
         return TextAttributeField(
           attributeId: attributeId,
           text: value as TranslatableText? ?? TranslatableText(),
-          onChanged: (text) {
-            onValue?.call(text);
-            onJson?.call(text.toJson());
-          },
+          onChanged: onChanged,
         );
       case AttributeType.number:
         final number = value as UnitNumber? ?? UnitNumber(value: 0);
@@ -52,29 +45,20 @@ class AttributeField extends ConsumerWidget {
           key: ValueKey(number.displayUnit),
           attributeId: attributeId,
           number: number,
-          onChanged: (number) {
-            onValue?.call(number);
-            onJson?.call(number.toJson());
-          },
+          onChanged: onChanged,
         );
       case AttributeType.url:
         return UrlAttributeField(
           attributeId: attributeId,
           url: value as Uri?,
-          onChanged: (url) {
-            onValue?.call(url);
-            onJson?.call(url?.toJson());
-          },
+          onChanged: onChanged,
         );
       case AttributeType.country:
         final country = value as Country?;
         return CountryAttributeField(
           attributeId: attributeId,
           country: country,
-          onChanged: (country) {
-            onValue?.call(country);
-            onJson?.call(country?.toJson());
-          },
+          onChanged: onChanged,
         );
       default:
         if (kDebugMode) {

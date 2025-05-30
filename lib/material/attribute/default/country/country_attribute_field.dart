@@ -12,12 +12,12 @@ class CountryAttributeField extends ConsumerWidget {
     super.key,
     required this.attributeId,
     this.country,
-    required this.onChanged,
+    this.onChanged,
   });
 
   final String attributeId;
   final Country? country;
-  final void Function(Country? value) onChanged;
+  final void Function(Country? value)? onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +41,7 @@ class CountryAttributeField extends ConsumerWidget {
       },
       textExtractor: (country) => country.name,
       onChanged: (country) {
-        onChanged(country);
+        onChanged?.call(country);
       },
       validator: (value) {
         if (value == null || value.isEmpty) {
