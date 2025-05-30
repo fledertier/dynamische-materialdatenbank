@@ -27,7 +27,7 @@ class ConditionAttributeDropdown extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final attributesById = ref.watch(attributesProvider).value ?? {};
     final attributes = attributesById.values.sortedBy(
-      (attribute) => attribute.name,
+      (attribute) => attribute.name ?? '',
     );
     final attributeId = extractId(initialAttribute, depth);
     final attribute = ref.watch(attributeProvider(attributeId)).value;
@@ -43,7 +43,10 @@ class ConditionAttributeDropdown extends ConsumerWidget {
           initialSelection: attribute,
           dropdownMenuEntries: [
             for (final attribute in attributeEntries ?? attributes)
-              DropdownMenuEntry(value: attribute, label: attribute.name),
+              DropdownMenuEntry(
+                value: attribute,
+                label: attribute.name ?? 'Unnamed',
+              ),
           ],
           onSelected: (attribute) {
             onSelected(attribute?.id);

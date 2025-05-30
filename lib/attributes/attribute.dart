@@ -16,7 +16,7 @@ class Attribute {
   final AttributeType type;
   final bool required;
 
-  String get name => nameDe ?? nameEn ?? 'Unnamed';
+  String? get name => nameDe ?? nameEn;
 
   Attribute copyWith({
     String? id,

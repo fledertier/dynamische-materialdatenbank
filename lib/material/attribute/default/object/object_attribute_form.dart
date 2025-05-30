@@ -54,10 +54,11 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 8,
                   children: [
-                    Text(
-                      attribute.name,
-                      style: TextTheme.of(context).labelMedium,
-                    ),
+                    if (attribute.name != null)
+                      Text(
+                        attribute.name!,
+                        style: TextTheme.of(context).labelMedium,
+                      ),
                     AttributeField(
                       attributeId: widget.attributeId.add(attribute.id),
                       value: _controller.value?[attribute.id],

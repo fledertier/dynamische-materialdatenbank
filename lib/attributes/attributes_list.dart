@@ -8,8 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'attribute.dart';
 import 'attribute_dialog.dart';
 import 'attribute_search_bar.dart';
-import 'attributes_provider.dart';
 import 'attribute_type.dart';
+import 'attributes_provider.dart';
 
 class AttributesList extends ConsumerStatefulWidget {
   const AttributesList({super.key, required this.selectedAttributeId});
@@ -38,7 +38,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
 
     final attributesById = snapshot.value ?? {};
     final attributes = attributesById.values.sortedBy(
-          (attribute) => attribute.name,
+      (attribute) => attribute.name ?? '',
     );
 
     return Stack(
@@ -58,8 +58,8 @@ class _AttributesListState extends ConsumerState<AttributesList> {
                 builder: (context, child) {
                   final search = searchController.text;
                   final filterdAttributes = attributes.where(
-                        (attribute) =>
-                        attribute.name.containsIgnoreCase(search),
+                    (attribute) =>
+                        attribute.name?.containsIgnoreCase(search) ?? false,
                   );
 
                   return ListView.builder(
@@ -70,7 +70,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
                       return AttributeListTile(
                         attribute,
                         selected:
-                        widget.selectedAttributeId.value == attribute.id,
+                            widget.selectedAttributeId.value == attribute.id,
                         onTap: () {
                           widget.selectedAttributeId.value = attribute.id;
                         },
@@ -112,7 +112,8 @@ class _AttributesListState extends ConsumerState<AttributesList> {
 }
 
 class AttributeListTile extends ConsumerWidget {
-  const AttributeListTile(this.attribute, {
+  const AttributeListTile(
+    this.attribute, {
     super.key,
     this.selected = false,
     required this.onTap,
@@ -132,18 +133,14 @@ class AttributeListTile extends ConsumerWidget {
           type: MaterialType.transparency,
           child: ListTile(
             leading: Icon(iconForAttributeType(attribute.type.id)),
-            title: Text(attribute.name),
+            title: Text(attribute.name ?? 'Unnamed'),
             subtitle: Text(
               [attribute.type, if (attribute.required) 'required'].join(', '),
             ),
             trailing: hover ? trailing : null,
             selected: selected,
-            textColor: ColorScheme
-                .of(context)
-                .onSecondaryContainer,
-            selectedTileColor: ColorScheme
-                .of(context)
-                .secondaryContainer,
+            textColor: ColorScheme.of(context).onSecondaryContainer,
+            selectedTileColor: ColorScheme.of(context).secondaryContainer,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

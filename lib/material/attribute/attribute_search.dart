@@ -58,7 +58,7 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
       search: searchAttributes,
       buildSuggestion: (attribute, query) {
         return ListTile(
-          title: HighlightedText(attribute.name, highlighted: query),
+          title: HighlightedText(attribute.name!, highlighted: query),
           onTap: () {
             controller.closeView(attribute.name);
             widget.onSubmit.call([attribute]);
@@ -76,8 +76,8 @@ class _AttributeSearchState extends ConsumerState<AttributeSearch> {
     final name = query.trim();
     final attributes = await ref.read(attributesProvider.future);
     return attributes.values
-        .where((attribute) => attribute.name.containsIgnoreCase(name))
-        .sortedBy((attribute) => attribute.name)
+        .where((attribute) => attribute.name?.containsIgnoreCase(name) ?? false)
+        .sortedBy((attribute) => attribute.name!)
         .toList();
   }
 }

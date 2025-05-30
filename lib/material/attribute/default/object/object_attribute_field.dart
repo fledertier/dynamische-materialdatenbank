@@ -65,7 +65,7 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
                     ),
                   ),
                 )
-                : Text(attribute.name, style: textStyle),
+                : Text(attribute.name ?? 'Object', style: textStyle),
         onTap:
             edit
                 ? () {
