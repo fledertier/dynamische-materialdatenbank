@@ -1,10 +1,10 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/query/condition.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute_type.dart';
-import '../constants.dart';
-import '../query/condition.dart';
-import '../query/condition_group.dart';
 
 final filterQueryProvider = Provider((ref) {
   final options = ref.watch(filterOptionsProvider);
@@ -35,7 +35,9 @@ final filterQueryProvider = Provider((ref) {
           ].join('.'),
           operator: Operator.equals,
           parameter:
-              options[Attributes.manufacturer][Attributes.manufacturerName],
+              (options[Attributes.manufacturer][Attributes.manufacturerName]
+                      as TranslatableText)
+                  .value,
         ),
 
       if (options[Attributes.density] != null)

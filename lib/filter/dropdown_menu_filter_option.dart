@@ -14,11 +14,11 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final manufacturers =
-        ref.watch(valuesProvider(Attributes.manufacturer)).value;
-    final suggestions = manufacturers?.values.toSet().sortedBy(
-      (manufacturer) => TranslatableText.fromJson(manufacturer).value,
-    );
+    final values = ref.watch(valuesProvider(Attributes.manufacturer)).value;
+    final manufacturers = values?.values.toSet().sortedBy((manufacturer) {
+      return (manufacturer[Attributes.manufacturerName] as TranslatableText)
+          .value;
+    });
     return DropdownMenu(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -30,15 +30,13 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
       menuHeight: 16 + 48 * 4,
       dropdownMenuEntries: [
         DropdownMenuEntry(value: null, label: 'Alle'),
-        ...?suggestions?.map(
-          (suggestion) => DropdownMenuEntry(
-            value: suggestion,
+        for (final manufacturer in manufacturers ?? [])
+          DropdownMenuEntry(
+            value: manufacturer,
             label:
-                TranslatableText.fromJson(
-                  suggestion[Attributes.manufacturerName],
-                ).value,
+                (manufacturer[Attributes.manufacturerName] as TranslatableText)
+                    .value,
           ),
-        ),
       ],
       initialSelection: options[Attributes.manufacturer],
       onSelected: (manufacturer) {

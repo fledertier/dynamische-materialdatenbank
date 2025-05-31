@@ -39,7 +39,7 @@ final materialsByIdProvider = FutureProvider.family((
 ) async {
   final materials = <String, Json>{};
   for (final attribute in argument.attributes) {
-    final values = await ref.watch(valuesProvider(attribute).future);
+    final values = await ref.watch(jsonValuesProvider(attribute).future);
     values.forEach((id, value) {
       final material = materials.putIfAbsent(id, () => {Attributes.id: id});
       material[attribute] = value;

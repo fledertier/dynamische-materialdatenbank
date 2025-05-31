@@ -4,9 +4,11 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
+import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'attribute_converter.dart';
 import 'attributes_provider.dart';
 
 class Extrema {
@@ -19,24 +21,29 @@ final valuesExtremaProvider = FutureProvider.family((
   ref,
   String attribute,
 ) async {
-  final values = await ref.watch(valuesProvider(attribute).future);
-  final numbers = values.values.map(
-    (value) => UnitNumber.fromJson(value).value,
-  );
-  if (numbers.isEmpty) {
+  final numbers = await ref.watch(valuesProvider(attribute).future);
+  final values = numbers.values.map((number) => (number as UnitNumber).value);
+  if (values.isEmpty) {
     return null;
   }
-  return Extrema(min: numbers.reduce(min), max: numbers.reduce(max));
+  return Extrema(min: values.reduce(min), max: values.reduce(max));
 });
 
-final valuesProvider = StreamProvider.family((ref, String attributeId) {
+final valuesProvider = FutureProvider.family((ref, String attributeId) async {
+  final attribute = await ref.watch(attributeProvider(attributeId).future);
+  final values = await ref.watch(jsonValuesProvider(attributeId).future);
+
+  return values.mapValues((json) => fromJson(json, attribute?.type));
+});
+
+final jsonValuesProvider = StreamProvider.family((ref, String attributeId) {
   return ref
       .read(firestoreProvider)
       .collection(Collections.values)
       .doc(attributeId)
       .snapshots()
       .map((snapshot) {
-        return snapshot.exists ? snapshot.data() ?? {} : {};
+        return snapshot.dataOrNull() ?? {};
       });
 });
 
@@ -71,7 +78,7 @@ final attributesUsedCountProvider = FutureProvider.family((
 ) async {
   final valuesByIds = await Future.wait([
     for (final attribute in argument.attributes)
-      ref.watch(valuesProvider(attribute).future),
+      ref.watch(jsonValuesProvider(attribute).future),
   ]);
   return valuesByIds.expand((valuesById) => valuesById.keys).toSet().length;
 });

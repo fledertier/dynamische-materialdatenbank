@@ -86,7 +86,7 @@ void main() {
         completion(containsPair(dings.id, dingsValue)),
       );
       await expectLater(
-        container.read(valuesProvider(dings.id).future),
+        container.read(jsonValuesProvider(dings.id).future),
         completion(containsPair(materialId, dingsValue)),
       );
 
@@ -98,7 +98,7 @@ void main() {
         completion(isNot(containsPair(dings.id, dingsValue))),
       );
       await expectLater(
-        container.read(valuesProvider(dings.id).future),
+        container.read(jsonValuesProvider(dings.id).future),
         completion(isEmpty),
       );
     });
