@@ -13,19 +13,16 @@ final searchQueryProvider = Provider((ref) {
     return null;
   }
 
-  return ConditionGroup(
-    type: ConditionGroupType.or,
-    nodes: [
-      Condition(
-        attribute: Attributes.name,
-        operator: Operator.contains,
-        parameter: search,
-      ),
-      Condition(
-        attribute: Attributes.description,
-        operator: Operator.contains,
-        parameter: search,
-      ),
-    ],
-  );
+  return ConditionGroup.or([
+    Condition(
+      attribute: Attributes.name,
+      operator: Operator.contains,
+      parameter: search,
+    ),
+    Condition(
+      attribute: Attributes.description,
+      operator: Operator.contains,
+      parameter: search,
+    ),
+  ]);
 });

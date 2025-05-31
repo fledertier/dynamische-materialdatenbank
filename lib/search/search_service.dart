@@ -21,17 +21,14 @@ class SearchService {
     Set<String> attributes,
     String search,
   ) {
-    final query = ConditionGroup(
-      type: ConditionGroupType.or,
-      nodes: [
-        for (final attribute in attributes)
-          Condition(
-            attribute: attribute,
-            operator: Operator.contains,
-            parameter: search,
-          ),
-      ],
-    );
+    final query = ConditionGroup.or([
+      for (final attribute in attributes)
+        Condition(
+          attribute: attribute,
+          operator: Operator.contains,
+          parameter: search,
+        ),
+    ]);
     return materials
         .where((material) => query.matches(material, attributesById))
         .toList();

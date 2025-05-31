@@ -9,10 +9,7 @@ final advancedSearchQueryProvider = ChangeNotifierProvider(
 );
 
 class AdvancedSearchQueryNotifier extends ChangeNotifier {
-  final query = ConditionGroup(
-    type: ConditionGroupType.and,
-    nodes: [Condition()],
-  );
+  final query = ConditionGroup.and([Condition()]);
 
   set query(ConditionGroup query) {
     this.query.nodes = query.nodes;

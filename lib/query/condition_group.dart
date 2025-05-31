@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/foundation.dart';
 
-import '../types.dart';
 import 'condition_node.dart';
 
 enum ConditionGroupType { and, or }
@@ -15,6 +15,12 @@ extension ConditionGroupTypeExtension on ConditionGroupType {
 }
 
 class ConditionGroup extends ConditionNode {
+  ConditionGroup.and(List<ConditionNode> nodes)
+    : this(type: ConditionGroupType.and, nodes: nodes);
+
+  ConditionGroup.or(List<ConditionNode> nodes)
+    : this(type: ConditionGroupType.or, nodes: nodes);
+
   ConditionGroup({required this.type, required this.nodes});
 
   ConditionGroupType type;

@@ -13,41 +13,38 @@ final filterQueryProvider = Provider((ref) {
     return null;
   }
 
-  return ConditionGroup(
-    type: ConditionGroupType.and,
-    nodes: [
-      for (final attribute in [
-        Attributes.recyclable,
-        Attributes.biodegradable,
-        Attributes.biobased,
-      ])
-        if (options[attribute] == true)
-          Condition(
-            attribute: attribute,
-            operator: Operator.equals,
-            parameter: options[attribute],
-          ),
-      if (options[Attributes.manufacturer] != null)
+  return ConditionGroup.and([
+    for (final attribute in [
+      Attributes.recyclable,
+      Attributes.biodegradable,
+      Attributes.biobased,
+    ])
+      if (options[attribute] == true)
         Condition(
-          attribute: [
-            Attributes.manufacturer,
-            Attributes.manufacturerName,
-          ].join('.'),
+          attribute: attribute,
           operator: Operator.equals,
-          parameter:
-              (options[Attributes.manufacturer][Attributes.manufacturerName]
-                      as TranslatableText)
-                  .value,
+          parameter: options[attribute],
         ),
+    if (options[Attributes.manufacturer] != null)
+      Condition(
+        attribute: [
+          Attributes.manufacturer,
+          Attributes.manufacturerName,
+        ].join('.'),
+        operator: Operator.equals,
+        parameter:
+            (options[Attributes.manufacturer][Attributes.manufacturerName]
+                    as TranslatableText)
+                .value,
+      ),
 
-      if (options[Attributes.density] != null)
-        Condition(
-          attribute: Attributes.density,
-          operator: Operator.lessThan,
-          parameter: options[Attributes.density],
-        ),
-    ],
-  );
+    if (options[Attributes.density] != null)
+      Condition(
+        attribute: Attributes.density,
+        operator: Operator.lessThan,
+        parameter: options[Attributes.density],
+      ),
+  ]);
 });
 
 final filterOptionsProvider = NotifierProvider(FilterOptionsNotifier.new);

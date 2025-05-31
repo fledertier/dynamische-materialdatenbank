@@ -31,8 +31,5 @@ final queriedMaterialsProvider = FutureProvider.autoDispose((ref) async {
 final searchAndFilterQueryProvider = Provider((ref) {
   final searchQuery = ref.watch(searchQueryProvider);
   final filterQuery = ref.watch(filterQueryProvider);
-  return ConditionGroup(
-    type: ConditionGroupType.and,
-    nodes: [searchQuery, filterQuery].nonNulls.toList(),
-  );
+  return ConditionGroup.and([searchQuery, filterQuery].nonNulls.toList());
 });
