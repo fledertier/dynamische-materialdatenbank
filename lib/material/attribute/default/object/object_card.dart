@@ -3,11 +3,14 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../attributes/attribute_converter.dart';
+import '../../../../attributes/attribute_provider.dart';
 import 'object_attribute_field.dart';
 
-class ObjectCard extends ConsumerWidget {
+class ObjectCard extends ConsumerStatefulWidget {
   const ObjectCard({
     super.key,
     required this.materialId,
@@ -22,25 +25,43 @@ class ObjectCard extends ConsumerWidget {
   final int columns;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ObjectCard> createState() => _ObjectCardState();
+}
+
+class _ObjectCardState extends ConsumerState<ObjectCard> {
+  final debouncer = Debouncer();
+
+  @override
+  Widget build(BuildContext context) {
     final argument = AttributeArgument(
-      materialId: materialId,
-      attributeId: attributeId,
+      materialId: widget.materialId,
+      attributeId: widget.attributeId,
     );
     final object = ref.watch(valueProvider(argument));
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+
+    if (attribute == null) {
+      return SizedBox();
+    }
 
     return AttributeCard(
-      label: AttributeLabel(attributeId: attributeId),
+      label: AttributeLabel(attributeId: widget.attributeId),
       title: ObjectAttributeField(
-        attributeId: attributeId,
+        attributeId: widget.attributeId,
         object: object,
-        onChanged: (json) {
-          ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: json,
-          });
+        onChanged: (object) {
+          debouncer.debounce(
+            duration: Duration(milliseconds: 1000),
+            onDebounce: () {
+              final json = toJson(object, attribute.type);
+              ref
+                  .read(materialProvider(widget.materialId).notifier)
+                  .updateMaterial({widget.attributeId: json});
+            },
+          );
         },
       ),
-      columns: columns,
+      columns: widget.columns,
     );
   }
 }

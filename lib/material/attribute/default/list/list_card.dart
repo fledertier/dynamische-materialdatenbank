@@ -9,7 +9,6 @@ import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../attributes/attribute_converter.dart';
-import '../../../../attributes/attribute_type.dart';
 
 class ListCard extends ConsumerStatefulWidget {
   const ListCard({
@@ -47,8 +46,6 @@ class _ListCardState extends ConsumerState<ListCard> {
       return SizedBox();
     }
 
-    final listType = attribute.type as ListAttributeType;
-
     return AttributeCard(
       columns: widget.columns,
       label: AttributeLabel(attributeId: widget.attributeId),
@@ -56,25 +53,17 @@ class _ListCardState extends ConsumerState<ListCard> {
         attributeId: widget.attributeId,
         list: list,
         onChanged: (list) {
-          final json = toJson(list, listType);
-          updateDebounced(json);
+          final json = toJson(list, attribute.type);
+          debouncer.debounce(
+            duration: const Duration(milliseconds: 1000),
+            onDebounce: () {
+              ref
+                  .read(materialProvider(widget.materialId).notifier)
+                  .updateMaterial({widget.attributeId: json});
+            },
+          );
         },
       ),
     );
-  }
-
-  void updateDebounced(List json) {
-    debouncer.debounce(
-      duration: const Duration(milliseconds: 1000),
-      onDebounce: () {
-        update(json);
-      },
-    );
-  }
-
-  void update(List json) {
-    ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
-      widget.attributeId: json,
-    });
   }
 }

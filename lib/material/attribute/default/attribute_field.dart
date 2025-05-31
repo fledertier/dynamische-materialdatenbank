@@ -1,9 +1,11 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../types.dart';
 import 'country/country.dart';
 import 'country/country_attribute_field.dart';
 import 'list/list_attribute_field.dart';
@@ -64,6 +66,12 @@ class AttributeField extends ConsumerWidget {
         return ListAttributeField(
           attributeId: attributeId,
           list: value as List? ?? [],
+          onChanged: onChanged,
+        );
+      case AttributeType.object:
+        return ObjectAttributeField(
+          attributeId: attributeId,
+          object: value as Json?,
           onChanged: onChanged,
         );
       default:
