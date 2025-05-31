@@ -20,7 +20,7 @@ class MaterialGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final items = ref.watch(queriedMaterialItemsProvider).value ?? [];
+        final items = ref.watch(queriedMaterialsProvider).value ?? [];
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,

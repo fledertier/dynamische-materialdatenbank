@@ -55,11 +55,12 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
         if (query.isEmpty) {
           return [];
         }
-        final attributes = AttributesArgument({Attributes.name});
-        final materials = await ref.read(materialsProvider(attributes).future);
-        return ref
-            .read(searchServiceProvider)
-            .search(materials, attributes.attributes, query);
+        final attributes = {Attributes.name};
+        final materials = await ref.read(
+          materialsProvider(AttributesArgument(attributes)).future,
+        );
+        final searchService = await ref.read(searchServiceProvider.future);
+        return searchService.search(materials, attributes, query);
       },
       buildSuggestion: (material, query) {
         final name = TranslatableText.fromJson(material[Attributes.name]).value;

@@ -10,18 +10,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'condition_group.dart';
 import 'query_source_provider.dart';
 
-final queriedMaterialItemsProvider = FutureProvider.autoDispose((ref) async {
+final queriedMaterialsProvider = FutureProvider.autoDispose((ref) async {
   final source = ref.watch(querySourceProvider);
   final query = switch (source) {
     QuerySource.searchAndFilter => ref.watch(searchAndFilterQueryProvider),
     QuerySource.advancedSearch => ref.watch(advancedSearchQueryProvider).query,
   };
-  final argument = AttributesArgument({
+  final attributes = AttributesArgument({
     Attributes.name,
     Attributes.image,
     ...query.attributes,
   });
-  final materials = await ref.watch(materialsProvider(argument).future);
+  final materials = await ref.watch(materialsProvider(attributes).future);
   final attributesById = await ref.watch(attributesProvider.future);
   return materials
       .where((material) => query.matches(material, attributesById))

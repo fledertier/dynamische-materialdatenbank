@@ -1,29 +1,7 @@
-import 'package:dynamische_materialdatenbank/search/search_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute_provider.dart';
-import '../constants.dart';
-import '../filter/filter_provider.dart';
-import '../filter/filter_service.dart';
-import '../search/search_service.dart';
-import '../types.dart';
-
-// todo: delete this
-final filteredMaterialsProvider = FutureProvider((ref) async {
-  final query = ref.watch(searchProvider);
-  final filterOptions = ref.watch(filterOptionsProvider);
-  final attributes = AttributesArgument({
-    Attributes.name,
-    if (query.isNotEmpty) Attributes.description,
-    ...filterOptions.keys,
-  });
-  var materials = await ref.watch(materialsProvider(attributes).future);
-  materials = ref
-      .read(searchServiceProvider)
-      .search(materials, attributes.attributes, query);
-  materials = ref.read(filterServiceProvider).filter(materials, filterOptions);
-  return materials;
-});
 
 final materialsProvider = FutureProvider.family((
   ref,
