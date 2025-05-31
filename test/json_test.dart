@@ -277,13 +277,6 @@ void main() {
         "nameEn": "Components",
         "id": "components",
       },
-      "weight": {
-        "id": "weight",
-        "required": false,
-        "nameEn": "Weight",
-        "nameDe": "Gewicht",
-        "type": {"id": "number", "unitType": "mass"},
-      },
     };
 
     final shortened = original.removeKeys({"required", "multiline", "nameEn"});

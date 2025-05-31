@@ -43,7 +43,6 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
       if (Random().nextBool()) Attributes.biodegradable: Random().nextBool(),
       if (Random().nextBool()) Attributes.biobased: Random().nextBool(),
       if (Random().nextBool()) Attributes.manufacturer: randomManufacturer(),
-      if (Random().nextBool()) Attributes.weight: randomWeight(),
     };
 
     updateMaterial(material);

@@ -26,7 +26,6 @@ abstract class Attributes {
   static const biobased = "biobased";
   static const manufacturer = "manufacturer";
   static const manufacturerName = "name-1";
-  static const weight = "weight";
   static const lightTransmission = "light transmission";
   static const lightAbsorption = "light absorption";
   static const lightReflection = "light reflection";

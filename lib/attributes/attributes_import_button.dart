@@ -290,11 +290,4 @@ const _attributes = {
     "nameEn": "Components",
     "id": "components",
   },
-  "weight": {
-    "id": "weight",
-    "required": false,
-    "nameEn": "Weight",
-    "nameDe": "Gewicht",
-    "type": {"id": "number", "unitType": "mass"},
-  },
 };

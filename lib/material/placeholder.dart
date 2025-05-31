@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
@@ -36,12 +35,6 @@ Json randomManufacturer() {
           valueDe: 'Manufacturer ${random.nextInt(10)}',
         ).toJson(),
   };
-}
-
-Json randomWeight() {
-  final random = Random();
-  final weight = double.parse((random.nextDouble() * 100).toStringAsFixed(2));
-  return UnitNumber(value: weight, displayUnit: 'kg').toJson();
 }
 
 const randomMaterialNames = [
