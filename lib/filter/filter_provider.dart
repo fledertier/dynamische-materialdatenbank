@@ -38,11 +38,11 @@ final filterQueryProvider = Provider((ref) {
               options[Attributes.manufacturer][Attributes.manufacturerName],
         ),
 
-      if (options[Attributes.weight] is double)
+      if (options[Attributes.density] != null)
         Condition(
-          attribute: Attributes.weight,
+          attribute: Attributes.density,
           operator: Operator.lessThan,
-          parameter: options[Attributes.weight],
+          parameter: options[Attributes.density],
         ),
     ],
   );

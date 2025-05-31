@@ -15,22 +15,22 @@ class SliderFilterOption extends ConsumerWidget {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
     final extrema = ref.watch(valuesExtremaProvider(attribute)).value;
-    final minWeight = extrema?.min ?? 0;
-    final maxWeight = extrema?.max ?? 1;
-    final weight = options[attribute]?.clamp(minWeight, maxWeight) ?? maxWeight;
+    final minValue = extrema?.min ?? 0;
+    final maxValue = extrema?.max ?? 1;
+    final value = options[attribute]?.clamp(minValue, maxValue) ?? maxValue;
     final attributeType =
         ref.watch(attributeProvider(attribute)).value?.type
             as NumberAttributeType?;
     final unitType = attributeType?.unitType;
 
     return Slider(
-      label: '${weight.toStringAsFixed(1)} ${unitType?.base}',
-      min: minWeight,
-      max: maxWeight,
-      value: weight,
+      label: '${value.toStringAsFixed(1)} ${unitType?.base}',
+      min: minValue.toDouble(),
+      max: maxValue.toDouble(),
+      value: value,
       onChanged: (value) {
         optionsNotifier.updateWith({
-          attribute: value != maxWeight ? value : null,
+          attribute: value != maxValue ? value : null,
         });
       },
     );

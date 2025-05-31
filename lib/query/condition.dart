@@ -25,7 +25,7 @@ class Condition extends ConditionNode {
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    var value = getJsonAttributeValue(material, attributesById, attribute!);
+    var value = getAttributeValue(material, attributesById, attribute!);
     value = switch (value) {
       TranslatableText() => value.valueDe,
       UnitNumber() => value.value,

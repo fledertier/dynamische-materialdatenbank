@@ -27,9 +27,9 @@ class FiltersAndSearch extends ConsumerWidget {
       alignment: Alignment.topLeft,
       curve: Curves.easeOutCubic,
       child:
-      querySource == QuerySource.searchAndFilter
-          ? Filters(onClose: onClose)
-          : AdvancedSearch(onClose: onClose),
+          querySource == QuerySource.searchAndFilter
+              ? Filters(onClose: onClose)
+              : AdvancedSearch(onClose: onClose),
     );
   }
 }
@@ -41,9 +41,7 @@ class Filters extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attributes = ref
-        .watch(attributesProvider)
-        .value ?? {};
+    final attributes = ref.watch(attributesProvider).value ?? {};
 
     return SideSheet(
       title: Text('Filters'),
@@ -66,9 +64,7 @@ class Filters extends ConsumerWidget {
           icon: Icon(Icons.auto_awesome),
           label: Text('Advanced search'),
           onPressed: () {
-            ref
-                .read(querySourceProvider.notifier)
-                .state =
+            ref.read(querySourceProvider.notifier).state =
                 QuerySource.advancedSearch;
           },
         ),
@@ -90,9 +86,9 @@ class Filters extends ConsumerWidget {
             child: ManufacturerDropdownMenuFilterOption(),
           ),
           Labeled(
-            label: LoadingText(attributes[Attributes.weight]?.name),
+            label: LoadingText(attributes[Attributes.density]?.name),
             gap: 6,
-            child: SliderFilterOption(Attributes.weight),
+            child: SliderFilterOption(Attributes.density),
           ),
         ],
       ),

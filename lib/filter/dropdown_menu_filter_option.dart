@@ -1,9 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../attributes/attribute_provider.dart';
 import 'filter_provider.dart';
 
 class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
@@ -16,7 +17,7 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
     final manufacturers =
         ref.watch(valuesProvider(Attributes.manufacturer)).value;
     final suggestions = manufacturers?.values.toSet().sortedBy(
-      (manufacturer) => manufacturer[Attributes.manufacturerName] as String,
+      (manufacturer) => TranslatableText.fromJson(manufacturer).value,
     );
     return DropdownMenu(
       inputDecorationTheme: InputDecorationTheme(
@@ -32,7 +33,10 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
         ...?suggestions?.map(
           (suggestion) => DropdownMenuEntry(
             value: suggestion,
-            label: suggestion[Attributes.manufacturerName],
+            label:
+                TranslatableText.fromJson(
+                  suggestion[Attributes.manufacturerName],
+                ).value,
           ),
         ),
       ],

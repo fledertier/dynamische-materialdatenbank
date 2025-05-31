@@ -5,8 +5,8 @@ import '../material/attribute/default/country/country.dart';
 import '../material/attribute/default/number/unit_number.dart';
 import '../material/attribute/default/text/translatable_text.dart';
 
-dynamic fromJson(dynamic json, AttributeType type) {
-  if (json == null) {
+dynamic fromJson(dynamic json, AttributeType? type) {
+  if (json == null || type == null) {
     return null;
   }
   return switch (type) {
@@ -19,7 +19,7 @@ dynamic fromJson(dynamic json, AttributeType type) {
     ObjectAttributeType() => objectFromJson(json, type),
     _ =>
       throw UnimplementedError(
-        "fromJson() for attribute type '$type' is implemented",
+        "fromJson() for attribute type '$type' not implemented",
       ),
   };
 }
@@ -35,9 +35,7 @@ Json objectFromJson(Json json, ObjectAttributeType type) {
 
   for (final attribute in attributes) {
     final value = json[attribute.id];
-    if (value != null) {
-      object[attribute.id] = fromJson(value, attribute.type);
-    }
+    object[attribute.id] = fromJson(value, attribute.type);
   }
   return object;
 }

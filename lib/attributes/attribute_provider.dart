@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,7 @@ import 'attributes_provider.dart';
 class Extrema {
   const Extrema({required this.min, required this.max});
 
-  final double min, max;
+  final num min, max;
 }
 
 final valuesExtremaProvider = FutureProvider.family((
@@ -19,7 +20,9 @@ final valuesExtremaProvider = FutureProvider.family((
   String attribute,
 ) async {
   final values = await ref.watch(valuesProvider(attribute).future);
-  final numbers = values.values.map((value) => value['value'] as double);
+  final numbers = values.values.map(
+    (value) => UnitNumber.fromJson(value).value,
+  );
   if (numbers.isEmpty) {
     return null;
   }
@@ -54,7 +57,10 @@ class AttributesArgument {
   }
 }
 
-final attributeProvider = FutureProvider.family((ref, String? attributeId) async {
+final attributeProvider = FutureProvider.family((
+  ref,
+  String? attributeId,
+) async {
   final attributesById = await ref.watch(attributesProvider.future);
   return getAttribute(attributesById, attributeId);
 });

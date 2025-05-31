@@ -1,7 +1,19 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
+
+dynamic getAttributeValue(
+  Json material,
+  Map<String, Attribute>? attributesById,
+  String attributeId,
+) {
+  final json = getJsonAttributeValue(material, attributesById, attributeId);
+  final attribute = getAttribute(attributesById, attributeId);
+
+  return fromJson(json, attribute?.type);
+}
 
 Attribute? getAttribute(
   Map<String, Attribute>? attributesById,

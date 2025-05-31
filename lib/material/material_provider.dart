@@ -104,17 +104,9 @@ final jsonValueProvider = Provider.family((ref, AttributeArgument arg) {
 
 final valueProvider = Provider.family((ref, AttributeArgument arg) {
   final json = ref.watch(jsonValueProvider(arg));
-  if (json == null) {
-    return null;
-  }
-
   final attribute = ref.watch(attributeProvider(arg.attributeId)).value;
-  final type = attribute?.type;
-  if (type == null) {
-    return null;
-  }
 
-  return fromJson(json, type);
+  return fromJson(json, attribute?.type);
 });
 
 class AttributeArgument {
