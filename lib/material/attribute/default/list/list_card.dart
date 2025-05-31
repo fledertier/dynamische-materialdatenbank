@@ -2,7 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
@@ -52,16 +52,12 @@ class _ListCardState extends ConsumerState<ListCard> {
     return AttributeCard(
       columns: widget.columns,
       label: AttributeLabel(attributeId: widget.attributeId),
-      title: ListField(
+      title: ListAttributeField(
         attributeId: widget.attributeId,
         list: list,
-        onChanged: (list, update) {
+        onChanged: (list) {
           final json = toJson(list, listType);
-          if (update == ListUpdateType.update) {
-            updateDebounced(json);
-          } else {
-            updateImmediately(json);
-          }
+          updateDebounced(json);
         },
       ),
     );
@@ -71,12 +67,12 @@ class _ListCardState extends ConsumerState<ListCard> {
     debouncer.debounce(
       duration: const Duration(milliseconds: 1000),
       onDebounce: () {
-        updateImmediately(json);
+        update(json);
       },
     );
   }
 
-  void updateImmediately(List json) {
+  void update(List json) {
     ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       widget.attributeId: json,
     });

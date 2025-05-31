@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'country/country.dart';
 import 'country/country_attribute_field.dart';
+import 'list/list_attribute_field.dart';
 import 'number/number_attribute_field.dart';
 import 'number/unit_number.dart';
 import 'text/text_attribute_field.dart';
@@ -22,7 +23,7 @@ class AttributeField extends ConsumerWidget {
 
   final String attributeId;
   final dynamic value;
-  final ValueChanged<dynamic>? onChanged;
+  final ValueChanged? onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,16 +55,21 @@ class AttributeField extends ConsumerWidget {
           onChanged: onChanged,
         );
       case AttributeType.country:
-        final country = value as Country?;
         return CountryAttributeField(
           attributeId: attributeId,
-          country: country,
+          country: value as Country?,
+          onChanged: onChanged,
+        );
+      case AttributeType.list:
+        return ListAttributeField(
+          attributeId: attributeId,
+          list: value as List? ?? [],
           onChanged: onChanged,
         );
       default:
         if (kDebugMode) {
           throw UnimplementedError(
-            "Attribute type ${attribute.type.id} is not implemented in AttributeField.",
+            "$AttributeType ${attribute.type.id} is not implemented in $AttributeField.",
           );
         }
         return Text(value.toString());

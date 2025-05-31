@@ -12,8 +12,8 @@ import '../attribute_field.dart';
 import '../number/unit_number.dart';
 import '../text/translatable_text.dart';
 
-class ListField extends ConsumerStatefulWidget {
-  const ListField({
+class ListAttributeField extends ConsumerStatefulWidget {
+  const ListAttributeField({
     super.key,
     required this.attributeId,
     required this.list,
@@ -22,13 +22,13 @@ class ListField extends ConsumerStatefulWidget {
 
   final String attributeId;
   final List list;
-  final void Function(List list, ListUpdateType update)? onChanged;
+  final void Function(List value)? onChanged;
 
   @override
-  ConsumerState<ListField> createState() => _ListFieldState();
+  ConsumerState<ListAttributeField> createState() => _ListFieldState();
 }
 
-class _ListFieldState extends ConsumerState<ListField> {
+class _ListFieldState extends ConsumerState<ListAttributeField> {
   late List list = List.from(widget.list);
 
   @override
@@ -110,19 +110,21 @@ class _ListFieldState extends ConsumerState<ListField> {
       AttributeType.country => null,
       _ => null,
     };
-    list.add(value);
-    widget.onChanged?.call(list, ListUpdateType.add);
+    setState(() {
+      list.add(value);
+    });
+    widget.onChanged?.call(list);
   }
 
   void updateItem(int index, dynamic value) {
     list[index] = value;
-    widget.onChanged?.call(list, ListUpdateType.update);
+    widget.onChanged?.call(list);
   }
 
   void removeItem(int index) {
-    list.removeAt(index);
-    widget.onChanged?.call(list, ListUpdateType.remove);
+    setState(() {
+      list.removeAt(index);
+    });
+    widget.onChanged?.call(list);
   }
 }
-
-enum ListUpdateType { add, update, remove }

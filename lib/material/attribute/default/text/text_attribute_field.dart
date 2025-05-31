@@ -42,7 +42,7 @@ class TextAttributeField extends ConsumerWidget {
       enabled: edit,
       style: (textStyle ?? defaultTextStyle)?.copyWith(fontFamily: 'Lexend'),
       decoration: InputDecoration.collapsed(
-        hintText: otherLanguageText ?? attribute?.name,
+        hintText: otherLanguageText ?? attribute?.name ?? 'Text',
       ),
       maxLines: multiline ? null : 1,
       onChanged: (value) {
