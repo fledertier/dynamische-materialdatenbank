@@ -72,11 +72,11 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
 
     final material = (await doc.get()).data();
 
+    await doc.delete();
+
     if (material == null) {
       return;
     }
-
-    await doc.delete();
 
     await Future.wait([
       for (final attribute in material.keys)
@@ -84,7 +84,7 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
             .read(firestoreProvider)
             .collection(Collections.values)
             .doc(attribute)
-            .update({arg: FieldValue.delete()}),
+            .set({arg: FieldValue.delete()}, SetOptions(merge: true)),
     ]);
 
     ref.invalidateSelf();

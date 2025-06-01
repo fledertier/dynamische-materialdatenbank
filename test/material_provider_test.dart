@@ -2,7 +2,6 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
-import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
@@ -29,7 +28,7 @@ void main() {
     await container.read(attributesProvider.notifier).updateAttribute(dings);
 
     final materialId = 'material';
-    final material = {Attributes.id: materialId, dings.id: dingsValue};
+    final material = {dings.id: dingsValue};
 
     await container
         .read(materialProvider(materialId).notifier)
@@ -62,7 +61,7 @@ void main() {
     await container.read(attributesProvider.notifier).updateAttribute(dings);
 
     final materialId = 'material';
-    final material = {Attributes.id: materialId, dings.id: dingsValue};
+    final material = {dings.id: dingsValue};
     await container
         .read(materialProvider(materialId).notifier)
         .updateMaterial(material);
@@ -78,7 +77,34 @@ void main() {
     );
   });
 
-  test('delete nested attribute', skip: true, () {});
+  test('delete nested attribute', () async {
+    final blub = Attribute(id: 'blub', type: BooleanAttributeType());
+    final dings = Attribute(
+      id: 'dings',
+      type: ObjectAttributeType(attributes: [blub]),
+    );
+    await container.read(attributesProvider.notifier).updateAttribute(dings);
+
+    final materialId = 'material';
+    final material = {
+      dings.id: {blub.id: true},
+    };
+    await container
+        .read(materialProvider(materialId).notifier)
+        .updateMaterial(material);
+
+    await container
+        .read(attributesProvider.notifier)
+        .deleteAttribute('dings.blub');
+    await expectLater(
+      container.read(materialProvider(materialId).future),
+      completion(containsPair(dings.id, {})),
+    );
+    await expectLater(
+      container.read(jsonValuesProvider(dings.id).future),
+      completion(containsPair(materialId, {})),
+    );
+  });
 
   test('delete list attribute', skip: true, () {});
 
