@@ -15,6 +15,24 @@ dynamic getAttributeValue(
   return fromJson(json, attribute?.type);
 }
 
+dynamic getJsonAttributeValue(
+  Json material,
+  Map<String, Attribute>? attributesById,
+  String attributeId,
+) {
+  final ids = attributeId.split('.');
+  var attribute = attributesById?[ids.firstOrNull];
+  var value = material[ids.firstOrNull];
+  for (final id in ids.skip(1)) {
+    final type = attribute?.type as ObjectAttributeType?;
+    attribute = type?.attributes.firstWhereOrNull(
+      (attribute) => attribute.id == id,
+    );
+    value = value?[id];
+  }
+  return value;
+}
+
 Attribute? getAttribute(
   Map<String, Attribute>? attributesById,
   String? attributeId,
@@ -34,24 +52,6 @@ Attribute? getAttribute(
     }
   }
   return attribute;
-}
-
-dynamic getJsonAttributeValue(
-  Json material,
-  Map<String, Attribute>? attributesById,
-  String attributeId,
-) {
-  final ids = attributeId.split('.');
-  var attribute = attributesById?[ids.firstOrNull];
-  var value = material[ids.firstOrNull];
-  for (final id in ids.skip(1)) {
-    final type = attribute?.type as ObjectAttributeType?;
-    attribute = type?.attributes.firstWhereOrNull(
-      (attribute) => attribute.id == id,
-    );
-    value = value?[id];
-  }
-  return value;
 }
 
 extension AttributeIdExtension on String {
