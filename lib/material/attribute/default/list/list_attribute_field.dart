@@ -17,11 +17,13 @@ class ListAttributeField extends ConsumerStatefulWidget {
     super.key,
     required this.attributeId,
     required this.list,
+    this.isRoot = false,
     this.onChanged,
   });
 
   final String attributeId;
   final List list;
+  final bool isRoot;
   final void Function(List value)? onChanged;
 
   @override
@@ -67,6 +69,7 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
             child: AttributeField(
               attributeId: itemAttributeId,
               value: list.elementAtOrNull(index),
+              isRoot: widget.isRoot,
               onChanged: (value) {
                 updateItem(index, value);
               },

@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
@@ -11,12 +12,10 @@ class ObjectAttributeForm extends ConsumerStatefulWidget {
     super.key,
     required this.attributeId,
     required this.controller,
-    required this.onSave,
   });
 
   final String attributeId;
   final ValueNotifier<Json?> controller;
-  final void Function(Json? object) onSave;
 
   @override
   ConsumerState<ObjectAttributeForm> createState() =>
@@ -28,9 +27,24 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
   late final _controller = widget.controller;
   late final _initialController = ValueNotifier(widget.controller.value);
 
+  Json? objectJson;
+
+  @override
+  void initState() {
+    super.initState();
+    getObjectType().then((type) {
+      if (type == null) {
+        return;
+      }
+      objectJson = toJson(_controller.value, type);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref
+        .watch(attributeProvider(widget.attributeId))
+        .value;
 
     if (attribute == null) {
       return const SizedBox();
@@ -57,15 +71,22 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
                     if (attribute.name != null)
                       Text(
                         attribute.name!,
-                        style: TextTheme.of(context).labelMedium,
+                        style: TextTheme
+                            .of(context)
+                            .labelMedium,
                       ),
                     AttributeField(
                       attributeId: widget.attributeId.add(attribute.id),
                       value: _controller.value?[attribute.id],
-                      onChanged: (value) {
-                        debugPrint(
-                          '${widget.attributeId.add(attribute.id)} changed to $value',
+                      onChanged: (attributeValue) {
+                        final attributeJson = toJson(
+                          attributeValue,
+                          attribute.type,
                         );
+                        objectJson = {
+                          ...?objectJson,
+                          attribute.id: attributeJson,
+                        };
                       },
                     ),
                   ],
@@ -77,22 +98,27 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
     );
   }
 
-  Future<void> save() async {
-    final attribute = await submit();
-    if (attribute != null) {
-      widget.onSave(attribute);
+  bool validate() {
+    return _form.currentState!.validate();
+  }
+
+  Future<Json?> submit() async {
+    final type = await getObjectType();
+    if (type == null) {
+      return null;
     }
+    return fromJson(objectJson, type);
   }
 
   bool get hasChanges {
     return _controller != _initialController;
   }
 
-  Future<Json?> submit() async {
-    if (!_form.currentState!.validate()) {
-      return null;
-    }
-    return null; // todo
+  Future<ObjectAttributeType?> getObjectType() async {
+    final attribute = await ref.read(
+      attributeProvider(widget.attributeId).future,
+    );
+    return attribute?.type as ObjectAttributeType?;
   }
 
   @override

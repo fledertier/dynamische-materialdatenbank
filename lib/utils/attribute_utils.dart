@@ -57,6 +57,8 @@ Attribute? getAttribute(
 extension AttributeIdExtension on String {
   String get topLevel => split('.').first;
 
+  int get levels => split('.').length;
+
   String add(String id) {
     return [this, id].join('.');
   }

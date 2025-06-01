@@ -49,7 +49,9 @@ class _ObjectCardState extends ConsumerState<ObjectCard> {
       title: ObjectAttributeField(
         attributeId: widget.attributeId,
         object: object,
+        isRoot: true,
         onChanged: (object) {
+          print('SAVE'); // todo: why is this not called?
           debouncer.debounce(
             duration: Duration(milliseconds: 1000),
             onDebounce: () {

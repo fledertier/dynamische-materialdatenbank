@@ -24,11 +24,11 @@ class ObjectAttributeDialog extends ConsumerStatefulWidget {
 }
 
 class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<ObjectAttributeFormState>();
 
   late final controller = ValueNotifier<Json?>(widget.initialObject);
 
-  FormState get form => formKey.currentState!;
+  ObjectAttributeFormState get form => formKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,8 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
               BackButton(
                 color: ColorScheme.of(context).onSurface,
                 onPressed: () async {
-                  // todo
-                  // final value = await form.submit();
-                  final value = null;
-                  if (value != null) {
-                    Navigator.of(context).pop(value);
-                  }
+                  save();
+                  Navigator.of(context).pop();
                 },
               ),
             Text(widget.initialObject != null ? "Edit $name" : "Create $name"),
@@ -66,7 +62,6 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
             key: formKey,
             attributeId: widget.attributeId,
             controller: controller,
-            onSave: widget.onSave,
           ),
         ),
       ),
@@ -81,7 +76,10 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
           listenable: controller,
           builder: (context, child) {
             return TextButton(
-              onPressed: submit,
+              onPressed: () async {
+                await save();
+                context.pop();
+              },
               child: Text(widget.initialObject != null ? "Save" : "Create"),
             );
           },
@@ -90,12 +88,12 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
     );
   }
 
-  submit() async {
-    // todo
-    // final attribute = await form.submit();
-    // if (attribute != null) {
-    //   widget.onSave(attribute);
-    // }
+  Future<void> save() async {
+    if (!form.validate()) {
+      return;
+    }
+    final object = await form.submit();
+    widget.onSave(object);
   }
 
   @override
@@ -109,50 +107,32 @@ Future<Json?> showObjectAttributeDialog({
   required BuildContext context,
   required String attributeId,
   Json? initialObject,
+  bool isRoot = false,
   required void Function(Json? value) onSave,
 }) {
-  return showDialog<Json?>(
-    context: context,
-    builder: (context) {
-      return Navigator(
-        onGenerateInitialRoutes: (navigator, initialRoute) {
-          return [
-            PageRouteBuilder<Json?>(
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return ObjectAttributeDialog(
-                  attributeId: attributeId,
-                  initialObject: initialObject,
-                  onSave: onSave,
-                );
-              },
-            ),
-          ];
+  final pageRoute = PageRouteBuilder<Json>(
+    transitionDuration: Duration.zero,
+    reverseTransitionDuration: Duration.zero,
+    barrierDismissible: !isRoot,
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return ObjectAttributeDialog(
+        attributeId: attributeId,
+        initialObject: initialObject,
+        onSave: (value) {
+          onSave(value);
         },
       );
     },
   );
-}
-
-Future<Json?> showNestedObjectAttributeDialog({
-  required BuildContext context,
-  required String materialId,
-  required String attributeId,
-  Json? initialValue,
-  required void Function(Json? value) onSave,
-}) {
-  return Navigator.of(context).push(
-    PageRouteBuilder(
-      transitionDuration: Duration.zero,
-      reverseTransitionDuration: Duration.zero,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return ObjectAttributeDialog(
-          attributeId: attributeId,
-          initialObject: initialValue,
-          onSave: onSave,
+  if (isRoot) {
+    return showDialog<Json>(
+      context: context,
+      builder: (context) {
+        return Navigator(
+          onGenerateInitialRoutes: (navigator, initialRoute) => [pageRoute],
         );
       },
-    ),
-  );
+    );
+  }
+  return Navigator.of(context).push(pageRoute);
 }

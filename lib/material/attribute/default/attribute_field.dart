@@ -20,11 +20,13 @@ class AttributeField extends ConsumerWidget {
     super.key,
     required this.attributeId,
     required this.value,
+    this.isRoot = false,
     this.onChanged,
   });
 
   final String attributeId;
   final dynamic value;
+  final bool isRoot;
   final ValueChanged? onChanged;
 
   @override
@@ -72,6 +74,7 @@ class AttributeField extends ConsumerWidget {
         return ObjectAttributeField(
           attributeId: attributeId,
           object: value as Json?,
+          isRoot: isRoot,
           onChanged: onChanged,
         );
       default:

@@ -15,12 +15,14 @@ class ObjectAttributeField extends ConsumerStatefulWidget {
     super.key,
     required this.attributeId,
     required this.object,
+    this.isRoot = false,
     this.onChanged,
     this.textStyle,
   });
 
   final String attributeId;
   final Json? object;
+  final bool isRoot;
   final ValueChanged<Json?>? onChanged;
   final TextStyle? textStyle;
 
@@ -73,8 +75,13 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
                     context: context,
                     attributeId: widget.attributeId,
                     initialObject: object,
+                    isRoot: widget.isRoot,
                     onSave: (object) {
+                      print("${widget.attributeId}: $object");
                       widget.onChanged?.call(object);
+                      setState(() {
+                        this.object = object;
+                      });
                     },
                   );
                 }

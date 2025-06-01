@@ -52,6 +52,7 @@ class _ListCardState extends ConsumerState<ListCard> {
       title: ListAttributeField(
         attributeId: widget.attributeId,
         list: list,
+        isRoot: true,
         onChanged: (list) {
           final json = toJson(list, attribute.type);
           debouncer.debounce(

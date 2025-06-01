@@ -40,6 +40,11 @@ class TranslatableText {
   }
 
   @override
+  String toString() {
+    return 'TranslatableText(valueDe: $valueDe, valueEn: $valueEn)';
+  }
+
+  @override
   int get hashCode => Object.hash(valueDe, valueEn);
 
   @override
