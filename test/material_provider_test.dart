@@ -106,38 +106,40 @@ void main() {
     );
   });
 
-  test('delete list attribute', skip: true, () {});
-
-  test('delete nested list attribute', skip: true, () async {
+  test('delete nested list attribute', () async {
+    final blub = Attribute(id: 'blub', type: BooleanAttributeType());
     final dings = Attribute(
       id: 'dings',
       type: ListAttributeType(
         attribute: Attribute(
           id: 'boop',
-          type: ObjectAttributeType(
-            attributes: [Attribute(id: 'blub', type: BooleanAttributeType())],
-          ),
+          type: ObjectAttributeType(attributes: [blub]),
         ),
       ),
     );
     await container.read(attributesProvider.notifier).updateAttribute(dings);
 
+    final materialId = 'material';
+    final material = {
+      dings.id: [
+        {blub.id: true},
+        {blub.id: false},
+      ],
+    };
+    await container
+        .read(materialProvider(materialId).notifier)
+        .updateMaterial(material);
+
     await container
         .read(attributesProvider.notifier)
         .deleteAttribute('dings.boop.blub');
-
-    final dingsWithoutBlub = Attribute(
-      id: 'dings',
-      type: ListAttributeType(
-        attribute: Attribute(
-          id: 'boop',
-          type: ObjectAttributeType(attributes: []),
-        ),
-      ),
+    await expectLater(
+      container.read(materialProvider(materialId).future),
+      completion(containsPair(dings.id, [{}, {}])),
     );
     await expectLater(
-      container.read(attributesProvider.future),
-      completion(containsPair(dings.id, dingsWithoutBlub)),
+      container.read(jsonValuesProvider(dings.id).future),
+      completion(containsPair(materialId, [{}, {}])),
     );
   });
 }

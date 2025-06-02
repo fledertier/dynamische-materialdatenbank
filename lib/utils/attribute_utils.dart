@@ -24,11 +24,14 @@ dynamic getJsonAttributeValue(
   var attribute = attributesById?[ids.firstOrNull];
   var value = material[ids.firstOrNull];
   for (final id in ids.skip(1)) {
-    final type = attribute?.type as ObjectAttributeType?;
-    attribute = type?.attributes.firstWhereOrNull(
+    attribute = attribute?.childAttributes.firstWhereOrNull(
       (attribute) => attribute.id == id,
     );
-    value = value?[id];
+    if (value is List) {
+      value = value.map((item) => item[id]).toList();
+    } else {
+      value = value?[id];
+    }
   }
   return value;
 }
@@ -40,18 +43,22 @@ Attribute? getAttribute(
   final ids = attributeId?.split('.') ?? [];
   var attribute = attributesById?[ids.firstOrNull];
   for (final id in ids.skip(1)) {
-    final type = attribute?.type;
-    if (type == null) {
-      return null;
-    } else if (type is ObjectAttributeType) {
-      attribute = type.attributes.firstWhereOrNull(
-        (attribute) => attribute.id == id,
-      );
-    } else if (type is ListAttributeType) {
-      attribute = type.attribute;
-    }
+    attribute = attribute?.childAttributes.firstWhereOrNull(
+      (attribute) => attribute.id == id,
+    );
   }
   return attribute;
+}
+
+extension AttributeChildExtension on Attribute {
+  List<Attribute> get childAttributes {
+    if (type case ObjectAttributeType(:final attributes)) {
+      return attributes;
+    } else if (type case ListAttributeType(:final attribute)) {
+      return [attribute];
+    }
+    return [];
+  }
 }
 
 extension AttributeIdExtension on String {

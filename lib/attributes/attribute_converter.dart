@@ -9,13 +9,16 @@ dynamic fromJson(dynamic json, AttributeType? type) {
   if (json == null || type == null) {
     return null;
   }
+  if (json is List) {
+    final itemType = type is ListAttributeType ? type.attribute.type : type;
+    return listFromJson(json, itemType);
+  }
   return switch (type) {
     TextAttributeType() => TranslatableText.fromJson(json),
     NumberAttributeType() => UnitNumber.fromJson(json),
     BooleanAttributeType() => json as bool,
     CountryAttributeType() => Country.fromJson(json),
     UrlAttributeType() => Uri.tryParse(json as String),
-    ListAttributeType() => listFromJson(json, type),
     ObjectAttributeType() => objectFromJson(json, type),
     _ =>
       throw UnimplementedError(
@@ -24,16 +27,14 @@ dynamic fromJson(dynamic json, AttributeType? type) {
   };
 }
 
-List listFromJson(List json, ListAttributeType type) {
-  final itemType = type.attribute.type;
+List listFromJson(List json, AttributeType itemType) {
   return json.map((json) => fromJson(json, itemType)).toList();
 }
 
 Json objectFromJson(Json json, ObjectAttributeType type) {
-  final attributes = type.attributes;
   final object = Json();
 
-  for (final attribute in attributes) {
+  for (final attribute in type.attributes) {
     final value = json[attribute.id];
     object[attribute.id] = fromJson(value, attribute.type);
   }
@@ -65,10 +66,9 @@ List listToJson(List list, ListAttributeType type) {
 }
 
 Json objectToJson(Json object, ObjectAttributeType type) {
-  final attributes = type.attributes;
   final json = Json();
 
-  for (final attribute in attributes) {
+  for (final attribute in type.attributes) {
     final value = object[attribute.id];
     json[attribute.id] = toJson(value, attribute.type);
   }

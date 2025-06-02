@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
@@ -189,16 +189,5 @@ class AttributeDetails extends ConsumerWidget {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Id copied to clipboard')));
-  }
-}
-
-extension on Attribute {
-  List<Attribute> get childAttributes {
-    if (type case ObjectAttributeType(:final attributes)) {
-      return attributes;
-    } else if (type case ListAttributeType(:final attribute)) {
-      return [attribute];
-    }
-    return [];
   }
 }
