@@ -47,7 +47,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
               BackButton(
                 color: ColorScheme.of(context).onSurface,
                 onPressed: () async {
-                  save();
+                  await save();
                   Navigator.of(context).pop();
                 },
               ),
@@ -62,6 +62,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
             key: formKey,
             attributeId: widget.attributeId,
             controller: controller,
+            onSave: widget.onSave,
           ),
         ),
       ),
@@ -90,6 +91,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
   Future<void> save() async {
     if (!form.validate()) {
+      debugPrint("Form for ${widget.attributeId} is not valid");
       return;
     }
     final object = await form.submit();
@@ -118,9 +120,7 @@ Future<Json?> showObjectAttributeDialog({
       return ObjectAttributeDialog(
         attributeId: attributeId,
         initialObject: initialObject,
-        onSave: (value) {
-          onSave(value);
-        },
+        onSave: onSave,
       );
     },
   );

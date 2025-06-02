@@ -17,6 +17,7 @@ class ObjectAttributeField extends ConsumerStatefulWidget {
     required this.object,
     this.isRoot = false,
     this.onChanged,
+    this.onSave,
     this.textStyle,
   });
 
@@ -24,6 +25,7 @@ class ObjectAttributeField extends ConsumerStatefulWidget {
   final Json? object;
   final bool isRoot;
   final ValueChanged<Json?>? onChanged;
+  final ValueChanged<Json?>? onSave;
   final TextStyle? textStyle;
 
   @override
@@ -77,11 +79,10 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
                     initialObject: object,
                     isRoot: widget.isRoot,
                     onSave: (object) {
-                      print("${widget.attributeId}: $object");
-                      widget.onChanged?.call(object);
                       setState(() {
                         this.object = object;
                       });
+                      widget.onSave?.call(object);
                     },
                   );
                 }

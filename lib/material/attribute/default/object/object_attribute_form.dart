@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
@@ -12,10 +13,12 @@ class ObjectAttributeForm extends ConsumerStatefulWidget {
     super.key,
     required this.attributeId,
     required this.controller,
+    this.onSave,
   });
 
   final String attributeId;
   final ValueNotifier<Json?> controller;
+  final void Function(Json? object)? onSave;
 
   @override
   ConsumerState<ObjectAttributeForm> createState() =>
@@ -42,9 +45,7 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final attribute = ref
-        .watch(attributeProvider(widget.attributeId))
-        .value;
+    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
 
     if (attribute == null) {
       return const SizedBox();
@@ -71,22 +72,18 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
                     if (attribute.name != null)
                       Text(
                         attribute.name!,
-                        style: TextTheme
-                            .of(context)
-                            .labelMedium,
+                        style: TextTheme.of(context).labelMedium,
                       ),
                     AttributeField(
                       attributeId: widget.attributeId.add(attribute.id),
                       value: _controller.value?[attribute.id],
-                      onChanged: (attributeValue) {
-                        final attributeJson = toJson(
-                          attributeValue,
-                          attribute.type,
-                        );
-                        objectJson = {
-                          ...?objectJson,
-                          attribute.id: attributeJson,
-                        };
+                      onChanged: (value) {
+                        updateAttribute(attribute, value);
+                      },
+                      onSave: (value) {
+                        updateAttribute(attribute, value);
+                        final object = fromJson(objectJson, objectType);
+                        widget.onSave?.call(object);
                       },
                     ),
                   ],
@@ -96,6 +93,11 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
         },
       ),
     );
+  }
+
+  void updateAttribute(Attribute attribute, dynamic value) {
+    final json = toJson(value, attribute.type);
+    objectJson = {...?objectJson, attribute.id: json};
   }
 
   bool validate() {

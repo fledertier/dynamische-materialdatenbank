@@ -22,12 +22,14 @@ class AttributeField extends ConsumerWidget {
     required this.value,
     this.isRoot = false,
     this.onChanged,
+    this.onSave,
   });
 
   final String attributeId;
   final dynamic value;
   final bool isRoot;
   final ValueChanged? onChanged;
+  final ValueChanged? onSave;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,6 +78,7 @@ class AttributeField extends ConsumerWidget {
           object: value as Json?,
           isRoot: isRoot,
           onChanged: onChanged,
+          onSave: onSave,
         );
       default:
         if (kDebugMode) {
