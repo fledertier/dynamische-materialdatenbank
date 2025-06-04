@@ -22,7 +22,7 @@ class OriginCountryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countries =
+    final dings =
         ref.watch(
               valueProvider(
                 AttributeArgument(
@@ -31,8 +31,8 @@ class OriginCountryCard extends ConsumerWidget {
                 ),
               ),
             )
-            as List<Country>? ??
-        [Country.fromCode('se')];
+            as List?;
+    final countries = [Country.fromCode('se')];
 
     return AttributeCard(
       columns: 2,

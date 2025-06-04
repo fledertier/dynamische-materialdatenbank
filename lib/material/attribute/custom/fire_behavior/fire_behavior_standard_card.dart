@@ -28,7 +28,7 @@ class FireBehaviorStandardCard extends ConsumerStatefulWidget {
 
 class _FireBehaviorStandardCardState
     extends ConsumerState<FireBehaviorStandardCard> {
-  late TextEditingController? controller;
+  // late TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +50,12 @@ class _FireBehaviorStandardCardState
     return AttributeCard(
       columns: 3,
       label: AttributeLabel(attributeId: Attributes.fireBehaviorStandard),
-      title: TextField(
+      title: TextFormField(
         enabled: edit,
         style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'z.B. B-s2,d1'),
-        controller: controller ??= TextEditingController(text: classification),
+        initialValue: classification,
+        // controller: controller ??= TextEditingController(text: classification),
         onChanged: (value) {
           ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
             {Attributes.fireBehaviorStandard: value},
@@ -67,7 +68,7 @@ class _FireBehaviorStandardCardState
 
   @override
   void dispose() {
-    controller?.dispose();
+    // controller?.dispose();
     super.dispose();
   }
 }

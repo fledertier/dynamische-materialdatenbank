@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-final editModeProvider = StateProvider.autoDispose((ref) => true);
+final editModeProvider = StateProvider.autoDispose((ref) => false);
 
 class EditModeButton extends ConsumerWidget {
   const EditModeButton({super.key});
