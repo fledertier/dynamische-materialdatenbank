@@ -12,13 +12,10 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final options = ref.watch(filterOptionsProvider);
-    final optionsNotifier = ref.read(filterOptionsProvider.notifier);
+    final filterOptions = ref.watch(filterOptionsProvider);
     final values = ref.watch(valuesProvider(Attributes.manufacturer)).value;
-    final manufacturers = values?.values.toSet().sortedBy((manufacturer) {
-      return (manufacturer[Attributes.manufacturerName] as TranslatableText)
-          .value;
-    });
+    final manufacturers = values?.values ?? [];
+
     return DropdownMenu(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -27,21 +24,28 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
       ),
       enableFilter: true,
       expandedInsets: EdgeInsets.zero,
-      menuHeight: 16 + 48 * 4,
+      menuHeight: 16 + 48 * 6,
       dropdownMenuEntries: [
         DropdownMenuEntry(value: null, label: 'Alle'),
-        for (final manufacturer in manufacturers ?? [])
-          DropdownMenuEntry(
-            value: manufacturer,
-            label:
-                (manufacturer[Attributes.manufacturerName] as TranslatableText)
-                    .value,
-          ),
+        for (final name in sortedNames(manufacturers))
+          DropdownMenuEntry(value: name, label: name),
       ],
-      initialSelection: options[Attributes.manufacturer],
+      initialSelection: filterOptions[Attributes.manufacturer],
       onSelected: (manufacturer) {
+        final optionsNotifier = ref.read(filterOptionsProvider.notifier);
         optionsNotifier.updateWith({Attributes.manufacturer: manufacturer});
       },
     );
+  }
+
+  List<String> sortedNames(Iterable<dynamic> manufacturers) {
+    return manufacturers
+        .map((manufacturer) {
+          final name =
+              manufacturer[Attributes.manufacturerName] as TranslatableText;
+          return name.value;
+        })
+        .toSet()
+        .sorted();
   }
 }

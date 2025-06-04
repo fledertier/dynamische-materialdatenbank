@@ -1,6 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
@@ -32,10 +31,7 @@ final filterQueryProvider = Provider((ref) {
           Attributes.manufacturerName,
         ].join('.'),
         operator: Operator.equals,
-        parameter:
-            (options[Attributes.manufacturer][Attributes.manufacturerName]
-                    as TranslatableText)
-                .value,
+        parameter: options[Attributes.manufacturer],
       ),
 
     if (options[Attributes.density] != null)
