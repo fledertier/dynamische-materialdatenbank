@@ -15,8 +15,8 @@ abstract class UnitTypes {
     force,
     length,
     mass,
-    percentage,
     power,
+    proportion,
     temperature,
     time,
     uValue,
@@ -26,7 +26,7 @@ abstract class UnitTypes {
   ];
 
   static final time = UnitType(
-    name: 'time',
+    id: 'time',
     base: 's',
     fromBase: {
       'ms': (t) => t * Duration.millisecondsPerSecond,
@@ -38,22 +38,23 @@ abstract class UnitTypes {
   );
 
   static final length = UnitType(
-    name: 'length',
+    id: 'length',
     base: 'm',
     fromBase: {
       'mm': (l) => l * 1000,
       'cm': (l) => l * 100,
-      'dm': (l) => l * 10,
       'm': (l) => l,
       'km': (l) => l / 1000,
+      'µm': (l) => l * 1e6,
+      'nm': (l) => l * 1e9,
     },
   );
 
   static final mass = UnitType(
-    name: 'mass',
+    id: 'mass',
     base: 'kg',
     fromBase: {
-      'mg': (m) => m * 1000000,
+      'mg': (m) => m * 1e6,
       'g': (m) => m * 1000,
       'kg': (m) => m,
       't': (m) => m / 1000,
@@ -61,7 +62,7 @@ abstract class UnitTypes {
   );
 
   static final temperature = UnitType(
-    name: 'temperature',
+    id: 'temperature',
     base: 'K',
     fromBase: {
       'K': (t) => t,
@@ -76,25 +77,26 @@ abstract class UnitTypes {
   );
 
   static final velocity = UnitType(
-    name: 'velocity',
+    id: 'velocity',
     base: 'm/s',
     fromBase: {
       'm/s': (v) => v * length['m'] / time['s'],
+      'mm/s': (v) => v * length['mm'] / time['s'],
       'km/h': (v) => v * length['km'] / time['h'],
     },
   );
 
   static final acceleration = UnitType(
-    name: 'acceleration',
+    id: 'acceleration',
     base: 'm/s²',
     fromBase: {
       'm/s²': (a) => a * length['m'] / pow(time['s'], 2),
-      'km/h²': (a) => a * length['km'] / pow(time['h'], 2),
+      'mm/s²': (a) => a * length['mm'] / pow(time['s'], 2),
     },
   );
 
   static final force = UnitType(
-    name: 'force',
+    id: 'force',
     base: 'N',
     fromBase: {
       'N': (f) => f * mass['kg'] * acceleration['m/s²'],
@@ -103,67 +105,69 @@ abstract class UnitTypes {
   );
 
   static final energy = UnitType(
-    name: 'energy',
+    id: 'energy',
     base: 'J',
     fromBase: {
       'J': (e) => e * force['N'] * length['m'],
       'kJ': (e) => e * force['N'] * length['m'] / 1000,
+      'MJ': (e) => e * force['N'] * length['m'] / 1e6,
     },
   );
 
   static final power = UnitType(
-    name: 'power',
+    id: 'power',
     base: 'W',
     fromBase: {
       'W': (p) => p * energy['J'] / time['s'],
       'kW': (p) => p * energy['J'] / time['s'] / 1000,
+      'MW': (p) => p * energy['J'] / time['s'] / 1e6,
     },
   );
 
   static final area = UnitType(
-    name: 'area',
+    id: 'area',
     base: 'm²',
     fromBase: {
+      'mm²': (a) => a * pow(length['mm'], 2),
       'cm²': (a) => a * pow(length['cm'], 2),
       'm²': (a) => a * pow(length['m'], 2),
     },
   );
 
   static final volume = UnitType(
-    name: 'volume',
+    id: 'volume',
     base: 'm³',
     fromBase: {
+      'mm³': (v) => v * pow(length['mm'], 3),
       'cm³': (v) => v * pow(length['cm'], 3),
       'm³': (v) => v * pow(length['m'], 3),
-      'l': (v) => v * pow(length['dm'], 3),
+      'l': (v) => v * pow(length['m'], 3) / 1000,
+      'ml': (v) => v * pow(length['m'], 3) / 1e6,
     },
   );
 
   static final arealDensity = UnitType(
-    name: 'arealDensity',
+    id: 'arealDensity',
     base: 'kg/m²',
     fromBase: {
-      'mg/cm²': (a) => a * mass['mg'] / area['cm²'],
-      'g/cm²': (a) => a * mass['g'] / area['cm²'],
-      'mg/m²': (a) => a * mass['mg'] / area['m²'],
+      'g/m²': (a) => a * mass['g'] / area['m²'],
       'kg/m²': (a) => a * mass['kg'] / area['m²'],
+      'mg/cm²': (a) => a * mass['mg'] / area['cm²'],
     },
   );
 
   static final density = UnitType(
-    name: 'density',
+    id: 'density',
     base: 'kg/m³',
     fromBase: {
-      'mg/cm³': (d) => d * mass['mg'] / volume['cm³'],
-      'g/cm³': (d) => d * mass['g'] / volume['cm³'],
       'kg/m³': (d) => d * mass['kg'] / volume['m³'],
-      'mg/l': (d) => d * mass['mg'] / volume['l'],
-      'g/l': (d) => d * mass['g'] / volume['l'],
+      'g/cm³': (d) => d * mass['g'] / volume['cm³'],
+      'g/ml': (d) => d * mass['g'] / volume['ml'],
     },
   );
 
   static final wValue = UnitType(
-    name: 'wValue',
+    id: 'wValue',
     base: 'kg/m²√h',
     fromBase: {
       'kg/m²√s': (w) => w * mass['kg'] / (area['m²'] * sqrt(time['s']) * 60),
@@ -173,13 +177,15 @@ abstract class UnitTypes {
   );
 
   static final uValue = UnitType(
-    name: 'uValue',
+    id: 'uValue',
     base: 'W/m²K',
-    fromBase: {'W/m²K': (u) => u * power['W'] / area['m²'] / temperature['K']},
+    fromBase: {
+      'W/m²K': (u) => u * power['W'] / (area['m²'] * temperature['K']),
+    },
   );
 
-  static final percentage = UnitType(
-    name: 'percentage',
+  static final proportion = UnitType(
+    id: 'proportion',
     base: '%',
     fromBase: {'%': (p) => p, '‰': (p) => p * 10},
   );
@@ -189,7 +195,7 @@ typedef UnitConverter = Map<String, num Function(num)>;
 
 class UnitType {
   UnitType({
-    required this.name,
+    required this.id,
     required this.base,
     required this.fromBase,
     UnitConverter? toBase,
@@ -201,7 +207,7 @@ class UnitType {
     });
   }
 
-  final String name;
+  final String id;
   final String base;
   final UnitConverter fromBase;
   final UnitConverter toBase;
@@ -222,20 +228,20 @@ class UnitType {
     return value;
   }
 
-  dynamic toJson() => name;
+  dynamic toJson() => id;
 
-  static UnitType? maybeFromJson(dynamic name) {
-    return UnitTypes.values.singleWhereOrNull((unit) => unit.name == name);
+  static UnitType? maybeFromJson(dynamic id) {
+    return UnitTypes.values.singleWhereOrNull((unit) => unit.id == id);
   }
 
   @override
-  String toString() => name;
+  String toString() => id;
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => id.hashCode;
 
   @override
   bool operator ==(Object other) {
-    return other is UnitType && name == other.name;
+    return other is UnitType && id == other.id;
   }
 }

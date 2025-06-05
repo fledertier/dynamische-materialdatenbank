@@ -46,7 +46,7 @@ const _attributes = {
   },
   "light reflection": {
     "required": false,
-    "type": {"id": "number", "unitType": "percentage"},
+    "type": {"id": "number", "unitType": "proportion"},
     "nameEn": "Light reflection",
     "id": "light reflection",
     "nameDe": "Lichtreflexion",
@@ -119,7 +119,7 @@ const _attributes = {
     "nameDe": "Lichtabsorption",
     "id": "light absorption",
     "nameEn": "Light absorption",
-    "type": {"unitType": "percentage", "id": "number"},
+    "type": {"unitType": "proportion", "id": "number"},
     "required": false,
   },
   "dings-1": {
@@ -130,7 +130,7 @@ const _attributes = {
     "required": false,
   },
   "light transmission": {
-    "type": {"unitType": "percentage", "id": "number"},
+    "type": {"unitType": "proportion", "id": "number"},
     "id": "light transmission",
     "nameEn": "Light transmission",
     "required": false,
@@ -190,7 +190,7 @@ const _attributes = {
             "nameEn": "Category",
           },
           {
-            "type": {"unitType": "percentage", "id": "number"},
+            "type": {"unitType": "proportion", "id": "number"},
             "id": "share",
             "required": true,
             "nameEn": "Share",
@@ -280,7 +280,7 @@ const _attributes = {
             "id": "share",
             "nameDe": "Anteil",
             "nameEn": "Share",
-            "type": {"id": "number", "unitType": "percentage"},
+            "type": {"id": "number", "unitType": "proportion"},
             "required": true,
           },
         ],

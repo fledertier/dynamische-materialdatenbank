@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:flutter/foundation.dart';
 
 import 'attribute.dart';

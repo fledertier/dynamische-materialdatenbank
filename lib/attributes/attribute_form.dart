@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/units.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +117,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 menuHeight: 300,
                 dropdownMenuEntries: [
                   for (final value in UnitTypes.values)
-                    DropdownMenuEntry(value: value, label: value.name),
+                    DropdownMenuEntry(value: value, label: value.id),
                 ],
                 onSelected: (value) {
                   _controller.unitType.value = value;

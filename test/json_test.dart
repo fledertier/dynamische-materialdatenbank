@@ -29,7 +29,7 @@ void main() {
       },
       "light reflection": {
         "required": false,
-        "type": {"id": "number", "unitType": "percentage"},
+        "type": {"id": "number", "unitType": "proportion"},
         "nameEn": "Light reflection",
         "id": "light reflection",
         "nameDe": "Lichtreflexion",
@@ -102,7 +102,7 @@ void main() {
         "nameDe": "Lichtabsorption",
         "id": "light absorption",
         "nameEn": "Light absorption",
-        "type": {"unitType": "percentage", "id": "number"},
+        "type": {"unitType": "proportion", "id": "number"},
         "required": false,
       },
       "dings-1": {
@@ -113,7 +113,7 @@ void main() {
         "required": false,
       },
       "light transmission": {
-        "type": {"unitType": "percentage", "id": "number"},
+        "type": {"unitType": "proportion", "id": "number"},
         "id": "light transmission",
         "nameEn": "Light transmission",
         "required": false,
@@ -173,7 +173,7 @@ void main() {
                 "nameEn": "Category",
               },
               {
-                "type": {"unitType": "percentage", "id": "number"},
+                "type": {"unitType": "proportion", "id": "number"},
                 "id": "share",
                 "required": true,
                 "nameEn": "Share",
@@ -267,7 +267,7 @@ void main() {
                 "id": "share",
                 "nameDe": "Anteil",
                 "nameEn": "Share",
-                "type": {"id": "number", "unitType": "percentage"},
+                "type": {"id": "number", "unitType": "proportion"},
                 "required": true,
               },
             ],
