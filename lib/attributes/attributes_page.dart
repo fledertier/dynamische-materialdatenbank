@@ -1,14 +1,13 @@
+import 'package:dynamische_materialdatenbank/app/app_scaffold.dart';
+import 'package:dynamische_materialdatenbank/app/header.dart';
+import 'package:dynamische_materialdatenbank/app/navigation.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_details.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_export_button.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_import_button.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_list.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/widgets/sheet.dart';
 import 'package:flutter/material.dart';
-
-import '../app/app_scaffold.dart';
-import '../app/header.dart';
-import '../app/navigation.dart';
-import '../constants.dart';
-import '../widgets/sheet.dart';
-import 'attribute_details.dart';
-import 'attributes_export_button.dart';
-import 'attributes_import_button.dart';
-import 'attributes_list.dart';
 
 class AttributesPage extends StatefulWidget {
   const AttributesPage({super.key});

@@ -1,3 +1,7 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/color/color_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
@@ -7,11 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import '../constants.dart';
-import 'attribute/color/color_provider.dart';
-import 'attribute/default/text/translatable_text.dart';
-import 'material_provider.dart';
 
 class MaterialGrid extends StatelessWidget {
   const MaterialGrid({super.key});

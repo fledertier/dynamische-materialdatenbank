@@ -1,15 +1,14 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_search_bar.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import 'attribute.dart';
-import 'attribute_dialog.dart';
-import 'attribute_search_bar.dart';
-import 'attribute_type.dart';
-import 'attributes_provider.dart';
 
 class AttributesList extends ConsumerStatefulWidget {
   const AttributesList({super.key, required this.selectedAttributeId});
@@ -104,7 +103,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
         await ref.read(attributesProvider.notifier).updateAttribute(attribute);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("Attribute created")));
+        ).showSnackBar(SnackBar(content: Text('Attribute created')));
         widget.selectedAttributeId.value = attribute.id;
       },
     );

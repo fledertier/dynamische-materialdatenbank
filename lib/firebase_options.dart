@@ -60,5 +60,4 @@ class DefaultFirebaseOptions {
     authDomain: 'dynamische-materialdatenbank.firebaseapp.com',
     storageBucket: 'dynamische-materialdatenbank.firebasestorage.app',
   );
-
 }

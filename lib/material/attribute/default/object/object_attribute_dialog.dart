@@ -1,10 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_form.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import 'object_attribute_form.dart';
 
 class ObjectAttributeDialog extends ConsumerStatefulWidget {
   const ObjectAttributeDialog({
@@ -33,7 +32,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
   @override
   Widget build(BuildContext context) {
     final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
-    final name = attribute?.name ?? "Object";
+    final name = attribute?.name ?? 'Object';
     final canPop = Navigator.of(context).canPop();
 
     return AlertDialog(
@@ -51,7 +50,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
                   Navigator.of(context).pop();
                 },
               ),
-            Text(widget.initialObject != null ? "Edit $name" : "Create $name"),
+            Text(widget.initialObject != null ? 'Edit $name' : 'Create $name'),
           ],
         ),
       ),
@@ -81,7 +80,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
                 await save();
                 context.pop();
               },
-              child: Text(widget.initialObject != null ? "Save" : "Create"),
+              child: Text(widget.initialObject != null ? 'Save' : 'Create'),
             );
           },
         ),
@@ -91,7 +90,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
   Future<void> save() async {
     if (!form.validate()) {
-      debugPrint("Form for ${widget.attributeId} is not valid");
+      debugPrint('Form for ${widget.attributeId} is not valid');
       return;
     }
     final object = await form.submit();

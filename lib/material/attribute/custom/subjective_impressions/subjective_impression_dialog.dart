@@ -1,7 +1,6 @@
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'subjective_impression.dart';
 
 class SubjectiveImpressionDialog extends StatefulWidget {
   const SubjectiveImpressionDialog({

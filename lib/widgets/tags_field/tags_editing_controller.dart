@@ -2,9 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_controller.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_field.dart';
+import 'package:dynamische_materialdatenbank/widgets/tags_field/text_or_tag.dart';
 import 'package:flutter/material.dart';
-
-import 'text_or_tag.dart';
 
 class TagsEditingController<T> extends TextEditingController {
   static final placeholder = String.fromCharCode(

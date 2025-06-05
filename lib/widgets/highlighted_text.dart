@@ -21,9 +21,9 @@ class HighlightedText extends StatelessWidget {
     return StyledText(
       text: text.replaceAllMapped(
         RegExp(RegExp.escape(highlighted), caseSensitive: caseSensitive),
-        (match) => "<bold>${match.group(0)}</bold>",
+        (match) => '<bold>${match.group(0)}</bold>',
       ),
-      tags: {"bold": StyledTextTag(style: highlightStyle)},
+      tags: {'bold': StyledTextTag(style: highlightStyle)},
     );
   }
 }

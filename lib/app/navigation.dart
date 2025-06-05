@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import '../constants.dart';
 
 class Navigation extends StatelessWidget {
   static const pages = [Pages.materials, Pages.attributes];
@@ -38,12 +37,12 @@ class Navigation extends StatelessWidget {
       destinations: [
         NavigationRailDestination(
           icon: Icon(Symbols.interests_rounded),
-          label: Text("Materials"),
+          label: Text('Materials'),
           padding: const EdgeInsets.only(top: 8),
         ),
         NavigationRailDestination(
           icon: Icon(Icons.change_history_rounded),
-          label: Text("Attributes"),
+          label: Text('Attributes'),
           padding: const EdgeInsets.only(top: 8),
         ),
       ],

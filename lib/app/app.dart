@@ -1,11 +1,10 @@
+import 'package:dynamische_materialdatenbank/app/router.dart';
+import 'package:dynamische_materialdatenbank/app/theme.dart';
 import 'package:dynamische_materialdatenbank/app/theme_mode.dart';
 import 'package:dynamische_materialdatenbank/user/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'router.dart';
-import 'theme.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});

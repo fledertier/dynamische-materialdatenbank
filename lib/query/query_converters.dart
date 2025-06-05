@@ -1,10 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/query/condition.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
+import 'package:dynamische_materialdatenbank/query/condition_node.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
-
-import '../attributes/attribute_type.dart';
-import '../types.dart';
-import 'condition.dart';
-import 'condition_group.dart';
-import 'condition_node.dart';
 
 extension ConditionGroupConverter on ConditionGroup {
   static ConditionGroup? maybeFromJson(Json? json) {
@@ -49,7 +48,7 @@ extension ConditionNodeConverter on ConditionNode {
     if (json == null) {
       return null;
     }
-    if (json.containsKey("type")) {
+    if (json.containsKey('type')) {
       return ConditionGroupConverter.maybeFromJson(json);
     }
     return ConditionConverter.maybeFromJson(json);

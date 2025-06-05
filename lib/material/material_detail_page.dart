@@ -4,18 +4,17 @@ import 'package:dynamische_materialdatenbank/app/navigation.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_button.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_dialog.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_cards_builder.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_section.dart';
+import 'package:dynamische_materialdatenbank/material/section/section_button.dart';
 import 'package:dynamische_materialdatenbank/widgets/sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'attribute/attribute_card_button.dart';
-import 'attribute/attribute_card_dialog.dart';
-import 'attribute/cards.dart';
-import 'edit_mode_button.dart';
-import 'material_provider.dart';
-import 'section/draggable_cards_builder.dart';
-import 'section/draggable_section.dart';
-import 'section/section_button.dart';
 
 class MaterialDetailPage extends ConsumerStatefulWidget {
   const MaterialDetailPage({super.key, required this.materialId});

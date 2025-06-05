@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:countries_world_map/countries_world_map.dart';
 import 'package:countries_world_map/data/maps/world_map.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/focusable_interactive_viewer.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../../default/country/country.dart';
-import 'focusable_interactive_viewer.dart';
 
 class WorldMap extends StatefulWidget {
   const WorldMap({super.key, required this.highlightedCountries});
@@ -48,14 +47,14 @@ class _WorldMapState extends State<WorldMap> {
 
   List<List> instructionsForCountry(Country country, MapAttributes attributes) {
     return attributes.drawingInstructions
-        .where((e) => e["u"] == country.code.toLowerCase())
-        .map((e) => e["i"] as List)
+        .where((e) => e['u'] == country.code.toLowerCase())
+        .map((e) => e['i'] as List)
         .toList();
   }
 
   List<Offset> extractPositions(List<dynamic> instructions) {
     return instructions
-        .where((instruction) => instruction != "c")
+        .where((instruction) => instruction != 'c')
         .map((instruction) => instruction.substring(1).split(','))
         .map((coordinates) {
           final x = double.parse(coordinates[0]);

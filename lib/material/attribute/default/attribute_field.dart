@@ -1,19 +1,18 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/url/url_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../types.dart';
-import 'country/country.dart';
-import 'country/country_attribute_field.dart';
-import 'list/list_attribute_field.dart';
-import 'number/number_attribute_field.dart';
-import 'number/unit_number.dart';
-import 'text/text_attribute_field.dart';
-import 'text/translatable_text.dart';
-import 'url/url_attribute_field.dart';
 
 class AttributeField extends ConsumerWidget {
   const AttributeField({
@@ -83,7 +82,7 @@ class AttributeField extends ConsumerWidget {
       default:
         if (kDebugMode) {
           throw UnimplementedError(
-            "$AttributeType ${attribute.type.id} is not implemented in $AttributeField.",
+            '$AttributeType ${attribute.type.id} is not implemented in $AttributeField.',
           );
         }
         return Text(value.toString());

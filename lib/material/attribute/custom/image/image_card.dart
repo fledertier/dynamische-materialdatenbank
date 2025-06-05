@@ -4,16 +4,15 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/image/constrained_image.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/image/image_search_service.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/image/web_image.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import '../../../material_provider.dart';
-import 'constrained_image.dart';
-import 'image_search_service.dart';
-import 'web_image.dart';
 
 class ImageCard extends ConsumerStatefulWidget {
   const ImageCard({super.key, required this.materialId, required this.size});
@@ -58,7 +57,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
         .searchImages(name);
     final foundImages =
         result?.images.map((image) {
-          return {"thumbnailLink": image.thumbnailLink, "link": image.link};
+          return {'thumbnailLink': image.thumbnailLink, 'link': image.link};
         }).toList();
 
     if (foundImages?.isNotEmpty ?? false) {
@@ -88,7 +87,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
 
   void setMainImage([int index = 0]) {
     final image = images[index];
-    final url = image["thumbnailLink"] as String? ?? image["link"] as String?;
+    final url = image['thumbnailLink'] as String? ?? image['link'] as String?;
     if (url == null) return;
     setState(() {
       images.removeAt(index);
@@ -134,7 +133,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
                 : Center(
                   child: FilledButton.icon(
                     icon: Icon(Icons.search),
-                    label: Text("Search images"),
+                    label: Text('Search images'),
                     onPressed: searchImages,
                   ),
                 ),
@@ -143,7 +142,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   }
 
   Widget buildImage(BuildContext context, Json image, bool edit) {
-    final thumbnail = image["thumbnailLink"] as String?;
+    final thumbnail = image['thumbnailLink'] as String?;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -155,7 +154,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
             ),
           ),
         WebImage(
-          src: image["link"],
+          src: image['link'],
           objectFit: BoxFit.contain,
           borderRadius: BorderRadius.circular(16),
         ),
@@ -170,17 +169,17 @@ class _ImageCardState extends ConsumerState<ImageCard> {
               children: [
                 IconButton.filledTonal(
                   icon: Icon(Symbols.search),
-                  tooltip: "Search images",
+                  tooltip: 'Search images',
                   onPressed: () => searchImages(),
                 ),
                 IconButton.filledTonal(
                   icon: Icon(Symbols.imagesmode),
-                  tooltip: "Set as main image",
+                  tooltip: 'Set as main image',
                   onPressed: () => setMainImage(selectedIndex),
                 ),
                 IconButton.filledTonal(
                   icon: Icon(Symbols.delete),
-                  tooltip: "Remove image",
+                  tooltip: 'Remove image',
                   onPressed: () => removeImage(selectedIndex),
                 ),
               ],
@@ -205,7 +204,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   }
 
   Widget buildThumbnail(BuildContext context, int index) {
-    final thumbnailLink = images[index]["thumbnailLink"];
+    final thumbnailLink = images[index]['thumbnailLink'];
     return AspectRatio(
       aspectRatio: 1,
       child: Material(

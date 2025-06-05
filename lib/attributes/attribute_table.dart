@@ -1,10 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../material/materials_provider.dart';
-import 'attribute_provider.dart';
 
 class AttributeTable extends ConsumerWidget {
   const AttributeTable({super.key, required this.attribute});

@@ -1,17 +1,16 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition_dialog.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/material_category.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportions_widget.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../constants.dart';
-import '../../../../types.dart';
-import '../../../edit_mode_button.dart';
-import '../../../material_provider.dart';
-import '../../attribute_card.dart';
-import '../../attribute_label.dart';
-import '../../cards.dart';
-import 'composition.dart';
-import 'composition_dialog.dart';
-import 'material_category.dart';
-import 'proportions_widget.dart';
 
 class CompositionCard extends ConsumerWidget {
   const CompositionCard({

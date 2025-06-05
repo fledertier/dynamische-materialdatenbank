@@ -1,13 +1,12 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card_search.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_card.dart';
+import 'package:dynamische_materialdatenbank/widgets/dialog_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
-import '../../widgets/dialog_background.dart';
-import '../materials_provider.dart';
-import '../section/draggable_card.dart';
-import 'cards.dart';
 
 class AttributeCardDialog extends ConsumerStatefulWidget {
   const AttributeCardDialog({

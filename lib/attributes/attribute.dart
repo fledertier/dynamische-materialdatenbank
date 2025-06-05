@@ -1,5 +1,5 @@
-import '../types.dart';
-import 'attribute_type.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 
 class Attribute {
   const Attribute({

@@ -1,16 +1,15 @@
 import 'dart:ui';
 
 import 'package:async/async.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/advanced_search_provider.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition_group_widget.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/material_prompt.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
+import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
+import 'package:dynamische_materialdatenbank/widgets/resizable_builder.dart';
+import 'package:dynamische_materialdatenbank/widgets/side_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../query/condition_group.dart';
-import '../query/query_source_provider.dart';
-import '../widgets/resizable_builder.dart';
-import '../widgets/side_sheet.dart';
-import 'advanced_search_provider.dart';
-import 'condition_group_widget.dart';
-import 'material_prompt.dart';
 
 class AdvancedSearch extends ConsumerStatefulWidget {
   const AdvancedSearch({super.key, this.onClose});

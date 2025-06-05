@@ -1,22 +1,21 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/components/components_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/density/areal_density_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/density/density_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/description/description_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/fire_behavior_standard_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/image/image_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/light/light_absorption_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/light/light_reflection_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/light/light_transmission_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/name/name_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/origin_country_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impressions_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/u_value/u_value_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/w_value/w_value_card.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../../constants.dart';
-import '../cards.dart';
-import 'components/components_card.dart';
-import 'composition/composition_card.dart';
-import 'density/areal_density_card.dart';
-import 'density/density_card.dart';
-import 'description/description_card.dart';
-import 'fire_behavior/fire_behavior_standard_card.dart';
-import 'image/image_card.dart';
-import 'light/light_absorption_card.dart';
-import 'light/light_reflection_card.dart';
-import 'light/light_transmission_card.dart';
-import 'name/name_card.dart';
-import 'origin_country/origin_country_card.dart';
 
 enum CustomCards implements Cards {
   nameCard(

@@ -1,6 +1,5 @@
+import 'package:dynamische_materialdatenbank/material/attribute/custom/density/density_visualization.dart';
 import 'package:flutter/material.dart';
-
-import 'density_visualization.dart';
 
 void main() {
   runApp(const MaterialApp(home: DensityPlayground()));
@@ -24,7 +23,7 @@ class _DensityPlaygroundState extends State<DensityPlayground> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Density: ${density.toStringAsFixed(2)}",
+            'Density: ${density.toStringAsFixed(2)}',
             style: const TextStyle(color: Colors.white, fontSize: 18),
           ),
 

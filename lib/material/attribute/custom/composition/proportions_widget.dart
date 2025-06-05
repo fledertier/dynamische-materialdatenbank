@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/color/color_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../color/color_provider.dart';
-import '../composition/proportion.dart';
 
 class ProportionsWidget<T extends Proportion> extends StatelessWidget {
   const ProportionsWidget({

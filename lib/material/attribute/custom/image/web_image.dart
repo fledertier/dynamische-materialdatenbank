@@ -35,16 +35,16 @@ class WebImage extends StatelessWidget {
           HTMLDivElement()
             ..style.width = '100%'
             ..style.height = '100%'
-            ..style.display = "flex"
-            ..style.alignItems = "center"
-            ..style.justifyContent = "center";
+            ..style.display = 'flex'
+            ..style.alignItems = 'center'
+            ..style.justifyContent = 'center';
 
       final img =
           HTMLImageElement()
             ..src = src
             ..alt = alt ?? ''
-            ..style.width = "auto"
-            ..style.height = "auto"
+            ..style.width = 'auto'
+            ..style.height = 'auto'
             ..style.maxWidth = '100%'
             ..style.maxHeight = '100%'
             ..style.objectFit = objectFit.toCss()

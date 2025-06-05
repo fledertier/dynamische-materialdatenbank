@@ -1,9 +1,8 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/filter/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute_provider.dart';
-import 'filter_provider.dart';
 
 class SliderFilterOption extends ConsumerWidget {
   const SliderFilterOption(this.attribute, {super.key});

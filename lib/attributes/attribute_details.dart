@@ -1,4 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_delete_dialog.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_table.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
@@ -8,13 +14,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'attribute.dart';
-import 'attribute_delete_dialog.dart';
-import 'attribute_dialog.dart';
-import 'attribute_provider.dart';
-import 'attribute_table.dart';
-import 'attributes_provider.dart';
 
 class AttributeDetails extends ConsumerWidget {
   const AttributeDetails({super.key, required this.selectedAttributeId});

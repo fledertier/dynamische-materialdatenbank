@@ -1,6 +1,6 @@
-import '../../../../types.dart';
-import 'material_category.dart';
-import 'proportion.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/material_category.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportion.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 
 class Composition extends Proportion {
   Composition({required this.category, required super.share})

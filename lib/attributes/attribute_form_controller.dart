@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:flutter/foundation.dart';
-
-import 'attribute.dart';
-import 'attribute_type.dart';
 
 class AttributeFormController implements Listenable {
   AttributeFormController([this.initialAttribute])

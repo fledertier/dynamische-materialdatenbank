@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import 'attribute_provider.dart';
 
 class AttributeDeleteDialog extends ConsumerWidget {
   const AttributeDeleteDialog({super.key, required this.attributes});

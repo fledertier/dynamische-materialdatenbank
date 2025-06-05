@@ -1,14 +1,13 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/color/hex_color.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/image/image_search_service.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../constants.dart';
-import '../custom/image/image_search_service.dart';
-import 'hex_color.dart';
 
 final materialColorProvider =
     NotifierProvider.family<MaterialColorNotifier, Color?, String>(

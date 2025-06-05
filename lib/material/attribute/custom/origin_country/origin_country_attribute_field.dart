@@ -1,12 +1,11 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/selectable_tag.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../default/country/country.dart';
 
 class OriginCountryAttributeField extends ConsumerWidget {
   const OriginCountryAttributeField({

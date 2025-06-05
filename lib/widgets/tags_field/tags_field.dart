@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_controller.dart';
+import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_editing_controller.dart';
+import 'package:dynamische_materialdatenbank/widgets/tags_field/text_or_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:super_clipboard/super_clipboard.dart';
-
-import 'tags_editing_controller.dart';
-import 'text_or_tag.dart';
 
 abstract class Suggestion<T> {
   const Suggestion();

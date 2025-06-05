@@ -1,10 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
-
-import '../material/attribute/default/boolean/boolean.dart';
-import '../material/attribute/default/country/country.dart';
-import '../material/attribute/default/number/unit_number.dart';
-import '../material/attribute/default/text/translatable_text.dart';
 
 dynamic fromJson(dynamic json, AttributeType? type) {
   if (json == null || type == null) {

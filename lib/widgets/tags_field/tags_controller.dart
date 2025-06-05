@@ -31,9 +31,7 @@ class TagsController<T> extends ValueNotifier<List<T>> {
   }
 
   void updateWhere(bool Function(T tag) test, T newTag) {
-    tags = [
-      for (final tag in tags) test(tag) ? newTag : tag,
-    ];
+    tags = [for (final tag in tags) test(tag) ? newTag : tag];
   }
 
   void clear() {

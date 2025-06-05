@@ -1,16 +1,15 @@
+import 'package:dynamische_materialdatenbank/app/app_scaffold.dart';
+import 'package:dynamische_materialdatenbank/app/header.dart';
+import 'package:dynamische_materialdatenbank/app/navigation.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/filter/filters_and_search.dart';
 import 'package:dynamische_materialdatenbank/header/sort.dart';
+import 'package:dynamische_materialdatenbank/material/material_grid.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../app/app_scaffold.dart';
-import '../app/header.dart';
-import '../app/navigation.dart';
-import '../constants.dart';
-import '../filter/filters_and_search.dart';
-import '../utils/miscellaneous_utils.dart';
-import 'material_grid.dart';
-import 'material_provider.dart';
 
 class MaterialsPage extends StatefulWidget {
   const MaterialsPage({super.key});

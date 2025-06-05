@@ -3,10 +3,9 @@ import 'dart:ui' show Color;
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/color/hex_color.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../types.dart';
-import '../../color/hex_color.dart';
 
 final imageSearchServiceProvider = Provider((ref) => ImageSearchService());
 
@@ -14,7 +13,7 @@ class ImageSearchService {
   Future<ImageSearchResult?> searchImages(String query) async {
     final result = await FirebaseFunctions.instanceFor(
       region: region,
-    ).httpsCallable(Functions.search).call({"query": query});
+    ).httpsCallable(Functions.search).call({'query': query});
     final json = result.data as Json?;
     if (json == null) {
       return null;

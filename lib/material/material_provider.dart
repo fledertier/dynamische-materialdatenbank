@@ -1,17 +1,16 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/material/placeholder.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute_converter.dart';
-import 'materials_provider.dart';
-import 'placeholder.dart';
 
 final materialProvider =
     StreamNotifierProvider.family<MaterialNotifier, Json, String>(

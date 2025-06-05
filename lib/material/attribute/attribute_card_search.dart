@@ -1,14 +1,13 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_search.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/default_cards.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../attributes/attribute.dart';
-import '../../attributes/attribute_type.dart';
-import '../../constants.dart';
-import '../material_provider.dart';
-import 'attribute_search.dart';
-import 'cards.dart';
-import 'custom/custom_cards.dart';
-import 'default/default_cards.dart';
 
 class AttributeCardSearch extends ConsumerStatefulWidget {
   const AttributeCardSearch({

@@ -1,13 +1,12 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../attributes/attribute_converter.dart';
-import '../../../../attributes/attribute_provider.dart';
-import 'object_attribute_field.dart';
 
 class ObjectCard extends ConsumerWidget {
   const ObjectCard({

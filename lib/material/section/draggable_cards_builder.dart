@@ -1,18 +1,17 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_card.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_section.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
-import '../../types.dart';
-import '../attribute/cards.dart';
-import '../material_provider.dart';
-import 'draggable_card.dart';
-import 'draggable_section.dart';
 
 enum SectionCategory { primary, secondary }
 
 final sectionsProvider =
     StateProvider.family<List<CardSection>, SectionCategory>(
-      (ref, arg) => throw "sectionsProvider($arg) not initialized",
+      (ref, arg) => throw 'sectionsProvider($arg) not initialized',
     );
 
 final draggingItemProvider = StateProvider<CardData?>((ref) => null);

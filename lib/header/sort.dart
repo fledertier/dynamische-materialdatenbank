@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute.dart';
-import '../attributes/attribute_type.dart';
-import '../attributes/attributes_provider.dart';
 
 class SortButton extends StatelessWidget {
   const SortButton({super.key});
@@ -76,7 +75,7 @@ class SortAttributeSelector extends ConsumerWidget {
       builder: (context, controller, child) {
         return TextButton(
           onPressed: controller.toggle,
-          child: Text(attribute != null ? "by $name" : "Sort by"),
+          child: Text(attribute != null ? 'by $name' : 'Sort by'),
         );
       },
       menuChildren: [
@@ -84,7 +83,7 @@ class SortAttributeSelector extends ConsumerWidget {
           onPressed: () {
             ref.read(sortAttributeProvider.notifier).state = null;
           },
-          child: Text("Nothing"),
+          child: Text('Nothing'),
         ),
         for (final attribute in attributes) buildMenu(ref, attribute, []),
       ],

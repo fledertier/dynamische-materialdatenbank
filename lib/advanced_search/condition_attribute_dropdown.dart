@@ -35,7 +35,7 @@ class ConditionAttributeDropdown extends ConsumerWidget {
     return Row(
       children: [
         DropdownMenuFormField<Attribute>(
-          hintText: "Attribute",
+          hintText: 'Attribute',
           enabled: enabled,
           enableFilter: true,
           width: 200,
@@ -53,7 +53,7 @@ class ConditionAttributeDropdown extends ConsumerWidget {
           },
           validator: (attribute) {
             if (attribute == null) {
-              return "Please select an attribute";
+              return 'Please select an attribute';
             }
             return null;
           },

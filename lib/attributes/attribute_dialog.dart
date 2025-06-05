@@ -1,9 +1,8 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_form.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_form_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'attribute.dart';
-import 'attribute_form.dart';
-import 'attribute_form_controller.dart';
 
 class AttributeDialog extends StatefulWidget {
   const AttributeDialog({
@@ -47,8 +46,8 @@ class _AttributeDialogState extends State<AttributeDialog> {
               ),
             Text(
               widget.initialAttribute != null
-                  ? "Edit Attribute"
-                  : "Create Attribute",
+                  ? 'Edit Attribute'
+                  : 'Create Attribute',
             ),
           ],
         ),
@@ -75,7 +74,7 @@ class _AttributeDialogState extends State<AttributeDialog> {
           builder: (context, child) {
             return TextButton(
               onPressed: submit,
-              child: Text(widget.initialAttribute != null ? "Save" : "Create"),
+              child: Text(widget.initialAttribute != null ? 'Save' : 'Create'),
             );
           },
         ),

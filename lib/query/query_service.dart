@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/query_converters.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attributes/attribute.dart';
-import '../attributes/attribute_type.dart';
-import '../constants.dart';
-import '../types.dart';
-import 'condition_group.dart';
 
 final queryServiceProvider = Provider((ref) => QueryService());
 
@@ -37,22 +36,22 @@ class QueryService {
     final result = await FirebaseFunctions.instanceFor(
       region: region,
     ).httpsCallable(Functions.chat).call({
-      "prompt": prompt,
-      "attributes":
+      'prompt': prompt,
+      'attributes':
           attributes
               .map(
                 (attribute) => attribute.toJson().removeKeys({
-                  "required",
-                  "multiline",
-                  "nameEn",
+                  'required',
+                  'multiline',
+                  'nameEn',
                 }),
               )
               .toList(),
-      "types":
+      'types':
           types.map((type) {
             return {
-              "id": type.id,
-              "operators":
+              'id': type.id,
+              'operators':
                   type.operators.map((operator) => operator.name).toList(),
             };
           }).toList(),
@@ -66,7 +65,7 @@ class QueryService {
       return null;
     }
 
-    final pattern = RegExp(r"([^`]*)```([^`]*)```");
+    final pattern = RegExp(r'([^`]*)```([^`]*)```');
     final match = pattern.firstMatch(answer);
 
     if (match == null) {
@@ -96,7 +95,7 @@ class QueryResult {
   const QueryResult({this.plan, required this.query});
 }
 
-const exampleAnswer = """
+const exampleAnswer = '''
 Plan:
 1. Identifizieren des Attributs, das mit dem Suchbegriff "holz" übereinstimmt.
 2. Da "holz" ein allgemeiner Begriff ist, kann er in verschiedenen Attributen vorkommen, aber am wahrscheinlichsten ist er in "description" oder "name" enthalten.
@@ -119,4 +118,4 @@ Plan:
   ]
 }
 ```
-""";
+''';

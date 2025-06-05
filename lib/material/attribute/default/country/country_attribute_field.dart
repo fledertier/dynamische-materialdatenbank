@@ -1,11 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/widgets/enum_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../attributes/attribute_provider.dart';
-import '../../../../widgets/enum_field.dart';
-import '../../../edit_mode_button.dart';
-import 'country.dart';
 
 class CountryAttributeField extends ConsumerWidget {
   const CountryAttributeField({
@@ -29,7 +28,7 @@ class CountryAttributeField extends ConsumerWidget {
       enabled: edit,
       style: TextTheme.of(context).titleLarge!.copyWith(fontFamily: 'Lexend'),
       decoration: InputDecoration.collapsed(
-        hintText: attribute?.name ?? "Country",
+        hintText: attribute?.name ?? 'Country',
       ),
       suggestions: Countries.values,
       findSuggestions: findSuggestions,
@@ -46,12 +45,12 @@ class CountryAttributeField extends ConsumerWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           if (attribute?.required ?? false) {
-            return "Please select a country";
+            return 'Please select a country';
           }
           return null;
         }
         if (!isCountry(value)) {
-          return "Please select a valid country";
+          return 'Please select a valid country';
         }
         return null;
       },

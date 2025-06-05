@@ -1,4 +1,4 @@
-import 'tags_controller.dart';
+import 'package:dynamische_materialdatenbank/widgets/tags_field/tags_controller.dart';
 
 class TagController<T> extends TagsController<T> {
   TagController({T? tag}) : super(maxNumberOfTags: 1) {

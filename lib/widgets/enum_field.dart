@@ -45,7 +45,7 @@ class _EnumFieldState<T> extends State<EnumField<T>> {
   void initState() {
     super.initState();
     if (widget.initialValue != null) {
-      controller.text = widget.textExtractor(widget.initialValue!);
+      controller.text = widget.textExtractor(widget.initialValue as T);
     }
     notifier = ValueNotifier<T?>(widget.initialValue);
     notifier.addListener(onChanged);

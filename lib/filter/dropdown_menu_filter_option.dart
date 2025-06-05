@@ -1,11 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/filter/filter_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'filter_provider.dart';
 
 class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
   const ManufacturerDropdownMenuFilterOption({super.key});

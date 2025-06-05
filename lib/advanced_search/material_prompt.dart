@@ -2,12 +2,11 @@ import 'dart:ui_web';
 
 import 'package:async/async.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
+import 'package:dynamische_materialdatenbank/query/query_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../query/condition_group.dart';
-import '../query/query_service.dart';
 
 class MaterialPrompt extends ConsumerStatefulWidget {
   const MaterialPrompt({super.key, this.controller, this.onQuery});
@@ -120,6 +119,6 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
 
   void insertNewLine() {
     final value = controller.value;
-    controller.value = value.replaced(value.selection, "\n");
+    controller.value = value.replaced(value.selection, '\n');
   }
 }

@@ -28,11 +28,11 @@ final materialsByIdProvider = FutureProvider.family((
 });
 
 final Json exampleMaterial = {
-  Attributes.id: "example",
-  Attributes.name: {"valueDe": "Acoustic Wood Wool"},
+  Attributes.id: 'example',
+  Attributes.name: {'valueDe': 'Acoustic Wood Wool'},
   Attributes.description: {
-    "valueDe":
-        "BAUX Acoustic Wood Wool is a functional, natural material made from two of the world’s oldest building materials, wood and cement. The combination is simple and ingenious. Wood fiber offers excellent insulation, heat retention and sound absorption. Cement, a proven and popular building material, is the binder that provides strength, moisture resistance and fire protection. Therefore, BAUX acoustic products are versatile and durable in all climates.",
+    'valueDe':
+        'BAUX Acoustic Wood Wool is a functional, natural material made from two of the world’s oldest building materials, wood and cement. The combination is simple and ingenious. Wood fiber offers excellent insulation, heat retention and sound absorption. Cement, a proven and popular building material, is the binder that provides strength, moisture resistance and fire protection. Therefore, BAUX acoustic products are versatile and durable in all climates.',
   },
   Attributes.density: {'value': 800},
   Attributes.arealDensity: {'value': 800},
@@ -42,6 +42,6 @@ final Json exampleMaterial = {
   Attributes.uValue: {'value': 2},
   Attributes.wValue: {'value': 3.6},
   Attributes.fireBehaviorStandard:
-      TranslatableText(valueDe: "C-s2,d1").toJson(),
-  Attributes.originCountry: ["SE"],
+      TranslatableText(valueDe: 'C-s2,d1').toJson(),
+  Attributes.originCountry: ['SE'],
 };

@@ -1,10 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/material_category.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'composition.dart';
-import 'material_category.dart';
 
 class CompositionDialog extends StatefulWidget {
   const CompositionDialog({

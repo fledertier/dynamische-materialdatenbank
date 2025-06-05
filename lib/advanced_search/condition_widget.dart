@@ -1,13 +1,12 @@
+import 'package:dynamische_materialdatenbank/advanced_search/condition_attribute_dropdown.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition_operator_dropdown.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/condition_parameter_field.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'condition_attribute_dropdown.dart';
-import 'condition_operator_dropdown.dart';
-import 'condition_parameter_field.dart';
 
 class ConditionWidget extends ConsumerWidget {
   const ConditionWidget({
@@ -45,7 +44,9 @@ class ConditionWidget extends ConsumerWidget {
               enabled: enabled,
               initialAttribute: condition.attribute,
               onSelected: (attributeId) async {
-                final attribute = await ref.read(attributeProvider(attributeId).future);
+                final attribute = await ref.read(
+                  attributeProvider(attributeId).future,
+                );
                 update(() {
                   condition.attribute = attributeId;
                   condition.operator = attribute?.type.operators.firstOrNull;
@@ -84,7 +85,7 @@ class ConditionWidget extends ConsumerWidget {
                 Visibility.maintain(
                   visible: hovered,
                   child: IconButton(
-                    tooltip: "Remove",
+                    tooltip: 'Remove',
                     onPressed: onRemove,
                     icon: Icon(
                       Symbols.remove_circle,

@@ -1,7 +1,6 @@
 import 'package:dynamische_materialdatenbank/app/theme.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/w_value/corner_gap_shape.dart';
 import 'package:flutter/material.dart';
-
-import 'corner_gap_shape.dart';
 
 abstract class WaterAbsorption {
   /// wasserundurchlässig: w <= 0.001
@@ -117,13 +116,13 @@ class WaterAbsorptionVisualization extends StatelessWidget {
 
   Text label() {
     if (value < WaterAbsorption.waterproof) {
-      return Text("wasserdicht");
+      return Text('wasserdicht');
     } else if (value < WaterAbsorption.repellent) {
-      return Text("wasserabweisend");
+      return Text('wasserabweisend');
     } else if (value < WaterAbsorption.resistant) {
-      return Text("wasserhemmend");
+      return Text('wasserhemmend');
     }
-    return Text("wassersaugend");
+    return Text('wassersaugend');
   }
 }
 

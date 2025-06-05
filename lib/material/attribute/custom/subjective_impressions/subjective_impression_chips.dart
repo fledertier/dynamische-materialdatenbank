@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
 import 'package:flutter/material.dart';
-
-import 'subjective_impression.dart';
 
 class SubjectiveImpressionChips extends StatelessWidget {
   const SubjectiveImpressionChips({

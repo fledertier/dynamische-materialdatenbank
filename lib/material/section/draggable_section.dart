@@ -1,13 +1,12 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_cards_builder.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
-import '../../utils/miscellaneous_utils.dart';
-import '../attribute/cards.dart';
-import '../edit_mode_button.dart';
-import 'draggable_cards_builder.dart';
 
 class DraggableSection extends ConsumerStatefulWidget {
   const DraggableSection({

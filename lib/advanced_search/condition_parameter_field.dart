@@ -67,7 +67,7 @@ class TextField extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           if (required) {
-            return "Please enter a text";
+            return 'Please enter a text';
           }
         }
         return null;
@@ -109,13 +109,13 @@ class NumberField extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           if (required) {
-            return "Please enter a number";
+            return 'Please enter a number';
           }
           return null;
         }
         final number = num.tryParse(value);
         if (number == null) {
-          return "Invalid number";
+          return 'Invalid number';
         }
         return null;
       },
@@ -156,8 +156,8 @@ class _BooleanFieldState extends State<BooleanField> {
       enabled: widget.enabled,
       initialSelection: widget.initialValue,
       dropdownMenuEntries: [
-        DropdownMenuEntry(value: true, label: "True"),
-        DropdownMenuEntry(value: false, label: "False"),
+        DropdownMenuEntry(value: true, label: 'True'),
+        DropdownMenuEntry(value: false, label: 'False'),
       ],
       onSelected: widget.onChanged,
       enableSearch: false,
@@ -165,7 +165,7 @@ class _BooleanFieldState extends State<BooleanField> {
       validator: (value) {
         if (value == null) {
           if (widget.required) {
-            return "Please select a value";
+            return 'Please select a value';
           }
         }
         return null;

@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/fire_behavior_standard.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/scale.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'fire_behavior_standard.dart';
 
 class FireBehaviorStandardVisualization extends StatelessWidget {
   const FireBehaviorStandardVisualization(this.value, {super.key});

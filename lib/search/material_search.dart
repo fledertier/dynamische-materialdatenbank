@@ -2,14 +2,13 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/search/search.dart';
+import 'package:dynamische_materialdatenbank/search/search_provider.dart';
+import 'package:dynamische_materialdatenbank/search/search_service.dart';
 import 'package:dynamische_materialdatenbank/widgets/highlighted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import 'search.dart';
-import 'search_provider.dart';
-import 'search_service.dart';
 
 class MaterialSearch extends ConsumerStatefulWidget {
   const MaterialSearch({super.key, this.onFilter});

@@ -1,18 +1,17 @@
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression_balls.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression_chips.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression_dialog.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../constants.dart';
-import '../../../../utils/miscellaneous_utils.dart';
-import '../../../edit_mode_button.dart';
-import '../../../material_provider.dart';
-import '../../attribute_card.dart';
-import '../../attribute_label.dart';
-import '../../cards.dart';
-import 'subjective_impression.dart';
-import 'subjective_impression_balls.dart';
-import 'subjective_impression_chips.dart';
-import 'subjective_impression_dialog.dart';
 
 class SubjectiveImpressionsCard extends ConsumerWidget {
   const SubjectiveImpressionsCard({

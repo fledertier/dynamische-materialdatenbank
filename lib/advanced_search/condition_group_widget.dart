@@ -1,11 +1,10 @@
 import 'package:dynamische_materialdatenbank/advanced_search/condition_widget.dart';
+import 'package:dynamische_materialdatenbank/advanced_search/half_bracket.dart';
+import 'package:dynamische_materialdatenbank/query/condition.dart';
+import 'package:dynamische_materialdatenbank/query/condition_group.dart';
+import 'package:dynamische_materialdatenbank/query/condition_node.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../query/condition.dart';
-import '../query/condition_group.dart';
-import '../query/condition_node.dart';
-import 'half_bracket.dart';
 
 class ConditionGroupWidget extends ConsumerWidget {
   const ConditionGroupWidget({
@@ -35,7 +34,7 @@ class ConditionGroupWidget extends ConsumerWidget {
                 Expanded(child: HalfBracket.upper()),
                 TextButton(
                   onPressed: toggleType,
-                  child: isAnd ? Text("And") : Text("Or"),
+                  child: isAnd ? Text('And') : Text('Or'),
                 ),
                 Expanded(child: HalfBracket.lower()),
               ],
@@ -67,7 +66,7 @@ class ConditionGroupWidget extends ConsumerWidget {
                     ),
                   )
                 else
-                  throw Exception("Unknown condition node type"),
+                  throw Exception('Unknown condition node type'),
               Theme(
                 data: theme.copyWith(
                   textButtonTheme: TextButtonThemeData(
@@ -87,14 +86,14 @@ class ConditionGroupWidget extends ConsumerWidget {
                             children: [
                               TextButton(
                                 onPressed: () => addCondition(),
-                                child: Text(isAnd ? "And" : "Or"),
+                                child: Text(isAnd ? 'And' : 'Or'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   toggleType();
                                   addCondition();
                                 },
-                                child: Text(isAnd ? "Or" : "And"),
+                                child: Text(isAnd ? 'Or' : 'And'),
                               ),
                             ],
                           ),
@@ -107,11 +106,11 @@ class ConditionGroupWidget extends ConsumerWidget {
                               TextButton.icon(
                                 icon: Icon(Icons.add),
                                 onPressed: () => addCondition(),
-                                label: Text("Condition"),
+                                label: Text('Condition'),
                               ),
                               TextButton(
                                 onPressed: () => addConditionGroup(),
-                                child: Text(isAnd ? "Or" : "And"),
+                                child: Text(isAnd ? 'Or' : 'And'),
                               ),
                             ],
                           ),

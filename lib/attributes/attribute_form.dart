@@ -1,15 +1,14 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_form_controller.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/attributes/attributes_list.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'attribute.dart';
-import 'attribute_dialog.dart';
-import 'attribute_form_controller.dart';
-import 'attribute_type.dart';
-import 'attributes_list.dart';
 
 class AttributeForm extends ConsumerStatefulWidget {
   const AttributeForm({

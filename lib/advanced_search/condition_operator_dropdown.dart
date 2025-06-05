@@ -27,7 +27,7 @@ class ConditionOperatorDropdown extends ConsumerWidget {
 
     return DropdownMenuFormField(
       key: ValueKey(selectedOperator),
-      hintText: "Operator",
+      hintText: 'Operator',
       initialSelection: selectedOperator,
       enabled: enabled && operators.isNotEmpty,
       requestFocusOnTap: false,
@@ -38,7 +38,7 @@ class ConditionOperatorDropdown extends ConsumerWidget {
       onSelected: onSelected,
       validator: (operator) {
         if (attribute != null && operator == null) {
-          return "Please select an operator";
+          return 'Please select an operator';
         }
         return null;
       },

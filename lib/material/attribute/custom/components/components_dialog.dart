@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/material/attribute/custom/components/component.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'component.dart';
 
 class ComponentsDialog extends StatefulWidget {
   const ComponentsDialog({

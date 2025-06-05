@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/default_cards.dart';
+import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../attributes/attribute.dart';
-import '../../attributes/attribute_provider.dart';
-import '../../types.dart';
-import 'default/default_cards.dart';
 
 enum CardSize { small, large }
 

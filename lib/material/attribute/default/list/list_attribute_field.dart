@@ -1,16 +1,15 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../attributes/attribute_provider.dart';
-import '../../../../attributes/attribute_type.dart';
-import '../../../../widgets/hover_builder.dart';
-import '../../../edit_mode_button.dart';
-import '../attribute_field.dart';
-import '../number/unit_number.dart';
-import '../text/translatable_text.dart';
 
 class ListAttributeField extends ConsumerStatefulWidget {
   const ListAttributeField({

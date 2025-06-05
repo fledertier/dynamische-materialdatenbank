@@ -1,8 +1,7 @@
+import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
+import 'package:dynamische_materialdatenbank/material/section/draggable_cards_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../attribute/cards.dart';
-import 'draggable_cards_builder.dart';
 
 class SectionButton extends ConsumerWidget {
   const SectionButton({super.key, required this.sectionCategory});

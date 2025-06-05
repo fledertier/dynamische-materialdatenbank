@@ -3,12 +3,11 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.d
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/origin_country_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/world_map.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'world_map.dart';
 
 class OriginCountryCard extends ConsumerWidget {
   const OriginCountryCard({
