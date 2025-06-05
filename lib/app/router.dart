@@ -2,9 +2,9 @@ import 'package:dynamische_materialdatenbank/attributes/attributes_page.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/material_detail_page.dart';
 import 'package:dynamische_materialdatenbank/material/materials_page.dart';
-import 'package:dynamische_materialdatenbank/sign_in_page.dart';
-import 'package:dynamische_materialdatenbank/sign_up_page.dart';
-import 'package:dynamische_materialdatenbank/user_provider.dart';
+import 'package:dynamische_materialdatenbank/user/sign_in_page.dart';
+import 'package:dynamische_materialdatenbank/user/sign_up_page.dart';
+import 'package:dynamische_materialdatenbank/user/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

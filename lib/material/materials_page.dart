@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app/app_scaffold.dart';
+import '../app/header.dart';
 import '../app/navigation.dart';
 import '../constants.dart';
 import '../filter/filters_and_search.dart';
-import '../header/header.dart';
 import '../utils/miscellaneous_utils.dart';
 import 'material_grid.dart';
 import 'material_provider.dart';

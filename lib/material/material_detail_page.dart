@@ -1,8 +1,8 @@
 import 'package:dynamische_materialdatenbank/app/app_scaffold.dart';
+import 'package:dynamische_materialdatenbank/app/header.dart';
 import 'package:dynamische_materialdatenbank/app/navigation.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/header/header.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/widgets/sheet.dart';
 import 'package:flutter/material.dart';

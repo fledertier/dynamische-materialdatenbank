@@ -1,20 +1,19 @@
-import 'package:dynamische_materialdatenbank/user_provider.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'constants.dart';
+import 'user_provider.dart';
 
-class SignUpPage extends ConsumerStatefulWidget {
-  const SignUpPage({super.key});
+class SignInPage extends ConsumerStatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  ConsumerState createState() => _SignUpPageState();
+  ConsumerState<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends ConsumerState<SignUpPage> {
-  final _nameController = TextEditingController();
+class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -31,41 +30,35 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Name (optional)',
-                    ),
-                    autofillHints: const [AutofillHints.name],
-                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    autofillHints: const [AutofillHints.email],
+                    controller: _emailController,
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                   ),
                   SizedBox(height: 24),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    autofillHints: const [AutofillHints.email],
-                    controller: _emailController,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  SizedBox(height: 24),
-                  TextFormField(
                     decoration: const InputDecoration(labelText: 'Password'),
-                    autofillHints: const [AutofillHints.newPassword],
+                    autofillHints: const [AutofillHints.password],
                     controller: _passwordController,
+                    textInputAction: TextInputAction.done,
                     obscureText: true,
-                    onFieldSubmitted: (value) => signUp(),
+                    onFieldSubmitted: (value) => signIn(),
                   ),
                   SizedBox(height: 64),
                   SizedBox(
                     height: 48,
                     child: FilledButton.tonal(
-                      child: const Text('Sign up'),
-                      onPressed: () => signUp(),
+                      child: const Text('Sign in'),
+                      onPressed: () => signIn(),
                     ),
                   ),
                   SizedBox(height: 8),
                   TextButton(
-                    child: const Text('Already have an account? Sign in here'),
-                    onPressed: () => context.goNamed(Pages.signIn),
+                    child: const Text('No account? Sign up here'),
+                    onPressed: () {
+                      context.goNamed(Pages.signUp);
+                    },
                   ),
                 ],
               ),
@@ -76,11 +69,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     );
   }
 
-  Future<void> signUp() async {
+  Future<void> signIn() async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
-      await userNotifier.signUp(
-        name: _nameController.text.isNotEmpty ? _nameController.text : null,
+      await userNotifier.signIn(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -94,7 +86,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

@@ -1,7 +1,7 @@
-import 'package:dynamische_materialdatenbank/header/theme_mode.dart';
+import 'package:dynamische_materialdatenbank/app/theme_mode.dart';
 import 'package:flutter/material.dart';
 
-import 'user_avatar.dart';
+import '../user/user_avatar.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key, this.center, this.actions});
