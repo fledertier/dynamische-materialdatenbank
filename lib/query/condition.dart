@@ -1,9 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 

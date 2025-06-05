@@ -1,9 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/query/query_provider.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';

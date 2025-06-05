@@ -3,8 +3,8 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/filter/filter_provider.dart';
-import 'package:dynamische_materialdatenbank/header/sort.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/material/sort.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
 import 'package:dynamische_materialdatenbank/search/search_query_provider.dart';

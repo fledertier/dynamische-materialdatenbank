@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 
 class SubjectiveImpression {
   const SubjectiveImpression({

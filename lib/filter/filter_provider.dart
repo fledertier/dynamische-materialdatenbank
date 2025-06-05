@@ -1,8 +1,8 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final filterQueryProvider = Provider((ref) {

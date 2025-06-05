@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 
 Json randomName() {
   final random = Random();

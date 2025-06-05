@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
 class Boolean implements Comparable<Boolean> {

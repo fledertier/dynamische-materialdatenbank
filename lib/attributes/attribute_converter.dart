@@ -3,7 +3,8 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
+
+typedef Json = Map<String, dynamic>;
 
 dynamic fromJson(dynamic json, AttributeType? type) {
   if (json == null || type == null) {

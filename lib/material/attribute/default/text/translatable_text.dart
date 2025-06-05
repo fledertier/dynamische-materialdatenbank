@@ -1,5 +1,5 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 
 class TranslatableText implements Comparable<TranslatableText> {
   const TranslatableText({this.valueDe, this.valueEn});

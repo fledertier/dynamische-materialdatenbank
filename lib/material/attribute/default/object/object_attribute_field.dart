@@ -1,9 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_dialog.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,8 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
 extension ConditionGroupConverter on ConditionGroup {

@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 
 class UnitNumber implements Comparable<UnitNumber> {
   UnitNumber({required this.value, this.displayUnit});

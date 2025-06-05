@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:ui' show Color;
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/hex_color.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final imageSearchServiceProvider = Provider((ref) => ImageSearchService());

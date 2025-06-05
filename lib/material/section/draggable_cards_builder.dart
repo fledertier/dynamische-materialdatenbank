@@ -1,9 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/material/section/draggable_card.dart';
 import 'package:dynamische_materialdatenbank/material/section/draggable_section.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

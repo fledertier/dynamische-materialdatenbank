@@ -1,9 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchServiceProvider = FutureProvider.autoDispose((ref) async {

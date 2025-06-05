@@ -8,7 +8,6 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/material/placeholder.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

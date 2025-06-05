@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
@@ -8,7 +9,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/custom/compositi
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportions_widget.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

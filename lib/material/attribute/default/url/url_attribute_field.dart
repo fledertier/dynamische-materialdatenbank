@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/debouncer.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/url/favicon.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

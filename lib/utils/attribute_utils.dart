@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 dynamic getAttributeValue(

@@ -1,5 +1,5 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportion.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 
 class Component extends Proportion {
   const Component({

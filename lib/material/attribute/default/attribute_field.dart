@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
@@ -9,7 +10,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/object/o
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/url/url_attribute_field.dart';
-import 'package:dynamische_materialdatenbank/types.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
