@@ -1,5 +1,6 @@
 abstract class Pages {
   static const login = "login";
+  static const registration = "registration";
   static const materials = "materials";
   static const material = "material";
   static const attributes = "attributes";

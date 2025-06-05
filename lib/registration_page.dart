@@ -1,19 +1,21 @@
 import 'package:dynamische_materialdatenbank/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'constants.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+class RegistrationPage extends ConsumerStatefulWidget {
+  const RegistrationPage({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  ConsumerState createState() => _RegistrationPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _RegistrationPageState extends ConsumerState<RegistrationPage> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -30,35 +32,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    autofillHints: const [AutofillHints.email],
-                    controller: _emailController,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    autofillHints: const [AutofillHints.name],
+                    controller: _nameController,
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                   ),
                   SizedBox(height: 24),
                   TextFormField(
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    autofillHints: const [AutofillHints.email],
+                    controller: _emailController,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  SizedBox(height: 24),
+                  TextFormField(
                     decoration: const InputDecoration(labelText: 'Password'),
-                    autofillHints: const [AutofillHints.password],
+                    autofillHints: const [AutofillHints.newPassword],
                     controller: _passwordController,
-                    textInputAction: TextInputAction.done,
                     obscureText: true,
-                    onFieldSubmitted: (value) => login(),
+                    onFieldSubmitted: (value) => register(),
                   ),
                   SizedBox(height: 64),
                   SizedBox(
                     height: 48,
                     child: FilledButton.tonal(
-                      child: const Text('Login'),
-                      onPressed: () => login(),
+                      child: const Text('Registrieren'),
+                      onPressed: () => register(),
                     ),
                   ),
                   SizedBox(height: 8),
                   TextButton(
-                    child: const Text('No account? Register here'),
-                    onPressed: () {
-                      context.goNamed(Pages.registration);
-                    },
+                    child: const Text('Already have an account? Login here'),
+                    onPressed: () => context.goNamed(Pages.login),
                   ),
                 ],
               ),
@@ -69,13 +75,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Future<void> login() async {
+  Future<void> register() async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
-      await userNotifier.signIn(
+      await userNotifier.signUp(
+        name: _nameController.text.isNotEmpty ? _nameController.text : null,
         email: _emailController.text,
         password: _passwordController.text,
       );
+      TextInput.finishAutofillContext();
     } on FirebaseAuthException catch (e) {
       final message = e.message ?? 'An error occurred';
       ScaffoldMessenger.of(
@@ -86,6 +94,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

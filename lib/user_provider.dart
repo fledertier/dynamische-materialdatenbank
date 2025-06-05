@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authStateProvider = StreamProvider((ref) {
-  return FirebaseAuth.instance.authStateChanges();
+final userChangesProvider = StreamProvider((ref) {
+  return FirebaseAuth.instance.userChanges();
 });
 
 final userProvider = NotifierProvider.autoDispose(UserNotifier.new);
@@ -10,8 +10,18 @@ final userProvider = NotifierProvider.autoDispose(UserNotifier.new);
 class UserNotifier extends AutoDisposeNotifier<User?> {
   @override
   User? build() {
-    ref.watch(authStateProvider);
+    ref.watch(userChangesProvider);
     return FirebaseAuth.instance.currentUser;
+  }
+
+  Future<void> signUp({
+    String? name,
+    required String email,
+    required String password,
+  }) async {
+    final credentials = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    await credentials.user?.updateDisplayName(name);
   }
 
   Future<UserCredential> signIn({
