@@ -80,6 +80,12 @@ class SortAttributeSelector extends ConsumerWidget {
         );
       },
       menuChildren: [
+        MenuItemButton(
+          onPressed: () {
+            ref.read(sortAttributeProvider.notifier).state = null;
+          },
+          child: Text("Nothing"),
+        ),
         for (final attribute in attributes) buildMenu(ref, attribute, []),
       ],
     );
