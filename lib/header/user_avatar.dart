@@ -22,7 +22,7 @@ class UserAvatar extends ConsumerWidget {
         MenuItemButton(
           leadingIcon: Icon(Icons.logout),
           requestFocusOnHover: false,
-          child: Text('Logout'),
+          child: Text('Sign out'),
           onPressed: () {
             ref.read(userProvider.notifier).signOut();
           },
