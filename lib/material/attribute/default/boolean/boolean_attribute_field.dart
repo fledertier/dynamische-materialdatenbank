@@ -2,6 +2,8 @@ import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'boolean.dart';
+
 class BooleanAttributeField extends ConsumerWidget {
   const BooleanAttributeField({
     super.key,
@@ -12,8 +14,8 @@ class BooleanAttributeField extends ConsumerWidget {
   });
 
   final String attributeId;
-  final bool boolean;
-  final ValueChanged<bool>? onChanged;
+  final Boolean boolean;
+  final ValueChanged<Boolean>? onChanged;
   final TextStyle? textStyle;
 
   @override
@@ -25,13 +27,13 @@ class BooleanAttributeField extends ConsumerWidget {
       fontFamily: 'Lexend',
     );
 
-    final text = Text(boolean ? "Ja" : "Nein", style: effectiveTextStyle);
+    final text = Text(boolean.value ? "Ja" : "Nein", style: effectiveTextStyle);
 
     late final segmentedButton = SegmentedButton(
       selected: {boolean},
       segments: [
-        ButtonSegment(value: true, label: Text("Ja")),
-        ButtonSegment(value: false, label: Text("Nein")),
+        ButtonSegment(value: Boolean(value: true), label: Text("Ja")),
+        ButtonSegment(value: Boolean(value: false), label: Text("Nein")),
       ],
       onSelectionChanged: (selection) {
         onChanged?.call(selection.first);

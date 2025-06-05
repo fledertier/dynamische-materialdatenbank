@@ -18,7 +18,7 @@ class CheckboxFilterOption extends ConsumerWidget {
 
     return CheckboxListTile(
       title: LoadingText(attributes[attribute]?.name),
-      value: options[attribute] ?? false,
+      value: options[attribute] ?? false, // todo: change to Boolean
       onChanged: (value) {
         optionsNotifier.updateWith({attribute: value == true ? value : null});
       },

@@ -5,6 +5,7 @@ import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'boolean.dart';
 import 'boolean_attribute_field.dart';
 
 class BooleanCard extends ConsumerWidget {
@@ -29,7 +30,8 @@ class BooleanCard extends ConsumerWidget {
       materialId: materialId,
       attributeId: attributeId,
     );
-    final boolean = ref.watch(valueProvider(argument)) as bool? ?? false;
+    final boolean =
+        ref.watch(valueProvider(argument)) as Boolean? ?? Boolean(value: false);
 
     return AttributeCard(
       columns: columns,
@@ -39,7 +41,7 @@ class BooleanCard extends ConsumerWidget {
         boolean: boolean,
         onChanged: (boolean) {
           ref.read(materialProvider(materialId).notifier).updateMaterial({
-            attributeId: boolean,
+            attributeId: boolean.toJson(),
           });
         },
         textStyle: textStyle,

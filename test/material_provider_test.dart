@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -87,7 +88,7 @@ void main() {
 
     final materialId = 'material';
     final material = {
-      dings.id: {blub.id: true},
+      dings.id: {blub.id: Boolean(value: true)},
     };
     await container
         .read(materialProvider(materialId).notifier)
@@ -122,8 +123,8 @@ void main() {
     final materialId = 'material';
     final material = {
       dings.id: [
-        {blub.id: true},
-        {blub.id: false},
+        {blub.id: Boolean(value: true).toJson()},
+        {blub.id: Boolean(value: false).toJson()},
       ],
     };
     await container

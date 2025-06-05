@@ -31,12 +31,12 @@ class ConditionParameterField extends ConsumerWidget {
       ),
       AttributeType.number => NumberField(
         enabled: enabled,
-        initialValue: value as num?,
+        initialValue: value as num?, // todo: change to Number
         onChanged: (value) => onChanged?.call(value),
       ),
       AttributeType.boolean => BooleanField(
         enabled: enabled,
-        initialValue: value as bool? ?? true,
+        initialValue: value as bool? ?? true, // todo: change to Boolean
         onChanged: (value) => onChanged?.call(value),
       ),
       _ => EmptyField(),

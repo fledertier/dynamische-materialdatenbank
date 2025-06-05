@@ -4,6 +4,8 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
+import 'attribute/default/boolean/boolean.dart';
+
 Json randomName() {
   final random = Random();
   final index = random.nextInt(randomMaterialNames.length);
@@ -35,6 +37,11 @@ Json randomManufacturer() {
           valueDe: 'Manufacturer ${random.nextInt(10)}',
         ).toJson(),
   };
+}
+
+Json randomBoolean() {
+  final random = Random();
+  return Boolean(value: random.nextBool()).toJson();
 }
 
 const randomMaterialNames = [
