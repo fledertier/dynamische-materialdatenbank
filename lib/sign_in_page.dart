@@ -6,14 +6,14 @@ import 'package:go_router/go_router.dart';
 
 import 'constants.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+class SignInPage extends ConsumerStatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  ConsumerState<SignInPage> createState() => _SignInPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -43,21 +43,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     controller: _passwordController,
                     textInputAction: TextInputAction.done,
                     obscureText: true,
-                    onFieldSubmitted: (value) => login(),
+                    onFieldSubmitted: (value) => signIn(),
                   ),
                   SizedBox(height: 64),
                   SizedBox(
                     height: 48,
                     child: FilledButton.tonal(
-                      child: const Text('Login'),
-                      onPressed: () => login(),
+                      child: const Text('Sign in'),
+                      onPressed: () => signIn(),
                     ),
                   ),
                   SizedBox(height: 8),
                   TextButton(
-                    child: const Text('No account? Register here'),
+                    child: const Text('No account? Sign up here'),
                     onPressed: () {
-                      context.goNamed(Pages.registration);
+                      context.goNamed(Pages.signUp);
                     },
                   ),
                 ],
@@ -69,7 +69,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Future<void> login() async {
+  Future<void> signIn() async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       await userNotifier.signIn(

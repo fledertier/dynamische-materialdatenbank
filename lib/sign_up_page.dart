@@ -1,20 +1,19 @@
 import 'package:dynamische_materialdatenbank/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'constants.dart';
 
-class RegistrationPage extends ConsumerStatefulWidget {
-  const RegistrationPage({super.key});
+class SignUpPage extends ConsumerStatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  ConsumerState createState() => _RegistrationPageState();
+  ConsumerState createState() => _SignUpPageState();
 }
 
-class _RegistrationPageState extends ConsumerState<RegistrationPage> {
+class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -32,7 +31,9 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Name'),
+                    decoration: const InputDecoration(
+                      labelText: 'Name (optional)',
+                    ),
                     autofillHints: const [AutofillHints.name],
                     controller: _nameController,
                     textInputAction: TextInputAction.next,
@@ -51,20 +52,20 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                     autofillHints: const [AutofillHints.newPassword],
                     controller: _passwordController,
                     obscureText: true,
-                    onFieldSubmitted: (value) => register(),
+                    onFieldSubmitted: (value) => signUp(),
                   ),
                   SizedBox(height: 64),
                   SizedBox(
                     height: 48,
                     child: FilledButton.tonal(
-                      child: const Text('Registrieren'),
-                      onPressed: () => register(),
+                      child: const Text('Sign up'),
+                      onPressed: () => signUp(),
                     ),
                   ),
                   SizedBox(height: 8),
                   TextButton(
-                    child: const Text('Already have an account? Login here'),
-                    onPressed: () => context.goNamed(Pages.login),
+                    child: const Text('Already have an account? Sign in here'),
+                    onPressed: () => context.goNamed(Pages.signIn),
                   ),
                 ],
               ),
@@ -75,7 +76,7 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
     );
   }
 
-  Future<void> register() async {
+  Future<void> signUp() async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       await userNotifier.signUp(
@@ -83,7 +84,6 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      TextInput.finishAutofillContext();
     } on FirebaseAuthException catch (e) {
       final message = e.message ?? 'An error occurred';
       ScaffoldMessenger.of(

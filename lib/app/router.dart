@@ -1,9 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attributes_page.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/login_page.dart';
 import 'package:dynamische_materialdatenbank/material/material_detail_page.dart';
 import 'package:dynamische_materialdatenbank/material/materials_page.dart';
-import 'package:dynamische_materialdatenbank/registration_page.dart';
+import 'package:dynamische_materialdatenbank/sign_in_page.dart';
+import 'package:dynamische_materialdatenbank/sign_up_page.dart';
 import 'package:dynamische_materialdatenbank/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,24 +13,24 @@ final routerProvider = Provider((ref) {
     initialLocation: '/materials',
     redirect: (context, state) {
       final user = ref.read(userProvider);
-      final loggingIn = state.matchedLocation == '/login';
-      final registering = state.matchedLocation == '/registration';
+      final signingIn = state.matchedLocation == '/sign-in';
+      final signingUp = state.matchedLocation == '/sign-up';
 
-      if (user == null && !(loggingIn || registering)) return '/login';
-      if (user != null && (loggingIn || registering)) return '/materials';
+      if (user == null && !(signingIn || signingUp)) return '/sign-in';
+      if (user != null && (signingIn || signingUp)) return '/materials';
 
       return null;
     },
     routes: [
       GoRoute(
-        path: '/login',
-        name: Pages.login,
-        builder: (context, state) => const LoginPage(),
+        path: '/sign-in',
+        name: Pages.signIn,
+        builder: (context, state) => const SignInPage(),
       ),
       GoRoute(
-        path: '/registration',
-        name: Pages.registration,
-        builder: (context, state) => const RegistrationPage(),
+        path: '/sign-up',
+        name: Pages.signUp,
+        builder: (context, state) => const SignUpPage(),
       ),
       GoRoute(
         path: '/materials',
