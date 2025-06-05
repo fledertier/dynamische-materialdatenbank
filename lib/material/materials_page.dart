@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/header/sort.dart';
 import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,12 +26,19 @@ class _MaterialsPageState extends State<MaterialsPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       header: Header(
-        center: MaterialSearch(
-          onFilter: () {
-            setState(() {
-              showFilters = !showFilters;
-            });
-          },
+        center: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MaterialSearch(
+              onFilter: () {
+                setState(() {
+                  showFilters = !showFilters;
+                });
+              },
+            ),
+            SizedBox(width: 24),
+            SortButton(),
+          ],
         ),
       ),
       navigation: Navigation(page: Pages.materials),

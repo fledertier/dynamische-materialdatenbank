@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 dynamic getAttributeValue(
   Json material,
@@ -48,6 +49,32 @@ Attribute? getAttribute(
     );
   }
   return attribute;
+}
+
+List<String>? getFullAttributeName(
+  Map<String, Attribute>? attributesById,
+  String? attributeId,
+) {
+  final ids = attributeId?.split('.') ?? [];
+  var attribute = attributesById?[ids.firstOrNull];
+  if (attribute == null) return null;
+
+  String typeName(Attribute attribute) {
+    return attribute.type.name.toTitleCase();
+  }
+
+  final name = [attribute.name ?? typeName(attribute)];
+
+  for (final id in ids.skip(1)) {
+    attribute = attribute?.childAttributes.firstWhereOrNull(
+      (attribute) => attribute.id == id,
+    );
+    // todo: for lists skip their child attribute
+    if (attribute != null && attribute.type is! ObjectAttributeType) {
+      name.add(attribute.name ?? typeName(attribute));
+    }
+  }
+  return name;
 }
 
 extension AttributeChildExtension on Attribute {

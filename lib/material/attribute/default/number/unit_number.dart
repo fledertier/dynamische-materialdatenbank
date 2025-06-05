@@ -1,6 +1,6 @@
 import 'package:dynamische_materialdatenbank/types.dart';
 
-class UnitNumber {
+class UnitNumber implements Comparable<UnitNumber> {
   UnitNumber({required this.value, this.displayUnit});
 
   final num value;
@@ -31,5 +31,10 @@ class UnitNumber {
     return other is UnitNumber &&
         other.value == value &&
         other.displayUnit == displayUnit;
+  }
+
+  @override
+  int compareTo(UnitNumber other) {
+    return value.compareTo(other.value);
   }
 }

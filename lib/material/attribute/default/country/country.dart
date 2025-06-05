@@ -1,4 +1,4 @@
-class Country {
+class Country implements Comparable<Country> {
   final String name;
   final String code;
 
@@ -30,6 +30,11 @@ class Country {
 
   @override
   int get hashCode => code.hashCode;
+
+  @override
+  int compareTo(Country other) {
+    return code.compareTo(other.code);
+  }
 }
 
 abstract class Countries {

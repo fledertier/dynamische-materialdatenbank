@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/types.dart';
 
-class TranslatableText {
+class TranslatableText implements Comparable<TranslatableText> {
   const TranslatableText({this.valueDe, this.valueEn});
 
   final String? valueDe;
@@ -52,5 +52,11 @@ class TranslatableText {
     return other is TranslatableText &&
         other.valueDe == valueDe &&
         other.valueEn == valueEn;
+  }
+
+  @override
+  int compareTo(TranslatableText other) {
+    // todo: compare language dependant
+    return (valueDe ?? '').compareTo(other.valueDe ?? '');
   }
 }
