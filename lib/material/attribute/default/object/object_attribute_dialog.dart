@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,12 +9,12 @@ import 'package:go_router/go_router.dart';
 class ObjectAttributeDialog extends ConsumerStatefulWidget {
   const ObjectAttributeDialog({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.initialObject,
     required this.onSave,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final Json? initialObject;
   final void Function(Json? object) onSave;
 
@@ -31,7 +32,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
     final name = attribute?.name ?? 'Object';
     final canPop = Navigator.of(context).canPop();
 
@@ -59,7 +60,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
           width: 400,
           child: ObjectAttributeForm(
             key: formKey,
-            attributeId: widget.attributeId,
+            attributePath: widget.attributePath,
             controller: controller,
             onSave: widget.onSave,
           ),
@@ -90,7 +91,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
   Future<void> save() async {
     if (!form.validate()) {
-      debugPrint('Form for ${widget.attributeId} is not valid');
+      debugPrint('Form for ${widget.attributePath} is not valid');
       return;
     }
     final object = await form.submit();
@@ -106,7 +107,7 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
 
 Future<Json?> showObjectAttributeDialog({
   required BuildContext context,
-  required String attributeId,
+  required AttributePath attributePath,
   Json? initialObject,
   bool isRoot = false,
   required void Function(Json? value) onSave,
@@ -117,7 +118,7 @@ Future<Json?> showObjectAttributeDialog({
     barrierDismissible: !isRoot,
     pageBuilder: (context, animation, secondaryAnimation) {
       return ObjectAttributeDialog(
-        attributeId: attributeId,
+        attributePath: attributePath,
         initialObject: initialObject,
         onSave: onSave,
       );

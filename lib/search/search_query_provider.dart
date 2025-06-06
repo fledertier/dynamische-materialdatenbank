@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/search/search_provider.dart';
@@ -14,12 +15,12 @@ final searchQueryProvider = Provider((ref) {
 
   return ConditionGroup.or([
     Condition(
-      attribute: Attributes.name,
+      attributePath: AttributePath(Attributes.name),
       operator: Operator.contains,
       parameter: search,
     ),
     Condition(
-      attribute: Attributes.description,
+      attributePath: AttributePath(Attributes.description),
       operator: Operator.contains,
       parameter: search,
     ),

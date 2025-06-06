@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/origin_country_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/world_map.dart';
@@ -26,7 +27,7 @@ class OriginCountryCard extends ConsumerWidget {
               valueProvider(
                 AttributeArgument(
                   materialId: materialId,
-                  attributeId: Attributes.originCountry,
+                  attributePath: AttributePath(Attributes.originCountry),
                 ),
               ),
             )

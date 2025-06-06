@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/default_cards.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
@@ -48,7 +49,8 @@ abstract class CardFactory {
     final cacheForMaterial = cache.putIfAbsent(materialId, () => {});
     return Consumer(
       builder: (context, ref, child) {
-        final attribute = ref.watch(attributeProvider(data.attribute)).value;
+        final attribute =
+            ref.watch(attributeProvider(AttributePath(data.attributeId))).value;
         final resized = resize(data, attribute, size);
 
         return cacheForMaterial.putIfAbsent(
@@ -66,7 +68,7 @@ abstract class CardFactory {
       DefaultCards() => DefaultCardFactory.create(
         card,
         materialId,
-        data.attribute,
+        data.attributeId,
         data.size,
       ),
       _ => throw Exception('Unknown cards type: ${card.runtimeType}'),
@@ -97,18 +99,18 @@ abstract class CardFactory {
 class CardData {
   const CardData({
     required this.card,
-    required this.attribute,
+    required this.attributeId,
     required this.size,
   });
 
   final Cards card;
-  final String attribute;
+  final String attributeId;
   final CardSize size;
 
-  CardData copyWith({Cards? card, String? attribute, CardSize? size}) {
+  CardData copyWith({Cards? card, String? attributeId, CardSize? size}) {
     return CardData(
       card: card ?? this.card,
-      attribute: attribute ?? this.attribute,
+      attributeId: attributeId ?? this.attributeId,
       size: size ?? this.size,
     );
   }
@@ -116,7 +118,7 @@ class CardData {
   factory CardData.fromCustomCard(CustomCards card) {
     return CardData(
       card: card,
-      attribute: card.attributes.first,
+      attributeId: card.attributes.first,
       size: card.sizes.last,
     );
   }
@@ -124,18 +126,18 @@ class CardData {
   factory CardData.fromJson(Json json) {
     return CardData(
       card: Cards.fromName(json['card']),
-      attribute: json['attribute'],
+      attributeId: json['attributeId'],
       size: CardSize.values.byName(json['size']),
     );
   }
 
   Json toJson() {
-    return {'card': card.name, 'attribute': attribute, 'size': size.name};
+    return {'card': card.name, 'attributeId': attributeId, 'size': size.name};
   }
 
   @override
   String toString() {
-    return 'CardData(card: $card, attribute: $attribute, size: $size)';
+    return 'CardData(card: $card, attributeId: $attributeId, size: $size)';
   }
 
   @override
@@ -143,13 +145,13 @@ class CardData {
     if (identical(this, other)) return true;
     if (other is! CardData) return false;
     return card == other.card &&
-        attribute == other.attribute &&
+        attributeId == other.attributeId &&
         size == other.size;
   }
 
   @override
   int get hashCode {
-    return card.hashCode ^ attribute.hashCode ^ size.hashCode;
+    return Object.hash(card, attributeId, size);
   }
 }
 

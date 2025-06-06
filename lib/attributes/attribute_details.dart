@@ -5,6 +5,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_dialog.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_table.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/directional_menu_anchor.dart';
@@ -27,8 +28,10 @@ class AttributeDetails extends ConsumerWidget {
       builder: (context, child) {
         return Consumer(
           builder: (context, ref, child) {
-            final attribute =
-                ref.watch(attributeProvider(selectedAttributeId.value)).value;
+            final path = attributeProvider(
+              toAttributePath(selectedAttributeId.value),
+            );
+            final attribute = ref.watch(path).value;
             if (attribute == null) {
               return Center(
                 child: Text(
@@ -93,7 +96,9 @@ class AttributeDetails extends ConsumerWidget {
                   ),
                 ),
                 Expanded(
-                  child: AttributeTable(attribute: selectedAttributeId.value!),
+                  child: AttributeTable(
+                    attributeId: selectedAttributeId.value!,
+                  ),
                 ),
               ],
             );
@@ -133,35 +138,36 @@ class AttributeDetails extends ConsumerWidget {
     );
   }
 
-  Set<String> getRemovedAttributes(
+  Set<AttributePath> getRemovedAttributes(
     Attribute updatedAttribute,
     Attribute attribute,
   ) {
-    return _collectRemovedAttributes(updatedAttribute, attribute, attribute.id);
+    return _collectRemovedAttributes(
+      updatedAttribute,
+      attribute,
+      AttributePath(attribute.id),
+    );
   }
 
-  Set<String> _collectRemovedAttributes(
+  Set<AttributePath> _collectRemovedAttributes(
     Attribute attribute,
     Attribute initialAttribute,
-    String parentAttributeId,
+    AttributePath parentAttributePath,
   ) {
-    final removedAttributes = <String>{};
+    final removedAttributes = <AttributePath>{};
     for (final initialChildAttribute in initialAttribute.childAttributes) {
       final childAttribute = attribute.childAttributes.firstWhereOrNull(
         (childAttribute) => childAttribute.id == initialChildAttribute.id,
       );
-      final attributeId = [
-        parentAttributeId,
-        initialChildAttribute.id,
-      ].join('.');
+      final attributePath = parentAttributePath + initialChildAttribute.id;
       if (childAttribute == null) {
-        removedAttributes.add(attributeId);
+        removedAttributes.add(attributePath);
       } else {
         removedAttributes.addAll(
           _collectRemovedAttributes(
             childAttribute,
             initialChildAttribute,
-            attributeId,
+            attributePath,
           ),
         );
       }
@@ -174,9 +180,13 @@ class AttributeDetails extends ConsumerWidget {
     WidgetRef ref,
     Attribute attribute,
   ) async {
-    final delete = await confirmAttributeDeletion(context, {attribute.id});
+    final delete = await confirmAttributeDeletion(context, {
+      AttributePath(attribute.id),
+    });
     if (delete) {
-      await ref.read(attributesProvider.notifier).deleteAttribute(attribute.id);
+      await ref
+          .read(attributesProvider.notifier)
+          .deleteAttribute(AttributePath(attribute.id));
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Attribute deleted')));

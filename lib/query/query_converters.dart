@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
@@ -61,8 +62,9 @@ extension ConditionConverter on Condition {
       return null;
     }
 
+    final atributePath = json['attributePath'] as String?;
     final condition = Condition(
-      attribute: json['attribute'] as String?,
+      attributePath: atributePath != null ? AttributePath(atributePath) : null,
       operator: Operator.values.maybeByName(json['operator']),
       parameter: json['parameter'],
     );

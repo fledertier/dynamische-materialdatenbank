@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
@@ -13,13 +14,13 @@ import 'package:material_symbols_icons/symbols.dart';
 class NumberAttributeField extends ConsumerStatefulWidget {
   const NumberAttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.number,
     this.onChanged,
     this.textStyle,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final UnitNumber number;
   final ValueChanged<UnitNumber>? onChanged;
   final TextStyle? textStyle;
@@ -40,7 +41,7 @@ class _NumberAttributeFieldState extends ConsumerState<NumberAttributeField> {
       fontFamily: 'Lexend',
     );
 
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
     final edit = ref.watch(editModeProvider);
 
     if (attribute == null) {

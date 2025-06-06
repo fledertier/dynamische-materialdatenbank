@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,30 +14,30 @@ final filterQueryProvider = Provider((ref) {
   }
 
   return ConditionGroup.and([
-    for (final attribute in [
+    for (final attributeId in [
       Attributes.recyclable,
       Attributes.biodegradable,
       Attributes.biobased,
     ])
-      if (options[attribute] == true)
+      if (options[attributeId] == true)
         Condition(
-          attribute: attribute,
+          attributePath: AttributePath(attributeId),
           operator: Operator.equals,
-          parameter: options[attribute],
+          parameter: options[attributeId],
         ),
     if (options[Attributes.manufacturer] != null)
       Condition(
-        attribute: [
+        attributePath: AttributePath.of([
           Attributes.manufacturer,
           Attributes.manufacturerName,
-        ].join('.'),
+        ]),
         operator: Operator.equals,
         parameter: options[Attributes.manufacturer],
       ),
 
     if (options[Attributes.density] != null)
       Condition(
-        attribute: Attributes.density,
+        attributePath: AttributePath(Attributes.density),
         operator: Operator.lessThan,
         parameter: options[Attributes.density],
       ),

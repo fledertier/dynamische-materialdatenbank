@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean_attribute_field.dart';
@@ -27,7 +28,7 @@ class BooleanCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final argument = AttributeArgument(
       materialId: materialId,
-      attributeId: attributeId,
+      attributePath: AttributePath(attributeId),
     );
     final boolean =
         ref.watch(valueProvider(argument)) as Boolean? ?? Boolean(value: false);

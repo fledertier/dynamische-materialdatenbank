@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression_balls.dart';
@@ -41,7 +42,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
           jsonValueProvider(
             AttributeArgument(
               materialId: materialId,
-              attributeId: Attributes.subjectiveImpressions,
+              attributePath: AttributePath(Attributes.subjectiveImpressions),
             ),
           ),
         ) ??

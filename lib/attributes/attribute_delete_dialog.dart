@@ -1,17 +1,18 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class AttributeDeleteDialog extends ConsumerWidget {
-  const AttributeDeleteDialog({super.key, required this.attributes});
+  const AttributeDeleteDialog({super.key, required this.attributePaths});
 
-  final Set<String> attributes;
+  final Set<AttributePath> attributePaths;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snapshot = ref.watch(
-      attributesUsedCountProvider(AttributesArgument(attributes)),
+      attributesUsedCountProvider(AttributesArgument(attributePaths)),
     );
 
     if (snapshot.isLoading || !snapshot.hasValue) {
@@ -26,10 +27,12 @@ class AttributeDeleteDialog extends ConsumerWidget {
         child: AlertDialog(
           icon: Icon(Icons.delete_outlined),
           title: Text(
-            attributes.length > 1 ? 'Delete attributes?' : 'Delete attribute?',
+            attributePaths.length > 1
+                ? 'Delete attributes?'
+                : 'Delete attribute?',
           ),
           content: Text(
-            attributes.length > 1
+            attributePaths.length > 1
                 ? 'Deleting these attributes will also remove them from $materialCount materials. This action cannot be undone.'
                 : 'Deleting this attribute will also remove it from $materialCount materials. This action cannot be undone.',
           ),
@@ -55,7 +58,7 @@ class AttributeDeleteDialog extends ConsumerWidget {
 
 Future<bool> confirmAttributeDeletion(
   BuildContext context,
-  Set<String> attributes,
+  Set<AttributePath> attributes,
 ) async {
   if (attributes.isEmpty) {
     return true;
@@ -63,7 +66,7 @@ Future<bool> confirmAttributeDeletion(
   final delete = await showDialog<bool>(
     context: context,
     builder: (context) {
-      return AttributeDeleteDialog(attributes: attributes);
+      return AttributeDeleteDialog(attributePaths: attributes);
     },
   );
   return delete ?? false;

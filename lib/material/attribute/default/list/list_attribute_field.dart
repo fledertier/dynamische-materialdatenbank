@@ -1,10 +1,10 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
-import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
@@ -14,13 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ListAttributeField extends ConsumerStatefulWidget {
   const ListAttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.list,
     this.isRoot = false,
     this.onChanged,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final List list;
   final bool isRoot;
   final void Function(List value)? onChanged;
@@ -35,7 +35,7 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
   @override
   Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
 
     if (attribute == null) {
       return SizedBox();
@@ -43,7 +43,7 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
 
     final listType = attribute.type as ListAttributeType;
     final itemAttribute = listType.attribute;
-    final itemAttributeId = widget.attributeId.add(itemAttribute.id);
+    final itemAttributePath = widget.attributePath + itemAttribute.id;
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 250),
@@ -66,7 +66,7 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
           }
           return HoverBuilder(
             child: AttributeField(
-              attributeId: itemAttributeId,
+              attributePath: itemAttributePath,
               value: list.elementAtOrNull(index),
               isRoot: widget.isRoot,
               onChanged: (value) {

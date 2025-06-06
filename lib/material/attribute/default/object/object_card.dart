@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
@@ -24,12 +25,13 @@ class ObjectCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final attributePath = AttributePath(attributeId);
     final argument = AttributeArgument(
       materialId: materialId,
-      attributeId: attributeId,
+      attributePath: attributePath,
     );
     final object = ref.watch(valueProvider(argument));
-    final attribute = ref.watch(attributeProvider(attributeId)).value;
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
 
     if (attribute == null) {
       return SizedBox();
@@ -38,7 +40,7 @@ class ObjectCard extends ConsumerWidget {
     return AttributeCard(
       label: AttributeLabel(attributeId: attributeId),
       title: ObjectAttributeField(
-        attributeId: attributeId,
+        attributePath: attributePath,
         object: object,
         isRoot: true,
         onSave: (object) {

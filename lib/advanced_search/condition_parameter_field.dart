@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,19 +9,19 @@ class ConditionParameterField extends ConsumerWidget {
   const ConditionParameterField({
     super.key,
     required this.value,
-    required this.attributeId,
+    required this.attributePath,
     this.onChanged,
     this.enabled = true,
   });
 
-  final String? attributeId;
+  final AttributePath? attributePath;
   final Object? value;
   final ValueChanged<Object?>? onChanged;
   final bool enabled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(attributeId)).value;
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
     final type = attribute?.type.id;
 
     return switch (type) {

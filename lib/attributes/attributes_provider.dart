@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,58 +16,55 @@ class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
   @override
   Stream<Map<String, Attribute>> build() => getAttributesStream();
 
-  Future<List<Json>> _getMaterialsWithAttribute(String attributeId) async {
+  Future<List<Json>> _getMaterialsWithAttribute(AttributePath path) async {
     final snapshot =
         await ref
             .read(firestoreProvider)
             .collection(Collections.materials)
-            .where(attributeId, isNull: false)
+            .where(path.toString(), isNull: false)
             .get();
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  Future<void> deleteAttribute(String attributeId) async {
-    await _deleteAttributeInMaterials(attributeId);
-    await _deleteValuesWithAttribute(attributeId);
-    await _deleteAttribute(attributeId);
+  Future<void> deleteAttribute(AttributePath path) async {
+    await _deleteAttributeInMaterials(path);
+    await _deleteValuesWithAttribute(path);
+    await _deleteAttribute(path);
   }
 
-  Future<void> _deleteAttributeInMaterials(String attributeId) async {
-    final materials = await _getMaterialsWithAttribute(attributeId);
+  Future<void> _deleteAttributeInMaterials(AttributePath path) async {
+    final materials = await _getMaterialsWithAttribute(path);
     for (final material in materials) {
       final materialId = material[Attributes.id];
       await ref
           .read(firestoreProvider)
           .collection(Collections.materials)
           .doc(materialId)
-          .update({attributeId: FieldValue.delete()});
+          .update({path.toString(): FieldValue.delete()});
     }
   }
 
-  Future<void> _deleteValuesWithAttribute(String attributeId) async {
-    final topLevelAttributeId = attributeId.split('.').first;
-    final subAttributeId = attributeId.split('.').sublist(1).join('.');
+  Future<void> _deleteValuesWithAttribute(AttributePath path) async {
+    final subAttributePath = path - path.topLevelId;
 
     final attributeDoc = ref
         .read(firestoreProvider)
         .collection(Collections.values)
-        .doc(topLevelAttributeId);
+        .doc(path.topLevelId);
 
-    if (attributeId == topLevelAttributeId) {
+    if (path.isTopLevel) {
       await attributeDoc.delete();
     } else {
       final valuesByMaterialId = (await attributeDoc.get()).data() ?? {};
       await attributeDoc.set({
         for (final materialId in valuesByMaterialId.keys)
-          '$materialId.$subAttributeId': FieldValue.delete(),
+          '$materialId.$subAttributePath': FieldValue.delete(),
       }, SetOptions(merge: true));
     }
   }
 
-  Future<void> _deleteAttribute(String attributeId) async {
-    final topLevelId = attributeId.split('.').first;
-
-    if (attributeId != topLevelId) {
+  Future<void> _deleteAttribute(AttributePath path) async {
+    if (!path.isTopLevel) {
       return; // attribute is removed in the attribute dialog
     }
 
@@ -74,7 +72,7 @@ class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
         .read(firestoreProvider)
         .collection(Collections.attributes)
         .doc(Docs.attributes)
-        .set({attributeId: FieldValue.delete()}, SetOptions(merge: true));
+        .set({path.toString(): FieldValue.delete()}, SetOptions(merge: true));
   }
 
   Stream<Map<String, Attribute>> getAttributesStream() {

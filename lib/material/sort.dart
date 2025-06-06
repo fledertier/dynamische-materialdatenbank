@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
@@ -63,13 +64,13 @@ class SortAttributeSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final id = ref.watch(sortAttributeProvider);
+    final path = ref.watch(sortAttributeProvider);
     final attributesById = ref.watch(attributesProvider).value ?? {};
     final attributes = attributesById.values.sortedBy(
       (attribute) => attribute.name ?? attribute.type.name.toTitleCase(),
     );
-    final attribute = getAttribute(attributesById, id);
-    final name = getFullAttributeName(attributesById, id)?.join(' / ');
+    final attribute = getAttribute(attributesById, path);
+    final name = getFullAttributeName(attributesById, path)?.join(' / ');
 
     return MenuAnchor(
       builder: (context, controller, child) {
@@ -120,8 +121,8 @@ class SortAttributeSelector extends ConsumerWidget {
     } else {
       return MenuItemButton(
         onPressed: () {
-          final id = currentPath.join('.');
-          ref.read(sortAttributeProvider.notifier).state = id;
+          final path = AttributePath.of(currentPath);
+          ref.read(sortAttributeProvider.notifier).state = path;
         },
         child: Text(name),
       );
@@ -129,6 +130,6 @@ class SortAttributeSelector extends ConsumerWidget {
   }
 }
 
-final sortAttributeProvider = StateProvider<String?>((ref) {
+final sortAttributeProvider = StateProvider<AttributePath?>((ref) {
   return null;
 });

@@ -2,20 +2,20 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
-import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ObjectAttributeForm extends ConsumerStatefulWidget {
   const ObjectAttributeForm({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.controller,
     this.onSave,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final ValueNotifier<Json?> controller;
   final void Function(Json? object)? onSave;
 
@@ -44,7 +44,7 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
 
     if (attribute == null) {
       return const SizedBox();
@@ -74,7 +74,7 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
                         style: TextTheme.of(context).labelMedium,
                       ),
                     AttributeField(
-                      attributeId: widget.attributeId.add(attribute.id),
+                      attributePath: widget.attributePath + attribute.id,
                       value: _controller.value?[attribute.id],
                       onChanged: (value) {
                         updateAttribute(attribute, value);
@@ -117,7 +117,7 @@ class ObjectAttributeFormState extends ConsumerState<ObjectAttributeForm> {
 
   Future<ObjectAttributeType?> getObjectType() async {
     final attribute = await ref.read(
-      attributeProvider(widget.attributeId).future,
+      attributeProvider(widget.attributePath).future,
     );
     return attribute?.type as ObjectAttributeType?;
   }

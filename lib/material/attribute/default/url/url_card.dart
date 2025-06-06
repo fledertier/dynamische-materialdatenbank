@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/url/url_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
@@ -35,7 +36,7 @@ class _UrlCardState extends ConsumerState<UrlCard> {
   Widget build(BuildContext context) {
     final argument = AttributeArgument(
       materialId: widget.materialId,
-      attributeId: widget.attributeId,
+      attributePath: AttributePath(widget.attributeId),
     );
     final url = ref.watch(valueProvider(argument)) as Uri?;
 
@@ -43,7 +44,7 @@ class _UrlCardState extends ConsumerState<UrlCard> {
       columns: widget.columns,
       label: AttributeLabel(attributeId: widget.attributeId),
       title: UrlAttributeField(
-        attributeId: widget.attributeId,
+        attributePath: AttributePath(widget.attributeId),
         url: url,
         onChanged: (url) {
           debounce(() {

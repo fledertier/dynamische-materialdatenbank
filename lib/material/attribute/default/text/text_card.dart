@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
@@ -35,7 +36,7 @@ class _TextCardState extends ConsumerState<TextCard> {
   Widget build(BuildContext context) {
     final argument = AttributeArgument(
       materialId: widget.materialId,
-      attributeId: widget.attributeId,
+      attributePath: AttributePath(widget.attributeId),
     );
     final text =
         ref.watch(valueProvider(argument)) as TranslatableText? ??
@@ -45,7 +46,7 @@ class _TextCardState extends ConsumerState<TextCard> {
       columns: widget.columns,
       label: AttributeLabel(attributeId: widget.attributeId),
       title: TextAttributeField(
-        attributeId: widget.attributeId,
+        attributePath: AttributePath(widget.attributeId),
         text: text,
         onChanged: (text) {
           debounce(() {

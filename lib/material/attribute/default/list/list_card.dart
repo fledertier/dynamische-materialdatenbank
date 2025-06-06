@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
@@ -34,12 +35,13 @@ class _ListCardState extends ConsumerState<ListCard> {
 
   @override
   Widget build(BuildContext context) {
+    final attributePath = AttributePath(widget.attributeId);
     final argument = AttributeArgument(
       materialId: widget.materialId,
-      attributeId: widget.attributeId,
+      attributePath: attributePath,
     );
     final list = ref.watch(valueProvider(argument)) as List? ?? [];
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
 
     if (attribute == null) {
       return SizedBox();
@@ -49,7 +51,7 @@ class _ListCardState extends ConsumerState<ListCard> {
       columns: widget.columns,
       label: AttributeLabel(attributeId: widget.attributeId),
       title: ListAttributeField(
-        attributeId: widget.attributeId,
+        attributePath: attributePath,
         list: list,
         isRoot: true,
         onChanged: (list) {

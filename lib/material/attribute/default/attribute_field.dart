@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_attribute_field.dart';
@@ -17,14 +18,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AttributeField extends ConsumerWidget {
   const AttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.value,
     this.isRoot = false,
     this.onChanged,
     this.onSave,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final dynamic value;
   final bool isRoot;
   final ValueChanged? onChanged;
@@ -32,7 +33,7 @@ class AttributeField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(attributeId)).value;
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
 
     if (attribute == null) {
       return const SizedBox();
@@ -41,7 +42,7 @@ class AttributeField extends ConsumerWidget {
     switch (attribute.type.id) {
       case AttributeType.text:
         return TextAttributeField(
-          attributeId: attributeId,
+          attributePath: attributePath,
           text: value as TranslatableText? ?? TranslatableText(),
           onChanged: onChanged,
         );
@@ -49,31 +50,31 @@ class AttributeField extends ConsumerWidget {
         final number = value as UnitNumber? ?? UnitNumber(value: 0);
         return NumberAttributeField(
           key: ValueKey(number.displayUnit),
-          attributeId: attributeId,
+          attributePath: attributePath,
           number: number,
           onChanged: onChanged,
         );
       case AttributeType.url:
         return UrlAttributeField(
-          attributeId: attributeId,
+          attributePath: attributePath,
           url: value as Uri?,
           onChanged: onChanged,
         );
       case AttributeType.country:
         return CountryAttributeField(
-          attributeId: attributeId,
+          attributePath: attributePath,
           country: value as Country?,
           onChanged: onChanged,
         );
       case AttributeType.list:
         return ListAttributeField(
-          attributeId: attributeId,
+          attributePath: attributePath,
           list: value as List? ?? [],
           onChanged: onChanged,
         );
       case AttributeType.object:
         return ObjectAttributeField(
-          attributeId: attributeId,
+          attributePath: attributePath,
           object: value as Json?,
           isRoot: isRoot,
           onChanged: onChanged,

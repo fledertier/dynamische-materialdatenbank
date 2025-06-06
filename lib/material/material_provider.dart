@@ -6,6 +6,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/material/placeholder.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
@@ -95,13 +96,13 @@ final jsonValueProvider = Provider.family((ref, AttributeArgument arg) {
     return null;
   }
 
-  final attributes = ref.watch(attributesProvider).value;
-  return getJsonAttributeValue(material, attributes, arg.attributeId);
+  final attributesById = ref.watch(attributesProvider).value;
+  return getJsonAttributeValue(material, attributesById, arg.attributePath);
 });
 
 final valueProvider = Provider.family((ref, AttributeArgument arg) {
   final json = ref.watch(jsonValueProvider(arg));
-  final attribute = ref.watch(attributeProvider(arg.attributeId)).value;
+  final attribute = ref.watch(attributeProvider(arg.attributePath)).value;
 
   return fromJson(json, attribute?.type);
 });
@@ -109,11 +110,11 @@ final valueProvider = Provider.family((ref, AttributeArgument arg) {
 class AttributeArgument {
   const AttributeArgument({
     required this.materialId,
-    required this.attributeId,
+    required this.attributePath,
   });
 
   final String materialId;
-  final String attributeId;
+  final AttributePath attributePath;
 
   @override
   bool operator ==(Object other) {
@@ -121,14 +122,14 @@ class AttributeArgument {
 
     return other is AttributeArgument &&
         other.materialId == materialId &&
-        other.attributeId == attributeId;
+        other.attributePath == attributePath;
   }
 
   @override
-  int get hashCode => materialId.hashCode ^ attributeId.hashCode;
+  int get hashCode => Object.hash(materialId, attributePath);
 
   @override
   String toString() {
-    return 'AttributeParameter(material: $materialId, attribute: $attributeId)';
+    return 'AttributeParameter(material: $materialId, attributePath: $attributePath)';
   }
 }

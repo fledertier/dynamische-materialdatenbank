@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,13 +19,13 @@ class SearchService {
 
   List<Json> search(
     List<Json> materials,
-    Set<String> attributes,
+    Set<AttributePath> attributes,
     String search,
   ) {
     final query = ConditionGroup.or([
-      for (final attribute in attributes)
+      for (final attributePath in attributes)
         Condition(
-          attribute: attribute,
+          attributePath: attributePath,
           operator: Operator.contains,
           parameter: search,
         ),

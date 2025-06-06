@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/fire_behavior_standard.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/fire_behavior/fire_behavior_standard_visualization.dart';
@@ -37,7 +38,7 @@ class _FireBehaviorStandardCardState
               valueProvider(
                 AttributeArgument(
                   materialId: widget.materialId,
-                  attributeId: Attributes.fireBehaviorStandard,
+                  attributePath: AttributePath(Attributes.fireBehaviorStandard),
                 ),
               ),
             )

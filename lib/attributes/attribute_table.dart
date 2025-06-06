@@ -1,19 +1,25 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttributeTable extends ConsumerWidget {
-  const AttributeTable({super.key, required this.attribute});
+  const AttributeTable({super.key, required this.attributeId});
 
-  final String attribute;
+  final String attributeId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncMaterials = ref.watch(
-      materialsProvider(AttributesArgument({Attributes.name, attribute})),
+      materialsProvider(
+        AttributesArgument({
+          AttributePath(Attributes.name),
+          AttributePath(attributeId),
+        }),
+      ),
     );
 
     if (asyncMaterials.isLoading) {
@@ -21,7 +27,7 @@ class AttributeTable extends ConsumerWidget {
     }
 
     final materials = (asyncMaterials.value ?? []).where(
-      (material) => material[attribute] != null,
+      (material) => material[attributeId] != null,
     );
 
     if (materials.isEmpty) {
@@ -62,7 +68,7 @@ class AttributeTable extends ConsumerWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(material[attribute].toString()),
+                  child: Text(material[attributeId].toString()),
                 ),
               ],
             ),

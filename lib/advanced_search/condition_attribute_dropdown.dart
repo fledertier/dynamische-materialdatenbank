@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,15 +12,15 @@ class ConditionAttributeDropdown extends ConsumerWidget {
   const ConditionAttributeDropdown({
     super.key,
     this.enabled = true,
-    this.initialAttribute,
+    this.initialAttributePath,
     required this.onSelected,
     this.attributeEntries,
     this.depth = 0,
   });
 
   final bool enabled;
-  final String? initialAttribute;
-  final ValueChanged<String?> onSelected;
+  final AttributePath? initialAttributePath;
+  final ValueChanged<AttributePath> onSelected;
   final List<Attribute>? attributeEntries;
   final int depth;
 
@@ -29,8 +30,8 @@ class ConditionAttributeDropdown extends ConsumerWidget {
     final attributes = attributesById.values.sortedBy(
       (attribute) => attribute.name ?? '',
     );
-    final attributeId = extractId(initialAttribute, depth);
-    final attribute = ref.watch(attributeProvider(attributeId)).value;
+    final attributePath = subPath(initialAttributePath, depth);
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
 
     return Row(
       children: [
@@ -49,7 +50,7 @@ class ConditionAttributeDropdown extends ConsumerWidget {
               ),
           ],
           onSelected: (attribute) {
-            onSelected(attribute?.id);
+            onSelected(AttributePath(attribute!.id));
           },
           validator: (attribute) {
             if (attribute == null) {
@@ -61,10 +62,10 @@ class ConditionAttributeDropdown extends ConsumerWidget {
         if (attribute?.type case ObjectAttributeType(:final attributes))
           ConditionAttributeDropdown(
             enabled: enabled,
-            initialAttribute: initialAttribute,
+            initialAttributePath: initialAttributePath,
             attributeEntries: attributes,
-            onSelected: (subAttribute) {
-              onSelected([attribute?.id, subAttribute].join('.'));
+            onSelected: (subPath) {
+              onSelected(AttributePath.of([attribute!.id, ...subPath.ids]));
             },
             depth: depth + 1,
           ),
@@ -72,11 +73,10 @@ class ConditionAttributeDropdown extends ConsumerWidget {
     );
   }
 
-  String? extractId(String? attribute, int depth) {
-    final subAttributes = attribute?.split('.') ?? [];
-    if (depth >= subAttributes.length) {
+  AttributePath? subPath(AttributePath? path, int depth) {
+    if (path == null || depth >= path.ids.length) {
       return null;
     }
-    return subAttributes.take(depth + 1).join('.');
+    return AttributePath.of(path.ids.take(depth + 1).toList());
   }
 }

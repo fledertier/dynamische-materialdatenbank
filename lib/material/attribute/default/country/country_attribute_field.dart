@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/widgets/enum_field.dart';
@@ -9,18 +10,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CountryAttributeField extends ConsumerWidget {
   const CountryAttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     this.country,
     this.onChanged,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final Country? country;
   final void Function(Country? value)? onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute = ref.watch(attributeProvider(attributeId)).value;
+    final attribute = ref.watch(attributeProvider(attributePath)).value;
     final edit = ref.watch(editModeProvider);
 
     return EnumField<Country>(

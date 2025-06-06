@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
@@ -8,23 +9,23 @@ import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 class Condition extends ConditionNode {
-  Condition({this.attribute, this.operator, this.parameter});
+  Condition({this.attributePath, this.operator, this.parameter});
 
-  String? attribute;
+  AttributePath? attributePath;
   Operator? operator;
   Object? parameter;
 
   @override
   bool get isValid {
-    return attribute != null && operator != null && parameter != null;
+    return attributePath != null && operator != null && parameter != null;
   }
 
   @override
-  Set<String> get attributes => {if (isValid) attribute!.split('.').first};
+  Set<String> get attributeIds => {if (isValid) attributePath!.topLevelId};
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    var value = getAttributeValue(material, attributesById, attribute!);
+    var value = getAttributeValue(material, attributesById, attributePath!);
     value = switch (value) {
       TranslatableText() => value.valueDe,
       UnitNumber() => value.value,
@@ -49,18 +50,18 @@ class Condition extends ConditionNode {
   @override
   bool operator ==(Object other) {
     return other is Condition &&
-        attribute == other.attribute &&
+        attributePath == other.attributePath &&
         operator == other.operator &&
         parameter == other.parameter;
   }
 
   @override
   int get hashCode {
-    return Object.hash(attribute, operator, parameter);
+    return Object.hash(attributePath, operator, parameter);
   }
 
   @override
   String toString() {
-    return 'Condition(attribute: $attribute, operator: $operator, parameter: $parameter)';
+    return 'Condition(attributePath: $attributePath, operator: $operator, parameter: $parameter)';
   }
 }

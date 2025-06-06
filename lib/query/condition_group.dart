@@ -31,8 +31,8 @@ class ConditionGroup extends ConditionNode {
   }
 
   @override
-  Set<String> get attributes {
-    return nodes.expand((node) => node.attributes).toSet();
+  Set<String> get attributeIds {
+    return nodes.expand((node) => node.attributeIds).toSet();
   }
 
   @override

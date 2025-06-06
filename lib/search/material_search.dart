@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/search/search.dart';
@@ -54,7 +55,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
         if (query.isEmpty) {
           return [];
         }
-        final attributes = {Attributes.name};
+        final attributes = {AttributePath(Attributes.name)};
         final materials = await ref.read(
           materialsProvider(AttributesArgument(attributes)).future,
         );

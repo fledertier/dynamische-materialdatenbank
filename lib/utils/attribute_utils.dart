@@ -2,15 +2,16 @@ import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 dynamic getAttributeValue(
   Json material,
-  Map<String, Attribute>? attributesById,
-  String attributeId,
+  Map<String, Attribute> attributesById,
+  AttributePath path,
 ) {
-  final json = getJsonAttributeValue(material, attributesById, attributeId);
-  final attribute = getAttribute(attributesById, attributeId);
+  final json = getJsonAttributeValue(material, attributesById, path);
+  final attribute = getAttribute(attributesById, path);
 
   return fromJson(json, attribute?.type);
 }
@@ -18,12 +19,11 @@ dynamic getAttributeValue(
 dynamic getJsonAttributeValue(
   Json material,
   Map<String, Attribute>? attributesById,
-  String attributeId,
+  AttributePath path,
 ) {
-  final ids = attributeId.split('.');
-  var attribute = attributesById?[ids.firstOrNull];
-  var value = material[ids.firstOrNull];
-  for (final id in ids.skip(1)) {
+  var attribute = attributesById?[path.ids.first];
+  var value = material[path.ids.first];
+  for (final id in path.ids.skip(1)) {
     attribute = attribute?.childAttributes.firstWhereOrNull(
       (attribute) => attribute.id == id,
     );
@@ -38,11 +38,10 @@ dynamic getJsonAttributeValue(
 
 Attribute? getAttribute(
   Map<String, Attribute>? attributesById,
-  String? attributeId,
+  AttributePath? path,
 ) {
-  final ids = attributeId?.split('.') ?? [];
-  var attribute = attributesById?[ids.firstOrNull];
-  for (final id in ids.skip(1)) {
+  var attribute = attributesById?[path?.ids.first];
+  for (final id in path?.ids.skip(1) ?? []) {
     attribute = attribute?.childAttributes.firstWhereOrNull(
       (attribute) => attribute.id == id,
     );
@@ -52,10 +51,9 @@ Attribute? getAttribute(
 
 List<String>? getFullAttributeName(
   Map<String, Attribute>? attributesById,
-  String? attributeId,
+  AttributePath? path,
 ) {
-  final ids = attributeId?.split('.') ?? [];
-  var attribute = attributesById?[ids.firstOrNull];
+  var attribute = attributesById?[path?.ids.first];
   if (attribute == null) return null;
 
   String typeName(Attribute attribute) {
@@ -64,7 +62,7 @@ List<String>? getFullAttributeName(
 
   final name = [attribute.name ?? typeName(attribute)];
 
-  for (final id in ids.skip(1)) {
+  for (final id in path?.ids.skip(1) ?? []) {
     attribute = attribute?.childAttributes.firstWhereOrNull(
       (attribute) => attribute.id == id,
     );
@@ -76,6 +74,13 @@ List<String>? getFullAttributeName(
   return name;
 }
 
+AttributePath? toAttributePath(String? attributeId) {
+  if (attributeId == null || attributeId.isEmpty) {
+    return null;
+  }
+  return AttributePath(attributeId);
+}
+
 extension AttributeChildExtension on Attribute {
   List<Attribute> get childAttributes {
     if (type case ObjectAttributeType(:final attributes)) {
@@ -84,15 +89,5 @@ extension AttributeChildExtension on Attribute {
       return [attribute];
     }
     return [];
-  }
-}
-
-extension AttributeIdExtension on String {
-  String get topLevel => split('.').first;
-
-  int get levels => split('.').length;
-
-  String add(String id) {
-    return [this, id].join('.');
   }
 }

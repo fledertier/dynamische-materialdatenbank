@@ -4,6 +4,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/image/constrained_image.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/image/image_search_service.dart';
@@ -38,7 +39,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       jsonValueProvider(
         AttributeArgument(
           materialId: widget.materialId,
-          attributeId: Attributes.images,
+          attributePath: AttributePath(Attributes.images),
         ),
       ),
     );

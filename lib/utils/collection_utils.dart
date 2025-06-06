@@ -1,4 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+
+extension ListExtension<T> on List<T> {
+  List<T> operator -(List<T> other) {
+    return whereNot(other.contains).toList();
+  }
+}
 
 extension MapExtension<K, V> on Map<K, V> {
   Map<T, V> mapKeys<T>(T Function(K key) convert) {

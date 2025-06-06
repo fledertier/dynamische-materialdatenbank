@@ -3,6 +3,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/firestore_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
@@ -67,7 +68,9 @@ void main() {
         .read(materialProvider(materialId).notifier)
         .updateMaterial(material);
 
-    await container.read(attributesProvider.notifier).deleteAttribute(dings.id);
+    await container
+        .read(attributesProvider.notifier)
+        .deleteAttribute(AttributePath(dings.id));
     await expectLater(
       container.read(materialProvider(materialId).future),
       completion(isNot(containsPair(dings.id, dingsValue))),
@@ -88,7 +91,7 @@ void main() {
 
     final materialId = 'material';
     final material = {
-      dings.id: {blub.id: Boolean(value: true)},
+      dings.id: {blub.id: Boolean(value: true).toJson()},
     };
     await container
         .read(materialProvider(materialId).notifier)
@@ -96,7 +99,7 @@ void main() {
 
     await container
         .read(attributesProvider.notifier)
-        .deleteAttribute('dings.blub');
+        .deleteAttribute(AttributePath.of([dings.id, blub.id]));
     await expectLater(
       container.read(materialProvider(materialId).future),
       completion(containsPair(dings.id, {})),
@@ -109,14 +112,13 @@ void main() {
 
   test('delete nested list attribute', () async {
     final blub = Attribute(id: 'blub', type: BooleanAttributeType());
+    final boop = Attribute(
+      id: 'boop',
+      type: ObjectAttributeType(attributes: [blub]),
+    );
     final dings = Attribute(
       id: 'dings',
-      type: ListAttributeType(
-        attribute: Attribute(
-          id: 'boop',
-          type: ObjectAttributeType(attributes: [blub]),
-        ),
-      ),
+      type: ListAttributeType(attribute: boop),
     );
     await container.read(attributesProvider.notifier).updateAttribute(dings);
 
@@ -133,7 +135,7 @@ void main() {
 
     await container
         .read(attributesProvider.notifier)
-        .deleteAttribute('dings.boop.blub');
+        .deleteAttribute(AttributePath.of([dings.id, boop.id, blub.id]));
     await expectLater(
       container.read(materialProvider(materialId).future),
       completion(containsPair(dings.id, [{}, {}])),

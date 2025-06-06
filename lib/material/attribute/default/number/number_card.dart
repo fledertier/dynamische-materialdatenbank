@@ -1,5 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
@@ -40,7 +41,7 @@ class NumberCard extends ConsumerWidget {
               valueProvider(
                 AttributeArgument(
                   materialId: materialId,
-                  attributeId: attributeId,
+                  attributePath: AttributePath(attributeId),
                 ),
               ),
             )
@@ -51,7 +52,7 @@ class NumberCard extends ConsumerWidget {
       label: AttributeLabel(attributeId: attributeId),
       title: NumberAttributeField(
         key: ValueKey(number.displayUnit),
-        attributeId: attributeId,
+        attributePath: AttributePath(attributeId),
         number: number,
         textStyle:
             textStyle ??

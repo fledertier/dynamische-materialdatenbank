@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/components/component.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/components/components_dialog.dart';
@@ -58,7 +59,7 @@ class ComponentsCard extends ConsumerWidget {
           jsonValueProvider(
             AttributeArgument(
               materialId: materialId,
-              attributeId: Attributes.components,
+              attributePath: AttributePath(Attributes.components),
             ),
           ),
         ) ??

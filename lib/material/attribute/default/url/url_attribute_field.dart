@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/url/favicon.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/utils/debouncer.dart';
@@ -8,13 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class UrlAttributeField extends ConsumerStatefulWidget {
   const UrlAttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.url,
     this.onChanged,
     this.textStyle,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final Uri? url;
   final ValueChanged<Uri?>? onChanged;
   final TextStyle? textStyle;
@@ -29,7 +30,7 @@ class _UrlAttributeFieldState extends ConsumerState<UrlAttributeField> {
   @override
   Widget build(BuildContext context) {
     final edit = ref.watch(editModeProvider);
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
 
     final textTheme = TextTheme.of(context);
     final defaultUrlStyle = textTheme.bodySmall ?? textTheme.titleLarge;

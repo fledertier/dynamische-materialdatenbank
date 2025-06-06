@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_search.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/custom_cards.dart';
@@ -44,7 +45,7 @@ class _AttributeCardSearchState extends ConsumerState<AttributeCardSearch> {
       jsonValueProvider(
         AttributeArgument(
           materialId: widget.materialId,
-          attributeId: Attributes.cardSections,
+          attributePath: AttributePath(Attributes.cardSections),
         ),
       ),
     );
@@ -68,7 +69,7 @@ Set<CardData> findCardsForAttribute(Attribute attribute, Set<CardSize> sizes) {
   return _findCardsForAttribute(attribute)
       .expand(
         (card) => card.sizes.intersection(sizes).map((size) {
-          return CardData(card: card, attribute: attribute.id, size: size);
+          return CardData(card: card, attributeId: attribute.id, size: size);
         }),
       )
       .toSet();

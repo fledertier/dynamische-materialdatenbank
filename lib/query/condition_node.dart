@@ -6,7 +6,7 @@ abstract class ConditionNode {
 
   bool get isValid;
 
-  Set<String> get attributes;
+  Set<String> get attributeIds;
 
   bool matches(Json material, Map<String, Attribute> attributesById);
 }

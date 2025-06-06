@@ -42,13 +42,13 @@ class ConditionWidget extends ConsumerWidget {
           children: [
             ConditionAttributeDropdown(
               enabled: enabled,
-              initialAttribute: condition.attribute,
+              initialAttributePath: condition.attributePath,
               onSelected: (attributeId) async {
                 final attribute = await ref.read(
                   attributeProvider(attributeId).future,
                 );
                 update(() {
-                  condition.attribute = attributeId;
+                  condition.attributePath = attributeId;
                   condition.operator = attribute?.type.operators.firstOrNull;
                   condition.parameter = null;
                 });
@@ -57,7 +57,7 @@ class ConditionWidget extends ConsumerWidget {
             ConditionOperatorDropdown(
               enabled: enabled,
               initialOperator: condition.operator,
-              attributeId: condition.attribute,
+              attributePath: condition.attributePath,
               onSelected: (operator) {
                 update(() {
                   condition.operator = operator;
@@ -67,7 +67,7 @@ class ConditionWidget extends ConsumerWidget {
             ConditionParameterField(
               enabled: enabled,
               value: condition.parameter,
-              attributeId: condition.attribute,
+              attributePath: condition.attributePath,
               onChanged: (value) {
                 update(() {
                   condition.parameter = value;

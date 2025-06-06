@@ -1,10 +1,10 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_dialog.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
-import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/loading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ObjectAttributeField extends ConsumerStatefulWidget {
   const ObjectAttributeField({
     super.key,
-    required this.attributeId,
+    required this.attributePath,
     required this.object,
     this.isRoot = false,
     this.onChanged,
@@ -20,7 +20,7 @@ class ObjectAttributeField extends ConsumerStatefulWidget {
     this.textStyle,
   });
 
-  final String attributeId;
+  final AttributePath attributePath;
   final Json? object;
   final bool isRoot;
   final ValueChanged<Json?>? onChanged;
@@ -42,7 +42,7 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
       fontFamily: 'Lexend',
     );
 
-    final attribute = ref.watch(attributeProvider(widget.attributeId)).value;
+    final attribute = ref.watch(attributeProvider(widget.attributePath)).value;
     final edit = ref.watch(editModeProvider);
 
     if (attribute == null) {
@@ -63,7 +63,7 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
                   child: ProviderScope(
                     overrides: [editModeProvider.overrideWith((ref) => false)],
                     child: AttributeField(
-                      attributeId: widget.attributeId.add(firstAttribute.id),
+                      attributePath: widget.attributePath + firstAttribute.id,
                       value: object?[firstAttribute.id],
                     ),
                   ),
@@ -74,7 +74,7 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
                 ? () {
                   showObjectAttributeDialog(
                     context: context,
-                    attributeId: widget.attributeId,
+                    attributePath: widget.attributePath,
                     initialObject: object,
                     isRoot: widget.isRoot,
                     onSave: (object) {

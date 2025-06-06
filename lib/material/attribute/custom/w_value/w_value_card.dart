@@ -1,4 +1,5 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/w_value/water_absorption_visualization.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_card.dart';
@@ -20,7 +21,7 @@ class WValueCard extends ConsumerWidget {
               valueProvider(
                 AttributeArgument(
                   materialId: materialId,
-                  attributeId: Attributes.wValue,
+                  attributePath: AttributePath(Attributes.wValue),
                 ),
               ),
             )
