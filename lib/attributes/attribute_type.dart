@@ -1,6 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -260,5 +263,18 @@ IconData iconForAttributeType(String id) {
     AttributeType.object => Symbols.category,
     AttributeType.list => Symbols.menu,
     _ => Symbols.change_history,
+  };
+}
+
+dynamic defaultValueForAttributeType(String id) {
+  return switch (id) {
+    AttributeType.text => TranslatableText(),
+    AttributeType.number => UnitNumber(value: 0),
+    AttributeType.boolean => Boolean(value: false),
+    AttributeType.url => Uri(),
+    AttributeType.country => null,
+    AttributeType.object => {},
+    AttributeType.list => [],
+    _ => null,
   };
 }

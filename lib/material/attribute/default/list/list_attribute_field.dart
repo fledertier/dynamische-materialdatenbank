@@ -2,8 +2,6 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/attribute_field.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
@@ -104,14 +102,7 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
   }
 
   void addItem(AttributeType itemType) {
-    final value = switch (itemType.id) {
-      AttributeType.text => TranslatableText(),
-      AttributeType.number => UnitNumber(value: 0),
-      AttributeType.boolean => false,
-      AttributeType.url => Uri(),
-      AttributeType.country => null,
-      _ => null,
-    };
+    final value = defaultValueForAttributeType(itemType.id);
     setState(() {
       list.add(value);
     });
