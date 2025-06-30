@@ -1,6 +1,10 @@
+import 'package:dynamische_materialdatenbank/attributes/attributeValue.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +20,7 @@ class ConditionParameterField extends ConsumerWidget {
 
   final AttributePath? attributePath;
   final Object? value;
-  final ValueChanged<Object?>? onChanged;
+  final ValueChanged<AttributeValue?>? onChanged;
   final bool enabled;
 
   @override
@@ -27,17 +31,17 @@ class ConditionParameterField extends ConsumerWidget {
     return switch (type) {
       AttributeType.text => TextField(
         enabled: enabled,
-        initialValue: value as String?,
+        initialValue: value as TranslatableText?,
         onChanged: (value) => onChanged?.call(value),
       ),
       AttributeType.number => NumberField(
         enabled: enabled,
-        initialValue: value as num?, // todo: change to Number
+        initialValue: value as UnitNumber?,
         onChanged: (value) => onChanged?.call(value),
       ),
       AttributeType.boolean => BooleanField(
         enabled: enabled,
-        initialValue: value as bool? ?? true, // todo: change to Boolean
+        initialValue: value as Boolean?,
         onChanged: (value) => onChanged?.call(value),
       ),
       _ => EmptyField(),
@@ -54,8 +58,8 @@ class TextField extends StatelessWidget {
     this.enabled = true,
   });
 
-  final String? initialValue;
-  final void Function(String? value) onChanged;
+  final TranslatableText? initialValue;
+  final void Function(TranslatableText? value) onChanged;
   final bool required;
   final bool enabled;
 
@@ -63,8 +67,10 @@ class TextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: enabled,
-      initialValue: initialValue,
-      onChanged: onChanged,
+      initialValue: initialValue?.value.toString(),
+      onChanged: (value) {
+        onChanged(value.isNotEmpty ? TranslatableText(valueDe: value) : null);
+      },
       validator: (value) {
         if (value == null || value.isEmpty) {
           if (required) {
@@ -86,8 +92,8 @@ class NumberField extends StatelessWidget {
     this.enabled = true,
   });
 
-  final num? initialValue;
-  final void Function(num? value) onChanged;
+  final UnitNumber? initialValue;
+  final void Function(UnitNumber? value) onChanged;
   final bool required;
   final bool enabled;
 
@@ -95,7 +101,7 @@ class NumberField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: enabled,
-      initialValue: initialValue?.toString(),
+      initialValue: initialValue?.value.toString(),
       keyboardType: TextInputType.numberWithOptions(
         decimal: true,
         signed: true,
@@ -104,8 +110,8 @@ class NumberField extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 150),
       ),
       onChanged: (value) {
-        final number = num.tryParse(value);
-        onChanged(number);
+        final number = num.tryParse(value) ?? 0;
+        onChanged(UnitNumber(value: number));
       },
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -133,8 +139,8 @@ class BooleanField extends StatefulWidget {
     this.enabled = true,
   });
 
-  final bool? initialValue;
-  final void Function(bool? value) onChanged;
+  final Boolean? initialValue;
+  final void Function(Boolean? value) onChanged;
   final bool required;
   final bool enabled;
 
@@ -153,14 +159,16 @@ class _BooleanFieldState extends State<BooleanField> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenuFormField(
+    return DropdownMenuFormField<bool>(
       enabled: widget.enabled,
-      initialSelection: widget.initialValue,
+      initialSelection: widget.initialValue?.value ?? true,
       dropdownMenuEntries: [
         DropdownMenuEntry(value: true, label: 'True'),
         DropdownMenuEntry(value: false, label: 'False'),
       ],
-      onSelected: widget.onChanged,
+      onSelected: (value) {
+        widget.onChanged(Boolean(value: value ?? true));
+      },
       enableSearch: false,
       requestFocusOnTap: false,
       validator: (value) {

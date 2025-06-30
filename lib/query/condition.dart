@@ -2,11 +2,8 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
 import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
-import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
 class Condition extends ConditionNode {
   Condition({this.attributePath, this.operator, this.parameter});
@@ -25,25 +22,17 @@ class Condition extends ConditionNode {
 
   @override
   bool matches(Json material, Map<String, Attribute> attributesById) {
-    var value = getAttributeValue(material, attributesById, attributePath!);
-    value = switch (value) {
-      TranslatableText() => value.valueDe,
-      UnitNumber() => value.value,
-      _ => value,
-    };
+    final value = getAttributeValue(material, attributesById, attributePath!);
     if (value == null) {
       return false;
     }
     return switch (operator!) {
-      Operator.equals => value == parameter,
-      Operator.notEquals => value != parameter,
-      Operator.greaterThan => value > parameter,
-      Operator.lessThan => value < parameter,
-      Operator.contains => value.toString().containsIgnoreCase(
-        parameter.toString(),
-      ),
-      Operator.notContains =>
-        !value.toString().containsIgnoreCase(parameter.toString()),
+      Operator.equals => value.equals(parameter),
+      Operator.notEquals => !value.equals(parameter),
+      Operator.greaterThan => value.greaterThan(parameter),
+      Operator.lessThan => value.lessThan(parameter),
+      Operator.contains => value.contains(parameter),
+      Operator.notContains => !value.contains(parameter),
     };
   }
 

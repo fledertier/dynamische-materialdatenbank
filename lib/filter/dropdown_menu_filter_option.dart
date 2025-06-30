@@ -12,10 +12,12 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterOptions = ref.watch(filterOptionsProvider);
+    final selectedOption =
+        filterOptions[Attributes.manufacturer] as TranslatableText?;
     final values = ref.watch(valuesProvider(Attributes.manufacturer)).value;
     final manufacturers = values?.values ?? [];
 
-    return DropdownMenu(
+    return DropdownMenu<String?>(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         border: UnderlineInputBorder(),
@@ -29,10 +31,15 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
         for (final name in sortedNames(manufacturers))
           DropdownMenuEntry(value: name, label: name),
       ],
-      initialSelection: filterOptions[Attributes.manufacturer],
+      initialSelection: selectedOption?.valueDe,
       onSelected: (manufacturer) {
         final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-        optionsNotifier.updateWith({Attributes.manufacturer: manufacturer});
+        optionsNotifier.updateWith({
+          Attributes.manufacturer:
+              manufacturer != null
+                  ? TranslatableText(valueDe: manufacturer)
+                  : null,
+        });
       },
     );
   }

@@ -3,8 +3,14 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 
 extension StringExtension on String {
-  bool containsIgnoreCase(String other) {
+  bool containsIgnoreCase(String? other) {
+    if (other == null) return false;
     return toLowerCase().contains(other.toLowerCase());
+  }
+
+  bool equalsIgnoreCase(String? other) {
+    if (other == null) return false;
+    return toLowerCase() == other.toLowerCase();
   }
 
   String toTitleCase() {

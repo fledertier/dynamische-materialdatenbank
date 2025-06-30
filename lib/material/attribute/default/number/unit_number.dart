@@ -1,6 +1,7 @@
+import 'package:dynamische_materialdatenbank/attributes/attributeValue.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 
-class UnitNumber implements Comparable<UnitNumber> {
+class UnitNumber extends AttributeValue<UnitNumber> {
   UnitNumber({required this.value, this.displayUnit});
 
   final num value;
@@ -31,6 +32,16 @@ class UnitNumber implements Comparable<UnitNumber> {
     return other is UnitNumber &&
         other.value == value &&
         other.displayUnit == displayUnit;
+  }
+
+  @override
+  bool greaterThan(UnitNumber other) {
+    return value > other.value;
+  }
+
+  @override
+  bool lessThan(UnitNumber other) {
+    return value < other.value;
   }
 
   @override

@@ -1,8 +1,9 @@
+import 'package:dynamische_materialdatenbank/attributes/attributeValue.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
-class Boolean implements Comparable<Boolean> {
-  const Boolean({required this.value});
+class Boolean extends AttributeValue<Boolean> {
+  Boolean({required this.value});
 
   final bool value;
 
@@ -27,6 +28,11 @@ class Boolean implements Comparable<Boolean> {
   @override
   bool operator ==(Object other) {
     return other is Boolean && other.value == value;
+  }
+
+  @override
+  bool equals(Boolean other) {
+    return value == other.value;
   }
 
   @override

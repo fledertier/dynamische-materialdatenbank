@@ -1,8 +1,10 @@
+import 'package:dynamische_materialdatenbank/attributes/attributeValue.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
+import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
 
-class TranslatableText implements Comparable<TranslatableText> {
-  const TranslatableText({this.valueDe, this.valueEn});
+class TranslatableText extends AttributeValue<TranslatableText> {
+  TranslatableText({this.valueDe, this.valueEn});
 
   final String? valueDe;
   final String? valueEn;
@@ -52,6 +54,18 @@ class TranslatableText implements Comparable<TranslatableText> {
     return other is TranslatableText &&
         other.valueDe == valueDe &&
         other.valueEn == valueEn;
+  }
+
+  @override
+  bool equals(TranslatableText other) {
+    return (valueDe?.equalsIgnoreCase(other.valueDe) ?? false) ||
+        (valueEn?.equalsIgnoreCase(other.valueEn) ?? false);
+  }
+
+  @override
+  bool contains(TranslatableText other) {
+    return (valueDe?.containsIgnoreCase(other.valueDe) ?? false) ||
+        (valueEn?.containsIgnoreCase(other.valueEn) ?? false);
   }
 
   @override
