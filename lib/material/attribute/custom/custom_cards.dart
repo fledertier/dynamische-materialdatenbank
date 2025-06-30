@@ -26,10 +26,7 @@ enum CustomCards implements Cards {
     attributes: {Attributes.description},
     sizes: {CardSize.small, CardSize.large},
   ),
-  imageCard(
-    attributes: {Attributes.image, Attributes.images},
-    sizes: {CardSize.large},
-  ),
+  imageCard(attributes: {Attributes.images}, sizes: {CardSize.large}),
   lightReflectionCard(
     attributes: {Attributes.lightReflection},
     sizes: {CardSize.large},

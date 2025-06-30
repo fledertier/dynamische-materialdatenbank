@@ -5,6 +5,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/query_converters.dart';
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
@@ -55,6 +56,10 @@ class QueryService {
                   type.operators.map((operator) => operator.name).toList(),
             };
           }).toList(),
+      'units':
+          UnitTypes.values.map((type) {
+            return {'id': type.id, 'units': type.units};
+          }).toList(),
     });
 
     return result.data as String?;
@@ -94,28 +99,3 @@ class QueryResult {
 
   const QueryResult({this.plan, required this.query});
 }
-
-const exampleAnswer = '''
-Plan:
-1. Identifizieren des Attributs, das mit dem Suchbegriff "holz" übereinstimmt.
-2. Da "holz" ein allgemeiner Begriff ist, kann er in verschiedenen Attributen vorkommen, aber am wahrscheinlichsten ist er in "description" oder "name" enthalten.
-3. Da wir nicht genau wissen, wo "holz" vorkommen könnte, verwenden wir den Operator "contains" für beide Attribute.
-
-```
-{
-  "type": "or",
-  "nodes": [
-    {
-      "attribute": "description",
-      "operator": "contains",
-      "parameter": "holz"
-    },
-    {
-      "attribute": "name",
-      "operator": "contains",
-      "parameter": "holz"
-    }
-  ]
-}
-```
-''';
