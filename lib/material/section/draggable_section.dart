@@ -113,7 +113,7 @@ class _DraggableSectionState extends ConsumerState<DraggableSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (hasName || edit) nameField,
+            if ((hasName || edit) && widget.sectionIndex != 0) nameField,
             Wrap(
               children: [
                 ...List.generate(items.length, (index) {
