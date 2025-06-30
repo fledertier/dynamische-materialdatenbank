@@ -35,6 +35,10 @@ class SelectDeleteTagIntent extends Intent {
   const SelectDeleteTagIntent();
 }
 
+class UnfocusIntent extends Intent {
+  const UnfocusIntent();
+}
+
 typedef SuggestValueBuilder<T> = Widget Function(BuildContext context, T value);
 typedef SuggestCreationBuilder<T> =
     Widget Function(BuildContext context, String value);
@@ -142,6 +146,7 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
         SingleActivator(LogicalKeyboardKey.enter): const CompleteTagIntent(),
         SingleActivator(LogicalKeyboardKey.backspace):
             const SelectDeleteTagIntent(),
+        SingleActivator(LogicalKeyboardKey.escape): const UnfocusIntent(),
       },
       child: Actions(
         actions: {
@@ -153,7 +158,13 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
           ),
           SelectDeleteTagIntent: CallbackAction<SelectDeleteTagIntent>(
             onInvoke: (intent) {
-              _selectOrDeleteTag();
+              _selectOrDelete();
+              return null;
+            },
+          ),
+          UnfocusIntent: CallbackAction<UnfocusIntent>(
+            onInvoke: (intent) {
+              _focusNode.unfocus();
               return null;
             },
           ),
@@ -217,30 +228,38 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
     );
   }
 
-  void _selectOrDeleteTag() {
-    if (_editingController.selection.isCollapsed) {
-      _selectTag();
-    } else {
-      _deleteSelection();
-    }
+  void _selectOrDelete() {
+    _canSelectTag() ? _selectTag() : _delete();
+  }
+
+  bool _canSelectTag() {
+    late final composingText = _editingController.composingText();
+    return _editingController.selection.isCollapsed &&
+        composingText.contains(TagsEditingController.placeholder);
   }
 
   void _selectTag() {
-    final composingText = _editingController.composingText();
-    if (composingText.contains(TagsEditingController.placeholder)) {
-      final composingRange = _editingController.composingRange();
-      _editingController.selection = composingRange.asSelection;
-    }
-  }
-
-  void _deleteSelection() {
-    _editingController.insertText('', _editingController.selection);
+    final composingRange = _editingController.composingRange();
+    _editingController.selection = composingRange.asSelection;
   }
 
   void _completeTag() {
     final suggestion = _suggestionsController.suggestions?.firstOrNull;
     if (suggestion != null) {
       _suggestionsController.select(suggestion);
+    }
+  }
+
+  void _delete() {
+    final selection = _editingController.selection;
+    if (selection.isCollapsed) {
+      final composingText = _editingController.composingText();
+      if (composingText.isNotEmpty) {
+        final shortened = composingText.substring(0, composingText.length - 1);
+        _editingController.insertText(shortened, _compositingRange.value);
+      }
+    } else {
+      _editingController.insertText('', selection);
     }
   }
 
@@ -282,7 +301,7 @@ class _TagsFieldState<T> extends State<TagsField<T>> {
 
   void _onCutEventThrottled(ClipboardWriteEvent event) {
     _copySelectionToClipboard(event);
-    _deleteSelection();
+    _delete();
   }
 
   void _copySelectionToClipboard(ClipboardWriteEvent event) {

@@ -65,6 +65,9 @@ class _WorldMapState extends State<WorldMap> {
   }
 
   Rect boundingBoxFrom(List<Offset> positions) {
+    if (positions.isEmpty) {
+      return Rect.fromLTRB(0, 0, 1, 1);
+    }
     final minX = positions.map((e) => e.dx).reduce(min);
     final minY = positions.map((e) => e.dy).reduce(min);
     final maxX = positions.map((e) => e.dx).reduce(max);
@@ -97,6 +100,8 @@ class _WorldMapState extends State<WorldMap> {
         controller: controller,
         maxScale: 100,
         scaleFactor: 100,
+        scaleEnabled: false,
+        panEnabled: false,
         viewPaddingExponent: 20,
         initialFocusKey: boundingBoxKey,
         initialDuration: Duration.zero,

@@ -22,7 +22,7 @@ class OriginCountryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dings =
+    final values =
         ref.watch(
               valueProvider(
                 AttributeArgument(
@@ -32,7 +32,7 @@ class OriginCountryCard extends ConsumerWidget {
               ),
             )
             as List?;
-    final countries = [Country.fromCode('se')];
+    final countries = List<Country>.from(values?.nonNulls ?? []);
 
     return AttributeCard(
       columns: 2,
@@ -43,12 +43,7 @@ class OriginCountryCard extends ConsumerWidget {
       ),
       child:
           size > CardSize.small
-              ? WorldMap(
-                key: ValueKey(
-                  countries.map((country) => country.code).join(','),
-                ),
-                highlightedCountries: countries,
-              )
+              ? WorldMap(highlightedCountries: countries)
               : null,
     );
   }

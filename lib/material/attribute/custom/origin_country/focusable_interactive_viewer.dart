@@ -17,6 +17,8 @@ class FocusableInteractiveViewer extends StatefulWidget {
   final double minScale;
   final double maxScale;
   final double scaleFactor;
+  final bool scaleEnabled;
+  final bool panEnabled;
   final double viewPaddingExponent;
 
   const FocusableInteractiveViewer({
@@ -32,6 +34,8 @@ class FocusableInteractiveViewer extends StatefulWidget {
     this.minScale = 1.0,
     this.maxScale = 100.0,
     this.scaleFactor = 100.0,
+    this.scaleEnabled = true,
+    this.panEnabled = true,
     this.viewPaddingExponent = 20.0,
   });
 
@@ -214,6 +218,8 @@ class _FocusableInteractiveViewerState extends State<FocusableInteractiveViewer>
         minScale: widget.minScale,
         maxScale: widget.maxScale,
         scaleFactor: widget.scaleFactor,
+        scaleEnabled: widget.scaleEnabled,
+        panEnabled: widget.panEnabled,
         child: widget.child,
       ),
     );
