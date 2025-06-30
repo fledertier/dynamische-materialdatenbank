@@ -1,4 +1,3 @@
-import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
@@ -21,10 +20,10 @@ class ObjectAttributeField extends ConsumerStatefulWidget {
   });
 
   final AttributePath attributePath;
-  final Json? object;
+  final dynamic object;
   final bool isRoot;
-  final ValueChanged<Json?>? onChanged;
-  final ValueChanged<Json?>? onSave;
+  final ValueChanged<dynamic>? onChanged;
+  final ValueChanged<dynamic>? onSave;
   final TextStyle? textStyle;
 
   @override

@@ -273,7 +273,7 @@ dynamic defaultValueForAttributeType(String id) {
     AttributeType.boolean => Boolean(value: false),
     AttributeType.url => Uri(),
     AttributeType.country => null,
-    AttributeType.object => {},
+    AttributeType.object => Json(),
     AttributeType.list => [],
     _ => null,
   };

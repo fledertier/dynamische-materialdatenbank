@@ -70,6 +70,9 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
               onChanged: (value) {
                 updateItem(index, value);
               },
+              onSave: (value) {
+                updateItem(index, value);
+              },
             ),
             builder: (context, hovered, child) {
               return Row(
