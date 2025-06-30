@@ -15,16 +15,20 @@ final queryServiceProvider = Provider((ref) => QueryService());
 
 class QueryService {
   Future<ConditionGroup?> generateQuery({
-    required List<Attribute> attributes,
+    required Map<String, Attribute> attributesById,
     required List<AttributeType> types,
     required String prompt,
   }) async {
-    final answer = await _answerPrompt(prompt, attributes, types);
-    final result = _parseAnswer(answer);
+    final answer = await _answerPrompt(
+      prompt,
+      attributesById.values.toList(),
+      types,
+    );
+    final result = parseAnswer(answer);
     if (result == null) {
       return null;
     }
-    return _parseQuery(result.query);
+    return parseQuery(result.query, attributesById);
   }
 
   Future<String?> _answerPrompt(
@@ -32,8 +36,6 @@ class QueryService {
     List<Attribute> attributes,
     List<AttributeType> types,
   ) async {
-    // return exampleAnswer;
-
     final result = await FirebaseFunctions.instanceFor(
       region: region,
     ).httpsCallable(Functions.chat).call({
@@ -58,14 +60,14 @@ class QueryService {
           }).toList(),
       'units':
           UnitTypes.values.map((type) {
-            return {'id': type.id, 'units': type.units};
+            return {'id': type.id, 'unit': type.base};
           }).toList(),
     });
 
     return result.data as String?;
   }
 
-  QueryResult? _parseAnswer(String? answer) {
+  QueryResult? parseAnswer(String? answer) {
     if (answer == null) {
       return null;
     }
@@ -87,9 +89,12 @@ class QueryService {
     return QueryResult(plan: plan, query: query);
   }
 
-  ConditionGroup? _parseQuery(String string) {
+  ConditionGroup? parseQuery(
+    String string,
+    Map<String, Attribute>? attributesById,
+  ) {
     final json = jsonDecode(string) as Json?;
-    return ConditionGroupConverter.maybeFromJson(json);
+    return ConditionGroupConverter.maybeFromJson(json, attributesById);
   }
 }
 

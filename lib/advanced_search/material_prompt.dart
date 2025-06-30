@@ -76,7 +76,7 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
     final queryService = ref.read(queryServiceProvider);
 
     final futureQuery = queryService.generateQuery(
-      attributes: attributes.values.toList(),
+      attributesById: attributes,
       types: attributes.values.map((attribute) => attribute.type).toList(),
       prompt: text.trim(),
     );

@@ -1,13 +1,18 @@
+import 'package:dynamische_materialdatenbank/attributes/attribute.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:dynamische_materialdatenbank/query/condition_node.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 
 extension ConditionGroupConverter on ConditionGroup {
-  static ConditionGroup? maybeFromJson(Json? json) {
+  static ConditionGroup? maybeFromJson(
+    Json? json,
+    Map<String, Attribute>? attributesById,
+  ) {
     if (json == null) {
       return null;
     }
@@ -15,7 +20,10 @@ extension ConditionGroupConverter on ConditionGroup {
     if (type == null) {
       return null;
     }
-    final nodes = ConditionNodeListConverter.maybeFromJson(json['nodes']);
+    final nodes = ConditionNodeListConverter.maybeFromJson(
+      json['nodes'],
+      attributesById,
+    );
     if (nodes == null) {
       return null;
     }
@@ -33,40 +41,63 @@ extension ConditionGroupTypeConverter on ConditionGroupType {
 }
 
 extension ConditionNodeListConverter on List<ConditionNode> {
-  static List<ConditionNode>? maybeFromJson(List<dynamic>? json) {
+  static List<ConditionNode>? maybeFromJson(
+    List<dynamic>? json,
+    Map<String, Attribute>? attributesById,
+  ) {
     if (json == null) {
       return null;
     }
     return json
-        .map((json) => ConditionNodeConverter.maybeFromJson(json))
+        .map(
+          (json) => ConditionNodeConverter.maybeFromJson(json, attributesById),
+        )
         .whereType<ConditionNode>()
         .toList();
   }
 }
 
 extension ConditionNodeConverter on ConditionNode {
-  static ConditionNode? maybeFromJson(Json? json) {
+  static ConditionNode? maybeFromJson(
+    Json? json,
+    Map<String, Attribute>? attributesById,
+  ) {
     if (json == null) {
       return null;
     }
     if (json.containsKey('type')) {
-      return ConditionGroupConverter.maybeFromJson(json);
+      return ConditionGroupConverter.maybeFromJson(json, attributesById);
     }
-    return ConditionConverter.maybeFromJson(json);
+    return ConditionConverter.maybeFromJson(json, attributesById);
   }
 }
 
 extension ConditionConverter on Condition {
-  static Condition? maybeFromJson(Json? json) {
+  static Condition? maybeFromJson(
+    Json? json,
+    Map<String, Attribute>? attributesById,
+  ) {
     if (json == null) {
       return null;
     }
 
-    final atributePath = json['attributePath'] as String?;
+    final operator = Operator.values.maybeByName(json['operator']);
+
+    final attribute = json['attribute'] as String?;
+    if (attribute == null) {
+      return Condition(
+        attributePath: null,
+        operator: operator,
+        parameter: null,
+      );
+    }
+
+    final attributePath = AttributePath(attribute);
+    final attributeType = getAttribute(attributesById, attributePath)?.type;
     final condition = Condition(
-      attributePath: atributePath != null ? AttributePath(atributePath) : null,
+      attributePath: attributePath,
       operator: Operator.values.maybeByName(json['operator']),
-      parameter: json['parameter'],
+      parameter: fromJson(json['parameter'] as Json?, attributeType),
     );
 
     return condition.isValid ? condition : null;
