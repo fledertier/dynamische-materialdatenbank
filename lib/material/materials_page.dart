@@ -10,6 +10,7 @@ import 'package:dynamische_materialdatenbank/search/material_search.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class MaterialsPage extends StatefulWidget {
   const MaterialsPage({super.key});
@@ -70,7 +71,9 @@ class AddMaterialButton extends ConsumerWidget {
     return FloatingActionButton.large(
       child: Icon(Icons.add),
       onPressed: () {
-        ref.read(materialProvider(generateId()).notifier).createMaterial();
+        final id = generateId();
+        ref.read(materialProvider(id).notifier).createMaterial();
+        context.pushNamed(Pages.material, pathParameters: {'materialId': id});
       },
     );
   }
