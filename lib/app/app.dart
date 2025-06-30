@@ -17,7 +17,7 @@ class _AppState extends ConsumerState<App> {
   @override
   void initState() {
     super.initState();
-    if (kDebugMode) {
+    if (kDebugMode || kReleaseMode) {
       final userNotifier = ref.read(userProvider.notifier);
       userNotifier.signIn(
         email: 'leon.martin@stud.hs-hannover.de',
