@@ -131,7 +131,7 @@ class UnitDropdown extends StatelessWidget {
     final textTheme = TextTheme.of(context);
 
     return MenuAnchor(
-      alignmentOffset: Offset(-12, 0),
+      alignmentOffset: Offset(-8, 0),
       menuChildren: [
         for (final unit in unitType.units)
           MenuItemButton(

@@ -19,7 +19,7 @@ final filterQueryProvider = Provider((ref) {
       Attributes.biodegradable,
       Attributes.biobased,
     ])
-      if (options[attributeId] == true)
+      if (options[attributeId] != null)
         Condition(
           attributePath: AttributePath(attributeId),
           operator: Operator.equals,
