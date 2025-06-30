@@ -117,12 +117,14 @@ class AttributeListTile extends ConsumerWidget {
     this.selected = false,
     required this.onTap,
     this.trailing,
+    this.filled = false,
   });
 
   final Attribute attribute;
   final bool selected;
   final void Function()? onTap;
   final Widget? trailing;
+  final bool filled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,6 +142,9 @@ class AttributeListTile extends ConsumerWidget {
             selected: selected,
             textColor: ColorScheme.of(context).onSecondaryContainer,
             selectedTileColor: ColorScheme.of(context).secondaryContainer,
+            tileColor: ColorScheme.of(
+              context,
+            ).onSurface.withValues(alpha: filled ? 0.06 : 0.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

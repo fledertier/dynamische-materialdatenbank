@@ -127,19 +127,26 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 8),
-                  for (final attribute in _controller.objectAttributes.value)
-                    AttributeListTile(
-                      attribute,
-                      onTap: () {
-                        editAttribute(attribute, _editObjectAttribute);
-                      },
-                      trailing: IconButton(
-                        icon: Icon(Symbols.remove),
-                        onPressed: () {
-                          _deleteObjectAttribute(attribute);
-                        },
-                      ),
-                    ),
+                  Column(
+                    spacing: 6,
+                    children: [
+                      for (final attribute
+                          in _controller.objectAttributes.value)
+                        AttributeListTile(
+                          attribute,
+                          onTap: () {
+                            editAttribute(attribute, _editObjectAttribute);
+                          },
+                          filled: true,
+                          trailing: IconButton(
+                            icon: Icon(Symbols.remove),
+                            onPressed: () {
+                              _deleteObjectAttribute(attribute);
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
                   SizedBox(height: 8),
                   OutlinedButton.icon(
                     style: IconButton.styleFrom(),
@@ -181,6 +188,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                                 field.didChange(attribute);
                               });
                             },
+                            filled: true,
                             trailing: IconButton(
                               icon: Icon(Symbols.remove),
                               onPressed: () {
