@@ -12,26 +12,20 @@ class EditModeButton extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
 
     if (edit) {
-      return SizedBox(
-        width: 97,
-        child: FilledButton.icon(
-          icon: Icon(Symbols.visibility),
-          label: Text('View'),
-          onPressed: () {
-            ref.read(editModeProvider.notifier).state = false;
-          },
-        ),
+      return FilledButton.icon(
+        icon: Icon(Symbols.visibility),
+        label: Text('View'),
+        onPressed: () {
+          ref.read(editModeProvider.notifier).state = false;
+        },
       );
     } else {
-      return SizedBox(
-        width: 97,
-        child: OutlinedButton.icon(
-          icon: Icon(Symbols.edit),
-          label: Text('Edit'),
-          onPressed: () {
-            ref.read(editModeProvider.notifier).state = true;
-          },
-        ),
+      return OutlinedButton.icon(
+        icon: Icon(Symbols.edit),
+        label: Text('Edit'),
+        onPressed: () {
+          ref.read(editModeProvider.notifier).state = true;
+        },
       );
     }
   }
