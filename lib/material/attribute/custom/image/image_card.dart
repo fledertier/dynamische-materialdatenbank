@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_card.dart';
@@ -9,11 +7,17 @@ import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/image/constrained_image.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/image/image_search_service.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/image/web_image.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
+
+class Fields {
+  static const link = '0197c159-7074-7813-ae3b-d8ccc98ee7c2';
+  static const thumbnailLink = '0197c159-299d-791e-9527-1bd445e2401e';
+}
 
 class ImageCard extends ConsumerStatefulWidget {
   const ImageCard({super.key, required this.materialId, required this.size});
@@ -35,7 +39,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   @override
   void initState() {
     super.initState();
-    final value = ref.watch(
+    final value = ref.read(
       jsonValueProvider(
         AttributeArgument(
           materialId: widget.materialId,
@@ -46,19 +50,28 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     images = value != null ? List<Json>.from(value) : [];
   }
 
-  Future<String> materialName() async {
-    final material = await ref.read(materialProvider(widget.materialId).future);
-    return material[Attributes.name];
+  String? materialName() {
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributePath: AttributePath(Attributes.name),
+    );
+    final name = ref.read(valueProvider(argument)) as TranslatableText?;
+    return name?.valueDe ?? name?.valueEn;
   }
 
   void searchImages() async {
-    final name = await materialName();
+    final name = materialName();
+    if (name == null) return;
     final result = await ref
         .read(imageSearchServiceProvider)
         .searchImages(name);
     final foundImages =
         result?.images.map((image) {
-          return {'thumbnailLink': image.thumbnailLink, 'link': image.link};
+          return {
+            Fields.thumbnailLink:
+                TranslatableText(valueDe: image.thumbnailLink).toJson(),
+            Fields.link: TranslatableText(valueDe: image.link).toJson(),
+          };
         }).toList();
 
     if (foundImages?.isNotEmpty ?? false) {
@@ -79,7 +92,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   void removeImage(int index) {
     setState(() {
       images.removeAt(index);
-      selectedIndex = min(selectedIndex, images.length - 1);
+      selectedIndex = selectedIndex.clamp(0, images.length - 1);
     });
     ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
       Attributes.images: images,
@@ -88,15 +101,13 @@ class _ImageCardState extends ConsumerState<ImageCard> {
 
   void setMainImage([int index = 0]) {
     final image = images[index];
-    final url = image['thumbnailLink'] as String? ?? image['link'] as String?;
-    if (url == null) return;
     setState(() {
       images.removeAt(index);
       images.insert(0, image);
       selectedIndex = 0;
     });
     ref.read(materialProvider(widget.materialId).notifier).updateMaterial({
-      Attributes.image: url,
+      Attributes.image: image[Fields.thumbnailLink],
       Attributes.images: images,
     });
   }
@@ -143,7 +154,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   }
 
   Widget buildImage(BuildContext context, Json image, bool edit) {
-    final thumbnail = image['thumbnailLink'] as String?;
+    final thumbnail = image[Fields.thumbnailLink]?['valueDe'] as String?;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -155,7 +166,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
             ),
           ),
         WebImage(
-          src: image['link'],
+          src: image[Fields.link]?['valueDe'] as String? ?? '',
           objectFit: BoxFit.contain,
           borderRadius: BorderRadius.circular(16),
         ),
@@ -205,7 +216,10 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   }
 
   Widget buildThumbnail(BuildContext context, int index) {
-    final thumbnailLink = images[index]['thumbnailLink'];
+    final thumbnailLink =
+        (images[index][Fields.thumbnailLink] ??
+                images[index][Fields.link])?['valueDe']
+            as String?;
     return AspectRatio(
       aspectRatio: 1,
       child: Material(
@@ -218,7 +232,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
               selectedIndex = index;
             });
           },
-          child: Image.network(thumbnailLink, fit: BoxFit.cover),
+          child: Image.network(thumbnailLink ?? '', fit: BoxFit.cover),
         ),
       ),
     );

@@ -62,7 +62,8 @@ class MaterialItem extends ConsumerWidget {
         },
         child: HoverBuilder(
           builder: (context, hovered, child) {
-            final image = item[Attributes.image];
+            final value = item[Attributes.image] as Json?;
+            final image = value?['valueDe'] ?? value?['valueEn'] as String?;
             return Stack(
               children: [
                 if (image != null)

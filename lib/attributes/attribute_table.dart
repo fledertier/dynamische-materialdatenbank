@@ -62,13 +62,13 @@ class AttributeTable extends ConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(
+                  child: SelectableText(
                     TranslatableText.fromJson(material[Attributes.name]).value,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(material[attributeId].toString()),
+                  child: SelectableText(material[attributeId].toString()),
                 ),
               ],
             ),
