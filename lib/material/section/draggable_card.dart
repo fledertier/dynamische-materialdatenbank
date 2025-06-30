@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/material/attribute/cards.dart';
 import 'package:flutter/material.dart';
 
-class DraggableCard extends StatelessWidget {
+class DraggableCard extends StatefulWidget {
   const DraggableCard({
     super.key,
     required this.data,
@@ -22,28 +22,43 @@ class DraggableCard extends StatelessWidget {
   final Widget child;
 
   @override
+  State<DraggableCard> createState() => _DraggableCardState();
+}
+
+class _DraggableCardState extends State<DraggableCard> {
+  bool isDragging = false;
+
+  @override
   Widget build(BuildContext context) {
-    return LongPressDraggable<CardData>(
-      data: data,
-      delay: Duration(milliseconds: 300),
+    return Draggable<CardData>(
+      data: widget.data,
       maxSimultaneousDrags: 1,
-      onDragStarted: onDragStarted,
-      onDragEnd: (details) => onDragEnd?.call(),
-      onDragCompleted: onDragCompleted,
+      onDragStarted: widget.onDragStarted,
+      onDragUpdate: (details) {
+        if (!isDragging) {
+          isDragging = true;
+          widget.onDragStarted?.call();
+        }
+      },
+      onDragEnd: (details) {
+        isDragging = false;
+        widget.onDragEnd?.call();
+      },
+      onDragCompleted: widget.onDragCompleted,
       feedback: Padding(
-        padding: padding,
+        padding: widget.padding,
         child: Material(
           color: Colors.transparent,
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           elevation: 8,
-          child: child,
+          child: widget.child,
         ),
       ),
       childWhenDragging: Opacity(
         opacity: 0,
-        child: Padding(padding: padding, child: child),
+        child: Padding(padding: widget.padding, child: widget.child),
       ),
-      child: Padding(padding: padding, child: child),
+      child: Padding(padding: widget.padding, child: widget.child),
     );
   }
 }
