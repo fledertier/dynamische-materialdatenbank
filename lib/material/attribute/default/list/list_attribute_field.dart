@@ -60,6 +60,11 @@ class _ListFieldState extends ConsumerState<ListAttributeField> {
               onPressed: () {
                 addItem(itemAttribute.type);
               },
+              style: TextButton.styleFrom(
+                backgroundColor: ColorScheme.of(
+                  context,
+                ).primary.withValues(alpha: 0.08),
+              ),
             );
           }
           return HoverBuilder(
