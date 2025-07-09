@@ -31,7 +31,7 @@ class AttributeDetails extends ConsumerWidget {
             final path = attributeProvider(
               toAttributePath(selectedAttributeId.value),
             );
-            final attribute = ref.watch(path).value;
+            final attribute = ref.watch(path).valueOrNull;
             if (attribute == null) {
               return Center(
                 child: Text(

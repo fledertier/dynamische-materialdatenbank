@@ -65,7 +65,7 @@ class SortAttributeSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final path = ref.watch(sortAttributeProvider);
-    final attributesById = ref.watch(attributesProvider).value ?? {};
+    final attributesById = ref.watch(attributesProvider).valueOrNull ?? {};
     final attributes = attributesById.values.sortedBy(
       (attribute) => attribute.name ?? attribute.type.name.toTitleCase(),
     );

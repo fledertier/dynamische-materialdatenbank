@@ -14,7 +14,8 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
     final filterOptions = ref.watch(filterOptionsProvider);
     final selectedOption =
         filterOptions[Attributes.manufacturer] as TranslatableText?;
-    final values = ref.watch(valuesProvider(Attributes.manufacturer)).value;
+    final values =
+        ref.watch(valuesProvider(Attributes.manufacturer)).valueOrNull;
     final manufacturers = values?.values ?? [];
 
     return DropdownMenu<String?>(

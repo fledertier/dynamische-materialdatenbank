@@ -15,13 +15,16 @@ class SliderFilterOption extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final extrema = ref.watch(valuesExtremaProvider(attributeId)).value;
+    final extrema = ref.watch(valuesExtremaProvider(attributeId)).valueOrNull;
     final minValue = extrema?.min ?? 0;
     final maxValue = extrema?.max ?? 1;
     final value =
         options[attributeId]?.value?.clamp(minValue, maxValue) ?? maxValue;
     final attributeType =
-        ref.watch(attributeProvider(AttributePath(attributeId))).value?.type
+        ref
+                .watch(attributeProvider(AttributePath(attributeId)))
+                .valueOrNull
+                ?.type
             as NumberAttributeType?;
     final unitType = attributeType?.unitType;
 

@@ -35,7 +35,7 @@ class _AttributesListState extends ConsumerState<AttributesList> {
       return Center(child: CircularProgressIndicator());
     }
 
-    final attributesById = snapshot.value ?? {};
+    final attributesById = snapshot.valueOrNull ?? {};
     final attributes = attributesById.values.sortedBy(
       (attribute) => attribute.name ?? '',
     );
