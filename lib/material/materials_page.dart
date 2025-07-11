@@ -29,12 +29,14 @@ class _MaterialsPageState extends State<MaterialsPage> {
         center: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            MaterialSearch(
-              onFilter: () {
-                setState(() {
-                  showFilters = !showFilters;
-                });
-              },
+            Flexible(
+              child: MaterialSearch(
+                onFilter: () {
+                  setState(() {
+                    showFilters = !showFilters;
+                  });
+                },
+              ),
             ),
             SizedBox(width: 24),
             SortButton(),

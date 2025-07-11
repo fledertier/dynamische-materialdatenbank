@@ -15,7 +15,7 @@ class Header extends StatelessWidget {
       child: Row(
         spacing: 12,
         children: [
-          Expanded(child: Center(child: center ?? SizedBox())),
+          Expanded(child: Center(child: center)),
           ...?actions,
           ThemeModeButton(),
           UserAvatar(),
