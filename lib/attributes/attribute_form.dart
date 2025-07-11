@@ -6,7 +6,9 @@ import 'package:dynamische_materialdatenbank/attributes/attributes_list.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
+import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -132,18 +134,45 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                     children: [
                       for (final attribute
                           in _controller.objectAttributes.value)
-                        AttributeListTile(
-                          attribute,
-                          onTap: () {
-                            editAttribute(attribute, _editObjectAttribute);
+                        HoverBuilder(
+                          builder: (context, hovered, child) {
+                            return AttributeListTile(
+                              attribute,
+                              onTap: () {
+                                editAttribute(attribute, _editObjectAttribute);
+                              },
+                              filled: true,
+                              trailing: MenuAnchor(
+                                builder: (context, controller, child) {
+                                  return IconButton(
+                                    onPressed: controller.toggle,
+                                    icon: Visibility.maintain(
+                                      visible: hovered || controller.isOpen,
+                                      child: Icon(Icons.more_vert),
+                                    ),
+                                  );
+                                },
+                                menuChildren: [
+                                  MenuItemButton(
+                                    leadingIcon: Icon(Symbols.content_copy),
+                                    requestFocusOnHover: false,
+                                    onPressed: () {
+                                      _copyAttributeId(attribute);
+                                    },
+                                    child: Text('Copy id'),
+                                  ),
+                                  MenuItemButton(
+                                    leadingIcon: Icon(Symbols.remove),
+                                    requestFocusOnHover: false,
+                                    onPressed: () {
+                                      _deleteObjectAttribute(attribute);
+                                    },
+                                    child: Text('Remove'),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
-                          filled: true,
-                          trailing: IconButton(
-                            icon: Icon(Symbols.remove),
-                            onPressed: () {
-                              _deleteObjectAttribute(attribute);
-                            },
-                          ),
                         ),
                     ],
                   ),
@@ -180,22 +209,49 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                       children: [
                         if (field.value != null) ...[
                           SizedBox(height: 8),
-                          AttributeListTile(
-                            field.value!,
-                            onTap: () {
-                              editAttribute(field.value!, (attribute) {
-                                _controller.listAttribute.value = attribute;
-                                field.didChange(attribute);
-                              });
+                          HoverBuilder(
+                            builder: (context, hovered, child) {
+                              return AttributeListTile(
+                                field.value!,
+                                onTap: () {
+                                  editAttribute(field.value!, (attribute) {
+                                    _controller.listAttribute.value = attribute;
+                                    field.didChange(attribute);
+                                  });
+                                },
+                                filled: true,
+                                trailing: MenuAnchor(
+                                  builder: (context, controller, child) {
+                                    return IconButton(
+                                      onPressed: controller.toggle,
+                                      icon: Visibility.maintain(
+                                        visible: hovered || controller.isOpen,
+                                        child: Icon(Icons.more_vert),
+                                      ),
+                                    );
+                                  },
+                                  menuChildren: [
+                                    MenuItemButton(
+                                      leadingIcon: Icon(Symbols.content_copy),
+                                      requestFocusOnHover: false,
+                                      onPressed: () {
+                                        _copyAttributeId(field.value!);
+                                      },
+                                      child: Text('Copy id'),
+                                    ),
+                                    MenuItemButton(
+                                      leadingIcon: Icon(Symbols.remove),
+                                      requestFocusOnHover: false,
+                                      onPressed: () {
+                                        _controller.listAttribute.value = null;
+                                        field.didChange(null);
+                                      },
+                                      child: Text('Remove'),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
-                            filled: true,
-                            trailing: IconButton(
-                              icon: Icon(Symbols.remove),
-                              onPressed: () {
-                                _controller.listAttribute.value = null;
-                                field.didChange(null);
-                              },
-                            ),
                           ),
                         ] else ...[
                           SizedBox(height: 16),
@@ -347,6 +403,13 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
       for (final objectAttribute in _controller.objectAttributes.value)
         if (objectAttribute.id != attribute.id) objectAttribute,
     ];
+  }
+
+  void _copyAttributeId(Attribute attribute) {
+    Clipboard.setData(ClipboardData(text: attribute.id));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Id copied to clipboard')));
   }
 
   bool get hasChanges {

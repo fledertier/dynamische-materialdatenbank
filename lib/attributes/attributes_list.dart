@@ -5,7 +5,6 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_search_bar.dar
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/utils/text_utils.dart';
-import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -128,30 +127,24 @@ class AttributeListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return HoverBuilder(
-      builder: (context, hover, child) {
-        return Material(
-          type: MaterialType.transparency,
-          child: ListTile(
-            leading: Icon(iconForAttributeType(attribute.type.id)),
-            title: Text(attribute.name ?? 'Unnamed'),
-            subtitle: Text(
-              [attribute.type, if (attribute.required) 'required'].join(', '),
-            ),
-            trailing: hover ? trailing : null,
-            selected: selected,
-            textColor: ColorScheme.of(context).onSecondaryContainer,
-            selectedTileColor: ColorScheme.of(context).secondaryContainer,
-            tileColor: ColorScheme.of(
-              context,
-            ).onSurface.withValues(alpha: filled ? 0.06 : 0.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            onTap: onTap,
-          ),
-        );
-      },
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        leading: Icon(iconForAttributeType(attribute.type.id)),
+        title: Text(attribute.name ?? 'Unnamed'),
+        subtitle: Text(
+          [attribute.type, if (attribute.required) 'required'].join(', '),
+        ),
+        trailing: trailing,
+        selected: selected,
+        textColor: ColorScheme.of(context).onSecondaryContainer,
+        selectedTileColor: ColorScheme.of(context).secondaryContainer,
+        tileColor: ColorScheme.of(
+          context,
+        ).onSurface.withValues(alpha: filled ? 0.06 : 0.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        onTap: onTap,
+      ),
     );
   }
 }
