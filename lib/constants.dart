@@ -51,3 +51,10 @@ abstract class Functions {
   static const search = 'search';
   static const chat = 'chat';
 }
+
+abstract class Environments {
+  static const development = 'development';
+  static const production = 'production';
+}
+
+const environment = String.fromEnvironment('environment');

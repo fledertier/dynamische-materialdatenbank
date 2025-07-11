@@ -1,3 +1,3 @@
 # Dynamische Materialdatenbank
 
-Eine dynamische Materialdatenbank, in der verschiedenste Materialien mit allen ihren Eigenschaften gespeichert werden können.
+Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.

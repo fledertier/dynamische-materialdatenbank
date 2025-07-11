@@ -1,0 +1,25 @@
+{
+  "name": "dynamische_materialdatenbank",
+  "version": "1.0.0",
+  "description": "Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start-emulators": "firebase emulators:start --import=./emulators_data --export-on-exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fledertier/dynamische-materialdatenbank.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fledertier/dynamische-materialdatenbank/issues"
+  },
+  "homepage": "https://github.com/fledertier/dynamische-materialdatenbank#readme"
+}

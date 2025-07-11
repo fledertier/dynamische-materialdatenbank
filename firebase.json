@@ -1,1 +1,23 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"dynamische-materialdatenbank","configurations":{"web":"1:318210530295:web:0f39e3b71e6de04e302cf2"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "dynamische-materialdatenbank",
+          "configurations": {
+            "web": "1:318210530295:web:0f39e3b71e6de04e302cf2"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
+}
