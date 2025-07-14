@@ -42,7 +42,8 @@ final routerProvider = Provider((ref) {
             name: Pages.material,
             builder: (context, state) {
               final materialId = state.pathParameters['materialId']!;
-              return MaterialDetailPage(materialId: materialId);
+              final edit = state.uri.queryParameters['edit'] == 'true';
+              return MaterialDetailPage(materialId: materialId, edit: edit);
             },
           ),
         ],

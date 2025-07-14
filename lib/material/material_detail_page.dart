@@ -17,9 +17,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MaterialDetailPage extends ConsumerStatefulWidget {
-  const MaterialDetailPage({super.key, required this.materialId});
+  const MaterialDetailPage({
+    super.key,
+    required this.materialId,
+    this.edit = false,
+  });
 
   final String materialId;
+  final bool edit;
 
   @override
   ConsumerState<MaterialDetailPage> createState() => _MaterialDetailPageState();
@@ -27,6 +32,14 @@ class MaterialDetailPage extends ConsumerStatefulWidget {
 
 class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
   bool showDialog = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      ref.read(editModeProvider.notifier).state = widget.edit;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

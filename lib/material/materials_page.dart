@@ -75,7 +75,11 @@ class AddMaterialButton extends ConsumerWidget {
       onPressed: () {
         final id = generateId();
         ref.read(materialProvider(id).notifier).createMaterial();
-        context.pushNamed(Pages.material, pathParameters: {'materialId': id});
+        context.pushNamed(
+          Pages.material,
+          pathParameters: {'materialId': id},
+          queryParameters: {'edit': 'true'},
+        );
       },
     );
   }
