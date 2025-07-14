@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/constants.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/country.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:dynamische_materialdatenbank/widgets/tags_field/selectable_tag.dart';

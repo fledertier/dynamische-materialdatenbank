@@ -1,3 +1,5 @@
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
+
 class Country implements Comparable<Country> {
   final String name;
   final String code;
@@ -5,7 +7,8 @@ class Country implements Comparable<Country> {
   const Country({required this.name, required this.code});
 
   factory Country.fromJson(dynamic json) {
-    return Country.fromCode(json as String);
+    final code = TranslatableText.fromJson(json).value;
+    return Country.fromCode(code);
   }
 
   factory Country.fromCode(String code) {
@@ -15,7 +18,7 @@ class Country implements Comparable<Country> {
   }
 
   dynamic toJson() {
-    return code;
+    return TranslatableText(valueDe: code).toJson();
   }
 
   @override

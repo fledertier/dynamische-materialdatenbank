@@ -152,7 +152,7 @@ const _attributes = {
         "required": false,
         "nameDe": "Land",
         "id": "01973a84-5f55-714a-82a9-74b50c540259",
-        "type": {"id": "country"},
+        "type": {"id": "text", "multiline": false},
         "nameEn": "Country",
       },
       "id": "list",
@@ -743,7 +743,10 @@ const _materials = [
     "light reflection": {"displayUnit": null, "value": 17},
     "id": "0197c08a-4ef1-7dac-ac94-3fc5e94bcb18",
     "biobased": {"value": true},
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["DE", "FR"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "DE"},
+      {"valueDe": "FR"},
+    ],
   },
   {
     "0197c1d4-79c9-7e48-8208-5b7fc09c51c9": {
@@ -915,7 +918,10 @@ const _materials = [
     "light transmission": {"displayUnit": null, "value": 0},
     "name": {"valueEn": "Unnamed Material", "valueDe": "Blähton"},
     "w-value": {"value": 9.3, "displayUnit": null},
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["DZ", "AL"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "DZ"},
+      {"valueDe": "AL"},
+    ],
     "id": "0197c236-95d2-7b6d-bea3-69adbfa5f52b",
     "0197c655-720a-795d-9d1b-8b2bc5fa2fe7": {
       "valueEn": null,
@@ -1359,7 +1365,9 @@ const _materials = [
         },
       ],
     },
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["AF"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "AF"},
+    ],
     "id": "0197c5fc-eca9-7aac-a2fb-a22b915a5320",
     "0197c1d4-79c9-7e48-8208-5b7fc09c51c9": {
       "valueDe":
@@ -1553,7 +1561,10 @@ const _materials = [
       "website": "https://www.ecopanel.de",
       "name-1": {"valueDe": "EcoPanel GmbH", "valueEn": null},
     },
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["CN", "VN"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "CN"},
+      {"valueDe": "VN"},
+    ],
     "biodegradable": {"value": true},
     "description": {
       "valueDe":
@@ -1651,7 +1662,10 @@ const _materials = [
     "name": {"valueDe": "Magnesitboden", "valueEn": "Unnamed Material"},
     "id": "0197c631-c4d7-76f0-ac45-be4272926749",
     "recyclable": {"value": true},
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["PT", "SG"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "PT"},
+      {"valueDe": "SG"},
+    ],
     "density": {"displayUnit": null, "value": 12.9},
     "cardSections": {
       "primary": [
@@ -1953,7 +1967,10 @@ const _materials = [
       "website": "https://www.greenbuild.eu",
       "name-1": {"valueDe": "GreenBuild Naturbaustoffe", "valueEn": null},
     },
-    "01973a84-5f56-71dc-9c18-dc25fc865b33": ["DE", "FR"],
+    "01973a84-5f56-71dc-9c18-dc25fc865b33": [
+      {"valueDe": "DE"},
+      {"valueDe": "FR"},
+    ],
     "density": {"value": 320, "displayUnit": null},
     "01973a81-f146-7f9b-97c1-97f8b393996a": [
       {"nameEn": null, "id": "1234", "share": 70, "nameDe": "Hanffasern"},

@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:countries_world_map/countries_world_map.dart';
 import 'package:countries_world_map/data/maps/world_map.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/country.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/focusable_interactive_viewer.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

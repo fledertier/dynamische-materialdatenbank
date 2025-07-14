@@ -192,28 +192,15 @@ class ListAttributeType extends AttributeType {
   }
 }
 
-class CountryAttributeType extends AttributeType {
-  CountryAttributeType()
-    : super(
-        id: AttributeType.country,
-        operators: {Operator.equals, Operator.notEquals},
-      );
-
-  factory CountryAttributeType.fromJson(Json json) {
-    return CountryAttributeType();
-  }
-}
-
 abstract class AttributeType {
   static const text = 'text';
   static const number = 'number';
   static const boolean = 'boolean';
   static const url = 'url';
-  static const country = 'country';
   static const object = 'object';
   static const list = 'list';
 
-  static final values = [text, number, boolean, url, country, object, list];
+  static final values = [text, number, boolean, url, object, list];
 
   const AttributeType({required this.id, required this.operators});
 
@@ -229,7 +216,6 @@ abstract class AttributeType {
       number => NumberAttributeType.fromJson(json),
       boolean => BooleanAttributeType.fromJson(json),
       url => UrlAttributeType.fromJson(json),
-      country => CountryAttributeType.fromJson(json),
       object => ObjectAttributeType.fromJson(json),
       list => ListAttributeType.fromJson(json),
       _ =>
@@ -259,7 +245,6 @@ IconData iconForAttributeType(String id) {
     AttributeType.number => Symbols.numbers,
     AttributeType.boolean => Symbols.check_box,
     AttributeType.url => Symbols.link,
-    AttributeType.country => Symbols.language,
     AttributeType.object => Symbols.category,
     AttributeType.list => Symbols.menu,
     _ => Symbols.change_history,
@@ -272,7 +257,6 @@ dynamic defaultValueForAttributeType(String id) {
     AttributeType.number => UnitNumber(value: 0),
     AttributeType.boolean => Boolean(value: false),
     AttributeType.url => Uri(),
-    AttributeType.country => null,
     AttributeType.object => Json(),
     AttributeType.list => [],
     _ => null,

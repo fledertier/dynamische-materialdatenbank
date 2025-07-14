@@ -1,6 +1,5 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/country/country.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 
@@ -18,7 +17,6 @@ dynamic fromJson(dynamic json, AttributeType? type) {
     TextAttributeType() => TranslatableText.fromJson(json),
     NumberAttributeType() => UnitNumber.fromJson(json),
     BooleanAttributeType() => Boolean.fromJson(json),
-    CountryAttributeType() => Country.fromJson(json),
     UrlAttributeType() => Uri.tryParse(json as String),
     ObjectAttributeType() => objectFromJson(json, type),
     _ =>
@@ -50,7 +48,6 @@ dynamic toJson(dynamic value, AttributeType type) {
     TextAttributeType() => (value as TranslatableText).toJson(),
     NumberAttributeType() => (value as UnitNumber).toJson(),
     BooleanAttributeType() => (value as Boolean).toJson(),
-    CountryAttributeType() => (value as Country).toJson(),
     UrlAttributeType() => (value as Uri).toString(),
     ListAttributeType() => listToJson(value as List, type),
     ObjectAttributeType() => objectToJson(value as Json, type),
