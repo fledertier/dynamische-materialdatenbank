@@ -45,6 +45,7 @@ class QueryService {
               .map(
                 (attribute) => attribute.toJson().removeKeys({
                   'required',
+                  'translatable',
                   'multiline',
                   'nameEn',
                 }),

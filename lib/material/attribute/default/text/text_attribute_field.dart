@@ -1,9 +1,9 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
-import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/material/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,16 +26,13 @@ class TextAttributeField extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
     final language = ref.watch(languageProvider);
     final attribute = ref.watch(attributeProvider(attributePath)).value;
-    final multiline =
-        (attribute?.type as TextAttributeType?)?.multiline ?? false;
+    final multiline = isMultiline(attribute);
 
     final textTheme = TextTheme.of(context);
     final defaultTextStyle =
         multiline ? textTheme.bodySmall : textTheme.titleLarge;
 
-    // todo: add util for checking if attribute is translatable / multiline
-    final translatable =
-        (attribute?.type as TextAttributeType?)?.translatable ?? false;
+    final translatable = isTranslatable(attribute);
     final otherLanguageText =
         language == Language.en ? text.valueDe : text.valueEn;
 

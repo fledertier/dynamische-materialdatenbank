@@ -91,3 +91,17 @@ extension AttributeChildExtension on Attribute {
     return [];
   }
 }
+
+bool isMultiline(Attribute? attribute) {
+  if (attribute?.type case TextAttributeType(:final multiline)) {
+    return multiline;
+  }
+  return false;
+}
+
+bool isTranslatable(Attribute? attribute) {
+  if (attribute?.type case TextAttributeType(:final translatable)) {
+    return translatable;
+  }
+  return false;
+}
