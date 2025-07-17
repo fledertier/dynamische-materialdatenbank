@@ -33,12 +33,15 @@ class TextAttributeField extends ConsumerWidget {
     final defaultTextStyle =
         multiline ? textTheme.bodySmall : textTheme.titleLarge;
 
+    // todo: add util for checking if attribute is translatable / multiline
+    final translatable =
+        (attribute?.type as TextAttributeType?)?.translatable ?? false;
     final otherLanguageText =
         language == Language.en ? text.valueDe : text.valueEn;
 
     return TextFormField(
       key: ValueKey(text.resolve(language)),
-      initialValue: text.resolve(language),
+      initialValue: translatable ? text.resolve(language) : text.value,
       enabled: edit,
       style: (textStyle ?? defaultTextStyle)?.copyWith(fontFamily: 'Lexend'),
       decoration: InputDecoration.collapsed(

@@ -28,7 +28,7 @@ class SearchService {
         Condition(
           attributePath: attributePath,
           operator: Operator.contains,
-          parameter: TranslatableText(valueDe: search),
+          parameter: TranslatableText.fromValue(search),
         ),
     ]);
     return materials

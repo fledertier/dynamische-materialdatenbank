@@ -99,7 +99,7 @@ const _attributes = {
             {
               "nameEn": null,
               "required": false,
-              "type": {"multiline": false, "id": "text"},
+              "type": {"multiline": false, "id": "text", "translatable": true},
               "id": "01973a53-3ad5-7a63-a6fd-d238fa571298",
               "nameDe": "Name",
             },
@@ -135,7 +135,7 @@ const _attributes = {
     "id": "0197c655-720a-795d-9d1b-8b2bc5fa2fe7",
     "nameDe": "Einsatzgebiet",
     "required": false,
-    "type": {"multiline": true, "id": "text"},
+    "type": {"multiline": true, "id": "text", "translatable": true},
   },
   "light transmission": {
     "type": {"unitType": "proportion", "id": "number"},
@@ -232,7 +232,7 @@ const _attributes = {
     "type": {"multiline": false, "id": "text"},
   },
   "0197c656-6875-7dd9-8ccb-b142aa2e68c4": {
-    "type": {"id": "text", "multiline": true},
+    "type": {"id": "text", "multiline": true, "translatable": true},
     "nameDe": "Herstellung",
     "id": "0197c656-6875-7dd9-8ccb-b142aa2e68c4",
     "required": false,
@@ -278,7 +278,7 @@ const _attributes = {
     "nameDe": "W-Wert",
   },
   "description": {
-    "type": {"multiline": true, "id": "text"},
+    "type": {"multiline": true, "id": "text", "translatable": true},
     "nameEn": "Description",
     "required": true,
     "id": "description",
@@ -312,7 +312,7 @@ const _attributes = {
     "nameEn": "Name",
     "required": true,
     "nameDe": "Name",
-    "type": {"id": "text", "multiline": false},
+    "type": {"id": "text", "multiline": false, "translatable": true},
   },
   "0197c1d4-79c9-7e48-8208-5b7fc09c51c9": {
     "type": {"multiline": false, "id": "text"},
@@ -322,7 +322,7 @@ const _attributes = {
     "required": false,
   },
   "0197c5f8-9198-7574-a920-c38a2b27b62c": {
-    "type": {"id": "text", "multiline": true},
+    "type": {"id": "text", "multiline": true, "translatable": true},
     "nameDe": "Bearbeitung",
     "nameEn": null,
     "required": false,
@@ -355,7 +355,7 @@ const _attributes = {
           "id": "object",
           "attributes": [
             {
-              "type": {"id": "text", "multiline": false},
+              "type": {"id": "text", "multiline": false, "translatable": true},
               "id": "01973a81-5717-732f-99c0-97481e1954c5",
               "nameDe": "Name",
               "nameEn": "",

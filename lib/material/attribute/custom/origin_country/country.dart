@@ -18,7 +18,7 @@ class Country implements Comparable<Country> {
   }
 
   dynamic toJson() {
-    return TranslatableText(valueDe: code).toJson();
+    return TranslatableText.fromValue(code).toJson();
   }
 
   @override

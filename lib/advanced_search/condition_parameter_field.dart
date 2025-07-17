@@ -69,7 +69,7 @@ class TextField extends StatelessWidget {
       enabled: enabled,
       initialValue: initialValue?.value.toString(),
       onChanged: (value) {
-        onChanged(value.isNotEmpty ? TranslatableText(valueDe: value) : null);
+        onChanged(value.isNotEmpty ? TranslatableText.fromValue(value) : null);
       },
       validator: (value) {
         if (value == null || value.isEmpty) {

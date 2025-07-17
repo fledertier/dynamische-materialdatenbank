@@ -38,7 +38,7 @@ class ManufacturerDropdownMenuFilterOption extends ConsumerWidget {
         optionsNotifier.updateWith({
           Attributes.manufacturer:
               manufacturer != null
-                  ? TranslatableText(valueDe: manufacturer)
+                  ? TranslatableText.fromValue(manufacturer)
                   : null,
         });
       },

@@ -18,12 +18,12 @@ final searchQueryProvider = Provider((ref) {
     Condition(
       attributePath: AttributePath(Attributes.name),
       operator: Operator.contains,
-      parameter: TranslatableText(valueDe: search),
+      parameter: TranslatableText.fromValue(search),
     ),
     Condition(
       attributePath: AttributePath(Attributes.description),
       operator: Operator.contains,
-      parameter: TranslatableText(valueDe: search),
+      parameter: TranslatableText.fromValue(search),
     ),
   ]);
 });

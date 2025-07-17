@@ -69,8 +69,8 @@ class _ImageCardState extends ConsumerState<ImageCard> {
         result?.images.map((image) {
           return {
             Fields.thumbnailLink:
-                TranslatableText(valueDe: image.thumbnailLink).toJson(),
-            Fields.link: TranslatableText(valueDe: image.link).toJson(),
+                TranslatableText.fromValue(image.thumbnailLink).toJson(),
+            Fields.link: TranslatableText.fromValue(image.link).toJson(),
           };
         }).toList();
 

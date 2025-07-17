@@ -318,6 +318,23 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                   Text('Required'),
                 ],
               );
+              final translatableCheckbox = Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListenableBuilder(
+                    listenable: _controller.translatable,
+                    builder: (context, child) {
+                      return Checkbox(
+                        value: _controller.translatable.value ?? false,
+                        onChanged: (value) {
+                          _controller.translatable.value = value;
+                        },
+                      );
+                    },
+                  ),
+                  Text('Translatable'),
+                ],
+              );
               final multilineCheckbox = Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -336,9 +353,11 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                 ],
               );
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 spacing: 16,
                 children: [
+                  if (isType(AttributeType.text)) translatableCheckbox,
                   if (isType(AttributeType.text)) multilineCheckbox,
                   requiredCheckbox,
                 ],
@@ -439,6 +458,7 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
   AttributeType _createAttributeType(String type) {
     return switch (type) {
       AttributeType.text => TextAttributeType(
+        translatable: _controller.translatable.value ?? false,
         multiline: _controller.multiline.value ?? false,
       ),
       AttributeType.number => NumberAttributeType(

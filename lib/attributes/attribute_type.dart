@@ -24,7 +24,7 @@ enum Operator {
 }
 
 class TextAttributeType extends AttributeType {
-  TextAttributeType({this.multiline = false})
+  TextAttributeType({required this.translatable, required this.multiline})
     : super(
         id: AttributeType.text,
         operators: {
@@ -35,27 +35,38 @@ class TextAttributeType extends AttributeType {
         },
       );
 
+  final bool translatable;
   final bool multiline;
 
   factory TextAttributeType.fromJson(Json json) {
-    return TextAttributeType(multiline: json['multiline']);
+    return TextAttributeType(
+      translatable: json['translatable'] ?? false,
+      multiline: json['multiline'] ?? false,
+    );
   }
 
   @override
   Json toJson() {
-    return {'id': id, 'multiline': multiline};
+    return {'id': id, 'translatable': translatable, 'multiline': multiline};
   }
 
   @override
-  String toString() => [name, if (multiline) 'multiline'].join(', ');
+  String toString() {
+    return [
+      name,
+      if (translatable) 'translatable',
+      if (multiline) 'multiline',
+    ].join(', ');
+  }
 
   @override
-  int get hashCode => Object.hash(id, multiline);
+  int get hashCode => Object.hash(id, translatable, multiline);
 
   @override
   bool operator ==(Object other) {
     return other is TextAttributeType &&
         other.id == id &&
+        other.translatable == translatable &&
         other.multiline == multiline;
   }
 }

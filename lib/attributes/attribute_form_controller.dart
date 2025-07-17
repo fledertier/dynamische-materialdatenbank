@@ -14,6 +14,7 @@ class AttributeFormController implements Listenable {
       objectAttributes = ValueNotifier(
         initialAttribute?.type.objectAttributes ?? [],
       ),
+      translatable = ValueNotifier(initialAttribute?.type.textTranslatable),
       multiline = ValueNotifier(initialAttribute?.type.textMultiline),
       required = ValueNotifier(initialAttribute?.required);
 
@@ -24,6 +25,7 @@ class AttributeFormController implements Listenable {
   final ValueNotifier<Attribute?> listAttribute;
   final ValueNotifier<UnitType?> unitType;
   final ValueNotifier<List<Attribute>> objectAttributes;
+  final ValueNotifier<bool?> translatable;
   final ValueNotifier<bool?> multiline;
   final ValueNotifier<bool?> required;
 
@@ -37,6 +39,7 @@ class AttributeFormController implements Listenable {
     listAttribute,
     unitType,
     objectAttributes,
+    translatable,
     multiline,
     required,
   ];
@@ -71,6 +74,7 @@ class AttributeFormController implements Listenable {
       listAttribute.value,
       unitType.value,
       Object.hashAll(objectAttributes.value),
+      translatable.value,
       multiline.value,
       required.value,
     );
@@ -88,12 +92,18 @@ class AttributeFormController implements Listenable {
         listAttribute.value == other.listAttribute.value &&
         unitType.value == other.unitType.value &&
         listEquals(objectAttributes.value, other.objectAttributes.value) &&
+        translatable.value == other.translatable.value &&
         multiline.value == other.multiline.value &&
         required.value == other.required.value;
   }
 }
 
 extension on AttributeType {
+  bool? get textTranslatable {
+    final type = this;
+    return type is TextAttributeType ? type.translatable : null;
+  }
+
   bool? get textMultiline {
     final type = this;
     return type is TextAttributeType ? type.multiline : null;

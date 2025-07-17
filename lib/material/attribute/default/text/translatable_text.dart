@@ -9,7 +9,6 @@ class TranslatableText extends AttributeValue<TranslatableText> {
   final String? valueDe;
   final String? valueEn;
 
-  @Deprecated('Use resolve instead')
   String get value {
     return valueDe ?? valueEn ?? '';
   }
@@ -19,6 +18,10 @@ class TranslatableText extends AttributeValue<TranslatableText> {
       Language.de => valueDe,
       Language.en => valueEn,
     };
+  }
+
+  factory TranslatableText.fromValue(String value) {
+    return TranslatableText(valueDe: value);
   }
 
   factory TranslatableText.fromJson(Json json) {
