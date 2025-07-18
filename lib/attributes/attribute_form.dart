@@ -465,7 +465,6 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
         unitType: _controller.unitType.value,
       ),
       AttributeType.boolean => BooleanAttributeType(),
-      AttributeType.url => UrlAttributeType(),
       AttributeType.object => ObjectAttributeType(
         attributes: _controller.objectAttributes.value,
       ),

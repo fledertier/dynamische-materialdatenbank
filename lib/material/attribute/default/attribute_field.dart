@@ -11,7 +11,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/number/u
 import 'package:dynamische_materialdatenbank/material/attribute/default/object/object_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/text_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/url/url_attribute_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,12 +60,6 @@ class AttributeField extends ConsumerWidget {
           key: ValueKey(number.displayUnit),
           attributePath: attributePath,
           number: number,
-          onChanged: onChanged,
-        );
-      case AttributeType.url:
-        return UrlAttributeField(
-          attributePath: attributePath,
-          url: value as Uri?,
           onChanged: onChanged,
         );
       case AttributeType.list:

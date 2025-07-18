@@ -119,18 +119,6 @@ class BooleanAttributeType extends AttributeType {
   }
 }
 
-class UrlAttributeType extends AttributeType {
-  UrlAttributeType()
-    : super(
-        id: AttributeType.url,
-        operators: {Operator.equals, Operator.notEquals},
-      );
-
-  factory UrlAttributeType.fromJson(Json json) {
-    return UrlAttributeType();
-  }
-}
-
 class ObjectAttributeType extends AttributeType {
   ObjectAttributeType({required this.attributes})
     : super(id: AttributeType.object, operators: {});
@@ -207,11 +195,10 @@ abstract class AttributeType {
   static const text = 'text';
   static const number = 'number';
   static const boolean = 'boolean';
-  static const url = 'url';
   static const object = 'object';
   static const list = 'list';
 
-  static final values = [text, number, boolean, url, object, list];
+  static final values = [text, number, boolean, object, list];
 
   const AttributeType({required this.id, required this.operators});
 
@@ -226,7 +213,6 @@ abstract class AttributeType {
       text => TextAttributeType.fromJson(json),
       number => NumberAttributeType.fromJson(json),
       boolean => BooleanAttributeType.fromJson(json),
-      url => UrlAttributeType.fromJson(json),
       object => ObjectAttributeType.fromJson(json),
       list => ListAttributeType.fromJson(json),
       _ =>
@@ -255,7 +241,6 @@ IconData iconForAttributeType(String id) {
     AttributeType.text => Symbols.text_fields,
     AttributeType.number => Symbols.numbers,
     AttributeType.boolean => Symbols.check_box,
-    AttributeType.url => Symbols.link,
     AttributeType.object => Symbols.category,
     AttributeType.list => Symbols.menu,
     _ => Symbols.change_history,
@@ -267,7 +252,6 @@ dynamic defaultValueForAttributeType(String id) {
     AttributeType.text => TranslatableText(),
     AttributeType.number => UnitNumber(value: 0),
     AttributeType.boolean => Boolean(value: false),
-    AttributeType.url => Uri(),
     AttributeType.object => Json(),
     AttributeType.list => [],
     _ => null,

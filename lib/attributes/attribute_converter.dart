@@ -17,7 +17,6 @@ dynamic fromJson(dynamic json, AttributeType? type) {
     TextAttributeType() => TranslatableText.fromJson(json),
     NumberAttributeType() => UnitNumber.fromJson(json),
     BooleanAttributeType() => Boolean.fromJson(json),
-    UrlAttributeType() => Uri.tryParse(json as String),
     ObjectAttributeType() => objectFromJson(json, type),
     _ =>
       throw UnimplementedError(
@@ -48,7 +47,6 @@ dynamic toJson(dynamic value, AttributeType type) {
     TextAttributeType() => (value as TranslatableText).toJson(),
     NumberAttributeType() => (value as UnitNumber).toJson(),
     BooleanAttributeType() => (value as Boolean).toJson(),
-    UrlAttributeType() => (value as Uri).toString(),
     ListAttributeType() => listToJson(value as List, type),
     ObjectAttributeType() => objectToJson(value as Json, type),
     _ =>

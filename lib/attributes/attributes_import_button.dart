@@ -257,7 +257,7 @@ const _attributes = {
           "id": "website",
           "nameEn": "Website",
           "nameDe": "Webseite",
-          "type": {"id": "url"},
+          "type": {"id": "text"},
           "required": false,
         },
       ],
@@ -294,7 +294,7 @@ const _attributes = {
         "id": "01971790-34c0-7fc1-bfc7-8115276ebe65",
         "required": false,
         "nameDe": "Link",
-        "type": {"id": "url"},
+        "type": {"id": "text", "multiline": true},
       },
     },
     "nameDe": "Links",
@@ -556,8 +556,11 @@ const _materials = [
   },
   {
     "01971790-34c5-7941-be43-01bd558c20d8": [
-      "https://www.obi.de/search/bauschaum/",
-      "https://www.hornbach.de/p/soudal-pistolenschaum-b2-beige-750-ml/259609/",
+      {"valueDe": "https://www.obi.de/search/bauschaum/"},
+      {
+        "valueDe":
+            "https://www.hornbach.de/p/soudal-pistolenschaum-b2-beige-750-ml/259609/",
+      },
     ],
     "id": "0197c085-3521-79ea-b3f1-a3f234f42485",
     "u-value": {"value": 0.5, "displayUnit": null},
@@ -627,7 +630,7 @@ const _materials = [
       "valueDe": "A-s1,d0",
     },
     "manufacturer": {
-      "website": "www.baux.com",
+      "website": {"valueDe": "https://www.baux.com"},
       "name-1": {"valueEn": null, "valueDe": "Baux"},
     },
     "description": {
@@ -1558,7 +1561,7 @@ const _materials = [
     },
     "w-value": {"displayUnit": "kg/m²√s", "value": 54},
     "manufacturer": {
-      "website": "https://www.ecopanel.de",
+      "website": {"valueDe": "https://www.ecopanel.de"},
       "name-1": {"valueDe": "EcoPanel GmbH", "valueEn": null},
     },
     "01973a84-5f56-71dc-9c18-dc25fc865b33": [
@@ -1745,7 +1748,7 @@ const _materials = [
       "valueEn": "Unnamed Material",
     },
     "manufacturer": {
-      "website": "https://www.texturagreen.com",
+      "website": {"valueDe": "https://www.texturagreen.com"},
       "name-1": {"valueDe": "Textura Green", "valueEn": null},
     },
     "biobased": {"value": true},
@@ -1964,7 +1967,7 @@ const _materials = [
     ],
     "u-value": {"value": 0.07, "displayUnit": null},
     "manufacturer": {
-      "website": "https://www.greenbuild.eu",
+      "website": {"valueDe": "https://www.greenbuild.eu"},
       "name-1": {"valueDe": "GreenBuild Naturbaustoffe", "valueEn": null},
     },
     "01973a84-5f56-71dc-9c18-dc25fc865b33": [
