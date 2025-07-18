@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -282,8 +283,8 @@ void main() {
     final shortened = original.removeKeys({'required', 'multiline', 'nameEn'});
 
     final count = jsonEncode(original).length - jsonEncode(shortened).length;
-    print('shaved $count chatacters');
-    print(shortened);
+    debugPrint('shaved $count chatacters');
+    debugPrint(shortened.toString());
 
     expect(jsonEncode(shortened).length < jsonEncode(original).length, true);
   });

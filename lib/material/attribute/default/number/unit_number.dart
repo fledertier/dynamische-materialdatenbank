@@ -1,5 +1,5 @@
-import 'package:dynamische_materialdatenbank/attributes/attributeValue.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/attributes/attribute_value.dart';
 
 class UnitNumber extends AttributeValue<UnitNumber> {
   UnitNumber({required this.value, this.displayUnit});

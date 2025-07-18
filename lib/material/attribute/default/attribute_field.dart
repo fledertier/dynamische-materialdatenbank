@@ -1,10 +1,7 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
-import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/custom/origin_country/country.dart';
-import 'package:dynamische_materialdatenbank/material/attribute/default/country_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/list/list_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/number_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
@@ -37,14 +34,6 @@ class AttributeField extends ConsumerWidget {
 
     if (attribute == null) {
       return const SizedBox();
-    }
-
-    if (attribute.id == Attributes.originCountry) {
-      return CountryAttributeField(
-        attributePath: attributePath,
-        country: value as Country?,
-        onChanged: onChanged,
-      );
     }
 
     switch (attribute.type.id) {
