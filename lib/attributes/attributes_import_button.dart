@@ -183,7 +183,7 @@ const _attributes = {
             {
               'nameDe': 'Anteil',
               'type': {'unitType': 'proportion', 'id': 'number'},
-              'required': false,
+              'required': true,
               'nameEn': 'Share',
               'id': '01973a80-26ff-7bee-bbc8-c93911d3fa2c',
             },
@@ -1594,7 +1594,10 @@ const _materials = [
     'id': '0197c62c-a325-7d95-afbc-3f5f3c1e748a',
     'light reflection': {'value': 85, 'displayUnit': null},
     '01973a80-8ae1-75ed-ae14-c442187b3955': [
-      {'category': 'metals', 'share': 100},
+      {
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {'valueDe': 'metals'},
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 100},
+      },
     ],
     'biobased': {'value': false},
     'cardSections': {
@@ -1811,12 +1814,21 @@ const _materials = [
     'areal density': {'displayUnit': 'g/m²', 'value': 0.25},
     '01973a81-f146-7f9b-97c1-97f8b393996a': [
       {
-        'share': 90,
-        'nameEn': null,
-        'nameDe': 'Recycelte Baumwolle',
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 90},
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueEn': null,
+          'valueDe': 'Recycelte Baumwolle',
+        },
         'id': '1234',
       },
-      {'share': 10, 'id': '2345', 'nameDe': 'Polyester', 'nameEn': null},
+      {
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 10},
+        'id': '2345',
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Polyester',
+          'valueEn': null,
+        },
+      },
     ],
     'id': '0197c635-fc79-7563-aaa2-d341d69a0d88',
   },
@@ -1877,8 +1889,14 @@ const _materials = [
       'secondary': [],
     },
     '01973a80-8ae1-75ed-ae14-c442187b3955': [
-      {'share': 60, 'category': 'plantsAndAnimals'},
-      {'share': 40, 'category': 'plastics'},
+      {
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 60},
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {'valueDe': 'plantsAndAnimals'},
+      },
+      {
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 40},
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {'valueDe': 'plastics'},
+      },
     ],
     'description': {
       'valueEn': null,
@@ -1887,22 +1905,28 @@ const _materials = [
     },
     '01973a81-f146-7f9b-97c1-97f8b393996a': [
       {
-        'share': 60,
-        'nameEn': null,
-        'nameDe': 'Makroalgenextrakt',
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 60},
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueEn': null,
+          'valueDe': 'Makroalgenextrakt',
+        },
         'id': '1234',
       },
       {
-        'nameDe': 'PLA',
         'id': '0197c645-b31c-75fc-986b-0b91f1713290',
-        'share': 30,
-        'nameEn': null,
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 30},
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'PLA',
+          'valueEn': null,
+        },
       },
       {
-        'nameDe': 'Glyzerin',
-        'nameEn': null,
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Glyzerin',
+          'valueEn': null,
+        },
         'id': '0197c645-d805-7763-8cd8-4824a70890f9',
-        'share': 10,
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 10},
       },
     ],
   },
@@ -1962,8 +1986,14 @@ const _materials = [
     },
     'biobased': {'value': true},
     '01973a80-8ae1-75ed-ae14-c442187b3955': [
-      {'category': 'minerals', 'share': 25},
-      {'share': 70, 'category': 'plantsAndAnimals'},
+      {
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {'valueDe': 'minerals'},
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 25},
+      },
+      {
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 70},
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {'valueDe': 'plantsAndAnimals'},
+      },
     ],
     'u-value': {'value': 0.07, 'displayUnit': null},
     'manufacturer': {
@@ -1976,18 +2006,29 @@ const _materials = [
     ],
     'density': {'value': 320, 'displayUnit': null},
     '01973a81-f146-7f9b-97c1-97f8b393996a': [
-      {'nameEn': null, 'id': '1234', 'share': 70, 'nameDe': 'Hanffasern'},
+      {
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueEn': null,
+          'valueDe': 'Hanffasern',
+        },
+        'id': '1234',
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 70},
+      },
       {
         'id': '0197c64f-d4cc-7713-87a8-a51512aa1784',
-        'nameDe': 'Hydraulischer Kalk',
-        'share': 25,
-        'nameEn': null,
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 25},
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Hydraulischer Kalk',
+          'valueEn': null,
+        },
       },
       {
         'id': '0197c650-022d-71fc-a90a-f6d141906213',
-        'nameDe': 'Pflanzliche Additive',
-        'share': 5,
-        'nameEn': null,
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 5},
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Pflanzliche Additive',
+          'valueEn': null,
+        },
       },
     ],
     'description': {

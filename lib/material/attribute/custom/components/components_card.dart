@@ -29,28 +29,43 @@ class ComponentsCard extends ConsumerWidget {
     final exampleValue = [
       {
         'id': '1234',
-        'nameDe': 'Portlandzement',
-        'nameEn': 'Portland cement',
-        'share': 44,
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Portlandzement',
+          'valueEn': 'Portland cement',
+        },
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 44},
       },
       {
         'id': '2345',
-        'nameDe': 'Schwedische Fichte',
-        'nameEn': 'Wood Swedish fir',
-        'share': 31,
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Schwedische Fichte',
+          'valueEn': 'Wood Swedish fir',
+        },
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 31},
       },
-      {'id': '3456', 'nameDe': 'Wasser', 'nameEn': 'Water', 'share': 12},
+      {
+        'id': '3456',
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Wasser',
+          'valueEn': 'Water',
+        },
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 12},
+      },
       {
         'id': '4567',
-        'nameDe': 'Kalksteinmehl',
-        'nameEn': 'Limestone powder',
-        'share': 9,
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Kalksteinmehl',
+          'valueEn': 'Limestone powder',
+        },
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 9},
       },
       {
         'id': '5678',
-        'nameDe': 'Farbe, wasserbasiert',
-        'nameEn': 'Paint, water based',
-        'share': 2,
+        '01973a81-5717-732f-99c0-97481e1954c5': {
+          'valueDe': 'Farbe, wasserbasiert',
+          'valueEn': 'Paint, water based',
+        },
+        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 2},
       },
     ];
 

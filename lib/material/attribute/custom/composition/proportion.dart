@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// todo: use TranslatableText and UnitNumber
 class Proportion {
   const Proportion({
     required this.nameDe,

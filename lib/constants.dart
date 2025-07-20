@@ -34,7 +34,12 @@ abstract class Attributes {
   static const uValue = 'u-value';
   static const wValue = 'w-value';
   static const composition = '01973a80-8ae1-75ed-ae14-c442187b3955';
+  static const compositionCategory = '01973a7f-996f-7d2c-808c-facf1b23abed';
+  static const compositionShare = '01973a80-26ff-7bee-bbc8-c93911d3fa2c';
   static const components = '01973a81-f146-7f9b-97c1-97f8b393996a';
+  static const componentId = 'id';
+  static const componentName = '01973a81-5717-732f-99c0-97481e1954c5';
+  static const componentShare = '01973a81-b8b3-7214-b729-877d3d6cb394';
   static const fireBehaviorStandard = '01973a83-3199-7457-80c9-18fda49d92ec';
   static const arealDensity = 'areal density';
   static const density = 'density';

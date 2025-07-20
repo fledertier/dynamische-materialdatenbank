@@ -42,9 +42,24 @@ class CompositionCard extends ConsumerWidget {
     final edit = ref.watch(editModeProvider);
 
     final exampleValue = [
-      {'category': MaterialCategory.minerals.name, 'share': 58},
-      {'category': MaterialCategory.woods.name, 'share': 40},
-      {'category': MaterialCategory.plastics.name, 'share': 2},
+      {
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {
+          'valueDe': MaterialCategory.minerals.name,
+        },
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 58},
+      },
+      {
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {
+          'valueDe': MaterialCategory.woods.name,
+        },
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 40},
+      },
+      {
+        '01973a7f-996f-7d2c-808c-facf1b23abed': {
+          'valueDe': MaterialCategory.plastics.name,
+        },
+        '01973a80-26ff-7bee-bbc8-c93911d3fa2c': {'value': 2},
+      },
     ];
 
     final value =

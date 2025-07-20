@@ -1,5 +1,8 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportion.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 
 class Component extends Proportion {
   const Component({
@@ -12,16 +15,22 @@ class Component extends Proportion {
   final String id;
 
   factory Component.fromJson(Json json) {
+    final name = TranslatableText.fromJson(json[Attributes.componentName]);
     return Component(
-      id: json['id'],
-      nameDe: json['nameDe'],
-      nameEn: json['nameEn'],
-      share: json['share'],
+      id: json[Attributes.componentId],
+      nameDe: name.valueDe ?? '',
+      nameEn: name.valueEn,
+      share: UnitNumber.fromJson(json[Attributes.componentShare]).value,
     );
   }
 
   Json toJson() {
-    return {'id': id, 'nameDe': nameDe, 'nameEn': nameEn, 'share': share};
+    return {
+      Attributes.componentId: id,
+      Attributes.componentName:
+          TranslatableText(valueDe: nameDe, valueEn: nameEn).toJson(),
+      Attributes.componentShare: UnitNumber(value: share).toJson(),
+    };
   }
 
   @override
