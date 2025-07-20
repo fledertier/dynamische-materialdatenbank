@@ -8,8 +8,10 @@ import 'package:dynamische_materialdatenbank/material/attribute/default/text/tra
 class Composition extends Proportion {
   Composition({required this.category, required super.share})
     : super(
-        nameDe: category.nameDe,
-        nameEn: category.nameEn,
+        name: TranslatableText(
+          valueDe: category.nameDe,
+          valueEn: category.nameEn,
+        ),
         color: category.color,
       );
 
@@ -20,15 +22,15 @@ class Composition extends Proportion {
       category: MaterialCategory.values.byName(
         TranslatableText.fromJson(json[Attributes.compositionCategory]).value,
       ),
-      share: UnitNumber.fromJson(json[Attributes.compositionShare]).value,
+      share: UnitNumber.fromJson(json[Attributes.compositionShare]),
     );
   }
 
   Json toJson() {
+    final categoryName = TranslatableText.fromValue(category.name);
     return {
-      Attributes.compositionCategory:
-          TranslatableText.fromValue(category.name).toJson(),
-      Attributes.compositionShare: UnitNumber(value: share).toJson(),
+      Attributes.compositionCategory: categoryName.toJson(),
+      Attributes.compositionShare: share.toJson(),
     };
   }
 
@@ -39,9 +41,8 @@ class Composition extends Proportion {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! Composition) return false;
-
-    return category == other.category && share == other.share;
+    return other is Composition &&
+        category == other.category &&
+        share == other.share;
   }
 }

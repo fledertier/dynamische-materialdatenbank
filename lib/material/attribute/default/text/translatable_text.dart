@@ -20,6 +20,13 @@ class TranslatableText extends AttributeValue<TranslatableText> {
     };
   }
 
+  String? resolveOther(Language language) {
+    return switch (language) {
+      Language.de => valueEn,
+      Language.en => valueDe,
+    };
+  }
+
   factory TranslatableText.fromValue(String value) {
     return TranslatableText(valueDe: value);
   }

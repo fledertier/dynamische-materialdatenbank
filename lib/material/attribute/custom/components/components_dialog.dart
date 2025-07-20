@@ -1,4 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/custom/components/component.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,9 +22,9 @@ class ComponentsDialog extends StatefulWidget {
 class _ComponentsDialogState extends State<ComponentsDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late final nameDe = ValueNotifier(widget.initialComponent?.nameDe);
-  late final nameEn = ValueNotifier(widget.initialComponent?.nameEn);
-  late final share = ValueNotifier(widget.initialComponent?.share);
+  late final nameDe = ValueNotifier(widget.initialComponent?.name.valueDe);
+  late final nameEn = ValueNotifier(widget.initialComponent?.name.valueEn);
+  late final share = ValueNotifier(widget.initialComponent?.share.value);
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +110,9 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
 
   bool get hasChanges {
     return widget.initialComponent == null ||
-        widget.initialComponent!.nameDe != nameDe.value ||
-        widget.initialComponent!.nameEn != nameEn.value ||
-        widget.initialComponent!.share != share.value;
+        widget.initialComponent!.name.valueDe != nameDe.value ||
+        widget.initialComponent!.name.valueEn != nameEn.value ||
+        widget.initialComponent!.share.value != share.value;
   }
 
   void save() {
@@ -123,9 +125,8 @@ class _ComponentsDialogState extends State<ComponentsDialog> {
       ),
       Component(
         id: widget.initialComponent?.id ?? generateId(),
-        nameDe: nameDe.value!,
-        nameEn: nameEn.value,
-        share: share.value!,
+        name: TranslatableText(valueDe: nameDe.value, valueEn: nameEn.value),
+        share: UnitNumber(value: share.value!),
       ),
     ]);
   }

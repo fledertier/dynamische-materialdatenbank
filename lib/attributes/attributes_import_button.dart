@@ -363,7 +363,7 @@ const _attributes = {
             },
             {
               'type': {'unitType': 'proportion', 'id': 'number'},
-              'required': false,
+              'required': true,
               'nameEn': 'Share',
               'nameDe': 'Anteil',
               'id': '01973a81-b8b3-7214-b729-877d3d6cb394',

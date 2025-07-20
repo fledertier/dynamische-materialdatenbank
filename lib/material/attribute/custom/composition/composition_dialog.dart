@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/material_category.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +24,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
   final formKey = GlobalKey<FormState>();
 
   late final category = ValueNotifier(widget.initialComposition?.category);
-  late final share = ValueNotifier(widget.initialComposition?.share);
+  late final share = ValueNotifier(widget.initialComposition?.share.value);
 
   Iterable<MaterialCategory> get availableCategories {
     if (widget.initialComposition == null) {
@@ -121,7 +122,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
   bool get hasChanges {
     return widget.initialComposition == null ||
         widget.initialComposition!.category != category.value ||
-        widget.initialComposition!.share != share.value;
+        widget.initialComposition!.share.value != share.value;
   }
 
   void save() {
@@ -132,7 +133,10 @@ class _CompositionDialogState extends State<CompositionDialog> {
       ...widget.composition.where(
         (composition) => composition != widget.initialComposition,
       ),
-      Composition(category: category.value!, share: share.value!),
+      Composition(
+        category: category.value!,
+        share: UnitNumber(value: share.value!),
+      ),
     ]);
   }
 }

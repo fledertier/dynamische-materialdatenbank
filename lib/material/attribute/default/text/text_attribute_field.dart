@@ -30,8 +30,7 @@ class TextAttributeField extends ConsumerWidget {
 
     final value =
         isTranslatable(attribute) ? text.resolve(language) : text.value;
-    final otherLanguageValue =
-        language == Language.en ? text.valueDe : text.valueEn;
+    final otherLanguageValue = text.resolveOther(language);
 
     final url = Uri.tryParse(value ?? '');
     final isUrl = url != null && url.isAbsolute;

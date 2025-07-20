@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/components/component.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
@@ -63,7 +64,8 @@ class ComponentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
-    final color = ref.watch(materialColorProvider(component.name));
+    final color = ref.watch(materialColorProvider(component.name.value));
+    final language = ref.watch(languageProvider);
 
     return Material(
       type: MaterialType.transparency,
@@ -71,8 +73,8 @@ class ComponentTile extends ConsumerWidget {
         leading: CircleAvatar(
           backgroundColor: color ?? colorScheme.surfaceContainerHighest,
         ),
-        title: Text(component.name),
-        subtitle: Text('${component.share} %'),
+        title: Text(component.name.resolve(language) ?? component.name.value),
+        subtitle: Text('${component.share.value} %'),
         onTap: edit ? onTap : null,
       ),
     );

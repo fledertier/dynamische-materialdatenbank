@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/color/color_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/proportion.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
           for (final proportion in sortedProportions)
             ProportionWidget(
               proportion: proportion,
-              maxShare: sortedProportions.first.share,
+              maxShare: sortedProportions.first.share.value,
               onPressed: edit ? () => update(proportion) : null,
               axis: axis,
               height: height,
@@ -75,7 +76,8 @@ class ProportionWidget extends ConsumerWidget {
     final colorScheme = ColorScheme.of(context);
     final textTheme = TextTheme.of(context);
 
-    late final color = ref.watch(materialColorProvider(proportion.name));
+    late final color = ref.watch(materialColorProvider(proportion.name.value));
+    final language = ref.watch(languageProvider);
 
     final container = SizedBox(
       height: height,
@@ -93,7 +95,7 @@ class ProportionWidget extends ConsumerWidget {
                 Axis.vertical => Alignment.centerLeft,
               },
               child: Text(
-                proportion.name,
+                proportion.name.resolve(language) ?? proportion.name.value,
                 style: textTheme.bodyMedium!.copyWith(
                   fontFamily: 'Lexend',
                   color: Colors.black,
@@ -109,11 +111,11 @@ class ProportionWidget extends ConsumerWidget {
 
     return switch (axis) {
       Axis.horizontal => Flexible(
-        flex: proportion.share.round(),
+        flex: proportion.share.value.round(),
         child: container,
       ),
       Axis.vertical => FractionallySizedBox(
-        widthFactor: proportion.share / maxShare,
+        widthFactor: proportion.share.value / maxShare,
         alignment: Alignment.centerLeft,
         child: container,
       ),
