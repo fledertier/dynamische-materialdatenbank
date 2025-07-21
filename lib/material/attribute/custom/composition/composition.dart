@@ -5,8 +5,8 @@ import 'package:dynamische_materialdatenbank/material/attribute/custom/compositi
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 
-class Composition extends Proportion {
-  Composition({required this.category, required super.share})
+class CompositionElement extends Proportion {
+  CompositionElement({required this.category, required super.share})
     : super(
         name: TranslatableText(
           valueDe: category.nameDe,
@@ -17,8 +17,8 @@ class Composition extends Proportion {
 
   final MaterialCategory category;
 
-  factory Composition.fromJson(Json json) {
-    return Composition(
+  factory CompositionElement.fromJson(Json json) {
+    return CompositionElement(
       category: MaterialCategory.values.byName(
         TranslatableText.fromJson(json[Attributes.compositionCategory]).value,
       ),
@@ -41,7 +41,7 @@ class Composition extends Proportion {
 
   @override
   bool operator ==(Object other) {
-    return other is Composition &&
+    return other is CompositionElement &&
         category == other.category &&
         share == other.share;
   }

@@ -10,11 +10,11 @@ class CompositionDialog extends StatefulWidget {
   const CompositionDialog({
     super.key,
     required this.composition,
-    this.initialComposition,
+    this.initialElement,
   });
 
-  final List<Composition> composition;
-  final Composition? initialComposition;
+  final List<CompositionElement> composition;
+  final CompositionElement? initialElement;
 
   @override
   State<CompositionDialog> createState() => _CompositionDialogState();
@@ -23,26 +23,22 @@ class CompositionDialog extends StatefulWidget {
 class _CompositionDialogState extends State<CompositionDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late final category = ValueNotifier(widget.initialComposition?.category);
-  late final share = ValueNotifier(widget.initialComposition?.share.value);
+  late final category = ValueNotifier(widget.initialElement?.category);
+  late final share = ValueNotifier(widget.initialElement?.share.value);
 
-  Iterable<MaterialCategory> get availableCategories {
-    if (widget.initialComposition == null) {
-      return MaterialCategory.values.whereNot(
-        (category) => widget.composition.any(
-          (composition) => composition.category == category,
-        ),
-      );
-    } else {
-      return MaterialCategory.values;
-    }
-  }
+  Iterable<MaterialCategory> get availableCategories => {
+    if (widget.initialElement?.category != null)
+      widget.initialElement!.category,
+    for (final category in MaterialCategory.values)
+      if (widget.composition.none((element) => element.category == category))
+        category,
+  };
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        widget.initialComposition == null ? 'Add category' : 'Edit category',
+        widget.initialElement == null ? 'Add category' : 'Edit category',
       ),
       content: Form(
         key: formKey,
@@ -55,7 +51,6 @@ class _CompositionDialogState extends State<CompositionDialog> {
               label: Text('Category'),
               expandedInsets: EdgeInsets.zero,
               requestFocusOnTap: false,
-              enabled: widget.initialComposition == null,
               initialSelection: category.value,
               dropdownMenuEntries: [
                 for (final category in availableCategories)
@@ -120,9 +115,9 @@ class _CompositionDialogState extends State<CompositionDialog> {
   }
 
   bool get hasChanges {
-    return widget.initialComposition == null ||
-        widget.initialComposition!.category != category.value ||
-        widget.initialComposition!.share.value != share.value;
+    return widget.initialElement == null ||
+        widget.initialElement!.category != category.value ||
+        widget.initialElement!.share.value != share.value;
   }
 
   void save() {
@@ -131,9 +126,9 @@ class _CompositionDialogState extends State<CompositionDialog> {
     }
     context.pop([
       ...widget.composition.where(
-        (composition) => composition != widget.initialComposition,
+        (element) => element != widget.initialElement,
       ),
-      Composition(
+      CompositionElement(
         category: category.value!,
         share: UnitNumber(value: share.value!),
       ),

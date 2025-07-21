@@ -74,22 +74,22 @@ class CompositionCard extends ConsumerWidget {
         exampleValue;
 
     final composition =
-        List<Json>.from(value).map(Composition.fromJson).toList();
+        List<Json>.from(value).map(CompositionElement.fromJson).toList();
 
-    Future<void> updateComposition(Composition? initialComposition) async {
-      final updatedComposition = await showDialog<List<Composition>>(
+    Future<void> updateComposition(CompositionElement? element) async {
+      final updatedComposition = await showDialog<List<CompositionElement>>(
         context: context,
         builder: (context) {
           return CompositionDialog(
             composition: composition,
-            initialComposition: initialComposition,
+            initialElement: element,
           );
         },
       );
       if (updatedComposition != null) {
         ref.read(materialProvider(materialId).notifier).updateMaterial({
           Attributes.composition: updatedComposition.map(
-            (composition) => composition.toJson(),
+            (element) => element.toJson(),
           ),
         });
       }
