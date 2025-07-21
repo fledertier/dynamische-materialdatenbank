@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
+import 'package:dynamische_materialdatenbank/localization/language_button.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SubjectiveImpressionChips extends StatelessWidget {
   const SubjectiveImpressionChips({
@@ -42,7 +44,7 @@ class SubjectiveImpressionChips extends StatelessWidget {
   }
 }
 
-class SubjectiveImpressionChip extends StatelessWidget {
+class SubjectiveImpressionChip extends ConsumerWidget {
   const SubjectiveImpressionChip({
     super.key,
     required this.impression,
@@ -55,14 +57,15 @@ class SubjectiveImpressionChip extends StatelessWidget {
   final bool edit;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
+    final language = ref.watch(languageProvider);
 
     return IgnorePointer(
       ignoring: !edit,
       child: ActionChip(
         label: Text(
-          impression.name,
+          impression.name.resolve(language) ?? impression.name.value,
           style: textTheme.bodyMedium!.copyWith(color: Colors.black),
         ),
         shape: StadiumBorder(),

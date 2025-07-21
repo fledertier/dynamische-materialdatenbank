@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum Language { de, en }
 
-final languageProvider = StateProvider((ref) => Language.de);
+final languageProvider = StateProvider.autoDispose((ref) => Language.de);
 
 class LanguageButton extends ConsumerWidget {
   const LanguageButton({super.key});

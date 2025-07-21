@@ -1,4 +1,6 @@
 import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,9 +23,15 @@ class _SubjectiveImpressionDialogState
     extends State<SubjectiveImpressionDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late final nameDe = ValueNotifier(widget.initialSubjectiveImpression?.nameDe);
-  late final nameEn = ValueNotifier(widget.initialSubjectiveImpression?.nameEn);
-  late final count = ValueNotifier(widget.initialSubjectiveImpression?.count);
+  late final nameDe = ValueNotifier(
+    widget.initialSubjectiveImpression?.name.valueDe,
+  );
+  late final nameEn = ValueNotifier(
+    widget.initialSubjectiveImpression?.name.valueEn,
+  );
+  late final count = ValueNotifier(
+    widget.initialSubjectiveImpression?.count.value,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +119,9 @@ class _SubjectiveImpressionDialogState
 
   bool get hasChanges {
     return widget.initialSubjectiveImpression == null ||
-        widget.initialSubjectiveImpression!.nameDe != nameDe.value ||
-        widget.initialSubjectiveImpression!.nameEn != nameEn.value ||
-        widget.initialSubjectiveImpression!.count != count.value;
+        widget.initialSubjectiveImpression!.name.valueDe != nameDe.value ||
+        widget.initialSubjectiveImpression!.name.valueEn != nameEn.value ||
+        widget.initialSubjectiveImpression!.count.value != count.value;
   }
 
   void save() {
@@ -126,9 +134,8 @@ class _SubjectiveImpressionDialogState
             subjectiveImpression != widget.initialSubjectiveImpression,
       ),
       SubjectiveImpression(
-        nameDe: nameDe.value!,
-        nameEn: nameEn.value,
-        count: count.value!,
+        name: TranslatableText(valueDe: nameDe.value, valueEn: nameEn.value),
+        count: UnitNumber(value: count.value!),
       ),
     ]);
   }

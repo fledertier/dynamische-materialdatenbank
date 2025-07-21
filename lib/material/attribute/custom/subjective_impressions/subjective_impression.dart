@@ -2,44 +2,42 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 
 class SubjectiveImpression {
-  const SubjectiveImpression({
-    required this.nameDe,
-    required this.nameEn,
-    required this.count,
-  });
+  const SubjectiveImpression({required this.name, required this.count});
 
-  final String nameDe;
-  final String? nameEn;
-  final int count;
-
-  String get name => nameDe;
+  final TranslatableText name;
+  final UnitNumber count;
 
   factory SubjectiveImpression.fromJson(Json json) {
     return SubjectiveImpression(
-      nameDe: json['nameDe'],
-      nameEn: json['nameEn'],
-      count: json['count'],
+      name: TranslatableText.fromJson(
+        json[Attributes.subjectiveImpressionName],
+      ),
+      count: UnitNumber.fromJson(json[Attributes.subjectiveImpressionCount]),
     );
   }
 
   Json toJson() {
-    return {'nameDe': nameDe, 'nameEn': nameEn, 'count': count};
+    return {
+      Attributes.subjectiveImpressionName: name.toJson(),
+      Attributes.subjectiveImpressionCount: count.toJson(),
+    };
   }
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
     return other is SubjectiveImpression &&
-        other.nameDe == nameDe &&
-        other.nameEn == nameEn &&
+        other.name == name &&
         other.count == count;
   }
 
   @override
   int get hashCode {
-    return Object.hash(nameDe, nameEn, count);
+    return Object.hash(name, count);
   }
 }
 
@@ -53,10 +51,10 @@ final _colors = [
 ];
 
 Color colorOf(SubjectiveImpression impression) {
-  final random = Random(impression.name.hashCode);
+  final random = Random(impression.name.value.hashCode);
   return _colors[random.nextInt(_colors.length)];
 }
 
 double radiusOf(SubjectiveImpression impression) {
-  return impression.count * 10 + 20;
+  return impression.count.value * 10 + 20;
 }

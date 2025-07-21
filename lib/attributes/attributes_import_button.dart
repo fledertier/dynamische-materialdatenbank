@@ -98,15 +98,15 @@ const _attributes = {
           'attributes': [
             {
               'nameEn': null,
-              'required': false,
+              'required': true,
               'type': {'multiline': false, 'id': 'text', 'translatable': true},
               'id': '01973a53-3ad5-7a63-a6fd-d238fa571298',
               'nameDe': 'Name',
             },
             {
-              'required': false,
+              'required': true,
               'nameDe': 'Anzahl',
-              'nameEn': null,
+              'nameEn': 'Count',
               'id': '01973a53-c53f-7ea3-a53f-3d21fffb2ca3',
               'type': {'id': 'number', 'unitType': null},
             },
