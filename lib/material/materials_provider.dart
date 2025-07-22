@@ -44,6 +44,6 @@ final Json exampleMaterial = {
   Attributes.uValue: UnitNumber(value: 2).toJson(),
   Attributes.wValue: UnitNumber(value: 3.6).toJson(),
   Attributes.fireBehaviorStandard:
-      TranslatableText(valueDe: 'C-s2,d1').toJson(),
+      TranslatableText.fromValue('C-s2,d1').toJson(),
   Attributes.originCountry: [TranslatableText.fromValue('SE').toJson()],
 };

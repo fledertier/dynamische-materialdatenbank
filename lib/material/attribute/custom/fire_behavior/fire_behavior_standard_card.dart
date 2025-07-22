@@ -11,7 +11,7 @@ import 'package:dynamische_materialdatenbank/material/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FireBehaviorStandardCard extends ConsumerStatefulWidget {
+class FireBehaviorStandardCard extends ConsumerWidget {
   const FireBehaviorStandardCard({
     super.key,
     required this.materialId,
@@ -22,30 +22,35 @@ class FireBehaviorStandardCard extends ConsumerStatefulWidget {
   final CardSize size;
 
   @override
-  ConsumerState<FireBehaviorStandardCard> createState() =>
-      _FireBehaviorStandardCardState();
-}
-
-class _FireBehaviorStandardCardState
-    extends ConsumerState<FireBehaviorStandardCard> {
-  // late TextEditingController? controller;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final translatableText =
+    final text =
         ref.watch(
               valueProvider(
                 AttributeArgument(
-                  materialId: widget.materialId,
+                  materialId: materialId,
                   attributePath: AttributePath(Attributes.fireBehaviorStandard),
                 ),
               ),
             )
             as TranslatableText?;
 
-    final classification = translatableText?.valueDe ?? 'B-s2,d1';
-    final fireBehavior = FireBehaviorStandard.parse(classification);
+    String? validate(String? classification) {
+      if (classification == null || classification.isEmpty) {
+        return null;
+      }
+      if (!edit) {
+        return null;
+      }
+      if (!FireBehaviorStandard.isValid(classification)) {
+        return 'Invalid classification';
+      }
+      return null;
+    }
+
+    final classification = text?.value ?? '';
+    final fireBehavior = FireBehaviorStandard.tryParse(classification);
+    final error = validate(classification);
 
     return AttributeCard(
       columns: 3,
@@ -55,20 +60,24 @@ class _FireBehaviorStandardCardState
         style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'z.B. B-s2,d1'),
         initialValue: classification,
-        // controller: controller ??= TextEditingController(text: classification),
         onChanged: (value) {
-          ref.read(materialProvider(widget.materialId).notifier).updateMaterial(
-            {Attributes.fireBehaviorStandard: value},
-          );
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
+            Attributes.fireBehaviorStandard:
+                TranslatableText.fromValue(value).toJson(),
+          });
         },
       ),
-      child: FireBehaviorStandardVisualization(fireBehavior),
+      child:
+          fireBehavior != null
+              ? FireBehaviorStandardVisualization(fireBehavior)
+              : error != null
+              ? Text(
+                error,
+                style: TextTheme.of(context).bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              )
+              : null,
     );
-  }
-
-  @override
-  void dispose() {
-    // controller?.dispose();
-    super.dispose();
   }
 }

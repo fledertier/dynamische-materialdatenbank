@@ -19,11 +19,15 @@ class FireBehaviorStandard {
   });
 
   static final pattern = RegExp(
-    r'^(?<reactionToFire>[A-F][1-2]?)(?:-(?<smokeProduction>s[1-3]))?(?:,(?<flamingDroplets>d[0-2]))?$',
+    r'^(?<reactionToFire>A1|A2|[B-F])(?:-(?<smokeProduction>s[1-3]))?(?:,(?<flamingDroplets>d[0-2]))?$',
   );
 
   static bool isValid(String value) {
     return pattern.hasMatch(value);
+  }
+
+  static FireBehaviorStandard? tryParse(String classification) {
+    return isValid(classification) ? parse(classification) : null;
   }
 
   static FireBehaviorStandard parse(String classification) {
