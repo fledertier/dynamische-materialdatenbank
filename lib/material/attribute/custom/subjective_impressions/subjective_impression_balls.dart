@@ -17,7 +17,7 @@ class SubjectiveImpressionBalls extends StatefulWidget {
     required this.impressions,
     required this.onUpdate,
     this.edit = false,
-  }) : height = calculateHeight(impressions, width);
+  }) : height = calculateHeight(impressions, width, padding, edit);
 
   final double width;
   final double height;
@@ -34,11 +34,18 @@ class SubjectiveImpressionBalls extends StatefulWidget {
   static double calculateHeight(
     List<SubjectiveImpression> impressions,
     double width,
+    EdgeInsets padding,
+    bool edit,
   ) {
-    final areas = impressions.map(
-      (impression) => Size.fromRadius(radiusOf(impression)).area,
-    );
-    return areas.sum / width;
+    final ballSizes = [
+      if (edit) Size.fromRadius(40),
+      for (final impression in impressions)
+        Size.fromRadius(radiusOf(impression)),
+    ];
+    final height = ballSizes.map((size) => size.area).sum / width;
+    final minHeight = ballSizes.map((size) => size.height).maxOrNull ?? 0;
+
+    return max(minHeight, height) + padding.vertical;
   }
 
   @override
@@ -81,7 +88,7 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
         ),
       if (widget.edit)
         Ball.add(
-          position: Vector2(widget.width / 2, 0),
+          position: Vector2(widget.width * 0.6, 0),
           velocity: Vector2.zero(),
         ),
     ];

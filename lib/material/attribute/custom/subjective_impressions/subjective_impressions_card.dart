@@ -28,51 +28,6 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final exampleValue = [
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'rau',
-          'valueEn': 'rough',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 4},
-      },
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'glatt',
-          'valueEn': 'smooth',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 1},
-      },
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'kalt',
-          'valueEn': 'cold',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 2},
-      },
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'warm',
-          'valueEn': 'warm',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 3},
-      },
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'weich',
-          'valueEn': 'soft',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 1},
-      },
-      {
-        '01973a53-3ad5-7a63-a6fd-d238fa571298': {
-          'valueDe': 'hart',
-          'valueEn': 'hard',
-        },
-        '01973a53-c53f-7ea3-a53f-3d21fffb2ca3': {'value': 2},
-      },
-    ];
-
     final value =
         ref.watch(
           jsonValueProvider(
@@ -82,7 +37,7 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
             ),
           ),
         ) ??
-        exampleValue;
+        [];
 
     final impressions =
         List<Json>.from(value).map(SubjectiveImpression.fromJson).toList();

@@ -1,6 +1,10 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/components/component.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/composition.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/composition/material_category.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/custom/subjective_impressions/subjective_impression.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,4 +50,83 @@ final Json exampleMaterial = {
   Attributes.fireBehaviorStandard:
       TranslatableText.fromValue('C-s2,d1').toJson(),
   Attributes.originCountry: [TranslatableText.fromValue('SE').toJson()],
+  Attributes.subjectiveImpressions: [
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'rau', valueEn: 'rough'),
+      count: UnitNumber(value: 4),
+    ).toJson(),
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'glatt', valueEn: 'smooth'),
+      count: UnitNumber(value: 1),
+    ).toJson(),
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'kalt', valueEn: 'cold'),
+      count: UnitNumber(value: 2),
+    ).toJson(),
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'warm', valueEn: 'warm'),
+      count: UnitNumber(value: 3),
+    ).toJson(),
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'weich', valueEn: 'soft'),
+      count: UnitNumber(value: 1),
+    ).toJson(),
+    SubjectiveImpression(
+      name: TranslatableText(valueDe: 'hart', valueEn: 'hard'),
+      count: UnitNumber(value: 2),
+    ).toJson(),
+  ],
+  Attributes.composition: [
+    CompositionElement(
+      category: MaterialCategory.minerals,
+      share: UnitNumber(value: 58),
+    ).toJson(),
+    CompositionElement(
+      category: MaterialCategory.woods,
+      share: UnitNumber(value: 40),
+    ).toJson(),
+    CompositionElement(
+      category: MaterialCategory.plastics,
+      share: UnitNumber(value: 2),
+    ).toJson(),
+  ],
+  Attributes.components: [
+    Component(
+      id: '1234',
+      name: TranslatableText(
+        valueDe: 'Portlandzement',
+        valueEn: 'Portland cement',
+      ),
+      share: UnitNumber(value: 44),
+    ).toJson(),
+    Component(
+      id: '2345',
+      name: TranslatableText(
+        valueDe: 'Schwedische Fichte',
+        valueEn: 'Wood Swedish fir',
+      ),
+      share: UnitNumber(value: 31),
+    ).toJson(),
+    Component(
+      id: '3456',
+      name: TranslatableText(valueDe: 'Wasser', valueEn: 'Water'),
+      share: UnitNumber(value: 12),
+    ).toJson(),
+    Component(
+      id: '4567',
+      name: TranslatableText(
+        valueDe: 'Kalksteinmehl',
+        valueEn: 'Limestone powder',
+      ),
+      share: UnitNumber(value: 9),
+    ).toJson(),
+    Component(
+      id: '5678',
+      name: TranslatableText(
+        valueDe: 'Farbe, wasserbasiert',
+        valueEn: 'Paint, water based',
+      ),
+      share: UnitNumber(value: 2),
+    ).toJson(),
+  ],
 };

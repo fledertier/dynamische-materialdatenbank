@@ -26,48 +26,6 @@ class ComponentsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final exampleValue = [
-      {
-        'id': '1234',
-        '01973a81-5717-732f-99c0-97481e1954c5': {
-          'valueDe': 'Portlandzement',
-          'valueEn': 'Portland cement',
-        },
-        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 44},
-      },
-      {
-        'id': '2345',
-        '01973a81-5717-732f-99c0-97481e1954c5': {
-          'valueDe': 'Schwedische Fichte',
-          'valueEn': 'Wood Swedish fir',
-        },
-        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 31},
-      },
-      {
-        'id': '3456',
-        '01973a81-5717-732f-99c0-97481e1954c5': {
-          'valueDe': 'Wasser',
-          'valueEn': 'Water',
-        },
-        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 12},
-      },
-      {
-        'id': '4567',
-        '01973a81-5717-732f-99c0-97481e1954c5': {
-          'valueDe': 'Kalksteinmehl',
-          'valueEn': 'Limestone powder',
-        },
-        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 9},
-      },
-      {
-        'id': '5678',
-        '01973a81-5717-732f-99c0-97481e1954c5': {
-          'valueDe': 'Farbe, wasserbasiert',
-          'valueEn': 'Paint, water based',
-        },
-        '01973a81-b8b3-7214-b729-877d3d6cb394': {'value': 2},
-      },
-    ];
 
     final value =
         ref.watch(
@@ -78,7 +36,7 @@ class ComponentsCard extends ConsumerWidget {
             ),
           ),
         ) ??
-        exampleValue;
+        [];
 
     final components = List<Json>.from(value).map(Component.fromJson).toList();
 
