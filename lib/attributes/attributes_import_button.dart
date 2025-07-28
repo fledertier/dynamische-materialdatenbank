@@ -806,7 +806,7 @@ const _materials = [
     },
     "01973a83-3199-7457-80c9-18fda49d92ec": {
       "valueEn": null,
-      "valueDe": "A-s1,d0",
+      "valueDe": "A1-s1,d0",
     },
     "light reflection": {"displayUnit": null, "value": 17},
     "biobased": {"value": true},
@@ -1428,6 +1428,10 @@ const _materials = [
       "valueDe":
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPFv9Bqdeakn__bJ6bD-xjuC_1XRCAkb5KB-SHVgmhcn0v_fwM8CuKXZ8&s",
     },
+    "01973a83-3199-7457-80c9-18fda49d92ec": {
+      "valueEn": null,
+      "valueDe": "B-s2,d1",
+    },
     "01973a53-3ad6-7e35-b596-3fb50f93cf96": [
       {
         "01973a53-3ad5-7a63-a6fd-d238fa571298": {
@@ -1494,7 +1498,7 @@ const _materials = [
   {
     "01973a83-3199-7457-80c9-18fda49d92ec": {
       "valueEn": null,
-      "valueDe": "A-s2,d0",
+      "valueDe": "A2-s2,d0",
     },
     "light reflection": {"displayUnit": null, "value": 33},
     "density": {"displayUnit": null, "value": 3.6},

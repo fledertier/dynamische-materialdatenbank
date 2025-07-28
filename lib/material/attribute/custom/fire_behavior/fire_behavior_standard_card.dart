@@ -48,14 +48,15 @@ class FireBehaviorStandardCard extends ConsumerWidget {
       return null;
     }
 
-    final classification = text?.value ?? '';
-    final fireBehavior = FireBehaviorStandard.tryParse(classification);
+    final classification = text?.value;
+    final fireBehavior = FireBehaviorStandard.tryParse(classification ?? '');
     final error = validate(classification);
 
     return AttributeCard(
       columns: 3,
       label: AttributeLabel(attributeId: Attributes.fireBehaviorStandard),
       title: TextFormField(
+        key: ValueKey(classification == null),
         enabled: edit,
         style: TextTheme.of(context).titleLarge?.copyWith(fontFamily: 'Lexend'),
         decoration: InputDecoration.collapsed(hintText: 'z.B. B-s2,d1'),
