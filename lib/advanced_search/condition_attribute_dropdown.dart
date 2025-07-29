@@ -4,6 +4,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart'
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_provider.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/utils/attribute_utils.dart';
 import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,6 +69,24 @@ class ConditionAttributeDropdown extends ConsumerWidget {
               onSelected(AttributePath.of([attribute!.id, ...subPath.ids]));
             },
             depth: depth + 1,
+          )
+        else if (attribute?.type case ListAttributeType(
+          attribute: final listAttribute,
+        ))
+          ConditionAttributeDropdown(
+            enabled: enabled,
+            initialAttributePath: initialAttributePath,
+            attributeEntries: listAttribute.childAttributes,
+            onSelected: (subPath) {
+              onSelected(
+                AttributePath.of([
+                  attribute!.id,
+                  listAttribute.id,
+                  ...subPath.ids,
+                ]),
+              );
+            },
+            depth: depth + 2,
           ),
       ],
     );
