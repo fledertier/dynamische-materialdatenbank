@@ -2,14 +2,19 @@
 
 Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.
 
+<br>
+
 ## Installation
 
 1. [Flutter installieren](https://docs.flutter.dev/get-started/install)
 2. [Firebase CLI installieren](https://firebase.google.com/docs/cli#setup_update_cli)
 3. Mit Google-Account anmelden:
+
    ```bash
    firebase login
    ```
+
+<br>
 
 ## Anwendung starten
 
@@ -24,6 +29,8 @@ Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch 
 1. Web device auswählen
 2. Anwendung mit `Production` run configuration starten
 
+<br>
+
 ## Projekt konfigurieren
 
 [Firebase Console](https://console.firebase.google.com)
@@ -31,9 +38,9 @@ Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch 
 Firebase in Flutter app konfigurieren:
 
 ```bash
-   dart pub global activate flutterfire_cli
+dart pub global activate flutterfire_cli
 ```
 
 ```bash
-   flutterfire configure
+flutterfire configure
 ```
