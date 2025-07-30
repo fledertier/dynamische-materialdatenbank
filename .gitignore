@@ -33,6 +33,7 @@ migrate_working_dir/
 .pub/
 /build/
 /emulators_data/
+.firebase/
 
 # Symbolication related
 app.*.symbols

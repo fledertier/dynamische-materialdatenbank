@@ -1,7 +1,6 @@
 # Dynamische Materialdatenbank
 
 Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.
-
 <br>
 
 ## Installation
@@ -33,7 +32,7 @@ Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch 
 
 ## Projekt konfigurieren
 
-[Firebase Console](https://console.firebase.google.com)
+[Firebase Console](https://console.firebase.google.com/project/dynamische-materialdatenbank/overview)
 
 Firebase in Flutter app konfigurieren:
 
