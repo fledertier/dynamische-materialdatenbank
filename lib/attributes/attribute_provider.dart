@@ -11,12 +11,6 @@ import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Extrema {
-  const Extrema({required this.min, required this.max});
-
-  final num min, max;
-}
-
 final valuesExtremaProvider = FutureProvider.family((
   ref,
   String attributeId,
@@ -26,7 +20,7 @@ final valuesExtremaProvider = FutureProvider.family((
   if (values.isEmpty) {
     return null;
   }
-  return Extrema(min: values.reduce(min), max: values.reduce(max));
+  return (min: values.reduce(min), max: values.reduce(max));
 });
 
 final valuesProvider = FutureProvider.family((ref, String attributeId) async {

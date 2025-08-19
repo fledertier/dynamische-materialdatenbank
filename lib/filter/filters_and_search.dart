@@ -4,7 +4,7 @@ import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/filter/checkbox_filter_option.dart';
 import 'package:dynamische_materialdatenbank/filter/dropdown_menu_filter_option.dart';
 import 'package:dynamische_materialdatenbank/filter/filter_provider.dart';
-import 'package:dynamische_materialdatenbank/filter/slider_filter_option.dart';
+import 'package:dynamische_materialdatenbank/filter/range_slider_filter_option.dart';
 import 'package:dynamische_materialdatenbank/query/query_source_provider.dart';
 import 'package:dynamische_materialdatenbank/widgets/labeled.dart';
 import 'package:dynamische_materialdatenbank/widgets/labeled_list.dart';
@@ -25,10 +25,9 @@ class FiltersAndSearch extends ConsumerWidget {
       duration: const Duration(milliseconds: 300),
       alignment: Alignment.topLeft,
       curve: Curves.easeOutCubic,
-      child:
-          querySource == QuerySource.searchAndFilter
-              ? Filters(onClose: onClose)
-              : AdvancedSearch(onClose: onClose),
+      child: querySource == QuerySource.searchAndFilter
+          ? Filters(onClose: onClose)
+          : AdvancedSearch(onClose: onClose),
     );
   }
 }
@@ -87,7 +86,7 @@ class Filters extends ConsumerWidget {
           Labeled(
             label: LoadingText(attributes[Attributes.density]?.name),
             gap: 6,
-            child: SliderFilterOption(Attributes.density),
+            child: RangeSliderFilterOption(Attributes.density),
           ),
         ],
       ),

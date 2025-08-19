@@ -2,6 +2,7 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_converter.dart
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/constants.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/query/condition.dart';
 import 'package:dynamische_materialdatenbank/query/condition_group.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,11 +36,17 @@ final filterQueryProvider = Provider((ref) {
         parameter: options[Attributes.manufacturer],
       ),
 
-    if (options[Attributes.density] != null)
+    if (options[Attributes.density]?.start != null)
+      Condition(
+        attributePath: AttributePath(Attributes.density),
+        operator: Operator.greaterThan,
+        parameter: UnitNumber(value: options[Attributes.density].start),
+      ),
+    if (options[Attributes.density]?.end != null)
       Condition(
         attributePath: AttributePath(Attributes.density),
         operator: Operator.lessThan,
-        parameter: options[Attributes.density],
+        parameter: UnitNumber(value: options[Attributes.density].end),
       ),
   ]);
 });
