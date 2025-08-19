@@ -41,24 +41,21 @@ class AttributeCard extends StatelessWidget {
         children: [
           if (label != null || title != null)
             Padding(
-              padding:
-                  child == null
-                      ? labelPadding
-                      : labelPadding.copyWith(bottom: 0),
+              padding: child == null
+                  ? labelPadding
+                  : labelPadding.copyWith(bottom: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 spacing: 8,
-                children: [
-                  if (label != null) label!,
-                  if (title != null) title!,
-                ],
+                children: [?label, ?title],
               ),
             ),
           if (child != null)
             Padding(
-              padding:
-                  label == null ? childPadding : childPadding.copyWith(top: 0),
+              padding: label == null
+                  ? childPadding
+                  : childPadding.copyWith(top: 0),
               child: child,
             ),
         ],

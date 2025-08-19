@@ -47,7 +47,7 @@ class _ImageCardState extends ConsumerState<ImageCard> {
         ),
       ),
     );
-    images = value != null ? List<Json>.from(value) : [];
+    images = List<Json>.from(value ?? []);
   }
 
   String? materialName() {
@@ -65,14 +65,14 @@ class _ImageCardState extends ConsumerState<ImageCard> {
     final result = await ref
         .read(imageSearchServiceProvider)
         .searchImages(name);
-    final foundImages =
-        result?.images.map((image) {
-          return {
-            Fields.thumbnailLink:
-                TranslatableText.fromValue(image.thumbnailLink).toJson(),
-            Fields.link: TranslatableText.fromValue(image.link).toJson(),
-          };
-        }).toList();
+    final foundImages = result?.images.map((image) {
+      return {
+        Fields.thumbnailLink: TranslatableText.fromValue(
+          image.thumbnailLink,
+        ).toJson(),
+        Fields.link: TranslatableText.fromValue(image.link).toJson(),
+      };
+    }).toList();
 
     if (foundImages?.isNotEmpty ?? false) {
       addImages(foundImages!);
@@ -128,27 +128,25 @@ class _ImageCardState extends ConsumerState<ImageCard> {
       childPadding: EdgeInsets.all(padding),
       child: AspectRatio(
         aspectRatio: 1.6,
-        child:
-            images.isNotEmpty
-                ? Row(
-                  spacing: padding,
-                  children: [
-                    Expanded(
-                      child:
-                          selectedImage != null
-                              ? buildImage(context, selectedImage, edit)
-                              : SizedBox(),
-                    ),
-                    buildThumbnails(context),
-                  ],
-                )
-                : Center(
-                  child: FilledButton.icon(
-                    icon: Icon(Icons.search),
-                    label: Text('Search images'),
-                    onPressed: searchImages,
+        child: images.isNotEmpty
+            ? Row(
+                spacing: padding,
+                children: [
+                  Expanded(
+                    child: selectedImage != null
+                        ? buildImage(context, selectedImage, edit)
+                        : SizedBox(),
                   ),
+                  buildThumbnails(context),
+                ],
+              )
+            : Center(
+                child: FilledButton.icon(
+                  icon: Icon(Icons.search),
+                  label: Text('Search images'),
+                  onPressed: searchImages,
                 ),
+              ),
       ),
     );
   }

@@ -60,7 +60,7 @@ class Search<T> extends StatelessWidget {
           },
           onSubmitted: onSubmitted,
           leading: leading,
-          trailing: [if (trailing != null) trailing!],
+          trailing: [?trailing],
         );
       },
       viewHintText: hintText,
@@ -77,7 +77,7 @@ class Search<T> extends StatelessWidget {
             return value.text.isEmpty ? const SizedBox() : clear;
           },
         ),
-        if (trailing != null) trailing!,
+        ?trailing,
       ],
       viewBuilder: (suggestions) {
         final query = controller.text;

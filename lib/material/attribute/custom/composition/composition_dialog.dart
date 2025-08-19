@@ -26,8 +26,7 @@ class _CompositionDialogState extends State<CompositionDialog> {
   late final share = ValueNotifier(widget.initialElement?.share.value);
 
   Iterable<MaterialCategory> get availableCategories => {
-    if (widget.initialElement?.category != null)
-      widget.initialElement!.category,
+    ?widget.initialElement?.category,
     for (final category in MaterialCategory.values)
       if (widget.composition.none((element) => element.category == category))
         category,

@@ -23,7 +23,7 @@ class AppScaffold extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Row(
         children: [
-          if (navigation != null) navigation!,
+          ?navigation,
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -36,7 +36,7 @@ class AppScaffold extends StatelessWidget {
                       spacing: 24,
                       children: [
                         Expanded(child: body),
-                        if (sidebar != null) sidebar!,
+                        ?sidebar,
                       ],
                     ),
                   ),

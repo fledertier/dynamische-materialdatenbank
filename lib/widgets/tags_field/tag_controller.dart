@@ -7,7 +7,7 @@ class TagController<T> extends TagsController<T> {
 
   T? get tag => tags.singleOrNull;
 
-  set tag(T? tag) => tags = tag != null ? [tag] : [];
+  set tag(T? tag) => tags = [?tag];
 
   @override
   void insert(int index, T tag) {
