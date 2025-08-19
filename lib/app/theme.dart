@@ -14,7 +14,7 @@ ThemeData buildTheme(BuildContext context, Brightness brightness) {
       // ignore: deprecated_member_use
       year2023: false,
       overlayShape: SliderComponentShape.noOverlay,
-      showValueIndicator: ShowValueIndicator.always,
+      showValueIndicator: ShowValueIndicator.onDrag,
       trackHeight: 3,
       padding: EdgeInsets.symmetric(horizontal: 2),
       thumbSize: WidgetStateProperty.resolveWith((states) {

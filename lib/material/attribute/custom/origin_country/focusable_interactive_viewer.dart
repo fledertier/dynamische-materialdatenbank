@@ -127,22 +127,23 @@ class _FocusableInteractiveViewerState extends State<FocusableInteractiveViewer>
       Vector3(targetRelativeToViewer.dx, targetRelativeToViewer.dy, 0),
     );
 
-    final double scale =
-        targetSize.aspectRatio < viewerSize.aspectRatio
-            ? viewerSize.height / targetSize.height
-            : viewerSize.width / targetSize.width;
+    final double scale = targetSize.aspectRatio < viewerSize.aspectRatio
+        ? viewerSize.height / targetSize.height
+        : viewerSize.width / targetSize.width;
 
     final double desiredScale = _smoothClamp(scale, widget.viewPaddingExponent);
 
-    final Matrix4 targetMatrix =
-        Matrix4.identity()
-          ..translate(
-            viewerSize.width / 2 -
-                (transformed.x + targetSize.width / 2) * desiredScale,
-            viewerSize.height / 2 -
-                (transformed.y + targetSize.height / 2) * desiredScale,
-          )
-          ..scale(desiredScale);
+    final Matrix4 targetMatrix = Matrix4.identity()
+      ..translateByVector3(
+        Vector3(
+          viewerSize.width / 2 -
+              (transformed.x + targetSize.width / 2) * desiredScale,
+          viewerSize.height / 2 -
+              (transformed.y + targetSize.height / 2) * desiredScale,
+          0.0,
+        ),
+      )
+      ..scaleByVector3(Vector3.all(desiredScale));
 
     _animateTo(targetMatrix, duration: duration, curve: curve);
   }
@@ -156,12 +157,11 @@ class _FocusableInteractiveViewerState extends State<FocusableInteractiveViewer>
         _viewerKey.currentContext?.findRenderObject() as RenderBox?;
     if (viewerBox == null) return;
 
-    final List<RenderBox> boxes =
-        keys
-            .map((k) => k.currentContext?.findRenderObject() as RenderBox?)
-            .where((b) => b != null)
-            .cast<RenderBox>()
-            .toList();
+    final List<RenderBox> boxes = keys
+        .map((k) => k.currentContext?.findRenderObject() as RenderBox?)
+        .where((b) => b != null)
+        .cast<RenderBox>()
+        .toList();
 
     if (boxes.isEmpty) return;
 
@@ -183,20 +183,22 @@ class _FocusableInteractiveViewerState extends State<FocusableInteractiveViewer>
 
     final double scale =
         (unionRect.height / unionRect.width) < viewerSize.aspectRatio
-            ? viewerSize.height / unionRect.height
-            : viewerSize.width / unionRect.width;
+        ? viewerSize.height / unionRect.height
+        : viewerSize.width / unionRect.width;
 
     final double desiredScale = _smoothClamp(scale, widget.viewPaddingExponent);
 
-    final Matrix4 targetMatrix =
-        Matrix4.identity()
-          ..translate(
-            viewerSize.width / 2 -
-                (unionRect.left + unionRect.width / 2) * desiredScale,
-            viewerSize.height / 2 -
-                (unionRect.top + unionRect.height / 2) * desiredScale,
-          )
-          ..scale(desiredScale);
+    final Matrix4 targetMatrix = Matrix4.identity()
+      ..translateByVector3(
+        Vector3(
+          viewerSize.width / 2 -
+              (unionRect.left + unionRect.width / 2) * desiredScale,
+          viewerSize.height / 2 -
+              (unionRect.top + unionRect.height / 2) * desiredScale,
+          0.0,
+        ),
+      )
+      ..scaleByVector3(Vector3.all(desiredScale));
 
     _animateTo(targetMatrix, duration: duration, curve: curve);
   }

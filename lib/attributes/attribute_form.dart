@@ -5,7 +5,6 @@ import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/attributes/attributes_list.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/units.dart';
 import 'package:dynamische_materialdatenbank/utils/miscellaneous_utils.dart';
-import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:dynamische_materialdatenbank/widgets/hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

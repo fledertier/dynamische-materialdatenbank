@@ -1,7 +1,6 @@
 import 'package:dynamische_materialdatenbank/attributes/attribute_provider.dart';
 import 'package:dynamische_materialdatenbank/attributes/attribute_type.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.dart';
-import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

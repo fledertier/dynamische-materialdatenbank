@@ -5,7 +5,6 @@ import 'package:dynamische_materialdatenbank/material/attribute/attribute_path.d
 import 'package:dynamische_materialdatenbank/material/attribute/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/number/unit_number.dart';
 import 'package:dynamische_materialdatenbank/material/attribute/default/text/translatable_text.dart';
-import 'package:dynamische_materialdatenbank/widgets/dropdown_menu_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
