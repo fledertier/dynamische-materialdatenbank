@@ -31,8 +31,9 @@ class OriginCountryCard extends ConsumerWidget {
         ),
       ),
     );
-    final countries =
-        List<Json>.from(values ?? []).map(Country.fromJson).toList();
+    final countries = List<Json>.from(
+      values ?? [],
+    ).map(Country.fromJson).toList();
 
     return AttributeCard(
       columns: 2,
@@ -41,10 +42,9 @@ class OriginCountryCard extends ConsumerWidget {
         countries: countries,
         materialId: materialId,
       ),
-      child:
-          size > CardSize.small
-              ? WorldMap(highlightedCountries: countries)
-              : null,
+      child: size > CardSize.small
+          ? WorldMap(highlightedCountries: countries)
+          : null,
     );
   }
 }

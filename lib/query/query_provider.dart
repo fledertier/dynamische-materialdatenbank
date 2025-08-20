@@ -27,10 +27,9 @@ final queriedMaterialsProvider = FutureProvider.autoDispose((ref) async {
   });
   final materials = await ref.watch(materialsProvider(attributes).future);
   final attributesById = await ref.watch(attributesProvider.future);
-  final matching =
-      materials
-          .where((material) => query.matches(material, attributesById))
-          .toList();
+  final matching = materials
+      .where((material) => query.matches(material, attributesById))
+      .toList();
   if (sortAttributePath != null) {
     matching.sort((a, b) {
       final value =

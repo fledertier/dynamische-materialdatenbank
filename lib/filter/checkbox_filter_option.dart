@@ -15,8 +15,9 @@ class CheckboxFilterOption extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final options = ref.watch(filterOptionsProvider);
     final optionsNotifier = ref.read(filterOptionsProvider.notifier);
-    final attribute =
-        ref.watch(attributeProvider(AttributePath(attributeId))).valueOrNull;
+    final attribute = ref
+        .watch(attributeProvider(AttributePath(attributeId)))
+        .valueOrNull;
 
     final value = options[attributeId] as Boolean?;
 

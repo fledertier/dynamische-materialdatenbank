@@ -18,10 +18,9 @@ dynamic fromJson(dynamic json, AttributeType? type) {
     NumberAttributeType() => UnitNumber.fromJson(json),
     BooleanAttributeType() => Boolean.fromJson(json),
     ObjectAttributeType() => objectFromJson(json, type),
-    _ =>
-      throw UnimplementedError(
-        "fromJson() for attribute type '$type' not implemented",
-      ),
+    _ => throw UnimplementedError(
+      "fromJson() for attribute type '$type' not implemented",
+    ),
   };
 }
 
@@ -49,10 +48,9 @@ dynamic toJson(dynamic value, AttributeType type) {
     BooleanAttributeType() => (value as Boolean).toJson(),
     ListAttributeType() => listToJson(value as List, type),
     ObjectAttributeType() => objectToJson(value as Json, type),
-    _ =>
-      throw UnimplementedError(
-        "toJson() for attribute type '$type' not implemented",
-      ),
+    _ => throw UnimplementedError(
+      "toJson() for attribute type '$type' not implemented",
+    ),
   };
 }
 

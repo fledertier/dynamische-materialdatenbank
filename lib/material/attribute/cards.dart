@@ -49,8 +49,9 @@ abstract class CardFactory {
     final cacheForMaterial = cache.putIfAbsent(materialId, () => {});
     return Consumer(
       builder: (context, ref, child) {
-        final attribute =
-            ref.watch(attributeProvider(AttributePath(data.attributeId))).value;
+        final attribute = ref
+            .watch(attributeProvider(AttributePath(data.attributeId)))
+            .value;
         final resized = resize(data, attribute, size);
 
         return cacheForMaterial.putIfAbsent(
@@ -199,14 +200,12 @@ class CardSections {
 
   factory CardSections.fromJson(Json json) {
     return CardSections(
-      primary:
-          List<Json>.from(
-            json['primary'] ?? [],
-          ).map(CardSection.fromJson).toList(),
-      secondary:
-          List<Json>.from(
-            json['secondary'] ?? [],
-          ).map(CardSection.fromJson).toList(),
+      primary: List<Json>.from(
+        json['primary'] ?? [],
+      ).map(CardSection.fromJson).toList(),
+      secondary: List<Json>.from(
+        json['secondary'] ?? [],
+      ).map(CardSection.fromJson).toList(),
     );
   }
 

@@ -56,35 +56,33 @@ class _ObjectAttributeFieldState extends ConsumerState<ObjectAttributeField> {
       child: ListTile(
         tileColor: ColorScheme.of(context).secondaryContainer,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title:
-            firstAttribute != null
-                ? IgnorePointer(
-                  child: ProviderScope(
-                    overrides: [editModeProvider.overrideWith((ref) => false)],
-                    child: AttributeField(
-                      attributePath: widget.attributePath + firstAttribute.id,
-                      value: object?[firstAttribute.id],
-                    ),
+        title: firstAttribute != null
+            ? IgnorePointer(
+                child: ProviderScope(
+                  overrides: [editModeProvider.overrideWith((ref) => false)],
+                  child: AttributeField(
+                    attributePath: widget.attributePath + firstAttribute.id,
+                    value: object?[firstAttribute.id],
                   ),
-                )
-                : Text(attribute.name ?? 'Object', style: textStyle),
-        onTap:
-            edit
-                ? () {
-                  showObjectAttributeDialog(
-                    context: context,
-                    attributePath: widget.attributePath,
-                    initialObject: object,
-                    isRoot: widget.isRoot,
-                    onSave: (object) {
-                      setState(() {
-                        this.object = object;
-                      });
-                      widget.onSave?.call(object);
-                    },
-                  );
-                }
-                : null,
+                ),
+              )
+            : Text(attribute.name ?? 'Object', style: textStyle),
+        onTap: edit
+            ? () {
+                showObjectAttributeDialog(
+                  context: context,
+                  attributePath: widget.attributePath,
+                  initialObject: object,
+                  isRoot: widget.isRoot,
+                  onSave: (object) {
+                    setState(() {
+                      this.object = object;
+                    });
+                    widget.onSave?.call(object);
+                  },
+                );
+              }
+            : null,
       ),
     );
   }

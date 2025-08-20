@@ -36,12 +36,11 @@ class QueryService {
     List<Attribute> attributes,
     List<AttributeType> types,
   ) async {
-    final result = await FirebaseFunctions.instanceFor(
-      region: region,
-    ).httpsCallable(Functions.chat).call({
-      'prompt': prompt,
-      'attributes':
-          attributes
+    final result = await FirebaseFunctions.instanceFor(region: region)
+        .httpsCallable(Functions.chat)
+        .call({
+          'prompt': prompt,
+          'attributes': attributes
               .map(
                 (attribute) => attribute.toJson().removeKeys({
                   'required',
@@ -51,19 +50,18 @@ class QueryService {
                 }),
               )
               .toList(),
-      'types':
-          types.map((type) {
+          'types': types.map((type) {
             return {
               'id': type.id,
-              'operators':
-                  type.operators.map((operator) => operator.name).toList(),
+              'operators': type.operators
+                  .map((operator) => operator.name)
+                  .toList(),
             };
           }).toList(),
-      'units':
-          UnitTypes.values.map((type) {
+          'units': UnitTypes.values.map((type) {
             return {'id': type.id, 'unit': type.base};
           }).toList(),
-    });
+        });
 
     return result.data as String?;
   }

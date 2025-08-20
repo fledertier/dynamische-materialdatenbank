@@ -20,8 +20,9 @@ class ComponentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortedComponents =
-        components.sortedBy((component) => component.share).reversed;
+    final sortedComponents = components
+        .sortedBy((component) => component.share)
+        .reversed;
 
     return GridView(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

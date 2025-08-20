@@ -48,26 +48,24 @@ class _SingleCornerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final effectiveRadius = radius.clamp(0.0, size.width);
 
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
 
-    final path =
-        Path()
-          ..moveTo(0, 0)
-          ..lineTo(effectiveRadius, 0)
-          ..arcTo(
-            Rect.fromCircle(
-              center: Offset(effectiveRadius, effectiveRadius),
-              radius: effectiveRadius,
-            ),
-            -3.14 / 2,
-            -3.14 / 2,
-            false,
-          )
-          ..lineTo(0, effectiveRadius)
-          ..close();
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(effectiveRadius, 0)
+      ..arcTo(
+        Rect.fromCircle(
+          center: Offset(effectiveRadius, effectiveRadius),
+          radius: effectiveRadius,
+        ),
+        -3.14 / 2,
+        -3.14 / 2,
+        false,
+      )
+      ..lineTo(0, effectiveRadius)
+      ..close();
 
     canvas.drawPath(path, paint);
   }

@@ -40,8 +40,9 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
 
   Future<void> createMaterial() async {
     final attributes = await ref.read(attributesProvider.future);
-    final requiredAttributes =
-        attributes.values.where((attribute) => attribute.required).toSet();
+    final requiredAttributes = attributes.values
+        .where((attribute) => attribute.required)
+        .toSet();
 
     final cards = [
       for (final attribute in requiredAttributes)
@@ -56,16 +57,14 @@ class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
           attribute.type,
         ),
       Attributes.id: arg,
-      Attributes.name:
-          TranslatableText(
-            valueDe: 'Unbenanntes Material',
-            valueEn: 'Unnamed Material',
-          ).toJson(),
-      Attributes.cardSections:
-          CardSections(
-            primary: [CardSection(cards: cards)],
-            secondary: [],
-          ).toJson(),
+      Attributes.name: TranslatableText(
+        valueDe: 'Unbenanntes Material',
+        valueEn: 'Unnamed Material',
+      ).toJson(),
+      Attributes.cardSections: CardSections(
+        primary: [CardSection(cards: cards)],
+        secondary: [],
+      ).toJson(),
     };
 
     await updateMaterial(material);

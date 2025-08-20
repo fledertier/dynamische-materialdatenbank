@@ -31,10 +31,9 @@ Json randomDescription() {
 Json randomManufacturer() {
   final random = Random();
   return {
-    Attributes.manufacturerName:
-        TranslatableText(
-          valueDe: 'Manufacturer ${random.nextInt(10)}',
-        ).toJson(),
+    Attributes.manufacturerName: TranslatableText(
+      valueDe: 'Manufacturer ${random.nextInt(10)}',
+    ).toJson(),
   };
 }
 

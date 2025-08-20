@@ -82,8 +82,9 @@ class DraggableCardsBuilder extends ConsumerWidget {
               ) {
                 final updated = [...sections];
                 updated[fromSectionIndex].cards.remove(details.data);
-                sectionsJson[fromSectionCategory.name] =
-                    updated.map((section) => section.toJson()).toList();
+                sectionsJson[fromSectionCategory.name] = updated
+                    .map((section) => section.toJson())
+                    .toList();
                 return updated;
               });
             }
@@ -93,8 +94,9 @@ class DraggableCardsBuilder extends ConsumerWidget {
             ) {
               final updated = [...sections];
               updated[sectionIndex].cards.insert(insertIndex, details.data);
-              sectionsJson[sectionCategory.name] =
-                  updated.map((section) => section.toJson()).toList();
+              sectionsJson[sectionCategory.name] = updated
+                  .map((section) => section.toJson())
+                  .toList();
               return updated;
             });
 
@@ -146,8 +148,9 @@ class DraggableCardsBuilder extends ConsumerWidget {
           ) {
             final updated = [...sections];
             updated[fromSectionIndex].cards.remove(details.data);
-            sectionsJson[fromSectionCategory.name] =
-                updated.map((section) => section.toJson()).toList();
+            sectionsJson[fromSectionCategory.name] = updated
+                .map((section) => section.toJson())
+                .toList();
             return updated;
           });
         }
@@ -155,8 +158,9 @@ class DraggableCardsBuilder extends ConsumerWidget {
         ref.read(sectionsProvider(sectionCategory).notifier).update((sections) {
           final updated = [...sections];
           updated[sectionIndex].cards.add(details.data);
-          sectionsJson[sectionCategory.name] =
-              updated.map((section) => section.toJson()).toList();
+          sectionsJson[sectionCategory.name] = updated
+              .map((section) => section.toJson())
+              .toList();
           return updated;
         });
 

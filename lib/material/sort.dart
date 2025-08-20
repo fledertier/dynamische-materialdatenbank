@@ -38,8 +38,9 @@ class SortDirectionButton extends ConsumerWidget {
       onPressed: () {
         ref.read(sortDirectionProvider.notifier).state = direction.other;
       },
-      tooltip:
-          direction == SortDirection.ascending ? 'ascending' : 'descending',
+      tooltip: direction == SortDirection.ascending
+          ? 'ascending'
+          : 'descending',
     );
   }
 }

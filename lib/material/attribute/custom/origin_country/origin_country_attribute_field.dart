@@ -50,8 +50,9 @@ class OriginCountryAttributeField extends ConsumerWidget {
       initialTags: countries,
       onChanged: (countries) {
         ref.read(materialProvider(materialId).notifier).updateMaterial({
-          Attributes.originCountry:
-              countries.map((country) => country.toJson()).toList(),
+          Attributes.originCountry: countries
+              .map((country) => country.toJson())
+              .toList(),
         });
       },
     );

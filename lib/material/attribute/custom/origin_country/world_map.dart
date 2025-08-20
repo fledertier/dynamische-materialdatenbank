@@ -31,10 +31,9 @@ class _WorldMapState extends State<WorldMap> {
   }
 
   void updateBoundingBox() {
-    final points =
-        widget.highlightedCountries
-            .expand((country) => pointsOfCountry(country, attributes))
-            .toList();
+    final points = widget.highlightedCountries
+        .expand((country) => pointsOfCountry(country, attributes))
+        .toList();
     boundingBox = boundingBoxFrom(points);
   }
 

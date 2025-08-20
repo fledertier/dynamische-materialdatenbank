@@ -31,10 +31,9 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
         controller: controller,
         minLines: 3,
         maxLines: 8,
-        textInputAction:
-            BrowserDetection.instance.isMobile
-                ? TextInputAction.newline
-                : TextInputAction.done,
+        textInputAction: BrowserDetection.instance.isMobile
+            ? TextInputAction.newline
+            : TextInputAction.done,
         keyboardType: TextInputType.multiline,
         onSubmitted: submit,
         decoration: InputDecoration(
@@ -46,22 +45,21 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
           ),
           contentPadding: EdgeInsets.fromLTRB(16, 8, 8, 16),
           isCollapsed: true,
-          suffix:
-              isLoading
-                  ? IconButton.filled(
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    icon: Icon(Icons.stop_rounded),
-                    onPressed: () => _operation?.cancel(),
-                  )
-                  : IconButton.filled(
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    icon: Icon(Icons.arrow_upward),
-                    onPressed: () => submit(controller.text),
+          suffix: isLoading
+              ? IconButton.filled(
+                  style: IconButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
+                  icon: Icon(Icons.stop_rounded),
+                  onPressed: () => _operation?.cancel(),
+                )
+              : IconButton.filled(
+                  style: IconButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  icon: Icon(Icons.arrow_upward),
+                  onPressed: () => submit(controller.text),
+                ),
         ),
       ),
     );
@@ -88,14 +86,12 @@ class _MaterialPromptState extends ConsumerState<MaterialPrompt> {
       (value) => setState(() {
         isLoading = false;
       }),
-      onCancel:
-          () => setState(() {
-            isLoading = false;
-          }),
-      onError:
-          (error, stackTrace) => setState(() {
-            isLoading = false;
-          }),
+      onCancel: () => setState(() {
+        isLoading = false;
+      }),
+      onError: (error, stackTrace) => setState(() {
+        isLoading = false;
+      }),
     );
 
     setState(() {

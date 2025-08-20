@@ -255,16 +255,16 @@ class AttributeFormState extends ConsumerState<AttributeForm> {
                         ] else ...[
                           SizedBox(height: 16),
                           OutlinedButton(
-                            style:
-                                field.hasError
-                                    ? OutlinedButton.styleFrom(
-                                      foregroundColor:
-                                          ColorScheme.of(context).error,
-                                      side: BorderSide(
-                                        color: ColorScheme.of(context).error,
-                                      ),
-                                    )
-                                    : null,
+                            style: field.hasError
+                                ? OutlinedButton.styleFrom(
+                                    foregroundColor: ColorScheme.of(
+                                      context,
+                                    ).error,
+                                    side: BorderSide(
+                                      color: ColorScheme.of(context).error,
+                                    ),
+                                  )
+                                : null,
                             child: Text('Select attribute'),
                             onPressed: () {
                               addAttribute((attribute) {

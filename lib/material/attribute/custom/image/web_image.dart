@@ -31,24 +31,22 @@ class WebImage extends StatelessWidget {
     }
 
     platformViewRegistry.registerViewFactory(viewType, (int viewId) {
-      final div =
-          HTMLDivElement()
-            ..style.width = '100%'
-            ..style.height = '100%'
-            ..style.display = 'flex'
-            ..style.alignItems = 'center'
-            ..style.justifyContent = 'center';
+      final div = HTMLDivElement()
+        ..style.width = '100%'
+        ..style.height = '100%'
+        ..style.display = 'flex'
+        ..style.alignItems = 'center'
+        ..style.justifyContent = 'center';
 
-      final img =
-          HTMLImageElement()
-            ..src = src
-            ..alt = alt ?? ''
-            ..style.width = 'auto'
-            ..style.height = 'auto'
-            ..style.maxWidth = '100%'
-            ..style.maxHeight = '100%'
-            ..style.objectFit = objectFit.toCss()
-            ..style.borderRadius = borderRadius.toCss();
+      final img = HTMLImageElement()
+        ..src = src
+        ..alt = alt ?? ''
+        ..style.width = 'auto'
+        ..style.height = 'auto'
+        ..style.maxWidth = '100%'
+        ..style.maxHeight = '100%'
+        ..style.objectFit = objectFit.toCss()
+        ..style.borderRadius = borderRadius.toCss();
 
       return div..append(img);
     });

@@ -39,8 +39,9 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
         ) ??
         [];
 
-    final impressions =
-        List<Json>.from(value).map(SubjectiveImpression.fromJson).toList();
+    final impressions = List<Json>.from(
+      value,
+    ).map(SubjectiveImpression.fromJson).toList();
 
     Future<void> updateSubjectiveImpressions(
       SubjectiveImpression? initialSubjectiveImpression,
@@ -68,8 +69,9 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
       columns: 2,
       label: AttributeLabel(attributeId: Attributes.subjectiveImpressions),
       clip: Clip.antiAlias,
-      childPadding:
-          size == CardSize.small ? EdgeInsets.all(16) : EdgeInsets.zero,
+      childPadding: size == CardSize.small
+          ? EdgeInsets.all(16)
+          : EdgeInsets.zero,
       child: switch (size) {
         CardSize.large => SubjectiveImpressionBalls(
           key: ValueKey([edit, impressions]),

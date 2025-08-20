@@ -162,10 +162,9 @@ class WaterBend extends StatelessWidget {
             child: CornerGapShape(
               size: effectiveSize,
               radius: effectiveSize,
-              position:
-                  side == WaterSide.right
-                      ? CornerPosition.bottomLeft
-                      : CornerPosition.bottomRight,
+              position: side == WaterSide.right
+                  ? CornerPosition.bottomLeft
+                  : CornerPosition.bottomRight,
               color: colorScheme.water,
             ),
           ),
@@ -175,10 +174,9 @@ class WaterBend extends StatelessWidget {
             child: CornerGapShape(
               size: effectiveSize,
               radius: effectiveSize,
-              position:
-                  side == WaterSide.right
-                      ? CornerPosition.topLeft
-                      : CornerPosition.topRight,
+              position: side == WaterSide.right
+                  ? CornerPosition.topLeft
+                  : CornerPosition.topRight,
               color: backgroundColor,
             ),
           ),

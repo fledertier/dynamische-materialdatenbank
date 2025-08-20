@@ -26,10 +26,9 @@ class Scale<T> extends StatelessWidget {
             data: IconThemeData(
               size: 48,
               fill: 1,
-              color:
-                  i <= values.indexOf(value)
-                      ? colorScheme.primary
-                      : colorScheme.outlineVariant,
+              color: i <= values.indexOf(value)
+                  ? colorScheme.primary
+                  : colorScheme.outlineVariant,
             ),
             child: icon,
           ),

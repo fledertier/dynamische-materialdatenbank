@@ -52,8 +52,9 @@ class CompositionCard extends ConsumerWidget {
         ) ??
         [];
 
-    final composition =
-        List<Json>.from(value).map(CompositionElement.fromJson).toList();
+    final composition = List<Json>.from(
+      value,
+    ).map(CompositionElement.fromJson).toList();
 
     Future<void> updateComposition(CompositionElement? element) async {
       final updatedComposition = await showDialog<List<CompositionElement>>(

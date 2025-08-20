@@ -25,8 +25,9 @@ class ProportionsWidget<T extends Proportion> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortedProportions =
-        proportions.sortedBy((proportion) => proportion.share).reversed;
+    final sortedProportions = proportions
+        .sortedBy((proportion) => proportion.share)
+        .reversed;
 
     return SizedBox(
       height: axis == Axis.horizontal ? height : null,

@@ -126,8 +126,9 @@ class ObjectAttributeType extends AttributeType {
   final List<Attribute> attributes;
 
   factory ObjectAttributeType.fromJson(Json json) {
-    final attributes =
-        List<Json>.from(json['attributes']).map(Attribute.fromJson).toList();
+    final attributes = List<Json>.from(
+      json['attributes'],
+    ).map(Attribute.fromJson).toList();
     return ObjectAttributeType(attributes: attributes);
   }
 
@@ -215,10 +216,9 @@ abstract class AttributeType {
       boolean => BooleanAttributeType.fromJson(json),
       object => ObjectAttributeType.fromJson(json),
       list => ListAttributeType.fromJson(json),
-      _ =>
-        throw UnimplementedError(
-          'AttributeType $id is missing fromJson method',
-        ),
+      _ => throw UnimplementedError(
+        'AttributeType $id is missing fromJson method',
+      ),
     };
   }
 

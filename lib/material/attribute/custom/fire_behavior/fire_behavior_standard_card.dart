@@ -63,22 +63,22 @@ class FireBehaviorStandardCard extends ConsumerWidget {
         initialValue: classification,
         onChanged: (value) {
           ref.read(materialProvider(materialId).notifier).updateMaterial({
-            Attributes.fireBehaviorStandard:
-                TranslatableText.fromValue(value).toJson(),
+            Attributes.fireBehaviorStandard: TranslatableText.fromValue(
+              value,
+            ).toJson(),
           });
         },
       ),
-      child:
-          fireBehavior != null
-              ? FireBehaviorStandardVisualization(fireBehavior)
-              : error != null
-              ? Text(
-                error,
-                style: TextTheme.of(context).bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              )
-              : null,
+      child: fireBehavior != null
+          ? FireBehaviorStandardVisualization(fireBehavior)
+          : error != null
+          ? Text(
+              error,
+              style: TextTheme.of(
+                context,
+              ).bodySmall?.copyWith(color: Theme.of(context).colorScheme.error),
+            )
+          : null,
     );
   }
 }

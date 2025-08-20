@@ -76,32 +76,27 @@ class _MaterialDetailPageState extends ConsumerState<MaterialDetailPage> {
                   ),
                 ),
                 navigation: Navigation(page: Pages.materials),
-                floatingActionButton:
-                    edit
-                        ? AttributeCardButton(
-                          materialId: widget.materialId,
-                          onPressed: () {
-                            setState(() {
-                              showDialog = true;
-                            });
-                          },
-                        )
-                        : null,
-                body:
-                    isLoading
-                        ? Center(child: CircularProgressIndicator())
-                        : Center(
-                          child: PrimarySections(materialId: widget.materialId),
-                        ),
-                sidebar:
-                    isLoading
-                        ? null
-                        : Sheet(
-                          width: 300,
-                          child: SecondarySections(
-                            materialId: widget.materialId,
-                          ),
-                        ),
+                floatingActionButton: edit
+                    ? AttributeCardButton(
+                        materialId: widget.materialId,
+                        onPressed: () {
+                          setState(() {
+                            showDialog = true;
+                          });
+                        },
+                      )
+                    : null,
+                body: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Center(
+                        child: PrimarySections(materialId: widget.materialId),
+                      ),
+                sidebar: isLoading
+                    ? null
+                    : Sheet(
+                        width: 300,
+                        child: SecondarySections(materialId: widget.materialId),
+                      ),
               ),
               if (showDialog)
                 AttributeCardDialog(

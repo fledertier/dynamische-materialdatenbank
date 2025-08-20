@@ -51,16 +51,15 @@ class _MaterialsPageState extends State<MaterialsPage> {
           Positioned(bottom: 16, child: AddMaterialButton()),
         ],
       ),
-      sidebar:
-          showFilters
-              ? FiltersAndSearch(
-                onClose: () {
-                  setState(() {
-                    showFilters = false;
-                  });
-                },
-              )
-              : null,
+      sidebar: showFilters
+          ? FiltersAndSearch(
+              onClose: () {
+                setState(() {
+                  showFilters = false;
+                });
+              },
+            )
+          : null,
     );
   }
 }

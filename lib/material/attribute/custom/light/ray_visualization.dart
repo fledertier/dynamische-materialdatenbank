@@ -58,10 +58,9 @@ class _RayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = mediumColor
-          ..strokeWidth = 1.5;
+    final paint = Paint()
+      ..color = mediumColor
+      ..strokeWidth = 1.5;
 
     final medium = Rect.fromCenter(
       center: size.center(Offset.zero),

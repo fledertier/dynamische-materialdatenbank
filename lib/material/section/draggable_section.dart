@@ -70,8 +70,9 @@ class _DraggableSectionState extends ConsumerState<DraggableSection> {
                   .watch(materialProvider(widget.materialId).notifier)
                   .updateMaterial({
                     Attributes.cardSections: {
-                      widget.sectionCategory.name:
-                          sections.map((section) => section.toJson()).toList(),
+                      widget.sectionCategory.name: sections
+                          .map((section) => section.toJson())
+                          .toList(),
                     },
                   });
             },
@@ -100,12 +101,11 @@ class _DraggableSectionState extends ConsumerState<DraggableSection> {
         padding: widget.padding,
         decoration: BoxDecoration(
           border: Border.all(
-            color:
-                highlighted
-                    ? colorScheme.primary
-                    : edit
-                    ? colorScheme.outline.withValues(alpha: 0.5)
-                    : Colors.transparent,
+            color: highlighted
+                ? colorScheme.primary
+                : edit
+                ? colorScheme.outline.withValues(alpha: 0.5)
+                : Colors.transparent,
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(16),

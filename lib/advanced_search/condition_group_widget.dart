@@ -41,10 +41,9 @@ class ConditionGroupWidget extends ConsumerWidget {
             ),
           ),
         Padding(
-          padding:
-              (isRootNode && conditionGroup.nodes.isEmpty)
-                  ? EdgeInsets.zero
-                  : const EdgeInsets.only(left: 64 - 16),
+          padding: (isRootNode && conditionGroup.nodes.isEmpty)
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(left: 64 - 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
@@ -77,44 +76,43 @@ class ConditionGroupWidget extends ConsumerWidget {
                     ).merge(theme.textButtonTheme.style),
                   ),
                 ),
-                child:
-                    (isRootNode && conditionGroup.nodes.isEmpty)
-                        ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Row(
-                            spacing: 6,
-                            children: [
-                              TextButton(
-                                onPressed: () => addCondition(),
-                                child: Text(isAnd ? 'And' : 'Or'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  toggleType();
-                                  addCondition();
-                                },
-                                child: Text(isAnd ? 'Or' : 'And'),
-                              ),
-                            ],
-                          ),
-                        )
-                        : Padding(
-                          padding: const EdgeInsets.only(left: 32),
-                          child: Row(
-                            spacing: 6,
-                            children: [
-                              TextButton.icon(
-                                icon: Icon(Icons.add),
-                                onPressed: () => addCondition(),
-                                label: Text('Condition'),
-                              ),
-                              TextButton(
-                                onPressed: () => addConditionGroup(),
-                                child: Text(isAnd ? 'Or' : 'And'),
-                              ),
-                            ],
-                          ),
+                child: (isRootNode && conditionGroup.nodes.isEmpty)
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Row(
+                          spacing: 6,
+                          children: [
+                            TextButton(
+                              onPressed: () => addCondition(),
+                              child: Text(isAnd ? 'And' : 'Or'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                toggleType();
+                                addCondition();
+                              },
+                              child: Text(isAnd ? 'Or' : 'And'),
+                            ),
+                          ],
                         ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 32),
+                        child: Row(
+                          spacing: 6,
+                          children: [
+                            TextButton.icon(
+                              icon: Icon(Icons.add),
+                              onPressed: () => addCondition(),
+                              label: Text('Condition'),
+                            ),
+                            TextButton(
+                              onPressed: () => addConditionGroup(),
+                              child: Text(isAnd ? 'Or' : 'And'),
+                            ),
+                          ],
+                        ),
+                      ),
               ),
             ],
           ),

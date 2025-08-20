@@ -25,18 +25,17 @@ class SelectableTag extends StatelessWidget {
         child: ChipTheme(
           data: ChipTheme.of(context).copyWith(
             side: BorderSide(
-              color:
-                  selected
-                      ? Colors.transparent
-                      : ColorScheme.of(context).outlineVariant,
+              color: selected
+                  ? Colors.transparent
+                  : ColorScheme.of(context).outlineVariant,
             ),
-            backgroundColor:
-                selected ? ColorScheme.of(context).secondaryContainer : null,
+            backgroundColor: selected
+                ? ColorScheme.of(context).secondaryContainer
+                : null,
           ),
-          child:
-              onTap != null
-                  ? ActionChip(avatar: avatar, label: label, onPressed: onTap)
-                  : Chip(avatar: avatar, label: label),
+          child: onTap != null
+              ? ActionChip(avatar: avatar, label: label, onPressed: onTap)
+              : Chip(avatar: avatar, label: label),
         ),
       ),
     );

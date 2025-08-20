@@ -18,8 +18,9 @@ class SubjectiveImpressionChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortedImpressions =
-        impressions.sortedBy((impression) => impression.count).reversed;
+    final sortedImpressions = impressions
+        .sortedBy((impression) => impression.count)
+        .reversed;
 
     return Wrap(
       spacing: 4,

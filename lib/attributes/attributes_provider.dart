@@ -17,12 +17,11 @@ class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
   Stream<Map<String, Attribute>> build() => getAttributesStream();
 
   Future<List<Json>> _getMaterialsWithAttribute(AttributePath path) async {
-    final snapshot =
-        await ref
-            .read(firestoreProvider)
-            .collection(Collections.materials)
-            .where(path.toString(), isNull: false)
-            .get();
+    final snapshot = await ref
+        .read(firestoreProvider)
+        .collection(Collections.materials)
+        .where(path.toString(), isNull: false)
+        .get();
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 

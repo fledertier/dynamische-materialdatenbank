@@ -11,8 +11,9 @@ class AttributeLabel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final attribute =
-        ref.watch(attributeProvider(AttributePath(attributeId))).value;
+    final attribute = ref
+        .watch(attributeProvider(AttributePath(attributeId)))
+        .value;
     final textTheme = TextTheme.of(context);
 
     return LoadingText(attribute?.name, style: textTheme.labelMedium);

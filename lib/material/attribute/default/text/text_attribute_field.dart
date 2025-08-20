@@ -28,17 +28,17 @@ class TextAttributeField extends ConsumerWidget {
     final language = ref.watch(languageProvider);
     final attribute = ref.watch(attributeProvider(attributePath)).value;
 
-    final value =
-        isTranslatable(attribute) ? text.resolve(language) : text.value;
+    final value = isTranslatable(attribute)
+        ? text.resolve(language)
+        : text.value;
     final otherLanguageValue = text.resolveOther(language);
 
     final url = Uri.tryParse(value ?? '');
     final isUrl = url != null && url.isAbsolute;
 
-    final defaultTextStyle =
-        isMultiline(attribute) || isUrl
-            ? TextTheme.of(context).bodySmall
-            : TextTheme.of(context).titleLarge;
+    final defaultTextStyle = isMultiline(attribute) || isUrl
+        ? TextTheme.of(context).bodySmall
+        : TextTheme.of(context).titleLarge;
 
     return Row(
       spacing: 8,

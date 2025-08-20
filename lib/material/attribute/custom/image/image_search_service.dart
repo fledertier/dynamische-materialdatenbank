@@ -34,10 +34,12 @@ class ImageSearchResult {
   });
 
   factory ImageSearchResult.fromJson(Json json) {
-    final images =
-        (json['images'] as List).map((e) => SearchImage.fromJson(e)).toList();
-    final colors =
-        (json['colors'] as List).map((e) => HexColor.fromHex(e)).toList();
+    final images = (json['images'] as List)
+        .map((e) => SearchImage.fromJson(e))
+        .toList();
+    final colors = (json['colors'] as List)
+        .map((e) => HexColor.fromHex(e))
+        .toList();
     final color = HexColor.fromHex(json['color']);
     return ImageSearchResult(images: images, colors: colors, color: color);
   }

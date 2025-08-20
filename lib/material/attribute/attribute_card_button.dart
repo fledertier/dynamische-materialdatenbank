@@ -28,8 +28,9 @@ class AttributeCardButton extends ConsumerWidget {
         updated[fromSectionIndex].cards.remove(card);
         ref.read(materialProvider(materialId).notifier).updateMaterial({
           Attributes.cardSections: {
-            fromSectionCategory.name:
-                updated.map((section) => section.toJson()).toList(),
+            fromSectionCategory.name: updated
+                .map((section) => section.toJson())
+                .toList(),
           },
         });
         return updated;
@@ -51,12 +52,11 @@ class AttributeCardButton extends ConsumerWidget {
         final receivingDrag = candidateData.isNotEmpty;
         return Material(
           borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
-          color:
-              ongoingDrag
-                  ? receivingDrag
-                      ? colorScheme.errorFixedDim
-                      : colorScheme.surfaceContainerHighest
-                  : colorScheme.primaryContainer,
+          color: ongoingDrag
+              ? receivingDrag
+                    ? colorScheme.errorFixedDim
+                    : colorScheme.surfaceContainerHighest
+              : colorScheme.primaryContainer,
           elevation: 8,
           child: InkWell(
             borderRadius: BorderRadius.circular(ongoingDrag ? 50 : 32),
@@ -68,19 +68,14 @@ class AttributeCardButton extends ConsumerWidget {
                 width: ongoingDrag ? 300 : 100,
                 height: ongoingDrag ? 80 : 100,
                 child: Center(
-                  child:
-                      ongoingDrag
-                          ? Icon(
-                            Symbols.delete,
-                            color:
-                                ongoingDrag && receivingDrag
-                                    ? colorScheme.onErrorFixedDim
-                                    : colorScheme.onSurface,
-                          )
-                          : Icon(
-                            Icons.add,
-                            color: colorScheme.onPrimaryContainer,
-                          ),
+                  child: ongoingDrag
+                      ? Icon(
+                          Symbols.delete,
+                          color: ongoingDrag && receivingDrag
+                              ? colorScheme.onErrorFixedDim
+                              : colorScheme.onSurface,
+                        )
+                      : Icon(Icons.add, color: colorScheme.onPrimaryContainer),
                 ),
               ),
             ),
