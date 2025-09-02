@@ -6,7 +6,7 @@ Prototyp einer Materialdatenbank, die es erlaubt, die Attribute der Materialien 
 
 1. [Flutter installieren](https://docs.flutter.dev/get-started/install)
 2. [Firebase CLI installieren](https://firebase.google.com/docs/cli#setup_update_cli)
-3. Mit Google-Account anmelden:
+3. Mit Google-Account des Projekts anmelden:
 
 ```bash
   firebase login

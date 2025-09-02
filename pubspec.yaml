@@ -1,5 +1,5 @@
 name: dynamische_materialdatenbank
-description: "Eine dynamische Materialdatenbank, in der verschiedenste Materialien mit allen ihren Eigenschaften gespeichert werden können"
+description: "Prototyp einer Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten."
 publish_to: 'none'
 version: 0.1.0
 

@@ -1,7 +1,7 @@
 {
   "name": "dynamische_materialdatenbank",
   "version": "1.0.0",
-  "description": "Eine Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.",
+  "description": "Prototyp einer Materialdatenbank, die es erlaubt, die Attribute der Materialien dynamisch zur Laufzeit zu verwalten.",
   "main": "index.js",
   "directories": {
     "lib": "lib",
