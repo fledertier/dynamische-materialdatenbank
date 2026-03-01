@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_converter.dart';
 
 extension ListExtension<T> on List<T> {
   List<T> operator -(List<T> other) {

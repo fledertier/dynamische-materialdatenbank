@@ -1,5 +1,5 @@
-import 'package:dynamische_materialdatenbank/features/attributes/attribute.dart';
-import 'package:dynamische_materialdatenbank/features/material/attribute/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/shared/utils/attribute_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 

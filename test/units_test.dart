@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/features/material/attribute/default/number/units.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/default/number/units.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final delta = 0.01;

@@ -1,0 +1,81 @@
+import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/default/number/number_attribute_field.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class NumberCard extends ConsumerWidget {
+  const NumberCard({
+    super.key,
+    required this.materialId,
+    required this.attributeId,
+    required this.size,
+    this.spacing = 16,
+    this.clip = Clip.none,
+    this.childPadding = const EdgeInsets.all(16),
+    this.child,
+    this.textStyle,
+    this.columns,
+  });
+
+  final String materialId;
+  final String attributeId;
+  final CardSize size;
+  final double spacing;
+  final Clip clip;
+  final EdgeInsets childPadding;
+  final Widget? child;
+  final TextStyle? textStyle;
+  final int? columns;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = TextTheme.of(context);
+
+    final number =
+        ref.watch(
+              valueProvider(
+                AttributeArgument(
+                  materialId: materialId,
+                  attributePath: AttributePath(attributeId),
+                ),
+              ),
+            )
+            as UnitNumber? ??
+        UnitNumber(value: 0);
+
+    return AttributeCard(
+      label: AttributeLabel(attributeId: attributeId),
+      title: NumberAttributeField(
+        key: ValueKey(number.displayUnit),
+        attributePath: AttributePath(attributeId),
+        number: number,
+        textStyle:
+            textStyle ??
+            switch (size) {
+              CardSize.small => textTheme.titleLarge,
+              CardSize.large => textTheme.displayLarge,
+            },
+        onChanged: (number) {
+          ref.read(materialProvider(materialId).notifier).updateMaterial({
+            attributeId: number.toJson(),
+          });
+        },
+      ),
+      columns:
+          columns ??
+          switch (size) {
+            CardSize.small => 2,
+            CardSize.large => 1,
+          },
+      spacing: spacing,
+      clip: clip,
+      childPadding: childPadding,
+      child: child,
+    );
+  }
+}

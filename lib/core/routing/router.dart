@@ -1,10 +1,10 @@
-import 'package:dynamische_materialdatenbank/features/attributes/attributes_page.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/pages/attributes_page.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
-import 'package:dynamische_materialdatenbank/features/material/material_detail_page.dart';
-import 'package:dynamische_materialdatenbank/features/material/materials_page.dart';
-import 'package:dynamische_materialdatenbank/features/user/sign_in_page.dart';
-import 'package:dynamische_materialdatenbank/features/user/sign_up_page.dart';
-import 'package:dynamische_materialdatenbank/features/user/user_provider.dart';
+import 'package:dynamische_materialdatenbank/features/material/pages/material_detail_page.dart';
+import 'package:dynamische_materialdatenbank/features/material/pages/materials_page.dart';
+import 'package:dynamische_materialdatenbank/features/user/pages/sign_in_page.dart';
+import 'package:dynamische_materialdatenbank/features/user/pages/sign_up_page.dart';
+import 'package:dynamische_materialdatenbank/features/user/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

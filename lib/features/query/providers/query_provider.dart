@@ -1,0 +1,55 @@
+import 'package:dynamische_materialdatenbank/features/advanced_search/providers/advanced_search_provider.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/providers/attribute_provider.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/providers/attributes_provider.dart';
+import 'package:dynamische_materialdatenbank/features/sort/models/sort_direction.dart';
+import 'package:dynamische_materialdatenbank/shared/constants.dart';
+import 'package:dynamische_materialdatenbank/features/filter/providers/filter_provider.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/features/material/providers/materials_provider.dart';
+import 'package:dynamische_materialdatenbank/features/sort/providers/sort_providers.dart';
+import 'package:dynamische_materialdatenbank/features/query/models/condition_group.dart';
+import 'package:dynamische_materialdatenbank/features/query/providers/query_source_provider.dart';
+import 'package:dynamische_materialdatenbank/features/search/providers/search_query_provider.dart';
+import 'package:dynamische_materialdatenbank/shared/utils/attribute_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final queriedMaterialsProvider = FutureProvider.autoDispose((ref) async {
+  final source = ref.watch(querySourceProvider);
+  final query = switch (source) {
+    QuerySource.searchAndFilter => ref.watch(searchAndFilterQueryProvider),
+    QuerySource.advancedSearch => ref.watch(advancedSearchQueryProvider).query,
+  };
+  final sortAttributePath = ref.watch(sortAttributeProvider);
+  final attributes = AttributesArgument({
+    AttributePath(Attributes.name),
+    AttributePath(Attributes.image),
+    for (final attributeId in query.attributeIds) AttributePath(attributeId),
+    if (sortAttributePath != null) AttributePath(sortAttributePath.topLevelId),
+  });
+  final materials = await ref.watch(materialsProvider(attributes).future);
+  final attributesById = await ref.watch(attributesProvider.future);
+  final matching = materials
+      .where((material) => query.matches(material, attributesById))
+      .toList();
+  if (sortAttributePath != null) {
+    matching.sort((a, b) {
+      final value =
+          getAttributeValue(a, attributesById, sortAttributePath) as Comparable;
+      final other =
+          getAttributeValue(b, attributesById, sortAttributePath) as Comparable;
+      return value.compareTo(other);
+    });
+    final sortDirection = ref.watch(sortDirectionProvider);
+    if (sortDirection == SortDirection.descending) {
+      return matching.reversed.toList();
+    }
+    return matching;
+  }
+  return matching;
+});
+
+final searchAndFilterQueryProvider = Provider((ref) {
+  final searchQuery = ref.watch(searchQueryProvider);
+  final filterQuery = ref.watch(filterQueryProvider);
+  return ConditionGroup.and([searchQuery, filterQuery].nonNulls.toList());
+});

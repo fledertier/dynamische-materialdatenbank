@@ -1,0 +1,91 @@
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/shared/constants.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_card.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_label.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression_balls.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression_chips.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression_dialog.dart';
+import 'package:dynamische_materialdatenbank/features/material/widgets/edit_mode_button.dart';
+import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';
+import 'package:dynamische_materialdatenbank/shared/utils/miscellaneous_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class SubjectiveImpressionsCard extends ConsumerWidget {
+  const SubjectiveImpressionsCard({
+    super.key,
+    required this.materialId,
+    required this.size,
+  });
+
+  final String materialId;
+  final CardSize size;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final edit = ref.watch(editModeProvider);
+
+    final value =
+        ref.watch(
+          jsonValueProvider(
+            AttributeArgument(
+              materialId: materialId,
+              attributePath: AttributePath(Attributes.subjectiveImpressions),
+            ),
+          ),
+        ) ??
+        [];
+
+    final impressions = List<Json>.from(
+      value,
+    ).map(SubjectiveImpression.fromJson).toList();
+
+    Future<void> updateSubjectiveImpressions(
+      SubjectiveImpression? initialSubjectiveImpression,
+    ) async {
+      final updatedSubjectiveImpressions =
+          await showDialog<List<SubjectiveImpression>>(
+            context: context,
+            builder: (context) {
+              return SubjectiveImpressionDialog(
+                subjectiveImpressions: impressions,
+                initialSubjectiveImpression: initialSubjectiveImpression,
+              );
+            },
+          );
+      if (updatedSubjectiveImpressions != null) {
+        ref.read(materialProvider(materialId).notifier).updateMaterial({
+          Attributes.subjectiveImpressions: updatedSubjectiveImpressions.map(
+            (subjectiveImpression) => subjectiveImpression.toJson(),
+          ),
+        });
+      }
+    }
+
+    return AttributeCard(
+      columns: 2,
+      label: AttributeLabel(attributeId: Attributes.subjectiveImpressions),
+      clip: Clip.antiAlias,
+      childPadding: size == CardSize.small
+          ? EdgeInsets.all(16)
+          : EdgeInsets.zero,
+      child: switch (size) {
+        CardSize.large => SubjectiveImpressionBalls(
+          key: ValueKey([edit, impressions]),
+          width: widthByColumns(2),
+          impressions: impressions,
+          onUpdate: updateSubjectiveImpressions,
+          edit: edit,
+        ),
+        CardSize.small => SubjectiveImpressionChips(
+          impressions: impressions,
+          onUpdate: updateSubjectiveImpressions,
+          edit: edit,
+        ),
+      },
+    );
+  }
+}

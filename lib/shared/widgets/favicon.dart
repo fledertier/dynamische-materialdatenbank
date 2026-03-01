@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/features/material/attribute/custom/image/web_image.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/image/web_image.dart';
 import 'package:flutter/material.dart';
 
 class Favicon extends StatelessWidget {

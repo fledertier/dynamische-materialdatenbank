@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/attribute.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/attribute_converter.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/attribute_type.dart';
-import 'package:dynamische_materialdatenbank/features/material/attribute/attribute_path.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/shared/utils/text_utils.dart';
 
 dynamic getAttributeValue(

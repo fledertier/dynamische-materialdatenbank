@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/core/theme/theme_mode.dart';
-import 'package:dynamische_materialdatenbank/features/user/user_avatar.dart';
+import 'package:dynamische_materialdatenbank/features/user/widgets/user_avatar.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
