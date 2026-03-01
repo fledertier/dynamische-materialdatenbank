@@ -1,0 +1,259 @@
+import 'package:dynamische_materialdatenbank/features/attributes/attribute.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/features/material/attribute/default/boolean/boolean.dart';
+import 'package:dynamische_materialdatenbank/features/material/attribute/default/number/unit_number.dart';
+import 'package:dynamische_materialdatenbank/features/material/attribute/default/number/units.dart';
+import 'package:dynamische_materialdatenbank/features/material/attribute/default/text/translatable_text.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+
+enum Operator {
+  equals,
+  notEquals,
+  greaterThan,
+  lessThan,
+  contains,
+  notContains;
+
+  static Operator fromJson(dynamic json) {
+    return Operator.values.byName(json);
+  }
+
+  String toJson() => name;
+}
+
+class TextAttributeType extends AttributeType {
+  TextAttributeType({required this.translatable, required this.multiline})
+    : super(
+        id: AttributeType.text,
+        operators: {
+          Operator.contains,
+          Operator.notContains,
+          Operator.equals,
+          Operator.notEquals,
+        },
+      );
+
+  final bool translatable;
+  final bool multiline;
+
+  factory TextAttributeType.fromJson(Json json) {
+    return TextAttributeType(
+      translatable: json['translatable'] ?? false,
+      multiline: json['multiline'] ?? false,
+    );
+  }
+
+  @override
+  Json toJson() {
+    return {'id': id, 'translatable': translatable, 'multiline': multiline};
+  }
+
+  @override
+  String toString() {
+    return [
+      name,
+      if (translatable) 'translatable',
+      if (multiline) 'multiline',
+    ].join(', ');
+  }
+
+  @override
+  int get hashCode => Object.hash(id, translatable, multiline);
+
+  @override
+  bool operator ==(Object other) {
+    return other is TextAttributeType &&
+        other.id == id &&
+        other.translatable == translatable &&
+        other.multiline == multiline;
+  }
+}
+
+class NumberAttributeType extends AttributeType {
+  NumberAttributeType({this.unitType})
+    : super(
+        id: AttributeType.number,
+        operators: {
+          Operator.greaterThan,
+          Operator.lessThan,
+          Operator.equals,
+          Operator.notEquals,
+        },
+      );
+
+  final UnitType? unitType;
+
+  factory NumberAttributeType.fromJson(Json json) {
+    return NumberAttributeType(
+      unitType: UnitType.maybeFromJson(json['unitType']),
+    );
+  }
+
+  @override
+  Json toJson() {
+    return {'id': id, 'unitType': unitType?.toJson()};
+  }
+
+  @override
+  String toString() => [name, unitType].nonNulls.join(', ');
+
+  @override
+  int get hashCode => Object.hash(id, unitType);
+
+  @override
+  bool operator ==(Object other) {
+    return other is NumberAttributeType &&
+        other.id == id &&
+        other.unitType == unitType;
+  }
+}
+
+class BooleanAttributeType extends AttributeType {
+  BooleanAttributeType()
+    : super(id: AttributeType.boolean, operators: {Operator.equals});
+
+  factory BooleanAttributeType.fromJson(Json json) {
+    return BooleanAttributeType();
+  }
+}
+
+class ObjectAttributeType extends AttributeType {
+  ObjectAttributeType({required this.attributes})
+    : super(id: AttributeType.object, operators: {});
+
+  final List<Attribute> attributes;
+
+  factory ObjectAttributeType.fromJson(Json json) {
+    final attributes = List<Json>.from(
+      json['attributes'],
+    ).map(Attribute.fromJson).toList();
+    return ObjectAttributeType(attributes: attributes);
+  }
+
+  @override
+  Json toJson() {
+    return {
+      'id': id,
+      'attributes': attributes.map((attribute) => attribute.toJson()).toList(),
+    };
+  }
+
+  @override
+  String toString() => '$name, ${attributes.length} attributes';
+
+  @override
+  int get hashCode => Object.hash(id, Object.hashAll(attributes));
+
+  @override
+  bool operator ==(Object other) {
+    return other is ObjectAttributeType &&
+        other.id == id &&
+        listEquals(other.attributes, attributes);
+  }
+}
+
+class ListAttributeType extends AttributeType {
+  ListAttributeType({required this.attribute})
+    : super(
+        id: AttributeType.list,
+        operators: {
+          Operator.equals,
+          Operator.notEquals,
+          Operator.contains,
+          Operator.notContains,
+        },
+      );
+
+  final Attribute attribute;
+
+  factory ListAttributeType.fromJson(Json json) {
+    final attribute = json['attribute'];
+    return ListAttributeType(attribute: Attribute.fromJson(attribute));
+  }
+
+  @override
+  Json toJson() {
+    return {'id': id, 'attribute': attribute.toJson()};
+  }
+
+  @override
+  String toString() => [name, attribute.type].join(', ');
+
+  @override
+  int get hashCode => Object.hash(id, attribute);
+
+  @override
+  bool operator ==(Object other) {
+    return other is ListAttributeType &&
+        other.id == id &&
+        other.attribute == attribute;
+  }
+}
+
+abstract class AttributeType {
+  static const text = 'text';
+  static const number = 'number';
+  static const boolean = 'boolean';
+  static const object = 'object';
+  static const list = 'list';
+
+  static final values = [text, number, boolean, object, list];
+
+  const AttributeType({required this.id, required this.operators});
+
+  final String id;
+  final Set<Operator> operators;
+
+  String get name => id;
+
+  factory AttributeType.fromJson(Json json) {
+    final id = json['id'];
+    return switch (id) {
+      text => TextAttributeType.fromJson(json),
+      number => NumberAttributeType.fromJson(json),
+      boolean => BooleanAttributeType.fromJson(json),
+      object => ObjectAttributeType.fromJson(json),
+      list => ListAttributeType.fromJson(json),
+      _ => throw UnimplementedError(
+        'AttributeType $id is missing fromJson method',
+      ),
+    };
+  }
+
+  Json toJson() => {'id': id};
+
+  @override
+  String toString() => name;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is AttributeType && other.id == id;
+  }
+}
+
+IconData iconForAttributeType(String id) {
+  return switch (id) {
+    AttributeType.text => Symbols.text_fields,
+    AttributeType.number => Symbols.numbers,
+    AttributeType.boolean => Symbols.check_box,
+    AttributeType.object => Symbols.category,
+    AttributeType.list => Symbols.menu,
+    _ => Symbols.change_history,
+  };
+}
+
+dynamic defaultValueForAttributeType(String id) {
+  return switch (id) {
+    AttributeType.text => TranslatableText(),
+    AttributeType.number => UnitNumber(value: 0),
+    AttributeType.boolean => Boolean(value: false),
+    AttributeType.object => Json(),
+    AttributeType.list => [],
+    _ => null,
+  };
+}

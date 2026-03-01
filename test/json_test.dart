@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dynamische_materialdatenbank/utils/collection_utils.dart';
+import 'package:dynamische_materialdatenbank/shared/utils/collection_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
