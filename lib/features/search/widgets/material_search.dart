@@ -4,7 +4,7 @@ import 'package:dynamische_materialdatenbank/features/attributes/models/attribut
 import 'package:dynamische_materialdatenbank/features/attributes/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/features/search/widgets/search.dart';
-import 'package:dynamische_materialdatenbank/features/search/providers/search_provider.dart';
+import 'package:dynamische_materialdatenbank/features/search/providers/search_providers.dart';
 import 'package:dynamische_materialdatenbank/features/search/providers/search_service.dart';
 import 'package:dynamische_materialdatenbank/shared/widgets/highlighted_text.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
   void initState() {
     super.initState();
     controller = SearchController();
-    controller.text = ref.read(searchProvider);
+    controller.text = ref.read(searchTextProvider);
   }
 
   @override
@@ -38,7 +38,7 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(searchProvider, (previous, next) {
+    ref.listen(searchTextProvider, (previous, next) {
       controller.text = next;
     });
 
@@ -76,10 +76,10 @@ class _MaterialSearchState extends ConsumerState<MaterialSearch> {
         );
       },
       onSubmitted: (query) {
-        ref.read(searchProvider.notifier).state = query;
+        ref.read(searchTextProvider.notifier).state = query;
       },
       onClear: () {
-        ref.read(searchProvider.notifier).state = '';
+        ref.read(searchTextProvider.notifier).state = '';
       },
       trailing: widget.onFilter != null ? filter : null,
     );

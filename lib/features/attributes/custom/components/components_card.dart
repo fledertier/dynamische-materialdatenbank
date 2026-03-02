@@ -27,16 +27,11 @@ class ComponentsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final value =
-        ref.watch(
-          jsonValueProvider(
-            AttributeArgument(
-              materialId: materialId,
-              attributePath: AttributePath(Attributes.components),
-            ),
-          ),
-        ) ??
-        [];
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.components),
+    );
+    final value = ref.watch(jsonValueProvider(argument)) ?? [];
 
     final components = List<Json>.from(value).map(Component.fromJson).toList();
 

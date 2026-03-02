@@ -24,16 +24,12 @@ class FireBehaviorStandardCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
-    final text =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: materialId,
-                  attributePath: AttributePath(Attributes.fireBehaviorStandard),
-                ),
-              ),
-            )
-            as TranslatableText?;
+
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.fireBehaviorStandard),
+    );
+    final text = ref.watch(valueProvider(argument)) as TranslatableText?;
 
     String? validate(String? classification) {
       if (classification == null || classification.isEmpty) {

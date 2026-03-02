@@ -20,16 +20,12 @@ class LightAbsorptionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.lightAbsorption),
+    );
     final number =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: materialId,
-                  attributePath: AttributePath(Attributes.lightAbsorption),
-                ),
-              ),
-            )
-            as UnitNumber? ??
+        ref.watch(valueProvider(argument)) as UnitNumber? ??
         UnitNumber(value: 0);
 
     final absorbedRays = (number.value / 10).round();

@@ -20,16 +20,12 @@ class LightTransmissionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.lightTransmission),
+    );
     final number =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: materialId,
-                  attributePath: AttributePath(Attributes.lightTransmission),
-                ),
-              ),
-            )
-            as UnitNumber? ??
+        ref.watch(valueProvider(argument)) as UnitNumber? ??
         UnitNumber(value: 0);
 
     final transmittedRays = (number.value / 10).round();

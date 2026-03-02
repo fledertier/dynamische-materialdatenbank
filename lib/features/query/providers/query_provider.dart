@@ -9,7 +9,7 @@ import 'package:dynamische_materialdatenbank/features/material/providers/materia
 import 'package:dynamische_materialdatenbank/features/sort/providers/sort_providers.dart';
 import 'package:dynamische_materialdatenbank/features/query/models/condition_group.dart';
 import 'package:dynamische_materialdatenbank/features/query/providers/query_source_provider.dart';
-import 'package:dynamische_materialdatenbank/features/search/providers/search_query_provider.dart';
+import 'package:dynamische_materialdatenbank/features/search/providers/search_providers.dart';
 import 'package:dynamische_materialdatenbank/shared/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

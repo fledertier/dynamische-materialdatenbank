@@ -36,16 +36,12 @@ class NumberCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = TextTheme.of(context);
 
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(attributeId),
+    );
     final number =
-        ref.watch(
-              valueProvider(
-                AttributeArgument(
-                  materialId: materialId,
-                  attributePath: AttributePath(attributeId),
-                ),
-              ),
-            )
-            as UnitNumber? ??
+        ref.watch(valueProvider(argument)) as UnitNumber? ??
         UnitNumber(value: 0);
 
     return AttributeCard(

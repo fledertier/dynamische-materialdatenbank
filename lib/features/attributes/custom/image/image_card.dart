@@ -39,14 +39,11 @@ class _ImageCardState extends ConsumerState<ImageCard> {
   @override
   void initState() {
     super.initState();
-    final value = ref.read(
-      jsonValueProvider(
-        AttributeArgument(
-          materialId: widget.materialId,
-          attributePath: AttributePath(Attributes.images),
-        ),
-      ),
+    final argument = AttributeArgument(
+      materialId: widget.materialId,
+      attributePath: AttributePath(Attributes.images),
     );
+    final value = ref.read(jsonValueProvider(argument));
     images = List<Json>.from(value ?? []);
   }
 

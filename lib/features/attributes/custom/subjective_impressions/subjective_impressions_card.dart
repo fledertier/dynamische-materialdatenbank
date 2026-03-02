@@ -28,16 +28,11 @@ class SubjectiveImpressionsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final value =
-        ref.watch(
-          jsonValueProvider(
-            AttributeArgument(
-              materialId: materialId,
-              attributePath: AttributePath(Attributes.subjectiveImpressions),
-            ),
-          ),
-        ) ??
-        [];
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.subjectiveImpressions),
+    );
+    final value = ref.watch(jsonValueProvider(argument)) ?? [];
 
     final impressions = List<Json>.from(
       value,

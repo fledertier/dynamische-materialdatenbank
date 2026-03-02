@@ -4,13 +4,14 @@ import 'package:dynamische_materialdatenbank/features/attributes/models/attribut
 import 'package:dynamische_materialdatenbank/features/attributes/default/text/translatable_text.dart';
 import 'package:dynamische_materialdatenbank/features/query/models/condition.dart';
 import 'package:dynamische_materialdatenbank/features/query/models/condition_group.dart';
-import 'package:dynamische_materialdatenbank/features/search/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final searchQueryProvider = Provider((ref) {
-  final search = ref.watch(searchProvider);
+final searchTextProvider = StateProvider((ref) => '');
 
-  if (search.isEmpty) {
+final searchQueryProvider = Provider((ref) {
+  final text = ref.watch(searchTextProvider);
+
+  if (text.isEmpty) {
     return null;
   }
 
@@ -18,12 +19,12 @@ final searchQueryProvider = Provider((ref) {
     Condition(
       attributePath: AttributePath(Attributes.name),
       operator: Operator.contains,
-      parameter: TranslatableText.fromValue(search),
+      parameter: TranslatableText.fromValue(text),
     ),
     Condition(
       attributePath: AttributePath(Attributes.description),
       operator: Operator.contains,
-      parameter: TranslatableText.fromValue(search),
+      parameter: TranslatableText.fromValue(text),
     ),
   ]);
 });

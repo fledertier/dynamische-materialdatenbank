@@ -23,14 +23,11 @@ class OriginCountryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final values = ref.watch(
-      jsonValueProvider(
-        AttributeArgument(
-          materialId: materialId,
-          attributePath: AttributePath(Attributes.originCountry),
-        ),
-      ),
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.originCountry),
     );
+    final values = ref.watch(jsonValueProvider(argument));
     final countries = List<Json>.from(
       values ?? [],
     ).map(Country.fromJson).toList();

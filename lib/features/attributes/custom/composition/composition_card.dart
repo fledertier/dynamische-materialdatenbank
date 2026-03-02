@@ -41,16 +41,11 @@ class CompositionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = ref.watch(editModeProvider);
 
-    final value =
-        ref.watch(
-          jsonValueProvider(
-            AttributeArgument(
-              materialId: materialId,
-              attributePath: AttributePath(Attributes.composition),
-            ),
-          ),
-        ) ??
-        [];
+    final argument = AttributeArgument(
+      materialId: materialId,
+      attributePath: AttributePath(Attributes.composition),
+    );
+    final value = ref.watch(jsonValueProvider(argument)) ?? [];
 
     final composition = List<Json>.from(
       value,
