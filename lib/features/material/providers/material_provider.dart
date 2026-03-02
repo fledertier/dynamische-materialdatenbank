@@ -19,10 +19,7 @@ import 'package:dynamische_materialdatenbank/features/material/providers/placeho
 import 'package:dynamische_materialdatenbank/shared/utils/attribute_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final materialProvider =
-    StreamNotifierProvider.family<MaterialNotifier, Json, String>(
-      MaterialNotifier.new,
-    );
+final materialProvider = StreamNotifierProvider.family(MaterialNotifier.new);
 
 class MaterialNotifier extends FamilyStreamNotifier<Json, String> {
   @override

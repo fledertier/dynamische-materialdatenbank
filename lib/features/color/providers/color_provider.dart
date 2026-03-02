@@ -9,10 +9,9 @@ import 'package:dynamische_materialdatenbank/shared/utils/collection_utils.dart'
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final materialColorProvider =
-    NotifierProvider.family<MaterialColorNotifier, Color?, String>(
-      MaterialColorNotifier.new,
-    );
+final materialColorProvider = NotifierProvider.family(
+  MaterialColorNotifier.new,
+);
 
 class MaterialColorNotifier extends FamilyNotifier<Color?, String> {
   @override

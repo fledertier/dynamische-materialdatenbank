@@ -7,10 +7,7 @@ import 'package:dynamische_materialdatenbank/features/attributes/models/attribut
 import 'package:dynamische_materialdatenbank/shared/utils/collection_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final attributesProvider =
-    StreamNotifierProvider<AttributesNotifier, Map<String, Attribute>>(
-      AttributesNotifier.new,
-    );
+final attributesProvider = StreamNotifierProvider(AttributesNotifier.new);
 
 class AttributesNotifier extends StreamNotifier<Map<String, Attribute>> {
   @override

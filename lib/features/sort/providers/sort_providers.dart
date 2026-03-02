@@ -2,10 +2,6 @@ import 'package:dynamische_materialdatenbank/features/attributes/models/attribut
 import 'package:dynamische_materialdatenbank/features/sort/models/sort_direction.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final sortDirectionProvider = StateProvider<SortDirection>((ref) {
-  return SortDirection.ascending;
-});
+final sortDirectionProvider = StateProvider((ref) => SortDirection.ascending);
 
-final sortAttributeProvider = StateProvider<AttributePath?>((ref) {
-  return null;
-});
+final sortAttributeProvider = StateProvider<AttributePath?>((ref) => null);
