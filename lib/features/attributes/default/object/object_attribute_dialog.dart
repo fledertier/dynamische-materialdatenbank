@@ -48,7 +48,9 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
                 color: ColorScheme.of(context).onSurface,
                 onPressed: () async {
                   await save();
-                  Navigator.of(context).pop();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             Text(widget.initialObject != null ? 'Edit $name' : 'Create $name'),
@@ -79,7 +81,9 @@ class _ObjectAttributeDialogState extends ConsumerState<ObjectAttributeDialog> {
             return TextButton(
               onPressed: () async {
                 await save();
-                context.pop();
+                if (context.mounted) {
+                  context.pop();
+                }
               },
               child: Text(widget.initialObject != null ? 'Save' : 'Create'),
             );

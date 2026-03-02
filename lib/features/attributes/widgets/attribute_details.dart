@@ -126,13 +126,17 @@ class AttributeDetails extends ConsumerWidget {
           removedAttributes,
         );
         if (delete) {
-          context.pop();
+          if (context.mounted) {
+            context.pop();
+          }
           await ref
               .read(attributesProvider.notifier)
               .updateAttribute(updatedAttribute);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+          if (context.mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Attribute saved')));
+          }
         }
       },
     );
@@ -187,9 +191,11 @@ class AttributeDetails extends ConsumerWidget {
       await ref
           .read(attributesProvider.notifier)
           .deleteAttribute(AttributePath(attribute.id));
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Attribute deleted')));
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Attribute deleted')));
+      }
     }
   }
 

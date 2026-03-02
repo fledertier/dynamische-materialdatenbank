@@ -77,9 +77,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       );
     } on FirebaseAuthException catch (e) {
       final message = e.message ?? 'An error occurred';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      }
     }
   }
 

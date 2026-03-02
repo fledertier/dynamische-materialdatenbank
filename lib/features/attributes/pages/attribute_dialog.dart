@@ -39,7 +39,7 @@ class _AttributeDialogState extends State<AttributeDialog> {
                 color: ColorScheme.of(context).onSurface,
                 onPressed: () async {
                   final attribute = await form.submit();
-                  if (attribute != null) {
+                  if (attribute != null && context.mounted) {
                     Navigator.of(context).pop(attribute);
                   }
                 },

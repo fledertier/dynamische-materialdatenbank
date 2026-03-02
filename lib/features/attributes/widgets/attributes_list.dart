@@ -100,9 +100,11 @@ class _AttributesListState extends ConsumerState<AttributesList> {
       onSave: (attribute) async {
         context.pop();
         await ref.read(attributesProvider.notifier).updateAttribute(attribute);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Attribute created')));
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Attribute created')));
+        }
         widget.selectedAttributeId.value = attribute.id;
       },
     );
