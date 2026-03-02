@@ -1,6 +1,8 @@
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_data.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_factory.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_card_search.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/edit_mode_button.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/materials_provider.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/section/draggable_card.dart';

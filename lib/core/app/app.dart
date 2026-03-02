@@ -1,6 +1,6 @@
 import 'package:dynamische_materialdatenbank/core/routing/router.dart';
 import 'package:dynamische_materialdatenbank/core/theme/theme.dart';
-import 'package:dynamische_materialdatenbank/core/theme/theme_mode.dart';
+import 'package:dynamische_materialdatenbank/core/theme/theme_mode_provier.dart';
 import 'package:dynamische_materialdatenbank/features/user/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

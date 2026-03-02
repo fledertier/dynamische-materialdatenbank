@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/custom/light/ray_visualization.dart';

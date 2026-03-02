@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_section.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/section/draggable_cards_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

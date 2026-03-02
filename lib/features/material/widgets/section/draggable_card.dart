@@ -1,4 +1,4 @@
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_data.dart';
 import 'package:flutter/material.dart';
 
 class DraggableCard extends StatefulWidget {

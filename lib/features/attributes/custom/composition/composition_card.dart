@@ -1,5 +1,5 @@
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_converter.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_label.dart';

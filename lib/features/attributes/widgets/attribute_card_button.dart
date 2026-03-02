@@ -1,6 +1,6 @@
 import 'package:dynamische_materialdatenbank/core/theme/theme.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_data.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/section/draggable_cards_builder.dart';
 import 'package:flutter/material.dart';

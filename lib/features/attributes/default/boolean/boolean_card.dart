@@ -1,7 +1,7 @@
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_label.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/boolean/boolean.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/boolean/boolean_attribute_field.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';

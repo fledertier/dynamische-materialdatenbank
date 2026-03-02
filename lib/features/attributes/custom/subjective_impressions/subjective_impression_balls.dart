@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:dynamische_materialdatenbank/shared/widgets/language_button.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/ball.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression_button.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/custom/subjective_impressions/subjective_impression.dart';
 import 'package:dynamische_materialdatenbank/shared/utils/miscellaneous_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 
 class SubjectiveImpressionBalls extends StatefulWidget {
@@ -181,74 +181,4 @@ class _SubjectiveImpressionBallsState extends State<SubjectiveImpressionBalls>
       }
     }
   }
-}
-
-class SubjectiveImpressionButton extends ConsumerWidget {
-  const SubjectiveImpressionButton({
-    super.key,
-    required this.ball,
-    required this.onUpdate,
-    this.edit = false,
-  });
-
-  final Ball ball;
-  final void Function(SubjectiveImpression? impression) onUpdate;
-  final bool edit;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageProvider);
-    final impression = ball.impression;
-
-    if (impression == null) {
-      return IconButton.outlined(
-        constraints: BoxConstraints.tight(Size.fromRadius(ball.radius)),
-        icon: Icon(Icons.add, size: 18),
-        onPressed: () => onUpdate(null),
-      );
-    }
-
-    return FilledButton(
-      style: FilledButton.styleFrom(
-        foregroundColor: Colors.black,
-        disabledForegroundColor: Colors.black,
-        backgroundColor: ball.color,
-        disabledBackgroundColor: ball.color,
-        fixedSize: Size.fromRadius(ball.radius),
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(16),
-      ),
-      onPressed: edit ? () => onUpdate(impression) : null,
-      child: Transform.rotate(
-        angle: ball.rotation,
-        child: Text(
-          impression.name.resolve(language) ?? impression.name.value,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: sqrt(ball.radius * 3.6)),
-        ),
-      ),
-    );
-  }
-}
-
-class Ball {
-  Ball.impression({
-    required this.position,
-    required this.velocity,
-    required this.rotation,
-    required SubjectiveImpression this.impression,
-  }) : radius = radiusOf(impression),
-       color = colorOf(impression);
-
-  Ball.add({required this.position, required this.velocity})
-    : rotation = 0,
-      radius = 40,
-      color = Colors.transparent;
-
-  Vector2 position;
-  Vector2 velocity;
-  double rotation;
-  double radius;
-  Color color;
-  SubjectiveImpression? impression;
 }

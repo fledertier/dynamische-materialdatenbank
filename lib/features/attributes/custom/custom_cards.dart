@@ -1,3 +1,4 @@
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/custom/components/components_card.dart';

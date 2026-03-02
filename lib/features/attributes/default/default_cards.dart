@@ -1,10 +1,11 @@
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_type.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/boolean/boolean_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/list/list_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/number/number_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/object/object_card.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/text/text_card.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
 import 'package:flutter/widgets.dart';
 
 enum DefaultCards implements Cards {

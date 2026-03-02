@@ -1,9 +1,12 @@
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_type.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_data.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_sections.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_path.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/widgets/attribute_search.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_size.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/custom/custom_cards.dart';
 import 'package:dynamische_materialdatenbank/features/attributes/default/default_cards.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';

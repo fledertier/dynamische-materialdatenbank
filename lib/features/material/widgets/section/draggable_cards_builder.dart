@@ -1,6 +1,7 @@
 import 'package:dynamische_materialdatenbank/features/attributes/models/attribute_converter.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_data.dart';
+import 'package:dynamische_materialdatenbank/features/attributes/models/card_section.dart';
 import 'package:dynamische_materialdatenbank/shared/constants.dart';
-import 'package:dynamische_materialdatenbank/features/attributes/models/cards.dart';
 import 'package:dynamische_materialdatenbank/features/material/providers/material_provider.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/section/draggable_card.dart';
 import 'package:dynamische_materialdatenbank/features/material/widgets/section/draggable_section.dart';
